@@ -31,7 +31,20 @@ services:
     container_name: myapp-nginx
     ports:
       - 80:80
-    environment:
-      - TZ=Asia/Tokyo
     volumes:
       - ./etc/nginx/nginx.conf:/etc/nginx/nginx.conf
+    environment:
+      - TZ=Asia/Tokyo
+
+  mysql:
+    container_name: myapp-mysql
+    image: mysql:latest
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_USER: root
+      MYSQL_ROOT_PASSWORD: "kbc_password"
+      MYSQL_DATABASE: kbcblog-mysql
+      TZ: 'Asia/Tokyo'
+    volumes:
+      - ./docker/mysql:/docker-entrypoint-initdb.d
