@@ -34,7 +34,7 @@
     </el-row>
 
 
-    <el-form-item label="本文">
+    <el-form-item label="本文" v-if="isActive == false">
       <el-input
         type="textarea"
         :rows="20"
@@ -43,6 +43,13 @@
         font>
       </el-input>
     </el-form-item>
+
+    <div class="article-form__preview" v-else>
+      <div class="article-form__label--preview"><p class="article-form__label--preview-p">プレビュー</p></div>
+      <div class="article-form__preview-body">
+        <div class="article-form__preview-body-contents">{{article.body}}</div>
+      </div>
+    </div>
 
     <el-row>
       <el-col :span="12"><el-button type="danger">キャンセル</el-button></el-col>
@@ -77,9 +84,41 @@
 .el-textarea >>> .el-textarea__inner {
   font-family: inherit;
   font-size: 130%;
+  resize: none;
 }
 .grid-content {
     border-radius: 4px;
     min-height: 36px;
-  }
+}
+.article-form__preview{
+  margin-bottom: 22px;
+}
+.article-form__preview-body {
+  grid-area: text;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  width: 998px;
+  height: 550px;
+  word-break: break-all;
+  white-space: normal;
+  position: relative;
+}
+.article-form__preview-body-contents{
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  padding: 20px;
+  font-size: 110%;
+}
+.article-form__label--preview{
+  height: 40px;
+}
+.article-form__label--preview-p{
+  line-height: 40px;
+  color: #888;
+  text-align: left;
+  margin: 0;
+}
 </style>
