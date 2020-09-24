@@ -1,13 +1,11 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js Index"/>
-    <p>{{aaa}}</p>
+    <Header></Header>
   </div>
 </template>
 
 <script>
-import HelloWorld from './../components/HelloWorld.vue'
+import Header from './../components/Header.vue'
 
 export default {
   name: 'app',
@@ -17,7 +15,7 @@ export default {
     }
   },
   components: {
-    HelloWorld
+    Header
   },
   // createdの中でaxiosを使います。get()の中のURLは、nginx.confで設定してるので、 /api/ になっています。
   created () {
@@ -37,6 +35,8 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
 }
 </style>
