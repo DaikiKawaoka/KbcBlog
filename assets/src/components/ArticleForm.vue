@@ -22,11 +22,11 @@
     </el-form-item>
 
     <el-row>
-      <el-col :span="4"><div class="grid-content bg-purple"></div></el-col>
-      <el-col :span="4"><div class="grid-content bg-purple-light"></div></el-col>
-      <el-col :span="4"><div class="grid-content bg-purple"></div></el-col>
-      <el-col :span="4"><div class="grid-content bg-purple-light"></div></el-col>
-      <el-col :span="4"><div class="grid-content bg-purple"></div></el-col>
+      <el-col :span="4"><div class="grid-content"></div></el-col>
+      <el-col :span="4"><div class="grid-content"></div></el-col>
+      <el-col :span="4"><div class="grid-content"></div></el-col>
+      <el-col :span="4"><div class="grid-content"></div></el-col>
+      <el-col :span="4"><div class="grid-content"></div></el-col>
       <el-col :span="4">
         <el-button v-if="isActive" type="primary" icon="el-icon-open" circle v-on:click="active"></el-button>
         <el-button v-else icon="el-icon-turn-off" circle v-on:click="active"></el-button>
@@ -39,7 +39,8 @@
         type="textarea"
         :rows="20"
         placeholder="Please input"
-        v-model="article.body">
+        v-model="article.body"
+        font>
       </el-input>
     </el-form-item>
 
@@ -72,6 +73,11 @@
 </script>
 
 <style scoped>
+
+.el-textarea >>> .el-textarea__inner {
+  font-family: inherit;
+  font-size: 130%;
+}
 .grid-content {
     border-radius: 4px;
     min-height: 36px;
