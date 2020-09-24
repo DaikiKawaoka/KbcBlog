@@ -1,42 +1,49 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-    <p>{{aaa}}</p>
+  <div>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Vue from 'vue'
+import VueRouter from 'vue-router'
+import ArticleIndex from './articles/Index.vue'
+import ArticleShow from './articles/Show.vue'
+import ArticleEdit from './articles/Edit.vue'
+import ArticleNew from './articles/New.vue'
+
+const router = new VueRouter({
+  mode: 'history',
+  routes: [
+    {
+      path: '/',
+      name: 'ArticleIndex',
+      component: ArticleIndex
+    },
+    {
+      path: '/Articles/:id(\\d+)',
+      name: 'ArticleShow',
+      component: ArticleShow
+    },
+    {
+      path: '/Articles/new',
+      name: 'ArticleNew',
+      component: ArticleNew
+    },
+    {
+      path: '/Articles/:id(\\d+)/edit',
+      name: 'ArticleEdit',
+      component: ArticleEdit
+    },
+  ]
+})
+
+Vue.use(VueRouter)
 
 export default {
-  name: 'app',
-  data(){
-    return {
-      aaa: "",
-    }
-  },
-  components: {
-    HelloWorld
-  },
-  // createdの中でaxiosを使います。get()の中のURLは、nginx.confで設定してるので、 /api/ になっています。
-  created () {
-    this.$axios.get('http://localhost/api/')
-      .then(response => {
-        this.aaa = response.data
-        console.log(response)
-      })
-  }
+  router
 }
 </script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+<style scoped>
 </style>
