@@ -47,7 +47,7 @@
     <div class="article-form__preview" v-else>
       <div class="article-form__label--preview"><p class="article-form__label--preview-p">プレビュー</p></div>
       <div class="article-form__preview-body">
-        <div class="article-form__preview-body-contents">{{article.body}}</div>
+        <div class="article-form__preview-body-contents" v-html="compiledMarkdown"></div>
       </div>
     </div>
 
@@ -60,6 +60,9 @@
 
 <script>
 
+import marked from 'marked';
+import hljs from 'highlight.js';
+
  export default {
    props: {
     article: Object,
@@ -71,15 +74,31 @@
       isActive: false
     }
   },
+  created: function () {
+    marked.setOptions({
+      // code要素にdefaultで付くlangage-を削除
+      langPrefix: '',
+      // highlightjsを使用したハイライト処理を追加
+      highlight: function(code, lang) {
+        return hljs.highlightAuto(code, [lang]).value
+      }
+    });
+  },
+  computed: {
+    compiledMarkdown: function () {
+      return marked(this.article.body)
+    }
+  },
   methods: {
     active: function () {
-      this.isActive = !this.isActive
-    }
+      this.isActive = !this.isActive;
+    },
   }
  }
 </script>
 
 <style scoped>
+@import '/assets/node_modules/highlight.js/styles/github-gist.css';
 
 .el-textarea >>> .el-textarea__inner {
   font-family: inherit;
@@ -109,7 +128,8 @@
   top: 0;
   bottom: 0;
   left: 0;
-  padding: 20px;
+  text-align: left;
+  padding: 0 20px 20px 20px;
   font-size: 110%;
 }
 .article-form__label--preview{
