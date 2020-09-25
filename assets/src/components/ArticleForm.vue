@@ -47,7 +47,7 @@
     <div class="article-form__preview" v-else>
       <div class="article-form__label--preview"><p class="article-form__label--preview-p">プレビュー</p></div>
       <div class="article-form__preview-body">
-        <div class="article-form__preview-body-contents" v-html="compiledMarkdown"></div>
+        <div class="article-form__preview-body-contents" id="article-body" v-html="compiledMarkdown"></div>
       </div>
     </div>
 
@@ -62,6 +62,8 @@
 
 import marked from 'marked';
 import hljs from 'highlight.js';
+import 'highlight.js/styles/github.css';
+import './markdown.css';
 
  export default {
    props: {
@@ -98,8 +100,6 @@ import hljs from 'highlight.js';
 </script>
 
 <style scoped>
-@import '/assets/node_modules/highlight.js/styles/github-gist.css';
-
 .el-textarea >>> .el-textarea__inner {
   font-family: inherit;
   font-size: 130%;
@@ -129,8 +129,10 @@ import hljs from 'highlight.js';
   bottom: 0;
   left: 0;
   text-align: left;
-  padding: 0 20px 20px 20px;
+  width: 960px;
+  padding: 20px 20px 20px 20px;
   font-size: 110%;
+  overflow: scroll;
 }
 .article-form__label--preview{
   height: 40px;
@@ -141,4 +143,5 @@ import hljs from 'highlight.js';
   text-align: left;
   margin: 0;
 }
+
 </style>
