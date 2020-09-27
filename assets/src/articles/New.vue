@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <Header></Header>
-    <Article-form :article="article" :errors="errors" :create="create" @submit="createArticle"></Article-form>
+    <Article-form :article="article" :errors="errors" :create="create" @submit="createArticle" @cancell="goHome"></Article-form>
   </div>
 </template>
 
@@ -14,6 +14,7 @@ export default {
   data(){
     return {
       article :{
+        userid: 1,
         title: "",
         body: "",
       },
@@ -34,20 +35,24 @@ export default {
   },
   methods: {
     createArticle: function() {
-      // axios
-      //   .post('/api/v1/items',this.item)
-      //   .then(response => {
-      //     let e = response.data;
-      //     this.$router.push({ name: 'itemShow', params: { id: e.id } });
-      //   })
-      //   .catch(error => {
-      //     console.error(error);
-      //     if (error.response.data && error.response.data.errors) {
-      //       this.errors = error.response.data.errors;
-      //     }
-      //   });
-      console.log("create article")
+      this.$axios
+        .post('http://localhost/api/Articles',this.article)
+        .then(response => {
+          // let e = response.data;
+          // this.$router.push({ name: 'itemShow', params: { id: e.id } });
+          this.$router.push({ path: "/" });
+          console.log(response)
+        })
+        .catch(error => {
+          console.error(error);
+          // if (error.response.data && error.response.data.errors) {
+          //   this.errors = error.response.data.errors;
+          // }
+        });
     },
+    goHome: function(){
+      this.$router.push({ path: "/" });
+    }
   }
 }
 </script>

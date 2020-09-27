@@ -52,8 +52,8 @@
     </div>
 
     <el-row>
-      <el-col :span="12"><el-button type="danger">キャンセル</el-button></el-col>
-      <el-col :span="12"><el-button type="success" @click="$emit('submit')" native-type="submit">セーブ</el-button></el-col>
+      <el-col :span="12"><el-button type="danger" @click="$emit('cancell')">キャンセル</el-button></el-col>
+      <el-col :span="12"><el-button type="success" @click="$emit('submit')">セーブ</el-button></el-col>
     </el-row>
   </el-form>
 </template>
@@ -94,7 +94,7 @@ import './markdown.css';
   methods: {
     active: function () {
       this.isActive = !this.isActive;
-    },
+    }
   }
  }
 </script>

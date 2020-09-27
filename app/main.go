@@ -1,67 +1,44 @@
 package main
 
 import (
-	"net/http"
-	"strconv"
-	"time"
+	"log"
 
+	"app/handler"
+	"app/repository"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	_ "github.com/go-sql-driver/mysql" // Using MySQL driver
+      "github.com/jmoiron/sqlx"
 )
 
+var db *sqlx.DB
 var e = createMux()
 
 func main() {
-	e.GET("/", articleIndex)
-	e.GET("/Articles/new", articleNew)
-	e.GET("/Articles/:id", articleShow)
-	e.GET("/Articles/:id/edit", articleEdit)
+	db = connectDB()
+	repository.SetDB(db)
+	e.GET("/Articles", handler.ArticleIndex)
+	e.GET("/Articles/new", handler.ArticleNew)
+	e.GET("/:id", handler.ArticleShow)
+	e.GET("/:id/edit", handler.ArticleEdit)
+	e.POST("/Articles", handler.ArticleCreate)
+
 	// Webサーバーをポート番号 8082 で起動する
 	e.Logger.Fatal(e.Start(":8082"))
 	// e.Startの中はdocker-composeのgoコンテナで設定したportsを指定してください。
 }
 
-func articleIndex(c echo.Context) error {
-	data := map[string]interface{}{
-		"Message": "Article Index",
-		"Now":     time.Now(),
+func connectDB() *sqlx.DB {
+	dsn := "root:kbc_password@tcp(myapp-mysql:3306)/kbcblog-mysql?parseTime=true&autocommit=0&sql_mode=%27TRADITIONAL,NO_AUTO_VALUE_ON_ZERO,ONLY_FULL_GROUP_BY%27"
+	db, err := sqlx.Open("mysql", dsn)
+	if err != nil {
+			e.Logger.Fatal(err)
 	}
-	return c.JSON(http.StatusOK, data)
-}
-func articleNew(c echo.Context) error {
-	data := map[string]interface{}{
-		"Message": "Article New",
-		"Now":     time.Now(),
+	if err := db.Ping(); err != nil {
+			e.Logger.Fatal(err)
 	}
-
-	return c.JSON(http.StatusOK, data)
-
-}
-
-func articleShow(c echo.Context) error {
-	id, _ := strconv.Atoi(c.Param("id"))
-
-	data := map[string]interface{}{
-		"Message": "Article Show",
-		"Now":     time.Now(),
-		"ID":      id,
-	}
-
-	return c.JSON(http.StatusOK, data)
-
-}
-
-func articleEdit(c echo.Context) error {
-	id, _ := strconv.Atoi(c.Param("id"))
-
-	data := map[string]interface{}{
-		"Message": "Article Edit",
-		"Now":     time.Now(),
-		"ID":      id,
-	}
-
-	return c.JSON(http.StatusOK, data)
-
+	log.Println("db connection succeeded")
+	return db
 }
 
 func createMux() *echo.Echo {

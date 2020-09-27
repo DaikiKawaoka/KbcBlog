@@ -1,6 +1,11 @@
 <template>
   <div id="app">
     <Header></Header>
+    <div>
+      <div v-for="article in articles" :key="article.id">
+        <h2> {{article.title}} : {{article.body}} </h2>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -11,7 +16,8 @@ export default {
   name: 'app',
   data(){
     return {
-      aaa: "",
+      articles: [],
+      user: {},
     }
   },
   components: {
@@ -19,10 +25,10 @@ export default {
   },
   // createdの中でaxiosを使います。get()の中のURLは、nginx.confで設定してるので、 /api/ になっています。
   created () {
-    this.$axios.get('http://localhost/api/')
+    this.$axios.get('http://localhost/api/Articles')
       .then(response => {
-        this.aaa = response.data
-        console.log(response)
+        this.articles = response.data.Articles
+        console.log(response.data.Articles)
       })
   }
 }
@@ -38,5 +44,8 @@ export default {
   width: 1000px;
   margin-left: auto;
   margin-right: auto;
+}
+h2{
+  text-align: left;
 }
 </style>
