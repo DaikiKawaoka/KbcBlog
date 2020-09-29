@@ -44,7 +44,9 @@ export default {
           console.log(response)
         })
         .catch(error => {
-          console.error(error);
+          console.log(error.response.data.ValidationErrors);
+          this.errors = error.response.data.ValidationErrors;
+
           // if (error.response.data && error.response.data.errors) {
           //   this.errors = error.response.data.errors;
           // }

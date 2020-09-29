@@ -33,6 +33,18 @@ func ArticleCreate(c echo.Context) error {
 
     // リクエストの解釈に失敗した場合は 400 エラーを返却します。
     return c.JSON(http.StatusBadRequest, out)
+	}
+
+	// バリデーションチェックを実行します。
+  if err := c.Validate(&article); err != nil {
+    // エラーの内容をサーバーのログに出力します。
+    c.Logger().Error(err.Error())
+
+    // エラー内容を検査してカスタムエラーメッセージを取得します。
+    out.ValidationErrors = article.ValidationErrors(err)
+
+    // 解釈できたパラメータが許可されていない値の場合は 422 エラーを返却します。
+    return c.JSON(http.StatusUnprocessableEntity, out)
   }
 
   // repository を呼び出して保存処理を実行します。

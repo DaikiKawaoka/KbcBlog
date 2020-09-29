@@ -5,10 +5,11 @@ import (
 
 	"app/handler"
 	"app/repository"
+	_ "github.com/go-sql-driver/mysql" // Using MySQL driver
+	"github.com/jmoiron/sqlx"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
-	_ "github.com/go-sql-driver/mysql" // Using MySQL driver
-      "github.com/jmoiron/sqlx"
+	"gopkg.in/go-playground/validator.v9"
 )
 
 var db *sqlx.DB
@@ -32,10 +33,10 @@ func connectDB() *sqlx.DB {
 	dsn := "root:kbc_password@tcp(myapp-mysql:3306)/kbcblog-mysql?parseTime=true&autocommit=0&sql_mode=%27TRADITIONAL,NO_AUTO_VALUE_ON_ZERO,ONLY_FULL_GROUP_BY%27"
 	db, err := sqlx.Open("mysql", dsn)
 	if err != nil {
-			e.Logger.Fatal(err)
+		e.Logger.Fatal(err)
 	}
 	if err := db.Ping(); err != nil {
-			e.Logger.Fatal(err)
+		e.Logger.Fatal(err)
 	}
 	log.Println("db connection succeeded")
 	return db
@@ -53,6 +54,18 @@ func createMux() *echo.Echo {
 	//gzip圧縮スキームを使用してHTTP応答を圧縮します。
 	e.Use(middleware.Gzip())
 
+	e.Validator = &CustomValidator{validator: validator.New()}
+
 	// アプリケーションインスタンスを返却
 	return e
+}
+
+// CustomValidator ...
+type CustomValidator struct {
+	validator *validator.Validate
+}
+
+// Validate ...
+func (cv *CustomValidator) Validate(i interface{}) error {
+	return cv.validator.Struct(i)
 }

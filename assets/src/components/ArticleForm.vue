@@ -6,7 +6,10 @@
 
     <div v-if="errors.length != 0">
       <ul v-for="e in errors" :key="e">
-        <li><font color="red">{{ e }}</font></li>
+        <el-row>
+          <i class="el-icon-warning-outline"></i>
+          <li><font color="red">{{ e }}</font></li>
+        </el-row>
       </ul>
     </div>
 
@@ -142,6 +145,13 @@ import './markdown.css';
   color: #888;
   text-align: left;
   margin: 0;
+}
+i{
+  font-size: 25px;
+  color:#F56C6C;
+}
+li{
+  list-style: none;
 }
 
 </style>
