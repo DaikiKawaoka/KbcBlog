@@ -5,11 +5,9 @@
     <h2 v-else>技術記事編集</h2>
 
     <div v-if="errors.length != 0">
-      <ul v-for="e in errors" :key="e">
-        <el-row>
-          <i class="el-icon-warning-outline"></i>
+      <ul class="error-ul" v-for="e in errors" :key="e">
+          <li class="error-icon-li"><i class="el-icon-warning-outline"></i></li>
           <li><font color="red">{{ e }}</font></li>
-        </el-row>
       </ul>
     </div>
 
@@ -18,7 +16,7 @@
         type="text"
         placeholder="Please input"
         v-model="article.title"
-        maxlength="100"
+        maxlength="50"
         show-word-limit
       >
       </el-input>
@@ -152,6 +150,12 @@ i{
 }
 li{
   list-style: none;
+}
+.error-icon-li{
+  padding-right: 10px;
+}
+.error-ul{
+  display: flex;
 }
 
 </style>

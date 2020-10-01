@@ -1,9 +1,14 @@
 <template>
   <div id="app">
     <Header></Header>
-    <div>
-      <div v-for="article in articles" :key="article.id">
-        <h2> {{article.title}} : {{article.body}} </h2>
+    <div class="index-main">
+      <div class="index-menu">
+        <div></div>
+      </div>
+      <div class="article-all-div">
+        <div v-for="article in articles" :key="article.id" class="article-show-div">
+          <h2> {{article.title}}</h2>
+        </div>
       </div>
     </div>
   </div>
@@ -47,5 +52,21 @@ export default {
 }
 h2{
   text-align: left;
+}
+.index-main{
+  display: flex;
+  margin-top: 30px;
+}
+.index-menu{
+  width: 200px;
+  background-color: #eee;
+}
+.article-all-div{
+  width: 800px;
+  background-color: #fff;
+}
+.article-show-div{
+  margin-left: 20px;
+  border: solid 1px #eee;
 }
 </style>
