@@ -7,7 +7,9 @@
       </div>
       <div class="article-all-div">
         <div v-for="article in articles" :key="article.id" class="article-show-div">
-          <h2> {{article.title}}</h2>
+          <router-link v-bind:to="{ name : 'ArticleShow', params : { id: article.id }}">
+            <h2> {{article.title}}</h2>
+          </router-link>
         </div>
       </div>
     </div>
@@ -33,7 +35,7 @@ export default {
     this.$axios.get('http://localhost/api/Articles')
       .then(response => {
         this.articles = response.data.Articles
-        console.log(response.data.Articles)
+        console.log(response.data)
       })
   }
 }
@@ -44,11 +46,10 @@ export default {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
-  width: 1000px;
   margin-left: auto;
   margin-right: auto;
+  background-color: #F6F6F4;
 }
 h2{
   text-align: left;
@@ -67,6 +68,7 @@ h2{
 }
 .article-show-div{
   margin-left: 20px;
+  padding-left: 20px;
   border: solid 1px #eee;
 }
 </style>

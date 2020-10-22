@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"log"
+	// "log"
 	"net/http"
 	"strconv"
 	"time"
@@ -71,16 +71,39 @@ func ArticleCreate(c echo.Context) error {
 }
 
 // ArticleIndex ...
+// func ArticleIndex(c echo.Context) error {
+// 	// 記事データの一覧を取得する
+// 	articles, err := repository.ArticleList()
+// 	if err != nil {
+// 		log.Println(err.Error())
+// 		return c.NoContent(http.StatusInternalServerError)
+// 	}
+// 	data := map[string]interface{}{
+// 		"Articles": articles, // 記事データをテンプレートエンジンに渡す
+// 	}
+// 	return c.JSON(http.StatusOK, data)
+// }
+
+// ArticleIndex ...
 func ArticleIndex(c echo.Context) error {
-	// 記事データの一覧を取得する
-	articles, err := repository.ArticleList()
+	// リポジトリの処理を呼び出して記事の一覧データを取得します。
+	articles, err := repository.ArticleListByCursor(0)
+
+	// エラーが発生した場合
 	if err != nil {
-		log.Println(err.Error())
+		// エラー内容をサーバーのログに出力します。
+		c.Logger().Error(err.Error())
+
+		// クライアントにステータスコード 500 でレスポンスを返します。
 		return c.NoContent(http.StatusInternalServerError)
 	}
+
+	// テンプレートに渡すデータを map に格納します。
 	data := map[string]interface{}{
-		"Articles": articles, // 記事データをテンプレートエンジンに渡す
+		"Articles": articles,
 	}
+
+	// テンプレートファイルとデータを指定して HTML を生成し、クライアントに返却します
 	return c.JSON(http.StatusOK, data)
 }
 
@@ -96,12 +119,24 @@ func ArticleNew(c echo.Context) error {
 
 // ArticleShow ...
 func ArticleShow(c echo.Context) error {
+	// パスパラメータから記事 ID を取得します。
+	// 文字列型で取得されるので、strconv パッケージを利用して数値型にキャストしています。
 	id, _ := strconv.Atoi(c.Param("id"))
 
+	// 記事データを取得します。
+	article, err := repository.ArticleGetByID(id)
+
+	if err != nil {
+		// エラー内容をサーバーのログに出力します。
+		c.Logger().Error(err.Error())
+
+		// ステータスコード 500 でレスポンスを返却します。
+		return c.NoContent(http.StatusInternalServerError)
+	}
+
+	// テンプレートに渡すデータを map に格納します。
 	data := map[string]interface{}{
-		"Message": "Article Show",
-		"Now":     time.Now(),
-		"ID":      id,
+		"Article": article,
 	}
 
 	return c.JSON(http.StatusOK, data)

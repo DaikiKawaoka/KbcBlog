@@ -20,8 +20,8 @@ func main() {
 	repository.SetDB(db)
 	e.GET("/Articles", handler.ArticleIndex)
 	e.GET("/Articles/new", handler.ArticleNew)
-	e.GET("/:id", handler.ArticleShow)
-	e.GET("/:id/edit", handler.ArticleEdit)
+	e.GET("/Articles/:id", handler.ArticleShow)
+	e.GET("/Articles/:id/edit", handler.ArticleEdit)
 	e.POST("/Articles", handler.ArticleCreate)
 
 	// Webサーバーをポート番号 8082 で起動する

@@ -1,5 +1,5 @@
 <template>
-  <el-form :model="article">
+  <el-form :model="article" class="article-form-all">
 
     <h2 v-if="create">技術記事作成</h2>
     <h2 v-else>技術記事編集</h2>
@@ -101,6 +101,11 @@ import './markdown.css';
 </script>
 
 <style scoped>
+.article-form-all{
+  width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+}
 .el-textarea >>> .el-textarea__inner {
   font-family: inherit;
   font-size: 130%;
