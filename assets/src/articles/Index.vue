@@ -49,6 +49,7 @@ export default {
   color: #2c3e50;
   margin-left: auto;
   margin-right: auto;
+  padding-bottom: 30px;
   background-color: #F6F6F4;
 }
 h2{

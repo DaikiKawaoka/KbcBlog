@@ -9,11 +9,53 @@
         </div>
       </div>
     </div>
+    <div class="article-comment-all">
+      <div class="article-comment-header">
+        <i class="el-icon-chat-dot-round comment-icon"></i>
+        <p class="comment">コメント</p>
+      </div>
+      <div class="article-comment-main">
+        <div class="comment-div">
+          <div class="comment-header">
+            <div class="comment-header-div">
+              <div class="comment-user-icon"></div>
+              <p class="comment-user-name">name</p>
+            </div>
+            <div class="comment-header-div">
+              <p class="comment-create-date">2020-10-10 10:59</p>
+              <i class="el-icon-more comment-edit-icon"></i>
+            </div>
+          </div>
+          <div class="comment-main">
+            <p class="comment-text">aaaaaaiiiiiiuuuuuueeeeeeoooooo</p>
+          </div>
+        </div>
+      </div>
+      <div class="article-comment-main">
+        <div class="comment-div">
+          <div class="comment-header">
+            <div class="comment-header-div">
+              <div class="comment-user-icon"></div>
+              <p class="comment-user-name">name</p>
+            </div>
+            <div class="comment-header-div">
+              <p class="comment-create-date">2020-10-10 10:59</p>
+              <i class="el-icon-more comment-edit-icon"></i>
+            </div>
+          </div>
+          <div class="comment-main">
+            <p class="comment-text">aaaaaaiiiiiiuuuuuueeeeeeoooooo</p>
+          </div>
+        </div>
+      </div>
+      <CommentForm></CommentForm>
+    </div>
   </div>
 </template>
 
 <script>
 import Header from './../components/Header.vue'
+import CommentForm from './../components/CommentForm.vue'
 import marked from 'marked';
 import hljs from 'highlight.js';
 import 'highlight.js/styles/github.css';
@@ -24,10 +66,12 @@ export default {
   data(){
     return {
       article: null,
+      comments: [],
     }
   },
   components: {
-    Header
+    Header,
+    CommentForm,
   },
   // createdの中でaxiosを使います。get()の中のURLは、nginx.confで設定してるので、 /api/ になっています。
   created () {
@@ -56,15 +100,68 @@ export default {
 </script>
 
 <style>
-.article-show-main{
+.article-show-main,.article-comment-all{
   width: 800px;
-  margin-right: auto;
-  margin-left: auto;
-  margin-top: 30px;
+  margin: 30px auto 0 auto;
   background-color: #fff;
   padding: 20px;
 }
 .article-title{
   padding: 20px;
 }
+.article-comment-all{
+
+}
+.article-comment-header{
+  display: flex;
+  height: 50px;
+  margin-bottom: 50px;
+}
+.comment-icon{
+  font-size: 30px;
+  line-height: 60px;
+  padding-top: 27px;
+}
+.comment{
+  font-size: 20px;
+  font-weight: 600;
+  margin-left: 10px;
+  line-height: 50px;
+}
+.comment-div{
+  width: 800px;
+  border-bottom: #F6F6F4 solid 2px;
+  margin-bottom: 30px;
+}
+.comment-header{
+  display: flex;
+  justify-content:space-between;
+  height: 50px;
+}
+.comment-header-div{
+  display: flex;
+}
+.comment-user-icon{
+  background-color: #ccc;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+.comment-user-name{
+  margin-left: 10px;
+}
+.comment-create-date,.comment-user-name{
+  line-height: 10px;
+}
+.comment-create-date,.comment-edit-icon{
+  text-align: right;
+  margin-left: 15px;
+}
+.comment-edit-icon{
+  margin-top: 10px;
+}
+.comment-text{
+  margin-bottom: 50px;
+}
+
 </style>

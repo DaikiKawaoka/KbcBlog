@@ -27,13 +27,12 @@
       <el-col :span="4"><div class="grid-content"></div></el-col>
       <el-col :span="4"><div class="grid-content"></div></el-col>
       <el-col :span="4"><div class="grid-content"></div></el-col>
-      <el-col :span="4"><div class="grid-content"></div></el-col>
-      <el-col :span="4">
+      <el-col :span="6"><div class="grid-content"></div></el-col>
+      <el-col :span="2">
         <el-button v-if="isActive" type="primary" icon="el-icon-open" circle v-on:click="active"></el-button>
         <el-button v-else icon="el-icon-turn-off" circle v-on:click="active"></el-button>
       </el-col>
     </el-row>
-
 
     <el-form-item label="本文" v-if="isActive == false">
       <el-input
@@ -53,8 +52,10 @@
     </div>
 
     <el-row>
-      <el-col :span="12"><el-button type="danger" @click="$emit('cancell')">キャンセル</el-button></el-col>
-      <el-col :span="12"><el-button type="success" @click="$emit('submit')">セーブ</el-button></el-col>
+      <el-col :span="6"><div class="grid-content"></div></el-col>
+      <el-col :span="8"><el-button type="danger" @click="$emit('cancell')">キャンセル</el-button></el-col>
+      <el-col :span="8"><el-button type="success" @click="$emit('submit')">セーブ</el-button></el-col>
+      <el-col :span="4"><div class="grid-content"></div></el-col>
     </el-row>
   </el-form>
 </template>
