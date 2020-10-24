@@ -11,6 +11,10 @@ import ArticleIndex from './articles/Index.vue'
 import ArticleShow from './articles/Show.vue'
 import ArticleEdit from './articles/Edit.vue'
 import ArticleNew from './articles/New.vue'
+import LoginPage from './sessions/Login.vue'
+import UserNew from './users/New'
+import UserShow from './users/Show'
+import UserEdit from './users/Edit'
 
 const router = new VueRouter({
   mode: 'history',
@@ -34,6 +38,26 @@ const router = new VueRouter({
       path: '/Articles/:id(\\d+)/edit',
       name: 'ArticleEdit',
       component: ArticleEdit
+    },
+    {
+      path: '/login',
+      name: 'LoginPage',
+      component: LoginPage
+    },
+    {
+      path: '/Users/new',
+      name: 'UserNew',
+      component: UserNew
+    },
+    {
+      path: '/Users/show',
+      name: 'UserShow',
+      component: UserShow
+    },
+    {
+      path: '/Users/edit',
+      name: 'UserEdit',
+      component: UserEdit
     },
   ]
 })
