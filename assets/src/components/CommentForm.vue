@@ -5,15 +5,18 @@
           <div class="comment-user-icon"></div>
           <p class="comment-user-name">name</p>
         </div>
+        <div class="form-preview-icon">
+          <el-button v-if="isActive" type="primary" icon="el-icon-open" circle v-on:click="active"></el-button>
+          <el-button v-else icon="el-icon-turn-off" circle v-on:click="active"></el-button>
+        </div>
     </div>
     <div class="commnet-form-main">
-      <el-button v-if="isActive" type="primary" icon="el-icon-open" circle v-on:click="active"></el-button>
-        <el-button v-else icon="el-icon-turn-off" circle v-on:click="active"></el-button>
       <el-form :model="comment">
         <el-form-item label="投稿" v-if="isActive == false">
             <el-input
               type="textarea"
               :rows="4"
+              autosize
               placeholder="Please input"
               v-model="comment"
               font>
@@ -23,11 +26,11 @@
         <div class="article-form__preview" v-else>
           <div class="article-form__label--preview"><p class="article-form__label--preview-p">プレビュー</p></div>
           <div class="article-form__preview-body">
-            <div class="article-form__preview-body-contents" id="article-body" v-html="compiledMarkdown"></div>
+            <div class="article-form__preview-body-contents comment-form-text" id="article-form-body" v-html="compiledMarkdown"></div>
           </div>
         </div>
 
-        <el-button type="success" @click="$emit('submit')">投稿</el-button>
+        <el-button type="success" @click="$emit('submit')" class="submit-btn">投稿</el-button>
       </el-form>
     </div>
   </div>
@@ -37,7 +40,7 @@
 import marked from 'marked';
 import hljs from 'highlight.js';
 import 'highlight.js/styles/github.css';
-import './markdown.css';
+import '../components/commentFormMarkdown.css';
 
 export default {
   props: {
@@ -82,7 +85,7 @@ export default {
   border: 1px solid #ddd;
   border-radius: 4px;
   width: 800px;
-  height: 94px;
+  height: 200px;
   word-break: break-all;
   white-space: normal;
   position: relative;
@@ -99,13 +102,19 @@ export default {
   font-size: 110%;
   overflow: scroll;
 }
-.article-form__label--preview{
-  height: 40px;
-}
 .article-form__label--preview-p{
   line-height: 40px;
   color: #888;
   text-align: left;
   margin: 0;
+}
+.comment-header{
+  display: flex;
+}
+.form-preview-icon{
+  margin: 5px 10px 0 0;
+}
+.submit-btn{
+  margin-left: 720px;
 }
 </style>
