@@ -5,6 +5,7 @@ import (
 
 	"app/handler"
 	"app/repository"
+	"app/model"
 	_ "github.com/go-sql-driver/mysql" // Using MySQL driver
 	"github.com/jmoiron/sqlx"
 	"github.com/labstack/echo/v4"
@@ -55,6 +56,8 @@ func createMux() *echo.Echo {
 	e.Use(middleware.Gzip())
 
 	e.Validator = &CustomValidator{validator: validator.New()}
+
+	&CustomValidator.validator.RegisterValidation("mail_check_regexp",model.Mail_check_regexp)
 
 	// アプリケーションインスタンスを返却
 	return e

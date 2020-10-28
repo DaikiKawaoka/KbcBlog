@@ -10,7 +10,7 @@
 
       <el-form label-width="80px">
         <el-form-item label="KBC_mail">
-          <el-input type="email" v-model="email"></el-input>
+          <el-input type="email" v-model="KBC_mail"></el-input>
         </el-form-item>
         <el-form-item label="Password">
           <el-input type="password" v-model="password"></el-input>
@@ -31,7 +31,7 @@ import Header from './../components/Header.vue'
 export default {
   data() {
     return {
-      email: '',
+      KBC_mail: '',
       password: '',
       errors: ''
     };
@@ -39,22 +39,22 @@ export default {
   components: {
     Header,
   },
-  // methods: {
-  //   loginUser: function() {
-  //     axios
-  //       .post('/api/v1/sessions',{password: this.password, email: this.email})
-  //       .then(response => {
-  //         let e = response.data;
-  //         this.$router.push({ name: 'staticHome'});
-  //       })
-  //       .catch(error => {
-  //         console.error(error);
-  //         if (error.response.data && error.response.data.errors) {
-  //           this.errors = error.response.data.errors;
-  //         }
-  //       });
-  //   }
-  // }
+  methods: {
+    loginUser: function() {
+      axios
+        .post('/api/v1/sessions',{password: this.password, email: this.email})
+        .then(response => {
+          let e = response.data;
+          this.$router.push({ name: 'staticHome'});
+        })
+        .catch(error => {
+          console.error(error);
+          if (error.response.data && error.response.data.errors) {
+            this.errors = error.response.data.errors;
+          }
+        });
+    }
+  }
 }
 </script>
 
