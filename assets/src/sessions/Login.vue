@@ -5,18 +5,18 @@
 
       <div slot="header" class="clearfix">
         <span>Login</span>
-        <el-button style="float: right; padding: 3px 0" type="text">Forget password</el-button>
+        <el-button style="float: right; padding: 3px 0" type="text" @click="signup">Signup</el-button>
       </div>
 
       <el-form label-width="80px">
         <el-form-item label="KBC_mail">
-          <el-input type="email" v-model="KBC_mail"></el-input>
+          <el-input type="email" placeholder="河原学園のメールアドレス" v-model="KBC_mail"></el-input>
         </el-form-item>
         <el-form-item label="Password">
-          <el-input type="password" v-model="password"></el-input>
+          <el-input type="password" placeholder="パスワード" v-model="password"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button style="float: right" type="primary" @click="loginUser">Login</el-button>
+          <el-button style="float: right" type="primary" @click="login">Login</el-button>
         </el-form-item>
       </el-form>
 
@@ -25,7 +25,7 @@
 </template>
 
 <script>
-// import axios from "axios";
+import axios from "axios";
 import Header from './../components/Header.vue'
 
 export default {
@@ -40,20 +40,23 @@ export default {
     Header,
   },
   methods: {
-    // loginUser: function() {
-    //   axios
-    //     .post('/api/v1/sessions',{password: this.password, email: this.email})
-    //     .then(response => {
-    //       let e = response.data;
-    //       this.$router.push({ name: 'staticHome'});
-    //     })
-    //     .catch(error => {
-    //       console.error(error);
-    //       if (error.response.data && error.response.data.errors) {
-    //         this.errors = error.response.data.errors;
-    //       }
-    //     });
-    // }
+    signup: function(){
+      this.$router.push("/Users/new");
+    },
+    login: function() {
+      axios
+        .post('http://localhost/api/Login',{password: this.password, email: this.KBC_mail})
+        .then(response => {
+          let e = response.data;
+          this.$router.push({ name: 'ArticleIndex'});
+        })
+        .catch(error => {
+          console.error(error);
+          if (error.response.data && error.response.data.errors) {
+            this.errors = error.response.data.errors;
+          }
+        });
+    }
   }
 }
 </script>

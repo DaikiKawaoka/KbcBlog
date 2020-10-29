@@ -25,6 +25,7 @@ func main() {
 	e.GET("/Articles/:id/edit", handler.ArticleEdit)
 	e.POST("/Articles", handler.ArticleCreate)
 	e.POST("/Users",handler.UserCreate)
+	e.POST("/Login",handler.Login)
 
 	// Webサーバーをポート番号 8082 で起動する
 	e.Logger.Fatal(e.Start(":8082"))

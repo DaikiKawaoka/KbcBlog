@@ -5,11 +5,10 @@ SET CHARACTER_SET_CONNECTION = utf8;
 
 CREATE TABLE IF NOT EXISTS `users`(
   `id` int AUTO_INCREMENT,
-  `mail` varchar(100) NOT NULL,
+  `mail` varchar(100) NOT NULL UNIQUE,
   `passhash` varchar(255) NOT NULL,
   `mailname`char(10) NOT NULL,
   `name` varchar(20) NOT NULL,
-
   PRIMARY KEY(`id`)
 );
 
