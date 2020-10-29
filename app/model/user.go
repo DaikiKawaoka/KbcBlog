@@ -11,7 +11,7 @@ type CreateUser struct {
 	ID          int       `db:"id" json:"id"`
 	Name        string    `db:"name" json:"name" validate:"required,min=4,max=20"`
 	KBC_mail    string    `db:"mail" json:"KBC_mail" validate:"required,mail_check_regexp"`
-	Password    string    `json:"password" validate:"min=8,max=50"`
+	Password    string    `json:"password" validate:"required,min=8,max=50"`
 	Pass_cfm    string    `json:"password_confirmation"`
 	PassHash    string    `db:"passhash"`
 	MailName    string    `db:"mailname" json:"mailname"`
@@ -64,6 +64,8 @@ func (a *CreateUser) ValidationErrors(err error) []string {
 		switch err.Field() {
 		case "Name":
 			switch err.Tag() {
+			case "required":
+				message = "名前を入力してください。"
 			case "min":
 				message = "名前は4文字以上です。"
 			case "max":
@@ -79,6 +81,8 @@ func (a *CreateUser) ValidationErrors(err error) []string {
 		case "Password":
 			// エラーになったバリデーションルールを特定します。
 			switch err.Tag() {
+			case "required":
+				message = "パスワードを入力してください。"
 			case "min":
 				message = "パスワードは8文字以上です。"
 			case "max":

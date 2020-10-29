@@ -12,7 +12,11 @@
 
     <input name="uploadedImage" type="file" ref="file" v-on:change="onFileChange()" v-if="edit">
 
-    <el-form-item label="名前">
+    <el-form-item label="名前" prop="name"
+    :rules="[
+        { required: true, message: '入力必須です', trigger: 'blur' },
+        { min: 4, max: 20, message: '4~20文字で入力してください', trigger: 'blur' },
+    ]">
       <el-input
         v-model="user.name"
         placeholder="name"
@@ -27,20 +31,26 @@
     </el-form-item>
 
     <el-form-item
-    label="メールアドレス" prop="email"
+    label="メールアドレス" prop="KBC_mail"
     :rules="[
-        { required: true, message: 'タイトルは必ず入力してください。' },
-        { max: 30, message: '30文字以内で入力してください。' },
-        { type: 'email', message: 'メール形式で入力してください。' }
+        { required: true , pattern: /[\w\-\._]+@(stu.)?kawahara.ac.jp/, message: '河原学園のメールアドレスを入力してください。', trigger: 'blur'},
     ]">
-        <el-input type="text" v-model="user.KBC_mail" autocomplete="off"></el-input>
+        <el-input v-model="user.KBC_mail"></el-input>
     </el-form-item>
 
-    <el-form-item label="パスワード" prop="password">
+    <el-form-item label="パスワード" prop="password"
+    :rules="[
+        { required: true, message: '入力必須です', trigger: 'blur' },
+        { min: 8, max: 50, message: '8~50文字で入力してください', trigger: 'blur' },
+    ]">
         <el-input type="password" v-model="user.password" autocomplete="off"></el-input>
     </el-form-item>
 
-    <el-form-item label="パスワード確認" prop="password">
+    <el-form-item label="パスワード確認" prop="password"
+    :rules="[
+        { required: true, message: '入力必須です', trigger: 'blur' },
+        { min: 8, max: 50, message: '8~50文字で入力してください', trigger: 'blur' },
+    ]">
         <el-input type="password" v-model="user.password_confirmation" autocomplete="off"></el-input>
     </el-form-item>
 
