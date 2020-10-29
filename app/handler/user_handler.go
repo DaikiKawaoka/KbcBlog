@@ -21,13 +21,14 @@ type UserCreateOutput struct {
 // ArticleCreate ...
 func UserCreate(c echo.Context) error {
   // 送信されてくるフォームの内容を格納する構造体を宣言します。
-  var user model.User
+	var createuser model.CreateUser
+	var user model.User
 
   // レスポンスとして返却する構造体を宣言します。
   var out UserCreateOutput
 
   // フォームの内容を構造体に埋め込みます。
-  if err := c.Bind(&user); err != nil {
+  if err := c.Bind(&createuser); err != nil {
     // エラーの内容をサーバーのログに出力します。
     c.Logger().Error(err.Error())
 
@@ -36,19 +37,19 @@ func UserCreate(c echo.Context) error {
 	}
 
 	// バリデーションチェックを実行します。
-  if err := c.Validate(&user); err != nil {
+  if err := c.Validate(&createuser); err != nil {
     // エラーの内容をサーバーのログに出力します。
     c.Logger().Error(err.Error())
 
     // エラー内容を検査してカスタムエラーメッセージを取得します。
-    out.ValidationErrors = user.ValidationErrors(err)
+    out.ValidationErrors = createuser.ValidationErrors(err)
 
     // 解釈できたパラメータが許可されていない値の場合は 422 エラーを返却します。
     return c.JSON(http.StatusUnprocessableEntity, out)
   }
 
   // repository を呼び出して保存処理を実行します。
-  res, err := repository.UserCreate(&user)
+  res, err := repository.UserCreate(&createuser)
   if err != nil {
     // エラーの内容をサーバーのログに出力します。
     c.Logger().Error(err.Error())
@@ -61,11 +62,13 @@ func UserCreate(c echo.Context) error {
   id, _ := res.LastInsertId()
 
   // 構造体に ID をセットします。
-  user.ID = int(id)
+  // user.ID = int(id)
+  // Userをセットアップする
+  user.SetupUser(createuser,int(id))
 
   // レスポンスの構造体に保存した記事のデータを格納します。
-  out.Article = &user
+  out.User = &user
 
   // 処理成功時はステータスコード 200 でレスポンスを返却します。
-  return c.JSON(http.StatusOK, out)
+  return c.JSON(http.StatusOK,out)
 }

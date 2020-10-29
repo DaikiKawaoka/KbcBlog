@@ -24,6 +24,7 @@ func main() {
 	e.GET("/Articles/:id", handler.ArticleShow)
 	e.GET("/Articles/:id/edit", handler.ArticleEdit)
 	e.POST("/Articles", handler.ArticleCreate)
+	e.POST("/Users",handler.UserCreate)
 
 	// Webサーバーをポート番号 8082 で起動する
 	e.Logger.Fatal(e.Start(":8082"))
@@ -57,7 +58,8 @@ func createMux() *echo.Echo {
 
 	e.Validator = &CustomValidator{validator: validator.New()}
 
-	&CustomValidator.validator.RegisterValidation("mail_check_regexp",model.Mail_check_regexp)
+	// &CustomValidator.validator.RegisterValidation("mail_check_regexp",model.Mail_check_regexp)
+	// &CustomValidator.validator.RegisterValidation("password_check",model.Password_check)
 
 	// アプリケーションインスタンスを返却
 	return e
@@ -70,5 +72,6 @@ type CustomValidator struct {
 
 // Validate ...
 func (cv *CustomValidator) Validate(i interface{}) error {
+	cv.validator.RegisterValidation("mail_check_regexp",model.Mail_check_regexp)
 	return cv.validator.Struct(i)
 }

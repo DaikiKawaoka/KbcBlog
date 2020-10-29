@@ -2,9 +2,11 @@
   <el-form :model="user">
     <h2 v-if="edit">プロフィール編集</h2>
     <h2 v-else>ユーザー登録</h2>
+
     <div v-if="errors.length != 0">
-      <ul v-for="e in errors" :key="e">
-        <li><font color="red">{{ e }}</font></li>
+      <ul class="error-ul" v-for="e in errors" :key="e">
+          <li class="error-icon-li"><i class="el-icon-warning-outline"></i></li>
+          <li><font color="red">{{ e }}</font></li>
       </ul>
     </div>
 
@@ -15,12 +17,6 @@
         v-model="user.name"
         placeholder="name"
         name="user[name]"></el-input>
-    </el-form-item>
-    <el-form-item label="ユーザーネーム">
-      <el-input
-        v-model="user.user_name"
-        placeholder="user_name"
-        name="user[user_name]"></el-input>
     </el-form-item>
 
     <el-form-item label="コメント" v-if="edit">
@@ -37,7 +33,7 @@
         { max: 30, message: '30文字以内で入力してください。' },
         { type: 'email', message: 'メール形式で入力してください。' }
     ]">
-        <el-input type="text" v-model="user.email" autocomplete="off"></el-input>
+        <el-input type="text" v-model="user.KBC_mail" autocomplete="off"></el-input>
     </el-form-item>
 
     <el-form-item label="パスワード" prop="password">
@@ -60,13 +56,12 @@
  export default {
    props: {
     user: {},
-    // errors: '',
+    errors: Object,
     // edit: false,
   },
   data() {
     return{
       uploadedImage: '',
-      errors: '',
       edit: false,
     }
     },
@@ -91,5 +86,17 @@
 </script>
 
 <style scoped>
-
+i{
+  font-size: 25px;
+  color:#F56C6C;
+}
+li{
+  list-style: none;
+}
+.error-icon-li{
+  padding-right: 10px;
+}
+.error-ul{
+  display: flex;
+}
 </style>

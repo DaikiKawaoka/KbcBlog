@@ -1,3 +1,0 @@
-# app/handler
-handler/user_handler.go:51:15: undefined: repository.UserCreate
-handler/user_handler.go:67:6: out.Article undefined (type UserCreateOutput has no field or method Article)

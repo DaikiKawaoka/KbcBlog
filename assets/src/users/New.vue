@@ -5,7 +5,7 @@
   </div>
 </template>
 <script>
-// import axios from "axios";
+import axios from "axios";
 import UserForm from '../components/UserForm.vue';
 import Header from '../components/Header.vue';
 
@@ -21,9 +21,7 @@ export default {
     return {
       user: {
          name: '',
-         user_name: '',
-         email: '',
-         comment: '',
+         KBC_mail: '',
          password: '',
          password_confirmation: '',
        },
@@ -32,18 +30,18 @@ export default {
   },
   methods: {
     createUser: function() {
-      // axios
-      //   .post('/api/v1/users',this.user)
-      //   .then(response => {
-      //     let e = response.data;
-      //     this.$router.push({ name: 'userShow', params: { id: e.id } });
-      //   })
-      //   .catch(error => {
-      //     console.error(error);
-      //     if (error.response.data && error.response.data.errors) {
-      //       this.errors = error.response.data.errors;
-      //     }
-      //   });
+      axios
+        .post('http://localhost/api/Users',this.user)
+        .then(response => {
+          // let e = response.data;
+          console.log(response);
+          console.log("user作成成功");
+          // this.$router.push({ name: 'userShow', params: { id: e.id } });
+        })
+        .catch(error => {
+          console.log(error.response.data.ValidationErrors);
+          this.errors = error.response.data.ValidationErrors;
+        });
     },
     // login_user: function() {
     //   axios

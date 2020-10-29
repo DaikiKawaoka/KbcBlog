@@ -40,20 +40,20 @@ export default {
     Header,
   },
   methods: {
-    loginUser: function() {
-      axios
-        .post('/api/v1/sessions',{password: this.password, email: this.email})
-        .then(response => {
-          let e = response.data;
-          this.$router.push({ name: 'staticHome'});
-        })
-        .catch(error => {
-          console.error(error);
-          if (error.response.data && error.response.data.errors) {
-            this.errors = error.response.data.errors;
-          }
-        });
-    }
+    // loginUser: function() {
+    //   axios
+    //     .post('/api/v1/sessions',{password: this.password, email: this.email})
+    //     .then(response => {
+    //       let e = response.data;
+    //       this.$router.push({ name: 'staticHome'});
+    //     })
+    //     .catch(error => {
+    //       console.error(error);
+    //       if (error.response.data && error.response.data.errors) {
+    //         this.errors = error.response.data.errors;
+    //       }
+    //     });
+    // }
   }
 }
 </script>

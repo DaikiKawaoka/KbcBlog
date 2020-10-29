@@ -26,13 +26,6 @@ export default {
     Header,
     ArticleForm
   },
-  // createdの中でaxiosを使います。get()の中のURLは、nginx.confで設定してるので、 /api/ になっています。
-  created () {
-    this.$axios.get('http://localhost/api/Articles/new')
-      .then(response => {
-        console.log(response)
-      })
-  },
   methods: {
     createArticle: function() {
       this.$axios
