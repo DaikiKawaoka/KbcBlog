@@ -23,6 +23,12 @@ type User struct {
 	Name        string    `db:"name" json:"name"`
 }
 
+type LoginUser struct {
+	ID          int       `db:"id" json:"id"`
+	KBC_mail    string    `db:"mail" json:"KBC_mail"`
+	PassHash    string    `db:"passhash"`
+}
+
 // CreateUserからUserを作成
 func (u *User) SetupUser(cu CreateUser, id int) () {
 	u.ID = cu.ID

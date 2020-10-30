@@ -56,7 +56,7 @@ func ArticleGetByID(id int) (*model.Article, error) {
 	var article model.Article
 
 	// 結果を格納する構造体、クエリ文字列、パラメータを指定して SQL を実行します。
-	// 複数件の取得の場合は db.Select() でしたが、一件取得の場合は db.Get() になります。
+	// 一件取得の場合は db.Get()
 	if err := db.Get(&article, query, id); err != nil {
 		// エラーが発生した場合はエラーを返却します。
 		return nil, err

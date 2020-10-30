@@ -19,13 +19,18 @@ var e = createMux()
 func main() {
 	db = connectDB()
 	repository.SetDB(db)
-	e.GET("/Articles", handler.ArticleIndex)
-	e.GET("/Articles/new", handler.ArticleNew)
-	e.GET("/Articles/:id", handler.ArticleShow)
-	e.GET("/Articles/:id/edit", handler.ArticleEdit)
-	e.POST("/Articles", handler.ArticleCreate)
+
 	e.POST("/Users",handler.UserCreate)
 	e.POST("/Login",handler.Login)
+
+	// Restricted group
+	r := e.Group("/restricted")
+	r.Use(middleware.JWT([]byte("secret")))
+	r.GET("/Articles", handler.ArticleIndex)
+	r.GET("/Articles/new", handler.ArticleNew)
+	r.GET("/Articles/:id", handler.ArticleShow)
+	r.GET("/Articles/:id/edit", handler.ArticleEdit)
+	r.POST("/Articles", handler.ArticleCreate)
 
 	// Webサーバーをポート番号 8082 で起動する
 	e.Logger.Fatal(e.Start(":8082"))

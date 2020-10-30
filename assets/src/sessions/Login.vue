@@ -45,9 +45,10 @@ export default {
     },
     login: function() {
       axios
-        .post('http://localhost/api/Login',{password: this.password, email: this.KBC_mail})
+        .post('http://localhost/api/Login',{password: this.password, KBC_mail: this.KBC_mail})
         .then(response => {
-          let e = response.data;
+          let token = response.data.token;
+          console.log(token);
           this.$router.push({ name: 'ArticleIndex'});
         })
         .catch(error => {
