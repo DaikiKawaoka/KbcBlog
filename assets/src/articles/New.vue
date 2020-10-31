@@ -29,7 +29,11 @@ export default {
   methods: {
     createArticle: function() {
       this.$axios
-        .post('http://localhost/api/Articles',this.article)
+        .post('http://localhost/api/restricted/Articles', this.article,{
+          headers: {
+            Authorization: `Bearer ${this.$cookie.get("JWT")}`
+          },
+        })
         .then(response => {
           this.$router.push({ path: "/" });
           console.log(response)

@@ -27,6 +27,7 @@
 <script>
 import axios from "axios";
 import Header from './../components/Header.vue'
+// import VueCookie from 'vue-cookie';
 
 export default {
   data() {
@@ -48,8 +49,18 @@ export default {
         .post('http://localhost/api/Login',{password: this.password, KBC_mail: this.KBC_mail})
         .then(response => {
           let token = response.data.token;
-          console.log(token);
-          this.$router.push({ name: 'ArticleIndex'});
+          this.$cookie.set('JWT',token,60 * 1);
+          this.$router.push({ path: "/" });
+          // this.$router.push({ name: 'ArticleIndex'});
+          // this.$axios
+          //   .post('http://localhost/api/session',{JWT: token})
+          //   .then(response => {
+          //     this.$router.push({ path: "/" });
+          //     console.log(response)
+          //   })
+          //   .catch(error => {
+          //     console.log(error);
+          //   });
         })
         .catch(error => {
           console.error(error);

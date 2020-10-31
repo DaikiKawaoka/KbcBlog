@@ -17,7 +17,9 @@
 </template>
 
 <script>
+// import axios from "axios";
 import Header from './../components/Header.vue'
+// import VueCookie from 'vue-cookie';
 
 export default {
   name: 'app',
@@ -32,7 +34,11 @@ export default {
   },
   // createdの中でaxiosを使います。get()の中のURLは、nginx.confで設定してるので、 /api/ になっています。
   created () {
-    this.$axios.get('http://localhost/api/restricted/Articles')
+    this.$axios.get('http://localhost/api/restricted/Articles',{
+      headers: {
+        Authorization: `Bearer ${this.$cookie.get("JWT")}`
+      },
+    })
       .then(response => {
         this.articles = response.data.Articles
         console.log(response.data)

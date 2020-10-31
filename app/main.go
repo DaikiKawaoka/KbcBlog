@@ -2,7 +2,8 @@ package main
 
 import (
 	"log"
-
+	// "net/http"
+	// "time"
 	"app/handler"
 	"app/repository"
 	"app/model"
@@ -22,12 +23,12 @@ func main() {
 
 	e.POST("/Users",handler.UserCreate)
 	e.POST("/Login",handler.Login)
+	// e.POST("/session",writeCookie)
 
 	// Restricted group
 	r := e.Group("/restricted")
 	r.Use(middleware.JWT([]byte("secret")))
 	r.GET("/Articles", handler.ArticleIndex)
-	r.GET("/Articles/new", handler.ArticleNew)
 	r.GET("/Articles/:id", handler.ArticleShow)
 	r.GET("/Articles/:id/edit", handler.ArticleEdit)
 	r.POST("/Articles", handler.ArticleCreate)
@@ -70,6 +71,30 @@ func createMux() *echo.Echo {
 	// アプリケーションインスタンスを返却
 	return e
 }
+
+// CustomValidator ...
+// type Jwt struct {
+// 	Token        string    `json:"JWT"`
+// }
+
+// func writeCookie(c echo.Context) error {
+// 	var jwt Jwt
+
+// 	if err := c.Bind(&jwt); err != nil {
+//     // エラーの内容をサーバーのログに出力します。
+//     c.Logger().Error(err.Error())
+
+//     // リクエストの解釈に失敗した場合は 400 エラーを返却します。
+//     return c.JSON(http.StatusBadRequest, "NO write a cookie")
+// 	}
+
+// 	cookie := new(http.Cookie)
+// 	cookie.Name = "JWT"
+// 	cookie.Value = jwt.Token
+// 	cookie.Expires = time.Now().Add(1 * time.Hour)
+// 	c.SetCookie(cookie)
+// 	return c.JSON(http.StatusOK, "write a cookie")
+// }
 
 // CustomValidator ...
 type CustomValidator struct {

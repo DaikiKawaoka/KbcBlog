@@ -71,20 +71,6 @@ func ArticleCreate(c echo.Context) error {
 }
 
 // ArticleIndex ...
-// func ArticleIndex(c echo.Context) error {
-// 	// 記事データの一覧を取得する
-// 	articles, err := repository.ArticleList()
-// 	if err != nil {
-// 		log.Println(err.Error())
-// 		return c.NoContent(http.StatusInternalServerError)
-// 	}
-// 	data := map[string]interface{}{
-// 		"Articles": articles, // 記事データをテンプレートエンジンに渡す
-// 	}
-// 	return c.JSON(http.StatusOK, data)
-// }
-
-// ArticleIndex ...
 func ArticleIndex(c echo.Context) error {
 	// リポジトリの処理を呼び出して記事の一覧データを取得します。
 	articles, err := repository.ArticleListByCursor(0)
@@ -104,16 +90,6 @@ func ArticleIndex(c echo.Context) error {
 	}
 
 	// テンプレートファイルとデータを指定して HTML を生成し、クライアントに返却します
-	return c.JSON(http.StatusOK, data)
-}
-
-// ArticleNew ...
-func ArticleNew(c echo.Context) error {
-	data := map[string]interface{}{
-		"Message": "Article New",
-		"Now":     time.Now(),
-	}
-
 	return c.JSON(http.StatusOK, data)
 }
 
