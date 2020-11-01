@@ -1,6 +1,14 @@
 <template>
   <div id="login-all">
     <Header></Header>
+
+    <div v-if="errors.length != 0">
+      <ul class="error-ul" v-for="e in errors" :key="e">
+          <li class="error-icon-li"><i class="el-icon-warning-outline"></i></li>
+          <li><font color="red">{{ e }}</font></li>
+      </ul>
+    </div>
+  
     <el-card class="box-card login">
 
       <div slot="header" class="clearfix">
@@ -49,24 +57,13 @@ export default {
         .post('http://localhost/api/Login',{password: this.password, KBC_mail: this.KBC_mail})
         .then(response => {
           let token = response.data.token;
-          this.$cookie.set('JWT',token,60 * 1);
+          this.$cookie.set('JWT',token,5);
           this.$router.push({ path: "/" });
-          // this.$router.push({ name: 'ArticleIndex'});
-          // this.$axios
-          //   .post('http://localhost/api/session',{JWT: token})
-          //   .then(response => {
-          //     this.$router.push({ path: "/" });
-          //     console.log(response)
-          //   })
-          //   .catch(error => {
-          //     console.log(error);
-          //   });
         })
         .catch(error => {
-          console.error(error);
-          if (error.response.data && error.response.data.errors) {
-            this.errors = error.response.data.errors;
-          }
+          // if (error.response.data && error.response.data.errors) {
+            this.errors = error.response.data;
+          // }
         });
     }
   }

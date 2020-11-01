@@ -29,6 +29,7 @@ func main() {
 	r := e.Group("/restricted")
 	r.Use(middleware.JWT([]byte("secret")))
 	r.GET("/Articles", handler.ArticleIndex)
+	r.GET("/Articles/new", handler.ArticleNew)
 	r.GET("/Articles/:id", handler.ArticleShow)
 	r.GET("/Articles/:id/edit", handler.ArticleEdit)
 	r.POST("/Articles", handler.ArticleCreate)

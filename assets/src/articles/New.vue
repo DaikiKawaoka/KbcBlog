@@ -22,6 +22,23 @@ export default {
       create: true,
     }
   },
+  // createdの中でaxiosを使います。get()の中のURLは、nginx.confで設定してるので、 /api/ になっています。
+  created () {
+    this.$axios.get('http://localhost/api/restricted/Articles/new',{
+      headers: {
+        Authorization: `Bearer ${this.$cookie.get("JWT")}`
+      },
+    })
+      .then(response => {
+        console.log(response.data)
+      })
+      .catch(error => {
+        if(error.response.status == 401){
+          this.$router.push({ path: "/login" });
+        }
+        console.log(error.response);
+      })
+  },
   components: {
     Header,
     ArticleForm
@@ -39,7 +56,9 @@ export default {
           console.log(response)
         })
         .catch(error => {
-          console.log(error.response.data.ValidationErrors);
+          if(error.response.status == 401){
+            this.$router.push({ path: "/login" });
+          }
           this.errors = error.response.data.ValidationErrors;
         });
     },

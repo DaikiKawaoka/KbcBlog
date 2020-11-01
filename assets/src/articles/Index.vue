@@ -43,6 +43,12 @@ export default {
         this.articles = response.data.Articles
         console.log(response.data)
       })
+      .catch(error => {
+        if(error.response.status == 401){
+          this.$router.push({ path: "/login" });
+        }
+        console.log(error.response);
+      })
   }
 }
 </script>

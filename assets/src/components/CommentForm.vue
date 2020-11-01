@@ -11,7 +11,7 @@
         </div>
     </div>
     <div class="commnet-form-main">
-      <el-form :model="comment">
+      <el-form>
         <el-form-item label="投稿" v-if="isActive == false">
             <el-input
               type="textarea"

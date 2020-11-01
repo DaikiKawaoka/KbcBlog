@@ -113,9 +113,6 @@ export default {
 .article-title{
   padding: 20px;
 }
-.article-comment-all{
-
-}
 .article-comment-header{
   display: flex;
   height: 50px;

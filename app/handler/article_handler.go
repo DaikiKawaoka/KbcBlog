@@ -130,3 +130,7 @@ func ArticleEdit(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, data)
 }
+
+func ArticleNew(c echo.Context) error {
+	return c.JSON(http.StatusOK, "")
+}
