@@ -72,6 +72,20 @@ func ArticleCreate(c echo.Context) error {
 
 // ArticleIndex ...
 func ArticleIndex(c echo.Context) error {
+
+	userId := userIDFromToken(c)
+
+	myUser,err := repository.GetMyUser(userId)
+
+	// エラーが発生した場合
+	if err != nil {
+		// エラー内容をサーバーのログに出力します。
+		c.Logger().Error(err.Error())
+
+		// クライアントにステータスコード 500 でレスポンスを返します。
+		return c.JSON(http.StatusInternalServerError,"userが存在しません")
+	}
+
 	// リポジトリの処理を呼び出して記事の一覧データを取得します。
 	articles, err := repository.ArticleListByCursor(0)
 
@@ -81,11 +95,12 @@ func ArticleIndex(c echo.Context) error {
 		c.Logger().Error(err.Error())
 
 		// クライアントにステータスコード 500 でレスポンスを返します。
-		return c.NoContent(http.StatusInternalServerError)
+		return c.JSON(http.StatusInternalServerError,"記事の一覧データを取得中にエラー発生")
 	}
 
 	// テンプレートに渡すデータを map に格納します。
 	data := map[string]interface{}{
+		"user": myUser,
 		"Articles": articles,
 	}
 

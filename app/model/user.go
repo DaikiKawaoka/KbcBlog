@@ -19,6 +19,7 @@ type CreateUser struct {
 
 type User struct {
 	ID          int       `db:"id" json:"id"`
+	KBC_mail    string    `db:"mail" json:"KBC_mail"`
 	MailName    string    `db:"mailname" json:"mailname"`
 	Name        string    `db:"name" json:"name"`
 }

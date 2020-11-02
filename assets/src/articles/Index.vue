@@ -41,6 +41,7 @@ export default {
     })
       .then(response => {
         this.articles = response.data.Articles
+        this.user = response.data.user
         console.log(response.data)
       })
       .catch(error => {

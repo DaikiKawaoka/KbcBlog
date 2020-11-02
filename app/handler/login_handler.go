@@ -24,6 +24,13 @@ type LoginResponse struct {
   ValidationErrors []string
 }
 
+
+type JwtCustomClaims struct {
+	UserId      int
+	UserName    string
+	jwt.StandardClaims
+}
+
 func Login(c echo.Context) error {
 
 	var loginReq LoginRequest
@@ -72,21 +79,34 @@ func passwordVerify(hash, pw string) error {
 }
 
 func CreateToken(userID int) (string, error) {
-	// tokenの作成
-	// Create token
-	token := jwt.New(jwt.SigningMethodHS256)
 
-	// claimsの設定
-	token.Claims = jwt.MapClaims{
-			"user": userID,
-			"exp":  time.Now().Add(time.Hour * 1).Unix(), // 有効期限を指定
+	claims := &JwtCustomClaims{
+		userID,
+		"daiki",
+		jwt.StandardClaims{
+				ExpiresAt: time.Now().Add(time.Hour * 1).Unix(), // 有効期限を指定
+		},
 	}
 
-	// 署名
-	var secretKey = "secret" // 任意の文字列
-	tokenString, err := token.SignedString([]byte(secretKey))
-	if err != nil {
-			return "", err
-	}
-	return tokenString, nil
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+
+    t, err := token.SignedString([]byte("secret"))
+    if err != nil {
+        return "",err
+		}
+
+	return t, nil
+}
+
+func userIDFromToken(c echo.Context) int {
+	user := c.Get("user").(*jwt.Token)
+	claims := user.Claims.(*JwtCustomClaims)
+	uid := claims.UserId
+	uname:= claims.UserName
+
+	println("wwwwwwwwwwwwwwwwwwwwwwwwwwww")
+	println(uid)
+	println(uname)
+	println("wwwwwwwwwwwwwwwwwwwwwwwwwwww")
+	return uid
 }

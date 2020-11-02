@@ -18,6 +18,7 @@ type UserCreateOutput struct {
   ValidationErrors []string
 }
 
+
 // ArticleCreate ...
 func UserCreate(c echo.Context) error {
   // 送信されてくるフォームの内容を格納する構造体を宣言します。

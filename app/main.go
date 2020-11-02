@@ -17,17 +17,23 @@ import (
 var db *sqlx.DB
 var e = createMux()
 
+
 func main() {
 	db = connectDB()
 	repository.SetDB(db)
 
 	e.POST("/Users",handler.UserCreate)
 	e.POST("/Login",handler.Login)
-	// e.POST("/session",writeCookie)
 
 	// Restricted group
 	r := e.Group("/restricted")
-	r.Use(middleware.JWT([]byte("secret")))
+
+	config := middleware.JWTConfig{
+		Claims:     &handler.JwtCustomClaims{},
+		SigningKey: []byte("secret"),
+	}
+	r.Use(middleware.JWTWithConfig(config))
+
 	r.GET("/Articles", handler.ArticleIndex)
 	r.GET("/Articles/new", handler.ArticleNew)
 	r.GET("/Articles/:id", handler.ArticleShow)
@@ -66,36 +72,9 @@ func createMux() *echo.Echo {
 
 	e.Validator = &CustomValidator{validator: validator.New()}
 
-	// &CustomValidator.validator.RegisterValidation("mail_check_regexp",model.Mail_check_regexp)
-	// &CustomValidator.validator.RegisterValidation("password_check",model.Password_check)
-
 	// アプリケーションインスタンスを返却
 	return e
 }
-
-// CustomValidator ...
-// type Jwt struct {
-// 	Token        string    `json:"JWT"`
-// }
-
-// func writeCookie(c echo.Context) error {
-// 	var jwt Jwt
-
-// 	if err := c.Bind(&jwt); err != nil {
-//     // エラーの内容をサーバーのログに出力します。
-//     c.Logger().Error(err.Error())
-
-//     // リクエストの解釈に失敗した場合は 400 エラーを返却します。
-//     return c.JSON(http.StatusBadRequest, "NO write a cookie")
-// 	}
-
-// 	cookie := new(http.Cookie)
-// 	cookie.Name = "JWT"
-// 	cookie.Value = jwt.Token
-// 	cookie.Expires = time.Now().Add(1 * time.Hour)
-// 	c.SetCookie(cookie)
-// 	return c.JSON(http.StatusOK, "write a cookie")
-// }
 
 // CustomValidator ...
 type CustomValidator struct {
