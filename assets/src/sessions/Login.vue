@@ -35,7 +35,6 @@
 <script>
 import axios from "axios";
 import Header from './../components/Header.vue'
-// import VueCookie from 'vue-cookie';
 
 export default {
   data() {
@@ -57,7 +56,7 @@ export default {
         .post('http://localhost/api/Login',{password: this.password, KBC_mail: this.KBC_mail})
         .then(response => {
           let token = response.data.token;
-          this.$cookie.set('JWT',token,5);
+          this.$cookies.set('JWT',token,"1h");
           this.$router.push({ path: "/" });
         })
         .catch(error => {

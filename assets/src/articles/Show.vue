@@ -77,7 +77,7 @@ export default {
   created () {
     this.$axios.get(`http://localhost/api/restricted/Articles/${this.$route.params.id}`,{
       headers: {
-        Authorization: `Bearer ${this.$cookie.get("JWT")}`
+        Authorization: `Bearer ${this.$cookies.get("JWT")}`
       },
     })
       .then(response => {

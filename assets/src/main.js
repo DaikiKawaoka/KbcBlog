@@ -4,11 +4,10 @@ import axios from 'axios'
 import ElementUI from 'element-ui'
 import locale from 'element-ui/lib/locale/lang/ja'
 import 'element-ui/lib/theme-chalk/index.css'
-import VueCookie from 'vue-cookie';
-Vue.use(VueCookie);
+import VueCookies from 'vue-cookies'
+Vue.use(VueCookies)
 Vue.use(ElementUI, { locale });
-Vue.prototype.$axios = axios
-
+Vue.prototype.$axios = axios;
 // import axios from 'axios'
 // Vue.prototype.$axios = axios
 

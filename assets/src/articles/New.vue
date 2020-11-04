@@ -13,8 +13,14 @@ export default {
   name: 'app',
   data(){
     return {
+      user: {
+        id: 0,
+        name: "",
+        KBC_mail: "",
+        mailname: "",
+      },
       article :{
-        userid: 1,
+        userid: 0,
         title: "",
         body: "",
       },
@@ -26,11 +32,15 @@ export default {
   created () {
     this.$axios.get('http://localhost/api/restricted/Articles/new',{
       headers: {
-        Authorization: `Bearer ${this.$cookie.get("JWT")}`
+        Authorization: `Bearer ${this.$cookies.get("JWT")}`
       },
     })
       .then(response => {
         console.log(response.data)
+        this.user.id = response.data.user.id
+        this.user.KBC_mail = response.data.user.KBC_mail
+        this.user.name = response.data.user.name
+        this.user.mailname = response.data.user.mailname
       })
       .catch(error => {
         if(error.response.status == 401){
@@ -45,10 +55,11 @@ export default {
   },
   methods: {
     createArticle: function() {
+      this.article.userid = this.user.id
       this.$axios
         .post('http://localhost/api/restricted/Articles', this.article,{
           headers: {
-            Authorization: `Bearer ${this.$cookie.get("JWT")}`
+            Authorization: `Bearer ${this.$cookies.get("JWT")}`
           },
         })
         .then(response => {

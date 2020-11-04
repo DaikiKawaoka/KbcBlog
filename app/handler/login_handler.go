@@ -102,11 +102,5 @@ func userIDFromToken(c echo.Context) int {
 	user := c.Get("user").(*jwt.Token)
 	claims := user.Claims.(*JwtCustomClaims)
 	uid := claims.UserId
-	uname:= claims.UserName
-
-	println("wwwwwwwwwwwwwwwwwwwwwwwwwwww")
-	println(uid)
-	println(uname)
-	println("wwwwwwwwwwwwwwwwwwwwwwwwwwww")
 	return uid
 }

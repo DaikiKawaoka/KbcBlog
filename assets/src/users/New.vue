@@ -36,7 +36,7 @@ export default {
           // let e = response.data;
           console.log(response);
           console.log("user作成成功");
-          // this.$router.push({ name: 'userShow', params: { id: e.id } });
+          this.$router.push({ name: 'LoginPage' });
         })
         .catch(error => {
           console.log(error.response.data.ValidationErrors);

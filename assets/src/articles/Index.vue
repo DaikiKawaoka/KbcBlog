@@ -10,6 +10,7 @@
           <router-link v-bind:to="{ name : 'ArticleShow', params : { id: article.id }}">
             <h2> {{article.title}}</h2>
           </router-link>
+          <h3>{{ article.name }}</h3>
         </div>
       </div>
     </div>
@@ -19,7 +20,6 @@
 <script>
 // import axios from "axios";
 import Header from './../components/Header.vue'
-// import VueCookie from 'vue-cookie';
 
 export default {
   name: 'app',
@@ -36,7 +36,7 @@ export default {
   created () {
     this.$axios.get('http://localhost/api/restricted/Articles',{
       headers: {
-        Authorization: `Bearer ${this.$cookie.get("JWT")}`
+        Authorization: `Bearer ${this.$cookies.get("JWT")}`
       },
     })
       .then(response => {
@@ -50,7 +50,7 @@ export default {
         }
         console.log(error.response);
       })
-  }
+  },
 }
 </script>
 

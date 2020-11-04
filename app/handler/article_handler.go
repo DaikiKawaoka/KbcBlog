@@ -147,5 +147,22 @@ func ArticleEdit(c echo.Context) error {
 }
 
 func ArticleNew(c echo.Context) error {
-	return c.JSON(http.StatusOK, "")
+	userId := userIDFromToken(c)
+
+	myUser,err := repository.GetMyUser(userId)
+
+	// エラーが発生した場合
+	if err != nil {
+		// エラー内容をサーバーのログに出力します。
+		c.Logger().Error(err.Error())
+
+		// クライアントにステータスコード 500 でレスポンスを返します。
+		return c.JSON(http.StatusInternalServerError,"userが存在しません")
+	}
+
+	data := map[string]interface{}{
+		"user": myUser,
+	}
+
+	return c.JSON(http.StatusOK, data)
 }

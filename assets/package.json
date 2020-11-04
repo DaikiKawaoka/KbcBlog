@@ -14,7 +14,7 @@
     "highlight.js": "^10.2.0",
     "marked": "^1.1.1",
     "vue": "^2.6.11",
-    "vue-cookie": "^1.1.4"
+    "vue-cookies": "^1.7.4"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",

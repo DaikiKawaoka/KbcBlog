@@ -5,14 +5,20 @@
       <ul>
         <li><router-link tag="li" id="home-nav" to="/" class="a-tag">ホーム</router-link></li>
         <li><router-link tag="li" id="gift-nav" to="/Articles/new" class="a-tag">作成</router-link></li>
+        <li class="a-tag" @click="logout">ログアウト</li>
       </ul>
     </nav>
   </header>
 </template>
 
 <script>
+
 export default {
-  props: {
+  methods: {
+    logout: function() {
+      this.$cookies.remove("JWT");
+      this.$router.push({ path: "/login" });
+    }
   }
 }
 </script>

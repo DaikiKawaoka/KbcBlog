@@ -47,5 +47,4 @@ services:
       MYSQL_DATABASE: kbcblog-mysql
       TZ: 'Asia/Tokyo'
     volumes:
-      - "./db:/var/lib/mysql"
       - ./docker/mysql:/docker-entrypoint-initdb.d
