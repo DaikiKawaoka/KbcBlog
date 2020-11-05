@@ -2,15 +2,26 @@
   <header id="header">
     <div class="body-main header-body-main-div">
       <div class="header-left">
-        <h1 class="title">KBC Blog</h1>
-        <h3 v-if="!loginpage" class="header-article">記事</h3>
-        <h3 v-if="!loginpage" class="header-question">質問</h3>
+        <router-link to="/" class="a-tag"><h1 class="title">KBC Blog</h1></router-link>
+        <router-link to="/" class="a-tag2"><h3 v-if="!loginpage" class="header-article" v-bind:class="{ active: isArticle }">記事</h3></router-link>
+        <router-link to="/Questions" class="a-tag2"><h3 v-if="!loginpage" class="header-question" v-bind:class="{ active: isQuestion }">質問</h3></router-link>
       </div>
       <nav v-if="!loginpage" id="header-nav">
         <ul>
-          <li><router-link tag="li" id="home-nav" to="/" class="a-tag">ホーム</router-link></li>
-          <li><router-link tag="li" id="gift-nav" to="/Articles/new" class="a-tag">作成</router-link></li>
-          <li class="a-tag" @click="logout">ログアウト</li>
+          <!-- <li><router-link tag="li" id="gift-nav" to="/Articles/new" class="a-tag">作成</router-link></li> -->
+          <li>
+            <el-dropdown>
+              <span class="el-dropdown-link">
+                <i class="el-icon-edit toukou-icon"></i>
+                投稿<i class="el-icon-caret-bottom el-icon--right"> </i>
+              </span>
+              <el-dropdown-menu slot="dropdown">
+                <router-link to="/Articles/new" class="a-tag2"><el-dropdown-item>記事</el-dropdown-item></router-link>
+                <router-link to="/Questions/new" class="a-tag2"><el-dropdown-item>質問</el-dropdown-item></router-link>
+              </el-dropdown-menu>
+            </el-dropdown>
+          </li>
+          <li class="a-tag logout-li" @click="logout">ログアウト</li>
         </ul>
       </nav>
     </div>
@@ -22,6 +33,8 @@
 export default {
   props: {
     loginpage: Boolean,
+    isArticle: Boolean,
+    isQuestion: Boolean,
   },
   methods: {
     logout: function() {
@@ -35,7 +48,7 @@ export default {
 <style scoped>
 #header{
   height: 60px;
-  background: #7dec61;
+  background: #2ee002;
 }
 .header-body-main-div{
   display: flex;
@@ -48,6 +61,9 @@ export default {
 .title{
   line-height: 60px;
   margin: 0;
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
 }
 .header-article,.header-question{
   margin-left: 30px;
@@ -56,8 +72,8 @@ export default {
   color: #606266;
   cursor: pointer;
 }
-.header-article{
-  border-bottom: 3px solid #1100ff;
+.active{
+  border-bottom: 3px solid #e5ff00;
 }
 #header-nav{
   width: 50%;
@@ -70,16 +86,29 @@ ul{
   list-style: none;
   text-align: right;
 }
-li{
-  display: inline;
-}
 .a-tag{
   line-height: 60px;
-  margin-right: 20px;
   font-size: 15px;
   text-align: right;
   color: #606566;
   text-decoration: none;
   cursor: pointer;
+}
+.a-tag2{
+  text-decoration: none;
+  color: #606266;
+}
+.logout-li{
+  margin-left: 20px;
+}
+.el-dropdown-link {
+  cursor: pointer;
+  color: #606566;
+}
+.el-icon-arrow-down {
+  font-size: 12px;
+}
+.toukou-icon{
+  font-size: 18px;
 }
 </style>

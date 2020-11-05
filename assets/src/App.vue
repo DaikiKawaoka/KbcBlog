@@ -11,6 +11,10 @@ import ArticleIndex from './articles/Index.vue'
 import ArticleShow from './articles/Show.vue'
 import ArticleEdit from './articles/Edit.vue'
 import ArticleNew from './articles/New.vue'
+import QuestionIndex from './questions/Index.vue'
+import QuestionShow from './questions/Show.vue'
+import QuestionEdit from './questions/Edit.vue'
+import QuestionNew from './questions/New.vue'
 import LoginPage from './sessions/Login.vue'
 import UserNew from './users/New'
 import UserShow from './users/Show'
@@ -38,6 +42,26 @@ const router = new VueRouter({
       path: '/Articles/:id(\\d+)/edit',
       name: 'ArticleEdit',
       component: ArticleEdit
+    },
+    {
+      path: '/Questions',
+      name: 'QuestionIndex',
+      component: QuestionIndex
+    },
+    {
+      path: '/Questions/:id(\\d+)',
+      name: 'QuestionShow',
+      component: QuestionShow
+    },
+    {
+      path: '/Questions/new',
+      name: 'QuestionNew',
+      component: QuestionNew
+    },
+    {
+      path: '/Questions/:id(\\d+)/edit',
+      name: 'QuestionEdit',
+      component: QuestionEdit
     },
     {
       path: '/login',

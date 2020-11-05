@@ -47,9 +47,9 @@ func ArticleListByCursor(cursor int) ([]*model.Article, error) {
 // ArticleGetByID ...
 func ArticleGetByID(id int) (*model.Article, error) {
 	// クエリ文字列を生成します。
-	query := `SELECT *
-	FROM articles
-	WHERE id = ?;`
+	query := `SELECT a.id id,a.userid userid,u.name name,a.title title,a.body body,a.created created,a.updated updated
+	FROM articles a,users u
+	WHERE a.id = ? and a.userid = u.id;`
 
 	// クエリ結果を格納する変数を宣言します。
 	// 複数件取得の場合はスライスでしたが、一件取得の場合は構造体になります。

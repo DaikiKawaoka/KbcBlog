@@ -1,8 +1,31 @@
 <template>
   <div id="app">
-    <Header></Header>
-    <div class="article-show-main body-main">
+    <Header :isArticle="true" :isQuestion="false"></Header>
+    <div class="article-show-main">
       <div v-if="this.article != null">
+        <div class="comment-header">
+          <div class="comment-header-div">
+            <div class="comment-user-icon"></div>
+            <p class="comment-user-name">{{ article.name }}</p>
+          </div>
+          <div class="comment-header-div">
+            <div class="article-create-update-date-div">
+              <p class="comment-create-date article-create-date"> 作成日 {{ article.Created }}</p>
+              <p class="comment-create-date article-update-date"> 更新日 {{ article.Updated }}</p>
+            </div>
+            <span class="dropdown-span">
+              <el-dropdown>
+                <span class="el-dropdown-link icon-menu-span">
+                  <i class="el-icon-more"></i>
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item>編集</el-dropdown-item>
+                  <el-dropdown-item>削除</el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </span>
+          </div>
+        </div>
         <h1 class="article-title">{{article.title}}</h1>
         <div class="article-form__preview-body">
           <div class="article-form__preview-body-contents" id="article-body" v-html="compiledMarkdown"></div>
@@ -66,6 +89,7 @@ export default {
   data(){
     return {
       article: null,
+      user: null,
       comments: [],
     }
   },
@@ -82,7 +106,8 @@ export default {
     })
       .then(response => {
         this.article = response.data.Article
-        console.log(this.article)
+        this.user = response.data.user
+        console.log(response.data)
       }),
     function () {
       marked.setOptions({
@@ -111,7 +136,7 @@ export default {
   padding: 20px;
 }
 .article-title{
-  padding: 20px;
+  padding: 0px 20px 20px 10px;
 }
 .article-comment-header{
   display: flex;
@@ -156,7 +181,22 @@ export default {
 }
 .comment-create-date,.comment-edit-icon{
   text-align: right;
-  margin-left: 15px;
+  /* margin-left: 15px; */
+}
+.article-create-update-date-div{
+  margin-right: 10px;
+}
+.article-create-date,.article-update-date{
+  margin-top: 0;
+  font-size: 14px;
+}
+.dropdown-span{
+  margin-right: 20px;
+  margin-left: 20px;
+}
+.icon-menu-span{
+  text-align: center;
+  font-size: 22px;
 }
 .comment-edit-icon{
   margin-top: 10px;

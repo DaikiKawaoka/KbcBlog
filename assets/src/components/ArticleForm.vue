@@ -23,14 +23,19 @@
     </el-form-item>
 
     <el-row>
-      <el-col :span="4"><div class="grid-content"></div></el-col>
+      <el-col :span="2"><div class="grid-content"></div></el-col>
       <el-col :span="4"><div class="grid-content"></div></el-col>
       <el-col :span="4"><div class="grid-content"></div></el-col>
       <el-col :span="4"><div class="grid-content"></div></el-col>
       <el-col :span="6"><div class="grid-content"></div></el-col>
-      <el-col :span="2">
-        <el-button v-if="isActive" type="primary" icon="el-icon-open" circle v-on:click="active"></el-button>
-        <el-button v-else icon="el-icon-turn-off" circle v-on:click="active"></el-button>
+      <el-col :span="4">
+        <!-- <el-button v-if="isActive" type="primary" icon="el-icon-open" circle v-on:click="active"></el-button>
+        <el-button v-else icon="el-icon-turn-off" circle v-on:click="active"></el-button> -->
+        <el-switch
+          v-model="isActive"
+          active-text="プレビュー"
+          inactive-text="編集">
+        </el-switch>
       </el-col>
     </el-row>
 
@@ -45,7 +50,9 @@
     </el-form-item>
 
     <div class="article-form__preview" v-else>
-      <div class="article-form__label--preview"><p class="article-form__label--preview-p">プレビュー</p></div>
+      <div class="article-form__label--preview">
+        <p class="article-form__label--preview-p">プレビュー</p>
+      </div>
       <div class="article-form__preview-body">
         <div class="article-form__preview-body-contents" id="article-body" v-html="compiledMarkdown"></div>
       </div>
@@ -75,7 +82,7 @@ import './markdown.css';
   },
   data(){
     return{
-      isActive: false
+      isActive: false,
     }
   },
   created: function () {

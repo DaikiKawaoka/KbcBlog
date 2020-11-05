@@ -110,6 +110,13 @@ func ArticleIndex(c echo.Context) error {
 
 // ArticleShow ...
 func ArticleShow(c echo.Context) error {
+	userId := userIDFromToken(c)
+	myUser,err := repository.GetMyUser(userId)
+
+	if err != nil {
+		c.Logger().Error(err.Error())
+		return c.JSON(http.StatusInternalServerError,"userが存在しません")
+	}
 	// パスパラメータから記事 ID を取得します。
 	// 文字列型で取得されるので、strconv パッケージを利用して数値型にキャストしています。
 	id, _ := strconv.Atoi(c.Param("id"))
@@ -120,13 +127,13 @@ func ArticleShow(c echo.Context) error {
 	if err != nil {
 		// エラー内容をサーバーのログに出力します。
 		c.Logger().Error(err.Error())
-
 		// ステータスコード 500 でレスポンスを返却します。
 		return c.NoContent(http.StatusInternalServerError)
 	}
 
 	// テンプレートに渡すデータを map に格納します。
 	data := map[string]interface{}{
+		"user": myUser,
 		"Article": article,
 	}
 

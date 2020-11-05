@@ -48,3 +48,4 @@ services:
       TZ: 'Asia/Tokyo'
     volumes:
       - ./docker/mysql:/docker-entrypoint-initdb.d
+      - ./docker/mysql/my.cnf:/etc/mysql/conf.d/my.cnf

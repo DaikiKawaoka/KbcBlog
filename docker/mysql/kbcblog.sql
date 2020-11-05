@@ -25,6 +25,19 @@ CREATE TABLE IF NOT EXISTS `articles` (
 update `articles` set `created` = CURRENT_TIMESTAMP where `created` is null;
 update `articles` set `updated` = CURRENT_TIMESTAMP where `updated` is null;
 
+CREATE TABLE IF NOT EXISTS `questions` (
+  `id` int AUTO_INCREMENT,
+  `userid` int NOT NULL,
+  `title` varchar(100) NOT NULL,
+  `body` mediumtext NOT NULL,
+  `created` datetime,
+  `updated` datetime,
+  PRIMARY KEY(`id`),
+  FOREIGN KEY (`userid`) REFERENCES `users`(`id`)
+);
+update `questions` set `created` = CURRENT_TIMESTAMP where `created` is null;
+update `questions` set `updated` = CURRENT_TIMESTAMP where `updated` is null;
+
 CREATE TABLE IF NOT EXISTS `favorites` (
   `userid` int NOT NULL,
   `articleid` int NOT NULL,

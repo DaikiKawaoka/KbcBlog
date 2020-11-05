@@ -40,6 +40,12 @@ func main() {
 	r.GET("/Articles/:id/edit", handler.ArticleEdit)
 	r.POST("/Articles", handler.ArticleCreate)
 
+	r.GET("/Questions", handler.QuestionIndex)
+	r.GET("/Questions/new", handler.QuestionNew)
+	r.GET("/Questions/:id", handler.QuestionShow)
+	r.GET("/Questions/:id/edit", handler.QuestionEdit)
+	r.POST("/Questions", handler.QuestionCreate)
+
 	// Webサーバーをポート番号 8082 で起動する
 	e.Logger.Fatal(e.Start(":8082"))
 	// e.Startの中はdocker-composeのgoコンテナで設定したportsを指定してください。
