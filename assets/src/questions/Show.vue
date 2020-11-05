@@ -78,11 +78,16 @@ export default {
     this.$axios.get(`http://localhost/api/restricted/Questions/${this.$route.params.id}`,{
       headers: {
         Authorization: `Bearer ${this.$cookies.get("JWT")}`
-      },
-    })
+      },})
       .then(response => {
         this.question = response.data.Question
         console.log(this.question)
+      })
+      .catch(error => {
+        if(error.response.status == 401){
+          this.$router.push({ path: "/login" });
+        }
+        console.log(error.response);
       }),
     function () {
       marked.setOptions({

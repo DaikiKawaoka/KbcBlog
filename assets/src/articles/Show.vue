@@ -13,14 +13,21 @@
               <p class="comment-create-date article-create-date"> 作成日 {{ article.Created }}</p>
               <p class="comment-create-date article-update-date"> 更新日 {{ article.Updated }}</p>
             </div>
-            <span class="dropdown-span">
+            <span v-if="article.userid === user.id" class="dropdown-span">
               <el-dropdown>
                 <span class="el-dropdown-link icon-menu-span">
                   <i class="el-icon-more"></i>
                 </span>
                 <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item>編集</el-dropdown-item>
-                  <el-dropdown-item>削除</el-dropdown-item>
+                  <router-link class="a-tag2" v-bind:to="{ name : 'ArticleEdit', params : { id: article.id }}"><el-dropdown-item>編集</el-dropdown-item></router-link>
+                  <el-popconfirm
+                  title="本当に削除しますか?"
+                  confirm-button-text="Yes"
+                  cancel-button-text="No"
+                  @confirm="deleteArticle"
+                  >
+                    <el-dropdown-item slot="reference">削除</el-dropdown-item>
+                  </el-popconfirm>
                 </el-dropdown-menu>
               </el-dropdown>
             </span>
@@ -102,12 +109,17 @@ export default {
     this.$axios.get(`http://localhost/api/restricted/Articles/${this.$route.params.id}`,{
       headers: {
         Authorization: `Bearer ${this.$cookies.get("JWT")}`
-      },
-    })
+      },})
       .then(response => {
         this.article = response.data.Article
         this.user = response.data.user
         console.log(response.data)
+      })
+      .catch(error => {
+        if(error.response.status == 401){
+          this.$router.push({ path: "/login" });
+        }
+        console.log(error.response);
       }),
     function () {
       marked.setOptions({
@@ -125,6 +137,26 @@ export default {
       return marked(this.article.body)
     }
   },
+  methods: {
+    deleteArticle: function() {
+      this.$axios
+        .delete(`http://localhost/api/restricted/Articles/${this.$route.params.id}`,{
+          headers: {
+            Authorization: `Bearer ${this.$cookies.get("JWT")}`
+          },
+        })
+        .then(response => {
+          this.$router.push({ path: '/' });
+          console.log(response)
+        })
+        .catch(error => {
+          if(error.response.status == 401){
+            this.$router.push({ path: "/login" });
+          }
+          this.errors = error.response.data.ValidationErrors;
+        });
+    },
+  }
 }
 </script>
 
@@ -203,6 +235,10 @@ export default {
 }
 .comment-text{
   margin-bottom: 50px;
+}
+.a-tag2{
+  text-decoration: none;
+  color: #606266;
 }
 
 </style>

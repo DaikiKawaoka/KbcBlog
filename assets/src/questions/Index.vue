@@ -12,7 +12,10 @@
             <router-link v-bind:to="{ name : 'QuestionShow', params : { id: question.id }}" class="a-tag">
               <h2 class="question-title-index"> {{question.title}}</h2>
             </router-link>
-            <h3 class="question-user-name">{{ question.name }}</h3>
+            <div class="article-index-username-updated">
+              <h3 class="article-index-username">{{ question.name }}</h3>
+              <h3 class="article-index-update">投稿日 {{ question.Updated }}</h3>
+            </div>
           </div>
         </div>
       </div>
@@ -106,6 +109,7 @@ body {
   font-size: 20px;
   width: 500px;
   text-align: left;
+  margin-bottom: 0;
 }
 .question-user-name{
   font-size: 13px;

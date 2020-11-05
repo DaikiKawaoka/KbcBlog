@@ -10,9 +10,12 @@
           <div class="article-user-icon"></div>
           <div class="article-index-body">
             <router-link v-bind:to="{ name : 'ArticleShow', params : { id: article.id }}" class="a-tag">
-              <h2 class="article-title-index"> {{article.title}}</h2>
+              <h2 class="article-title-index"> {{article.title}} </h2>
             </router-link>
-            <h3 class="article-user-name">{{ article.name }}</h3>
+            <div class="article-index-username-updated">
+              <h3 class="article-index-username">{{ article.name }}</h3>
+              <h3 class="article-index-update">投稿日 {{ article.Updated }}</h3>
+            </div>
           </div>
         </div>
       </div>
@@ -101,13 +104,21 @@ body {
 .article-index-body{
   margin-left: 20px;
 }
+.article-index-username-updated{
+  display: flex;
+}
 .article-title-index{
   font-size: 20px;
   width: 500px;
   text-align: left;
+  margin-bottom: 0;
 }
-.article-user-name{
+.article-index-username,.article-index-update{
   font-size: 13px;
+}
+.article-index-update{
+  margin-left: 20px;
+  color: #999;
 }
 .a-tag{
   color: #000;

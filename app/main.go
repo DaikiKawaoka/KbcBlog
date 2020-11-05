@@ -39,6 +39,8 @@ func main() {
 	r.GET("/Articles/:id", handler.ArticleShow)
 	r.GET("/Articles/:id/edit", handler.ArticleEdit)
 	r.POST("/Articles", handler.ArticleCreate)
+	r.PATCH("/Articles/:id", handler.ArticleUpdate)  // 更新
+	r.DELETE("/Articles/:id", handler.ArticleDelete)
 
 	r.GET("/Questions", handler.QuestionIndex)
 	r.GET("/Questions/new", handler.QuestionNew)
