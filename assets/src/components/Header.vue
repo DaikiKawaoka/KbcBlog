@@ -1,6 +1,10 @@
 <template>
   <header id="header">
-    <h1>KBC Blog</h1>
+    <div class="header-left">
+      <h1 class="title">KBC Blog</h1>
+      <h3 class="header-article">記事</h3>
+      <h3 class="header-question">質問</h3>
+    </div>
     <nav id="header-nav">
       <ul>
         <li><router-link tag="li" id="home-nav" to="/" class="a-tag">ホーム</router-link></li>
@@ -26,16 +30,29 @@ export default {
 <style scoped>
 #header{
   height: 60px;
-  background: #ffb;
+  background: #7dec61;
   display: flex;
 }
-h1{
+.header-left{
   margin: 0;
+  padding-left: 20px;
+  width: 50%;
+  display: flex;
+}
+.title{
   line-height: 60px;
+  margin: 0;
+}
+.header-article,.header-question{
+  padding-left: 30px;
+  color: #606266;
+  cursor: pointer;
+}
+#header-nav{
+  width: 50%;
 }
 ul{
   margin: 0;
-  width: 500px;
   display: flex;
   justify-content: flex-end;
   align-items: center;

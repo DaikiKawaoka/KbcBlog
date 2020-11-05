@@ -55,13 +55,15 @@ export default {
 </script>
 
 <style>
+body {
+  margin: 0px;
+}
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
-  margin-left: auto;
-  margin-right: auto;
+  margin: 0 auto 0 auto;
   padding-bottom: 30px;
   background-color: #F6F6F4;
 }
@@ -73,15 +75,14 @@ h2{
   margin-top: 30px;
 }
 .index-menu{
-  width: 200px;
-  background-color: #eee;
+  width: 30%;
+  background-color: #F6F6F4;
 }
 .article-all-div{
-  width: 800px;
+  width: 55%;
   background-color: #fff;
 }
 .article-show-div{
-  margin-left: 20px;
   padding-left: 20px;
   border: solid 1px #eee;
 }
