@@ -1,16 +1,19 @@
 <template>
   <div id="app">
     <Header></Header>
-    <div class="index-main">
+    <div class="index-main body-main">
       <div class="index-menu">
         <div></div>
       </div>
       <div class="article-all-div">
         <div v-for="article in articles" :key="article.id" class="article-show-div">
-          <router-link v-bind:to="{ name : 'ArticleShow', params : { id: article.id }}">
-            <h2> {{article.title}}</h2>
-          </router-link>
-          <h3>{{ article.name }}</h3>
+          <div class="article-user-icon"></div>
+          <div class="article-index-body">
+            <router-link v-bind:to="{ name : 'ArticleShow', params : { id: article.id }}" class="a-tag">
+              <h2 class="article-title-index"> {{article.title}}</h2>
+            </router-link>
+            <h3 class="article-user-name">{{ article.name }}</h3>
+          </div>
         </div>
       </div>
     </div>
@@ -67,23 +70,48 @@ body {
   padding-bottom: 30px;
   background-color: #F6F6F4;
 }
-h2{
-  text-align: left;
+.body-main{
+  width: 1000px;
+  margin: 0 auto 0 auto;
 }
 .index-main{
   display: flex;
   margin-top: 30px;
 }
 .index-menu{
-  width: 30%;
+  width: 300px;
   background-color: #F6F6F4;
 }
 .article-all-div{
-  width: 55%;
+  width: 600px;
   background-color: #fff;
 }
 .article-show-div{
   padding-left: 20px;
   border: solid 1px #eee;
+  display: flex;
+}
+.article-user-icon{
+  margin-top: 25px;
+  background-color: #ccc;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+.article-index-body{
+  margin-left: 20px;
+}
+.article-title-index{
+  font-size: 20px;
+  width: 500px;
+  text-align: left;
+}
+.article-user-name{
+  font-size: 13px;
+}
+.a-tag{
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
 }
 </style>

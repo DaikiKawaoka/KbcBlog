@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <Header></Header>
-    <div class="article-show-main">
+    <div class="article-show-main body-main">
       <div v-if="this.article != null">
         <h1 class="article-title">{{article.title}}</h1>
         <div class="article-form__preview-body">
