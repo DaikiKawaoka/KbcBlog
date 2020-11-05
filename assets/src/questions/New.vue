@@ -63,7 +63,7 @@ export default {
           },
         })
         .then(response => {
-          this.$router.push({ path: "/" });
+          this.$router.push({ path: "/Questions" });
           console.log(response)
         })
         .catch(error => {

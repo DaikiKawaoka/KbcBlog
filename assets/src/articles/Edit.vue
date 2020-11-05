@@ -33,6 +33,9 @@ export default {
       .then(response => {
         this.user = response.data.user
         this.article = response.data.Article
+        if(this.user.id != this.article.userid){
+          this.$router.push({ path: "/" });
+        }
         console.log(response)
       })
       .catch(error => {

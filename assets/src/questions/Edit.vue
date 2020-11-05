@@ -33,6 +33,9 @@ export default {
       .then(response => {
         this.user = response.data.user
         this.question = response.data.Question
+        if(this.user.id != this.question.userid){
+          this.$router.push({ path: "/Questions" });
+        }
         console.log(response)
       })
       .catch(error => {
