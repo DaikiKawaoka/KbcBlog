@@ -3,9 +3,39 @@
     <Header :isArticle="false" :isQuestion="true"></Header>
     <div class="question-show-main">
       <div v-if="this.question != null">
-        <h1 class="question-title">{{question.title}}</h1>
-        <div class="question-form__preview-body">
-          <div class="question-form__preview-body-contents" id="question-body" v-html="compiledMarkdown"></div>
+        <div class="comment-header">
+          <div class="comment-header-div">
+            <div class="comment-user-icon"></div>
+            <p class="comment-user-name">{{ question.name }}</p>
+          </div>
+          <div class="comment-header-div">
+            <div class="article-create-update-date-div">
+              <p class="comment-create-date article-create-date"> 作成日 {{ question.Created }}</p>
+              <p class="comment-create-date article-update-date"> 更新日 {{ question.Updated }}</p>
+            </div>
+            <span v-if="question.userid === user.id" class="dropdown-span">
+              <el-dropdown>
+                <span class="el-dropdown-link icon-menu-span">
+                  <i class="el-icon-more"></i>
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <router-link class="a-tag2" v-bind:to="{ name : 'QuestionEdit', params : { id: question.id }}"><el-dropdown-item>編集</el-dropdown-item></router-link>
+                  <el-popconfirm
+                  title="本当に削除しますか?"
+                  confirm-button-text="Yes"
+                  cancel-button-text="No"
+                  @confirm="deleteQuestion"
+                  >
+                    <el-dropdown-item slot="reference">削除</el-dropdown-item>
+                  </el-popconfirm>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </span>
+          </div>
+        </div>
+        <h1 class="article-title">{{question.title}}</h1>
+        <div class="article-form__preview-body">
+          <div class="article-form__preview-body-contents" id="article-body" v-html="compiledMarkdown"></div>
         </div>
       </div>
     </div>
@@ -66,6 +96,7 @@ export default {
   data(){
     return {
       question: null,
+      user:null,
       comments: [],
     }
   },
@@ -81,6 +112,7 @@ export default {
       },})
       .then(response => {
         this.question = response.data.Question
+        this.user = response.data.user
         console.log(this.question)
       })
       .catch(error => {
@@ -105,6 +137,26 @@ export default {
       return marked(this.question.body)
     }
   },
+  methods: {
+    deleteQuestion: function() {
+      this.$axios
+        .delete(`http://localhost/api/restricted/Questions/${this.$route.params.id}`,{
+          headers: {
+            Authorization: `Bearer ${this.$cookies.get("JWT")}`
+          },
+        })
+        .then(response => {
+          this.$router.push({ path: '/Questions' });
+          console.log(response)
+        })
+        .catch(error => {
+          if(error.response.status == 401){
+            this.$router.push({ path: "/login" });
+          }
+          this.errors = error.response.data.ValidationErrors;
+        });
+    },
+  }
 }
 </script>
 

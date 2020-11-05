@@ -47,6 +47,8 @@ func main() {
 	r.GET("/Questions/:id", handler.QuestionShow)
 	r.GET("/Questions/:id/edit", handler.QuestionEdit)
 	r.POST("/Questions", handler.QuestionCreate)
+	r.PATCH("/Questions/:id", handler.QuestionUpdate)
+	r.DELETE("/Questions/:id", handler.QuestionDelete)
 
 	// Webサーバーをポート番号 8082 で起動する
 	e.Logger.Fatal(e.Start(":8082"))
