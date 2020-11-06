@@ -208,15 +208,12 @@ export default {
 .comment-user-name{
   margin-left: 10px;
 }
-.comment-create-date,.comment-user-name{
-  line-height: 10px;
-}
 .comment-create-date,.comment-edit-icon{
   text-align: right;
   margin-left: 15px;
 }
 .comment-edit-icon{
-  margin-top: 10px;
+  margin-top: 15px;
 }
 .comment-text{
   margin-bottom: 50px;

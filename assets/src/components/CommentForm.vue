@@ -1,5 +1,13 @@
 <template>
   <div class="comment-form-all">
+
+    <div v-if="errors.length != 0">
+      <ul class="error-ul" v-for="e in errors" :key="e">
+          <li class="error-icon-li"><i class="el-icon-warning-outline"></i></li>
+          <li><font color="red">{{ e }}</font></li>
+      </ul>
+    </div>
+
     <div class="comment-header">
         <div class="comment-header-div">
           <div class="comment-user-icon"></div>
@@ -18,7 +26,7 @@
               :rows="4"
               autosize
               placeholder="Please input"
-              v-model="comment"
+              v-model="comment.text"
               font>
             </el-input>
         </el-form-item>
@@ -44,11 +52,12 @@ import '../components/commentFormMarkdown.css';
 
 export default {
   props: {
+    comment: Object,
+    errors: Object,
   },
   data(){
     return{
       isActive: false,
-      comment: "",
     }
   },
   created: function () {
@@ -63,7 +72,7 @@ export default {
   },
   computed: {
     compiledMarkdown: function () {
-      return marked(this.comment)
+      return marked(this.comment.text)
     }
   },
   methods: {

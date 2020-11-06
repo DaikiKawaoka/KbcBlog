@@ -1,4 +1,4 @@
-#article-body > blockquote {
+.article-body > blockquote {
   background: #f3f3f3;
   padding: 10px 12px;
   font-style: italic;
@@ -9,14 +9,14 @@
   position: relative;
 }
 
-#article-body > p code {
+.article-body > p code {
   display: inline-block;
   background: #eee;
   padding: 1px 5px;
   border-radius: 4px;
 }
 
-#article-body pre {
+.article-body pre {
   background: #272724;
   color: #fff;
   padding: 14px;
@@ -34,11 +34,11 @@
 }
 
 
-#article-body > h1 {
+.article-body > h1 {
   font-size: 30px;
 }
 
-#article-body > h2 {
+.article-body > h2 {
   font-size: 24px;
   background: #f7f7f7;
   padding: 8px 12px;
@@ -48,7 +48,7 @@
   border-bottom: 3px solid #dadada;
 }
 
-#article-body > h3 {
+.article-body > h3 {
   font-size: 20px;
   padding: 8px 12px;
   margin-top: 32px;
@@ -56,7 +56,7 @@
   position: relative;
 }
 
-#article-body > h3::before {
+.article-body > h3::before {
   content: '';
   position: absolute;
   top: 0;
@@ -67,7 +67,7 @@
   border-radius: 2px;
 }
 
-#article-body > h4 {
+.article-body > h4 {
   font-size: 16px;
   position: relative;
   padding: 0 0 0 15px;
@@ -75,51 +75,51 @@
   margin-bottom: 8px;
 }
 
-#article-body > h5 {
+.article-body > h5 {
   font-size: 12px;
   margin-top: 24px;
   margin-bottom: 8px;
 }
 
-#article-body > p,
-#article-body > ul,
-#article-body > ol {
+.article-body > p,
+.article-body > ul,
+.article-body > ol {
   margin-top: 12px;
   margin-bottom: 8px;
 }
 
-#article-body > ul > li,
-#article-body > ol > li {
+.article-body > ul > li,
+.article-body > ol > li {
   margin-left: 20px;
 }
 
-#article-body li > ul,
-#article-body li > ol {
+.article-body li > ul,
+.article-body li > ol {
   margin-left: 20px;
 }
 
-#article-body > table {
+.article-body > table {
   border-collapse: collapse;
 }
 
-#article-body > table th,
-#article-body > table td {
+.article-body > table th,
+.article-body > table td {
   border: 1px solid #ccc;
   padding: 8px 10px;
 }
 
-#article-body > table > tbody tr:nth-of-type(odd) {
+.article-body > table > tbody tr:nth-of-type(odd) {
   background: #eee;
 }
 
-#article-body a {
+.article-body a {
   color: #0000ee;
 }
 
-#article-body > *:first-child {
+.article-body > *:first-child {
   margin-top: 0;
 }
 
-#article-body > *:last-child {
+.article-body > *:last-child {
   margin-bottom: 48px;
 }

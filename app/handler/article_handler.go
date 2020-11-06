@@ -96,7 +96,6 @@ func ArticleCreate(c echo.Context) error {
 func ArticleIndex(c echo.Context) error {
 
 	userId := userIDFromToken(c)
-
 	myUser,err := repository.GetMyUser(userId)
 
 	// エラーが発生した場合
@@ -150,13 +149,23 @@ func ArticleShow(c echo.Context) error {
 		// エラー内容をサーバーのログに出力します。
 		c.Logger().Error(err.Error())
 		// ステータスコード 500 でレスポンスを返却します。
-		return c.NoContent(http.StatusInternalServerError)
+		return c.JSON(http.StatusInternalServerError,"記事データを取得中にエラー発生")
+	}
+
+	// 記事データへのコメント一覧データを取得します。
+	comments, err := repository.ArticleCommentListByCursor(article.ID)
+
+	if err != nil {
+		c.Logger().Error(err.Error())
+		// クライアントにステータスコード 500 でレスポンスを返します。
+		return c.JSON(http.StatusInternalServerError,"記事のコメント一覧データを取得中にエラー発生")
 	}
 
 	// テンプレートに渡すデータを map に格納します。
 	data := map[string]interface{}{
 		"user": myUser,
 		"Article": article,
+		"Comments": comments,
 	}
 
 	return c.JSON(http.StatusOK, data)

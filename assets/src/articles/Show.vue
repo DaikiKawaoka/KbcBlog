@@ -10,8 +10,8 @@
           </div>
           <div class="comment-header-div">
             <div class="article-create-update-date-div">
-              <p class="comment-create-date article-create-date"> 作成日 {{ article.Created }}</p>
-              <p class="comment-create-date article-update-date"> 更新日 {{ article.Updated }}</p>
+              <p class="article-create-date"> 作成日 {{ article.Created }}</p>
+              <p class="article-create-date"> 更新日 {{ article.Updated }}</p>
             </div>
             <span v-if="article.userid === user.id" class="dropdown-span">
               <el-dropdown>
@@ -35,7 +35,7 @@
         </div>
         <h1 class="article-title">{{article.title}}</h1>
         <div class="article-form__preview-body">
-          <div class="article-form__preview-body-contents" id="article-body" v-html="compiledMarkdown"></div>
+          <div class="article-body article-form__preview-body-contents" v-html="compiledMarkdown"></div>
         </div>
       </div>
     </div>
@@ -44,41 +44,43 @@
         <i class="el-icon-chat-dot-round comment-icon"></i>
         <p class="comment">コメント</p>
       </div>
-      <div class="article-comment-main">
+      <div v-for="c in comments" :key="c.id" class="article-comment-main">
         <div class="comment-div">
           <div class="comment-header">
             <div class="comment-header-div">
               <div class="comment-user-icon"></div>
-              <p class="comment-user-name">name</p>
+              <p class="comment-user-name">{{c.name}}</p>
             </div>
             <div class="comment-header-div">
-              <p class="comment-create-date">2020-10-10 10:59</p>
-              <i class="el-icon-more comment-edit-icon"></i>
+              <div>
+                <p class="comment-create-date">投稿日 {{c.Created}}</p>
+              </div>
+              <span v-if="article.userid === user.id" class="dropdown-span">
+                <el-dropdown>
+                  <span class="el-dropdown-link icon-menu-span">
+                    <i class="el-icon-more comment-edit-icon"></i>
+                  </span>
+                  <el-dropdown-menu slot="dropdown">
+                    <el-popconfirm
+                    title="本当に削除しますか?"
+                    confirm-button-text="Yes"
+                    cancel-button-text="No"
+                    @confirm="deleteArticleComment"
+                    >
+                      <el-dropdown-item slot="reference">削除</el-dropdown-item>
+                    </el-popconfirm>
+                  </el-dropdown-menu>
+                </el-dropdown>
+              </span>
             </div>
           </div>
           <div class="comment-main">
-            <p class="comment-text">aaaaaaiiiiiiuuuuuueeeeeeoooooo</p>
+            <div class="article-body comment-text" v-html="compiledMarkdownComment(c.text)"></div>
           </div>
         </div>
       </div>
-      <div class="article-comment-main">
-        <div class="comment-div">
-          <div class="comment-header">
-            <div class="comment-header-div">
-              <div class="comment-user-icon"></div>
-              <p class="comment-user-name">name</p>
-            </div>
-            <div class="comment-header-div">
-              <p class="comment-create-date">2020-10-10 10:59</p>
-              <i class="el-icon-more comment-edit-icon"></i>
-            </div>
-          </div>
-          <div class="comment-main">
-            <p class="comment-text">aaaaaaiiiiiiuuuuuueeeeeeoooooo</p>
-          </div>
-        </div>
-      </div>
-      <CommentForm></CommentForm>
+
+      <CommentForm :comment="comment" :errors="errors" @submit="createArticleComment"></CommentForm>
     </div>
   </div>
 </template>
@@ -97,7 +99,13 @@ export default {
     return {
       article: null,
       user: null,
+      comment:{
+        userid: 0,
+        articleid: 0,
+        text: "",
+      },
       comments: [],
+      errors: {},
     }
   },
   components: {
@@ -113,7 +121,11 @@ export default {
       .then(response => {
         this.article = response.data.Article
         this.user = response.data.user
-        console.log(response.data)
+        this.comments = response.data.Comments
+
+        //commentに各idを代入
+        this.comment.articleid = this.article.id
+        this.comment.userid = this.user.id
       })
       .catch(error => {
         if(error.response.status == 401){
@@ -135,12 +147,55 @@ export default {
   computed: {
     compiledMarkdown: function () {
       return marked(this.article.body)
+    },
+    compiledMarkdownComment: function(){
+      return function(value) {
+        return marked(value)
+      }
     }
   },
   methods: {
+    createArticleComment: function() {
+      this.$axios
+        .post(`http://localhost/api/restricted/Articles/${this.article.id}/Comments`, this.comment,{
+          headers: {
+            Authorization: `Bearer ${this.$cookies.get("JWT")}`
+          },
+        })
+        .then(response => {
+          // this.$router.push({ path: "/" });
+          console.log(response)
+        })
+        .catch(error => {
+          if(error.response.status == 401){
+            this.$router.push({ path: "/login" });
+          }
+          this.errors = error.response.data.ValidationErrors;
+        });
+    },
+
     deleteArticle: function() {
       this.$axios
-        .delete(`http://localhost/api/restricted/Articles/${this.$route.params.id}`,{
+        .delete(`http://localhost/api/restricted/Articles/${this.article.id}`,this.article,{
+          headers: {
+            Authorization: `Bearer ${this.$cookies.get("JWT")}`
+          },
+        })
+        .then(response => {
+          this.$router.push({ path: '/' });
+          console.log(response)
+        })
+        .catch(error => {
+          if(error.response.status == 401){
+            this.$router.push({ path: "/login" });
+          }
+          this.errors = error.response.data.ValidationErrors;
+        });
+    },
+
+    deleteArticleComment: function() {
+      this.$axios
+        .delete(`http://localhost/api/restricted/Articles/${this.article.id}/Comments/`,this.article,{
           headers: {
             Authorization: `Bearer ${this.$cookies.get("JWT")}`
           },
@@ -175,6 +230,10 @@ export default {
   height: 50px;
   margin-bottom: 50px;
 }
+.article-create-date,.article-update-date{
+  font-size: 10px;
+  line-height: 10px;
+}
 .comment-icon{
   font-size: 30px;
   line-height: 60px;
@@ -207,9 +266,10 @@ export default {
 }
 .comment-user-name{
   margin-left: 10px;
-}
-.comment-create-date,.comment-user-name{
   line-height: 10px;
+}
+.comment-create-date{
+  font-size: 8px;
 }
 .comment-create-date,.comment-edit-icon{
   text-align: right;
@@ -231,10 +291,10 @@ export default {
   font-size: 22px;
 }
 .comment-edit-icon{
-  margin-top: 10px;
+  margin-top: 15px;
 }
 .comment-text{
-  margin-bottom: 50px;
+  margin: 10px 15px 50px 15px;
 }
 .a-tag2{
   text-decoration: none;

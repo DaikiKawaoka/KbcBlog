@@ -41,6 +41,7 @@ export default {
         this.user.KBC_mail = response.data.user.KBC_mail
         this.user.name = response.data.user.name
         this.user.mailname = response.data.user.mailname
+        this.article.userid = this.user.id
       })
       .catch(error => {
         if(error.response.status == 401){
@@ -55,7 +56,6 @@ export default {
   },
   methods: {
     createArticle: function() {
-      this.article.userid = this.user.id
       this.$axios
         .post('http://localhost/api/restricted/Articles', this.article,{
           headers: {
