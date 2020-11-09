@@ -2,7 +2,6 @@ package model
 
 import (
 	"gopkg.in/go-playground/validator.v9"
-	"time"
 )
 
 // Article ...
@@ -12,8 +11,8 @@ type Article struct {
 	UserName string   `db:"name" json:"name"`
 	Title   string    `db:"title" json:"title" validate:"required,max=50"`
 	Body    string    `db:"body" json:"body" validate:"required"`
-	Created time.Time `db:"created"`
-	Updated time.Time `db:"updated"`
+	Created string `db:"created"`
+	Updated string `db:"updated"`
 }
 
 // ValidationErrors ...

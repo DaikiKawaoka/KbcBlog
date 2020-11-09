@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS `articles` (
   `created` datetime,
   `updated` datetime,
   PRIMARY KEY(`id`),
-  FOREIGN KEY (`userid`) REFERENCES `users`(`id`)
+  FOREIGN KEY (`userid`) REFERENCES `users`(`id`) ON DELETE CASCADE
 );
 update `articles` set `created` = CURRENT_TIMESTAMP where `created` is null;
 update `articles` set `updated` = CURRENT_TIMESTAMP where `updated` is null;
@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS `questions` (
   `created` datetime,
   `updated` datetime,
   PRIMARY KEY(`id`),
-  FOREIGN KEY (`userid`) REFERENCES `users`(`id`)
+  FOREIGN KEY (`userid`) REFERENCES `users`(`id`) ON DELETE CASCADE
 );
 update `questions` set `created` = CURRENT_TIMESTAMP where `created` is null;
 update `questions` set `updated` = CURRENT_TIMESTAMP where `updated` is null;
@@ -42,8 +42,8 @@ CREATE TABLE IF NOT EXISTS `favorites` (
   `userid` int NOT NULL,
   `articleid` int NOT NULL,
   `created` datetime,
-  FOREIGN KEY (`userid`) REFERENCES `users`(`id`),
-  FOREIGN KEY (`articleid`) REFERENCES `articles`(`id`),
+  FOREIGN KEY (`userid`) REFERENCES `users`(`id`) ON DELETE CASCADE,
+  FOREIGN KEY (`articleid`) REFERENCES `articles`(`id`) ON DELETE CASCADE,
   PRIMARY KEY(`userid`,`articleid`)
 );
 update `favorites` set `created` = CURRENT_TIMESTAMP where `created` is null;
@@ -56,8 +56,8 @@ CREATE TABLE IF NOT EXISTS `comments` (
   `created` datetime,
   `updated` datetime,
   PRIMARY KEY(`id`),
-  FOREIGN KEY (`userid`) REFERENCES `users`(`id`),
-  FOREIGN KEY (`articleid`) REFERENCES `articles`(`id`)
+  FOREIGN KEY (`userid`) REFERENCES `users`(`id`) ON DELETE CASCADE,
+  FOREIGN KEY (`articleid`) REFERENCES `articles`(`id`) ON DELETE CASCADE
 );
 update `comments` set `created` = CURRENT_TIMESTAMP where `created` is null;
 update `comments` set `updated` = CURRENT_TIMESTAMP where `updated` is null;

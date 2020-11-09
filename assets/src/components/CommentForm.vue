@@ -11,7 +11,7 @@
     <div class="comment-header">
         <div class="comment-header-div">
           <div class="comment-user-icon"></div>
-          <p class="comment-user-name">name</p>
+          <p class="comment-user-name">{{ user.name }}</p>
         </div>
         <div class="form-preview-icon">
           <el-button v-if="isActive" type="primary" icon="el-icon-open" circle v-on:click="active"></el-button>
@@ -53,6 +53,7 @@ import '../components/commentFormMarkdown.css';
 export default {
   props: {
     comment: Object,
+    user: null,
     errors: Object,
   },
   data(){
@@ -125,5 +126,19 @@ export default {
 }
 .submit-btn{
   margin-left: 720px;
+}
+
+i{
+  font-size: 25px;
+  color:#F56C6C;
+}
+li{
+  list-style: none;
+}
+.error-icon-li{
+  padding-right: 10px;
+}
+.error-ul{
+  display: flex;
 }
 </style>

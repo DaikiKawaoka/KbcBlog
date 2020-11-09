@@ -55,7 +55,7 @@
               <div>
                 <p class="comment-create-date">投稿日 {{c.Created}}</p>
               </div>
-              <span v-if="article.userid === user.id" class="dropdown-span">
+              <span v-if="c.userid === user.id" class="dropdown-span">
                 <el-dropdown>
                   <span class="el-dropdown-link icon-menu-span">
                     <i class="el-icon-more comment-edit-icon"></i>
@@ -65,7 +65,7 @@
                     title="本当に削除しますか?"
                     confirm-button-text="Yes"
                     cancel-button-text="No"
-                    @confirm="deleteArticleComment"
+                    @confirm="deleteArticleComment(c.id)"
                     >
                       <el-dropdown-item slot="reference">削除</el-dropdown-item>
                     </el-popconfirm>
@@ -80,7 +80,7 @@
         </div>
       </div>
 
-      <CommentForm :comment="comment" :errors="errors" @submit="createArticleComment"></CommentForm>
+      <CommentForm :comment="comment" :errors="errors" :user="user" @submit="createArticleComment"></CommentForm>
     </div>
   </div>
 </template>
@@ -98,7 +98,7 @@ export default {
   data(){
     return {
       article: null,
-      user: null,
+      user: Object,
       comment:{
         userid: 0,
         articleid: 0,
@@ -163,7 +163,7 @@ export default {
           },
         })
         .then(response => {
-          // this.$router.push({ path: "/" });
+          this.$router.go({path: this.$router.currentRoute.path, force: true})
           console.log(response)
         })
         .catch(error => {
@@ -176,7 +176,7 @@ export default {
 
     deleteArticle: function() {
       this.$axios
-        .delete(`http://localhost/api/restricted/Articles/${this.article.id}`,this.article,{
+        .delete(`http://localhost/api/restricted/Articles/${this.article.id}`,{
           headers: {
             Authorization: `Bearer ${this.$cookies.get("JWT")}`
           },
@@ -193,15 +193,15 @@ export default {
         });
     },
 
-    deleteArticleComment: function() {
+    deleteArticleComment: function(commentId) {
       this.$axios
-        .delete(`http://localhost/api/restricted/Articles/${this.article.id}/Comments/`,this.article,{
+        .delete(`http://localhost/api/restricted/Articles/${this.article.id}/Comments/${commentId}`,{
           headers: {
             Authorization: `Bearer ${this.$cookies.get("JWT")}`
           },
         })
         .then(response => {
-          this.$router.push({ path: '/' });
+          // this.$router.push({ path: '/' });
           console.log(response)
         })
         .catch(error => {
@@ -292,6 +292,9 @@ export default {
 }
 .comment-edit-icon{
   margin-top: 15px;
+}
+.el-icon-more{
+  cursor: pointer;
 }
 .comment-text{
   margin: 10px 15px 50px 15px;

@@ -22,6 +22,9 @@ import UserEdit from './users/Edit'
 
 const router = new VueRouter({
   mode: 'history',
+  scrollBehavior() {
+    return { x: 0, y: 0 };
+  },
   routes: [
     {
       path: '/',

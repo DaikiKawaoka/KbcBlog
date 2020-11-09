@@ -285,7 +285,7 @@ func ArticleDelete(c echo.Context) error {
 		c.Logger().Error(err.Error())
 
 		// サーバーサイドでエラーが発生した場合は 500 エラーを返却します。
-		return c.JSON(http.StatusInternalServerError, "")
+		return c.JSON(http.StatusInternalServerError, "記事削除中にエラー発生")
 	}
 
 	// 成功時はステータスコード 200 を返却します。

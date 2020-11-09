@@ -25,12 +25,13 @@ func ArticleCommentListByCursor(articleid int) ([]*model.Comment, error) {
 }
 
 func ArticleCommentCreate(comment *model.Comment) (sql.Result, error) {
-  // 現在日時を取得します
-  now := time.Now()
+	// 現在日時を取得します
+
+	now := time.Now().In(jst)
 
   // 構造体に現在日時を設定します。
-  comment.Created = now
-  comment.Updated = now
+  comment.Created = now.Format("2006/01/02 15:04:05")
+  comment.Updated = now.Format("2006/01/02 15:04:05")
 
   // クエリ文字列を生成します。
   query := `INSERT INTO comments (userid, articleid, text, created, updated)
@@ -60,10 +61,10 @@ func ArticleCommentCreate(comment *model.Comment) (sql.Result, error) {
 
 func ArticleCommentUpdate(comment *model.Comment) (sql.Result, error) {
 	// 現在日時を取得します
-	now := time.Now()
+	now := time.Now().In(jst)
 
 	// 構造体に現在日時を設定します。
-	comment.Updated = now
+	comment.Updated = now.Format("2006/01/02 15:04:05")
 
 	// クエリ文字列を生成します。
 	query := `UPDATE comments

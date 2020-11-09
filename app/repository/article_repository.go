@@ -7,6 +7,7 @@ import (
 "app/model"
 )
 
+
 // func ArticleList() ([]*model.Article, error) {
 // 	query := `SELECT id,title,body FROM articles;`
 
@@ -69,11 +70,11 @@ func ArticleGetByID(id int) (*model.Article, error) {
 // ArticleCreate ...
 func ArticleCreate(article *model.Article) (sql.Result, error) {
   // 現在日時を取得します
-  now := time.Now()
+	now := time.Now().In(jst)
 
   // 構造体に現在日時を設定します。
-  article.Created = now
-  article.Updated = now
+  article.Created = now.Format("2006/01/02 15:04:05")
+  article.Updated = now.Format("2006/01/02 15:04:05")
 
   // クエリ文字列を生成します。
   query := `INSERT INTO articles (userid,title, body, created, updated)
@@ -104,10 +105,10 @@ func ArticleCreate(article *model.Article) (sql.Result, error) {
 // ArticleUpdate ...
 func ArticleUpdate(article *model.Article) (sql.Result, error) {
 	// 現在日時を取得します
-	now := time.Now()
+	now := time.Now().In(jst)
 
 	// 構造体に現在日時を設定します。
-	article.Updated = now
+	article.Updated = now.Format("2006/01/02 15:04:05")
 
 	// クエリ文字列を生成します。
 	query := `UPDATE articles
