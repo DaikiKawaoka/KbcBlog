@@ -44,8 +44,7 @@ func main() {
 
 	r.GET("/Articles/:id/Comments",handler.ArticleCommentIndex)
 	r.POST("/Articles/:id/Comments",handler.ArticleCommentCreate)
-	// r.PATCH("/Articles/:id/Comments/:cid", handler.ArticleCommentUpdate)  // 更新
-	// r.DELETE("/Articles/:id/Comments/:cid", handler.ArticleCommentDelete)
+	r.DELETE("/Articles/:id/Comments/:cid", handler.ArticleCommentDelete)
 
 	r.GET("/Questions", handler.QuestionIndex)
 	r.GET("/Questions/new", handler.QuestionNew)

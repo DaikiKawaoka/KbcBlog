@@ -201,7 +201,7 @@ export default {
           },
         })
         .then(response => {
-          // this.$router.push({ path: '/' });
+          this.$router.go({path: this.$router.currentRoute.path, force: true})
           console.log(response)
         })
         .catch(error => {

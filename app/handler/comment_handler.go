@@ -76,3 +76,21 @@ func ArticleCommentIndex(c echo.Context) error {
 	// テンプレートファイルとデータを指定して HTML を生成し、クライアントに返却します
 	return c.JSON(http.StatusOK, data)
 }
+
+func ArticleCommentDelete(c echo.Context) error {
+	// パスパラメータから記事 ID を取得します。
+	// 文字列型で取得されるので、strconv パッケージを利用して数値型にキャストしています。
+	id, _ := strconv.Atoi(c.Param("cid"))
+
+	// repository の記事削除処理を呼び出します。
+	if err := repository.ArticleCommentDelete(id); err != nil {
+		// サーバーのログにエラー内容を出力します。
+		c.Logger().Error(err.Error())
+
+		// サーバーサイドでエラーが発生した場合は 500 エラーを返却します。
+		return c.JSON(http.StatusInternalServerError, "コメント削除中にエラー発生")
+	}
+
+	// 成功時はステータスコード 200 を返却します。
+	return c.JSON(http.StatusOK, "コメントを削除しました。")
+}
