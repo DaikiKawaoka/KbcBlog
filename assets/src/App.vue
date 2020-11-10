@@ -77,12 +77,12 @@ const router = new VueRouter({
       component: UserNew
     },
     {
-      path: '/Users/show',
+      path: '/Users/:id(\\d+)',
       name: 'UserShow',
       component: UserShow
     },
     {
-      path: '/Users/edit',
+      path: '/Users/:id(\\d+)/edit',
       name: 'UserEdit',
       component: UserEdit
     },

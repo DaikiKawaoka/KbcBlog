@@ -34,6 +34,7 @@ func main() {
 	}
 	r.Use(middleware.JWTWithConfig(config))
 
+	// Article
 	r.GET("/Articles", handler.ArticleIndex)
 	r.GET("/Articles/new", handler.ArticleNew)
 	r.GET("/Articles/:id", handler.ArticleShow)
@@ -41,11 +42,11 @@ func main() {
 	r.POST("/Articles", handler.ArticleCreate)
 	r.PATCH("/Articles/:id", handler.ArticleUpdate)  // 更新
 	r.DELETE("/Articles/:id", handler.ArticleDelete)
-
+  // ArticleComment
 	r.GET("/Articles/:id/Comments",handler.ArticleCommentIndex)
 	r.POST("/Articles/:id/Comments",handler.ArticleCommentCreate)
 	r.DELETE("/Articles/:id/Comments/:cid", handler.ArticleCommentDelete)
-
+  // Question
 	r.GET("/Questions", handler.QuestionIndex)
 	r.GET("/Questions/new", handler.QuestionNew)
 	r.GET("/Questions/:id", handler.QuestionShow)
@@ -53,6 +54,15 @@ func main() {
 	r.POST("/Questions", handler.QuestionCreate)
 	r.PATCH("/Questions/:id", handler.QuestionUpdate)
 	r.DELETE("/Questions/:id", handler.QuestionDelete)
+  // QuestionComment
+	r.GET("/Questions/:id/Comments",handler.QuestionCommentIndex)
+	r.POST("/Questions/:id/Comments",handler.QuestionCommentCreate)
+	r.DELETE("/Questions/:id/Comments/:cid", handler.QuestionCommentDelete)
+
+	// User
+	r.GET("/Users/:id",handler.UserShow)
+	// r.GET("/Users/:id/edit", handler.UserEdit)
+	// r.PATCH("/Users/:id", handler.UserUpdate)  // 更新
 
 	// Webサーバーをポート番号 8082 で起動する
 	e.Logger.Fatal(e.Start(":8082"))

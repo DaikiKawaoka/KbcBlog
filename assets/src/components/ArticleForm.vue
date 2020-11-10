@@ -54,7 +54,7 @@
         <p class="article-form__label--preview-p">プレビュー</p>
       </div>
       <div class="article-form__preview-body">
-        <div class="article-form__preview-body-contents" id="article-body" v-html="compiledMarkdown"></div>
+        <div class="article-form__preview-body-contents article-body" v-html="compiledMarkdown"></div>
       </div>
     </div>
 
@@ -77,7 +77,7 @@ import './markdown.css';
  export default {
    props: {
     article: Object,
-    errors: Array,
+    errors: Object,
     create: Boolean,
   },
   data(){

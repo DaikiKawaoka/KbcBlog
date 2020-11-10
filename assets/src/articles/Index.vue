@@ -7,13 +7,19 @@
       </div>
       <div class="article-all-div">
         <div v-for="article in articles" :key="article.id" class="article-show-div">
-          <div class="article-user-icon"></div>
+          <div class="article-user-icon">
+            <router-link v-bind:to="{ name : 'UserShow', params : { id: article.userid }}" class="a-tag">
+              <!-- image -->
+            </router-link>
+          </div>
           <div class="article-index-body">
             <router-link v-bind:to="{ name : 'ArticleShow', params : { id: article.id }}" class="a-tag">
               <h2 class="article-title-index"> {{article.title}} </h2>
             </router-link>
             <div class="article-index-username-updated">
-              <h3 class="article-index-username">{{ article.name }}</h3>
+              <router-link v-bind:to="{ name : 'UserShow', params : { id: article.userid }}" class="a-tag">
+                <h3 class="article-index-username">{{ article.name }}</h3>
+              </router-link>
               <h3 class="article-index-update">投稿日 {{ article.Updated }}</h3>
             </div>
           </div>

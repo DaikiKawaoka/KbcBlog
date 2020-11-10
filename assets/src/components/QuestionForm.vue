@@ -52,7 +52,7 @@
         <p class="question-form__label--preview-p">プレビュー</p>
       </div>
       <div class="question-form__preview-body">
-        <div class="question-form__preview-body-contents" id="question-body" v-html="compiledMarkdown"></div>
+        <div class="question-form__preview-body-contents article-body" v-html="compiledMarkdown"></div>
       </div>
     </div>
 

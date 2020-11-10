@@ -65,3 +65,24 @@ func UserCreate(user *model.CreateUser) (sql.Result, error) {
   // SQL の実行結果を返却します。
   return res, nil
 }
+
+func UserGetByID(id int) (*model.User, error) {
+	// クエリ文字列を生成します。
+	query := `SELECT id, mail, mailname, name
+	FROM users
+	WHERE id = ?`
+
+	// クエリ結果を格納する変数を宣言します。
+	// 複数件取得の場合はスライスでしたが、一件取得の場合は構造体になります。
+	var user model.User
+
+	// 結果を格納する構造体、クエリ文字列、パラメータを指定して SQL を実行します。
+	// 一件取得の場合は db.Get()
+	if err := db.Get(&user, query, id); err != nil {
+		// エラーが発生した場合はエラーを返却します。
+		return nil, err
+	}
+
+	// エラーがない場合は記事データを返却します。
+	return &user, nil
+}

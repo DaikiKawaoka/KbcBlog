@@ -69,12 +69,11 @@
    props: {
     user: {},
     errors: Object,
-    // edit: false,
+    edit: Boolean,
   },
   data() {
     return{
       uploadedImage: '',
-      edit: false,
     }
     },
     methods: {

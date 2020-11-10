@@ -39,47 +39,49 @@
         </div>
       </div>
     </div>
-    <div class="question-comment-all">
-      <div class="question-comment-header">
+    <div class="article-comment-all">
+      <div class="article-comment-header">
         <i class="el-icon-chat-dot-round comment-icon"></i>
         <p class="comment">コメント</p>
       </div>
-      <div class="question-comment-main">
+      <div v-for="c in comments" :key="c.id" class="article-comment-main">
         <div class="comment-div">
           <div class="comment-header">
             <div class="comment-header-div">
               <div class="comment-user-icon"></div>
-              <p class="comment-user-name">name</p>
+              <p class="comment-user-name">{{c.name}}</p>
             </div>
             <div class="comment-header-div">
-              <p class="comment-create-date">2020-10-10 10:59</p>
-              <i class="el-icon-more comment-edit-icon"></i>
+              <div>
+                <p class="comment-create-date">投稿日 {{c.Created}}</p>
+              </div>
+              <span v-if="c.userid === user.id" class="dropdown-span">
+                <el-dropdown>
+                  <span class="el-dropdown-link icon-menu-span">
+                    <i class="el-icon-more comment-edit-icon"></i>
+                  </span>
+                  <el-dropdown-menu slot="dropdown">
+                    <el-popconfirm
+                    title="本当に削除しますか?"
+                    confirm-button-text="Yes"
+                    cancel-button-text="No"
+                    @confirm="deleteQuestionComment(c.id)"
+                    >
+                      <el-dropdown-item slot="reference">削除</el-dropdown-item>
+                    </el-popconfirm>
+                  </el-dropdown-menu>
+                </el-dropdown>
+              </span>
             </div>
           </div>
           <div class="comment-main">
-            <p class="comment-text">aaaaaaiiiiiiuuuuuueeeeeeoooooo</p>
+            <div class="article-body comment-text" v-html="compiledMarkdownComment(c.text)"></div>
           </div>
         </div>
       </div>
-      <div class="question-comment-main">
-        <div class="comment-div">
-          <div class="comment-header">
-            <div class="comment-header-div">
-              <div class="comment-user-icon"></div>
-              <p class="comment-user-name">name</p>
-            </div>
-            <div class="comment-header-div">
-              <p class="comment-create-date">2020-10-10 10:59</p>
-              <i class="el-icon-more comment-edit-icon"></i>
-            </div>
-          </div>
-          <div class="comment-main">
-            <p class="comment-text">aaaaaaiiiiiiuuuuuueeeeeeoooooo</p>
-          </div>
-        </div>
-      </div>
-      <CommentForm></CommentForm>
+      <CommentForm :comment="comment" :errors="errors" :user="user" @submit="createQuestionComment"></CommentForm>
     </div>
+
   </div>
 </template>
 
@@ -96,8 +98,14 @@ export default {
   data(){
     return {
       question: null,
-      user:null,
+      user: Object,
+      comment:{
+        userid: 0,
+        questionid: 0,
+        text: "",
+      },
       comments: [],
+      errors: {},
     }
   },
   components: {
@@ -113,7 +121,11 @@ export default {
       .then(response => {
         this.question = response.data.Question
         this.user = response.data.user
-        console.log(this.question)
+        this.comments = response.data.Comments
+
+        //commentに各idを代入
+        this.comment.questionid = this.question.id
+        this.comment.userid = this.user.id
       })
       .catch(error => {
         if(error.response.status == 401){
@@ -135,9 +147,52 @@ export default {
   computed: {
     compiledMarkdown: function () {
       return marked(this.question.body)
+    },
+    compiledMarkdownComment: function(){
+      return function(value) {
+        return marked(value)
+      }
     }
   },
   methods: {
+    createQuestionComment: function() {
+      this.$axios
+        .post(`http://localhost/api/restricted/Questions/${this.question.id}/Comments`, this.comment,{
+          headers: {
+            Authorization: `Bearer ${this.$cookies.get("JWT")}`
+          },
+        })
+        .then(response => {
+          this.$router.go({path: this.$router.currentRoute.path, force: true})
+          console.log(response)
+        })
+        .catch(error => {
+          if(error.response.status == 401){
+            this.$router.push({ path: "/login" });
+          }
+          this.errors = error.response.data.ValidationErrors;
+        });
+    },
+
+    deleteQuestionComment: function(commentId) {
+      this.$axios
+        .delete(`http://localhost/api/restricted/Questions/${this.question.id}/Comments/${commentId}`,{
+          headers: {
+            Authorization: `Bearer ${this.$cookies.get("JWT")}`
+          },
+        })
+        .then(response => {
+          this.$router.go({path: this.$router.currentRoute.path, force: true})
+          console.log(response)
+        })
+        .catch(error => {
+          if(error.response.status == 401){
+            this.$router.push({ path: "/login" });
+          }
+          this.errors = error.response.data.ValidationErrors;
+        });
+    },
+
     deleteQuestion: function() {
       this.$axios
         .delete(`http://localhost/api/restricted/Questions/${this.$route.params.id}`,{

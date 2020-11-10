@@ -7,13 +7,19 @@
       </div>
       <div class="question-all-div">
         <div v-for="question in questions" :key="question.id" class="question-show-div">
-          <div class="question-user-icon"></div>
+          <div class="question-user-icon">
+            <router-link v-bind:to="{ name : 'UserShow', params : { id: question.userid }}" class="a-tag">
+              <!-- image -->
+            </router-link>
+          </div>
           <div class="question-index-body">
             <router-link v-bind:to="{ name : 'QuestionShow', params : { id: question.id }}" class="a-tag">
               <h2 class="question-title-index"> {{question.title}}</h2>
             </router-link>
             <div class="article-index-username-updated">
-              <h3 class="article-index-username">{{ question.name }}</h3>
+              <router-link v-bind:to="{ name : 'UserShow', params : { id: question.userid }}" class="a-tag">
+                <h3 class="article-index-username">{{ question.name }}</h3>
+              </router-link>
               <h3 class="article-index-update">投稿日 {{ question.Updated }}</h3>
             </div>
           </div>

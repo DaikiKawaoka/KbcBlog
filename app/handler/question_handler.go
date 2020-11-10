@@ -118,10 +118,20 @@ func QuestionShow(c echo.Context) error {
 		return c.NoContent(http.StatusInternalServerError)
 	}
 
+	// 記事データへのコメント一覧データを取得します。
+	comments, err := repository.QuestionCommentListByCursor(question.ID)
+
+	if err != nil {
+		c.Logger().Error(err.Error())
+		// クライアントにステータスコード 500 でレスポンスを返します。
+		return c.JSON(http.StatusInternalServerError,"質問のコメント一覧データを取得中にエラー発生")
+	}
+
 	// テンプレートに渡すデータを map に格納します。
 	data := map[string]interface{}{
 		"user": myUser,
 		"Question": question,
+		"Comments": comments,
 	}
 
 	return c.JSON(http.StatusOK, data)

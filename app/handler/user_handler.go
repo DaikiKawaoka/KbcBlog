@@ -3,7 +3,7 @@ package handler
 import (
 	// "log"
 	"net/http"
-	// "strconv"
+	"strconv"
 	// "time"
 
 	"app/repository"
@@ -19,7 +19,6 @@ type UserCreateOutput struct {
 }
 
 
-// ArticleCreate ...
 func UserCreate(c echo.Context) error {
   // 送信されてくるフォームの内容を格納する構造体を宣言します。
 	var createuser model.CreateUser
@@ -72,4 +71,46 @@ func UserCreate(c echo.Context) error {
 
   // 処理成功時はステータスコード 200 でレスポンスを返却します。
   return c.JSON(http.StatusOK,out)
+}
+
+
+func UserShow(c echo.Context) error {
+	userId := userIDFromToken(c)
+	myUser,err := repository.GetMyUser(userId)
+
+	if err != nil {
+		c.Logger().Error(err.Error())
+		return c.JSON(http.StatusInternalServerError,"userが存在しません")
+	}
+	// パスパラメータから記事 ID を取得します。
+	// 文字列型で取得されるので、strconv パッケージを利用して数値型にキャストしています。
+	id, _ := strconv.Atoi(c.Param("id"))
+
+	// 記事データを取得します。
+	user, err := repository.UserGetByID(id)
+
+	if err != nil {
+		// エラー内容をサーバーのログに出力します。
+		c.Logger().Error(err.Error())
+		// ステータスコード 500 でレスポンスを返却します。
+		return c.JSON(http.StatusInternalServerError,"ユーザデータを取得中にエラー発生")
+	}
+
+  // リポジトリの処理を呼び出して記事の一覧データを取得します。
+	articles, err := repository.GetUserArticle(0,user.ID)
+
+	if err != nil {
+		c.Logger().Error(err.Error())
+		// クライアントにステータスコード 500 でレスポンスを返します。
+		return c.JSON(http.StatusInternalServerError,"ユーザの記事一覧データを取得中にエラー発生")
+	}
+
+	// テンプレートに渡すデータを map に格納します。
+	data := map[string]interface{}{
+    "MyUser": myUser,
+    "User":user,
+		"Articles": articles,
+	}
+
+	return c.JSON(http.StatusOK, data)
 }
