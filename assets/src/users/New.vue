@@ -43,7 +43,6 @@ export default {
           this.errors = error.response.data.ValidationErrors;
         });
     },
-    
   }
 };
 </script>

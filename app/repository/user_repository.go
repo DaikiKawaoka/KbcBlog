@@ -8,7 +8,7 @@ import (
 
 func GetMyUser(id int) (*model.User , error) {
   // クエリ文字列を生成します。
-	query := `SELECT id,mail,name
+	query := `SELECT id,mail,name,comment
 	FROM users
 	WHERE id = ?;`
 
@@ -74,10 +74,37 @@ func UserGetByID(id int) (*model.User, error) {
 	// 結果を格納する構造体、クエリ文字列、パラメータを指定して SQL を実行します。
 	// 一件取得の場合は db.Get()
 	if err := db.Get(&user, query, id); err != nil {
-		// エラーが発生した場合はエラーを返却します。
 		return nil, err
 	}
 
 	// エラーがない場合は記事データを返却します。
 	return &user, nil
+}
+
+func UserUpdate(user *model.User) error {
+
+	// クエリ文字列を生成します。
+	query := `UPDATE users
+	SET name = :name,
+			comment = :comment
+	WHERE id = :id;`
+
+	// トランザクションを開始します。
+	tx := db.MustBegin()
+
+	_, err := tx.NamedExec(query, user)
+
+	if err != nil {
+		// エラーが発生した場合はロールバックします。
+		tx.Rollback()
+
+		// エラーを返却します。
+		return err
+	}
+
+	// エラーがない場合はコミットします。
+	tx.Commit()
+
+	// SQL の実行結果を返却します。
+	return nil
 }

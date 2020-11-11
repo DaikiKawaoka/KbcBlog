@@ -1,6 +1,7 @@
 package model
 
 import (
+	"database/sql"
 	"gopkg.in/go-playground/validator.v9"
 	"regexp"
 	"golang.org/x/crypto/bcrypt"
@@ -18,15 +19,9 @@ type CreateUser struct {
 type User struct {
 	ID          int       `db:"id" json:"id"`
 	KBC_mail    string    `db:"mail" json:"KBC_mail"`
-	Name        string    `db:"name" json:"name"`
-	Comment     string    `db:"comment json:"comment"`
-}
-
-type EditUser struct {
-  ID          int       `db:"id" json:"id"`
-	KBC_mail    string    `db:"mail" json:"KBC_mail"`
-	Name        string    `db:"name" json:"name"`
-	Comment     string    `db:"comment json:"comment"`
+	Name        string    `db:"name" json:"name" validate:"required,min=4,max=20"`
+	Comment     sql.NullString   `db:"comment" json:"comment" validate:"max=150"`
+	ArticleCount int      `db:"articleCount" json:"articleCount"`
 }
 
 type LoginUser struct {
@@ -41,7 +36,6 @@ func (u *User) SetupUser(cu CreateUser, id int) () {
 	u.Name = cu.Name
 }
 
-
 // パスワードハッシュを作る
 func (u *CreateUser) PasswordHash() (string, error) {
 	hash, err := bcrypt.GenerateFromPassword([]byte(u.Password), bcrypt.DefaultCost)
@@ -52,10 +46,7 @@ func (u *CreateUser) PasswordHash() (string, error) {
 	return string(hash), err
 }
 
-// ValidationErrors ...
 func (a *CreateUser) ValidationErrors(err error) []string {
-
-
 	// メッセージを格納するスライスを宣言します。
 	var errMessages []string
 
@@ -105,10 +96,38 @@ func (a *CreateUser) ValidationErrors(err error) []string {
 		message := "パスワードとパスワード確認が異なります。"
 		errMessages = append(errMessages, message)
 	}
-
 	return errMessages
 }
 
+// ValidationErrors ...
+func (a *User) ValidationErrors(err error) []string {
+	var errMessages []string
+	// 複数のエラーが発生する場合があるのでループ処理を行います。
+	for _, err := range err.(validator.ValidationErrors) {
+		// メッセージを格納する変数を宣言します。
+		var message string
+
+		// エラーになったフィールドを特定します。
+		switch err.Field() {
+		case "Name":
+			switch err.Tag() {
+			case "required":
+				message = "名前を入力してください。"
+			case "min":
+				message = "名前は4文字以上です。"
+			case "max":
+				message = "名前は最大20文字です。"
+			}
+		case "Comment":
+			message = "コメントは最大150文字です。"
+		}
+		// メッセージをスライスに追加します。
+		if message != "" {
+			errMessages = append(errMessages, message)
+		}
+	}
+	return errMessages
+}
 func Mail_check_regexp(fl validator.FieldLevel) bool {  //引数の型、返り値は固定
 	reg := `[\w\-\._]+@(stu.)?kawahara.ac.jp`
 	str := fl.Field().String()

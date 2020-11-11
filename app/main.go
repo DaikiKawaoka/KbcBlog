@@ -62,7 +62,7 @@ func main() {
 	// User
 	r.GET("/Users/:id",handler.UserShow)
 	r.GET("/Users/:id/edit", handler.UserEdit)
-	// r.PATCH("/Users/:id", handler.UserUpdate)  // 更新
+	r.PATCH("/Users/:id", handler.UserUpdate)
 
 	// Webサーバーをポート番号 8082 で起動する
 	e.Logger.Fatal(e.Start(":8082"))

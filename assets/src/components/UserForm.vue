@@ -11,7 +11,7 @@
         </ul>
       </div>
 
-      <input name="uploadedImage" type="file" ref="file" v-on:change="onFileChange()" v-if="edit">
+      <!-- <input name="uploadedImage" type="file" ref="file" v-on:change="onFileChange()" v-if="edit"> -->
 
       <el-form-item label="名前" prop="name"
       :rules="[
@@ -21,17 +21,24 @@
         <el-input
           v-model="user.name"
           placeholder="name"
+          maxlength="20"
+          show-word-limit
           name="user[name]"></el-input>
       </el-form-item>
 
-      <el-form-item label="コメント" v-if="edit">
+      <el-form-item label="コメント" v-if="edit"
+      :rules="[
+          { max: 150, message: '最大150文字です', trigger: 'blur' },
+      ]">
         <el-input
-          v-model="user.comment"
+          v-model="user.comment.String"
+          maxlength="150"
+          show-word-limit
           placeholder="comment">
         </el-input>
       </el-form-item>
 
-      <el-form-item
+      <el-form-item v-if="!edit"
       label="メールアドレス" prop="KBC_mail"
       :rules="[
           { required: true , pattern: /[\w\-\._]+@(stu.)?kawahara.ac.jp/, message: '河原学園のメールアドレスを入力してください。', trigger: 'blur'},

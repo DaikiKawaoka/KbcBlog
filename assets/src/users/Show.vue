@@ -49,7 +49,7 @@
           <div class="user-show-info-main">
             <div class="user-show-article-count-div">
               <!-- UserArticleCount -->
-              <p class="edit-margin-p">10000</p>
+              <p class="edit-margin-p">{{user.articleCount}}</p>
               <p class="edit-margin-p">投稿</p>
             </div>
             <div class="user-show-follower-count-div">
@@ -64,7 +64,7 @@
             </div>
           </div>
           <div class="user-show-info-footer">
-            <p class="user-show-comment-p">aaaaaaaaaa</p>
+            <p class="user-show-comment-p">{{user.comment.String}}</p>
           </div>
         </div>
       </div>
@@ -100,7 +100,15 @@ export default {
     return {
       articles: Array,
       myUser: {},
-      user: {},
+      user: {
+        KBCmail: "",
+        id : 0,
+        name: "",
+        comment: {
+          String: String,
+          Valid: Boolean
+        }
+      },
       errors: {},
     }
   },

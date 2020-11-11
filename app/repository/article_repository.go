@@ -186,3 +186,15 @@ func GetUserArticle(cursor int,userid int) ([]*model.Article, error) {
 
 	return articles, nil
 }
+
+
+func AritcleCount(user *model.User) error{
+	query := `SELECT count(*) AS articleCount
+						FROM articles
+						WHERE userid = ?`;
+	if err := db.Get(user, query, user.ID); err != nil {
+		// エラーが発生した場合はエラーを返却します。
+		return err
+	}
+	return nil
+}
