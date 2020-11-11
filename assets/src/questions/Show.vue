@@ -98,7 +98,7 @@ export default {
   data(){
     return {
       question: null,
-      user: Object,
+      user: {},
       comment:{
         userid: 0,
         questionid: 0,

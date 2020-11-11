@@ -44,9 +44,9 @@ export default {
   },
   methods: {
     myUserPage: function() {
+      this.$router.push({ name : 'UserShow', params : { id: this.user.id }});
       if(this.$router.currentRoute.path !== `/Users/${this.user.id}`){
-        this.$router.push({ name : 'UserShow', params : { id: this.user.id }});
-        this.$router.go({path: this.$router.currentRoute.path, force: true})
+        this.$router.go({ name : 'UserShow', params : { id: this.user.id }})
       }
     },
   }

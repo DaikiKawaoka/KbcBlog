@@ -12,8 +12,8 @@ import Header from '../components/Header.vue';
 export default {
   data() {
     return {
-      myUser: null,
-      user: null,
+      myUser: {},
+      user: {},
       errors: {}
     };
   },

@@ -77,7 +77,7 @@ import './markdown.css';
  export default {
    props: {
     article: Object,
-    errors: Object,
+    errors: Array,
     create: Boolean,
   },
   data(){

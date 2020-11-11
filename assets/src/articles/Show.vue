@@ -98,7 +98,7 @@ export default {
   data(){
     return {
       article: null,
-      user: Object,
+      user: {},
       comment:{
         userid: 0,
         articleid: 0,

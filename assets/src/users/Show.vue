@@ -11,7 +11,7 @@
 
             <div class="user-show-info-div" v-if="myUser.id===user.id">
               <div class="user-show-btn-div"><el-button type="info" size="mini" @click="editUser">プロフィール編集</el-button></div>
-              
+
 
               <el-dropdown>
                 <span class="el-dropdown-link icon-menu-span">
@@ -70,8 +70,20 @@
       </div>
 
       <div class="user-show-body">
-
+        <div class="article-all-div">
+          <div v-for="article in articles" :key="article.id" class="article-show-div">
+            <div class="article-index-body">
+              <router-link v-bind:to="{ name : 'ArticleShow', params : { id: article.id }}" class="a-tag">
+                <h2 class="article-title-index"> {{article.title}} </h2>
+              </router-link>
+              <div class="article-index-username-updated">
+                <h3 class="article-index-update">投稿日 {{ article.Updated }}</h3>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
+
       <div class="user-show-footer">
 
       </div>
@@ -86,9 +98,9 @@ export default {
   name: 'app',
   data(){
     return {
-      articles: null,
-      myUser: Object,
-      user: Object,
+      articles: Array,
+      myUser: {},
+      user: {},
       errors: {},
     }
   },
@@ -103,8 +115,8 @@ export default {
       },})
       .then(response => {
         this.articles = response.data.Articles
-        this.myUser = response.data.MyUser
         this.user = response.data.User
+        this.myUser = response.data.MyUser
         console.log(response.data)
       })
       .catch(error => {

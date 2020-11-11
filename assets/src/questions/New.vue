@@ -17,7 +17,6 @@ export default {
         id: 0,
         name: "",
         KBC_mail: "",
-        mailname: "",
       },
       question :{
         userid: 0,
@@ -40,7 +39,6 @@ export default {
         this.user.id = response.data.user.id
         this.user.KBC_mail = response.data.user.KBC_mail
         this.user.name = response.data.user.name
-        this.user.mailname = response.data.user.mailname
       })
       .catch(error => {
         if(error.response.status == 401){

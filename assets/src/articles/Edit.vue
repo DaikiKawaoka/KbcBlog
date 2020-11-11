@@ -13,8 +13,8 @@ export default {
   name: 'app',
   data(){
     return {
-      user: null,
-      article : null,
+      user: {},
+      article : {},
       errors: [],
       create: false,
     }

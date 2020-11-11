@@ -48,3 +48,8 @@ services:
       TZ: 'Asia/Tokyo'
     volumes:
       - ./docker/mysql:/docker-entrypoint-initdb.d
+      - mysql_data:/var/lib/mysql
+
+# データ永続化領域
+volumes:
+  mysql_data:

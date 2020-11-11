@@ -8,7 +8,7 @@ import (
 
 func GetMyUser(id int) (*model.User , error) {
   // クエリ文字列を生成します。
-	query := `SELECT id,mail,mailname,name
+	query := `SELECT id,mail,name
 	FROM users
 	WHERE id = ?;`
 
@@ -36,13 +36,10 @@ func UserCreate(user *model.CreateUser) (sql.Result, error) {
 		// エラー内容を返却します。
     return nil, err
 	}
-	//メールアドレスネーム作成
-	user.CreateMailName()
-
 
   // クエリ文字列を生成します。
-  query := `INSERT INTO users (mail,passhash,mailname,name)
-	VALUES (:mail,:passhash, :mailname, :name);`
+  query := `INSERT INTO users (mail,passhash,name)
+	VALUES (:mail, :passhash, :name);`
 
   // トランザクションを開始します。
   tx := db.MustBegin()
@@ -68,12 +65,10 @@ func UserCreate(user *model.CreateUser) (sql.Result, error) {
 
 func UserGetByID(id int) (*model.User, error) {
 	// クエリ文字列を生成します。
-	query := `SELECT id, mail, mailname, name
+	query := `SELECT id,mail,name,comment
 	FROM users
 	WHERE id = ?`
 
-	// クエリ結果を格納する変数を宣言します。
-	// 複数件取得の場合はスライスでしたが、一件取得の場合は構造体になります。
 	var user model.User
 
 	// 結果を格納する構造体、クエリ文字列、パラメータを指定して SQL を実行します。

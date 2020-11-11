@@ -121,10 +121,10 @@ body {
 }
 .article-index-username,.article-index-update{
   font-size: 13px;
+  color: #999;
 }
 .article-index-update{
   margin-left: 20px;
-  color: #999;
 }
 .a-tag{
   color: #000;

@@ -2,7 +2,6 @@ package model
 
 import (
 	"gopkg.in/go-playground/validator.v9"
-	"strings"
 	"regexp"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -14,14 +13,20 @@ type CreateUser struct {
 	Password    string    `json:"password" validate:"required,min=8,max=50"`
 	Pass_cfm    string    `json:"password_confirmation"`
 	PassHash    string    `db:"passhash"`
-	MailName    string    `db:"mailname" json:"mailname"`
 }
 
 type User struct {
 	ID          int       `db:"id" json:"id"`
 	KBC_mail    string    `db:"mail" json:"KBC_mail"`
-	MailName    string    `db:"mailname" json:"mailname"`
 	Name        string    `db:"name" json:"name"`
+	Comment     string    `db:"comment json:"comment"`
+}
+
+type EditUser struct {
+  ID          int       `db:"id" json:"id"`
+	KBC_mail    string    `db:"mail" json:"KBC_mail"`
+	Name        string    `db:"name" json:"name"`
+	Comment     string    `db:"comment json:"comment"`
 }
 
 type LoginUser struct {
@@ -33,7 +38,6 @@ type LoginUser struct {
 // CreateUserからUserを作成
 func (u *User) SetupUser(cu CreateUser, id int) () {
 	u.ID = cu.ID
-	u.MailName = cu.MailName
 	u.Name = cu.Name
 }
 
@@ -46,13 +50,6 @@ func (u *CreateUser) PasswordHash() (string, error) {
 	}
 	u.PassHash = string(hash)
 	return string(hash), err
-}
-
-// MailNameを作る
-func (u *CreateUser) CreateMailName(){
-	mail := u.KBC_mail
-	w := strings.Index(mail, "@")
-	u.MailName = mail[0:w]
 }
 
 // ValidationErrors ...
