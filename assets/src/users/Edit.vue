@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Header></Header>
+    <Header :user="myUser"></Header>
     <user-form :errors="errors" :user="user" :edit="true" @submit="updateUser"></user-form>
   </div>
 </template>
@@ -10,23 +10,38 @@ import UserForm from '../components/UserForm.vue';
 import Header from '../components/Header.vue';
 
 export default {
+  data() {
+    return {
+      myUser: null,
+      user: null,
+      errors: {}
+    };
+  },
   components: {
     UserForm,
     Header,
   },
   created () {
-
-  },
-  data() {
-    return {
-      user: {
-         name: '',
-         KBC_mail: '',
-         password: '',
-         password_confirmation: '',
-       },
-       errors: {}
-    };
+    this.$axios.get(`http://localhost/api/restricted/Users/${this.$route.params.id}/edit`,{
+      headers: {
+        Authorization: `Bearer ${this.$cookies.get("JWT")}`
+      },
+    })
+      .then(response => {
+        this.myUser = response.data.MyUser
+        this.user = response.data.User
+        if(this.myUser.id != this.user.id){
+          this.$router.push({ path: "/" });
+        }
+        console.log(response)
+      })
+      .catch(error => {
+        console.log(error)
+        if(error.response.status == 401){
+            this.$router.push({ path: "/login" });
+          }
+        this.errors = error.response.data.ValidationErrors;
+      })
   },
   methods: {
     updateUser: function() {

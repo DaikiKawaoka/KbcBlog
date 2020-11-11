@@ -7,7 +7,7 @@
         <router-link to="/Questions" class="a-tag2"><h3 v-if="!loginpage" class="header-question" v-bind:class="{ active: isQuestion }">質問</h3></router-link>
       </div>
       <nav v-if="!loginpage" id="header-nav">
-        <ul>
+        <ul class="header-right-ul">
           <!-- <li><router-link tag="li" id="gift-nav" to="/Articles/new" class="a-tag">作成</router-link></li> -->
           <li>
             <el-dropdown>
@@ -21,7 +21,12 @@
               </el-dropdown-menu>
             </el-dropdown>
           </li>
-          <li class="a-tag logout-li" @click="logout">ログアウト</li>
+          <li class="a-tag logout-li" @click="myUserPage">
+          <!-- <li class="a-tag logout-li"> -->
+            <!-- <router-link v-bind:to="{ name : 'UserShow', params : { id: user.id }}" class="a-tag"> -->
+              <div class="header-user-icon"></div>
+            <!-- </router-link> -->
+          </li>
         </ul>
       </nav>
     </div>
@@ -35,12 +40,15 @@ export default {
     loginpage: Boolean,
     isArticle: Boolean,
     isQuestion: Boolean,
+    user: Object,
   },
   methods: {
-    logout: function() {
-      this.$cookies.remove("JWT");
-      this.$router.push({ path: "/login" });
-    }
+    myUserPage: function() {
+      if(this.$router.currentRoute.path !== `/Users/${this.user.id}`){
+        this.$router.push({ name : 'UserShow', params : { id: this.user.id }});
+        this.$router.go({path: this.$router.currentRoute.path, force: true})
+      }
+    },
   }
 }
 </script>
@@ -110,5 +118,14 @@ ul{
 }
 .toukou-icon{
   font-size: 18px;
+}
+.header-right-ul{
+  margin-top: 10px;
+}
+.header-user-icon{
+  background-color: #ccc;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
 }
 </style>

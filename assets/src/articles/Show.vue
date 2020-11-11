@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Header :isArticle="true" :isQuestion="false"></Header>
+    <Header :isArticle="true" :isQuestion="false" :user="user"></Header>
     <div class="article-show-main">
       <div v-if="this.article != null">
         <div class="comment-header">

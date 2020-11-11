@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Header :isArticle="false" :isQuestion="false"></Header>
+    <Header :isArticle="false" :isQuestion="false" :user="myUser"></Header>
     <div class="user-show-all">
 
       <div class="user-show-header">
@@ -8,10 +8,43 @@
         <div class="user-show-info">
           <div class="user-show-info-header">
             <span class="user-show-name">{{user.name}}</span>
-            <div class="user-show-info-div">
+
+            <div class="user-show-info-div" v-if="myUser.id===user.id">
               <div class="user-show-btn-div"><el-button type="info" size="mini" @click="editUser">プロフィール編集</el-button></div>
-              <i class="el-icon-setting"></i>
+              
+
+              <el-dropdown>
+                <span class="el-dropdown-link icon-menu-span">
+                  <i class="el-icon-setting"></i>
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <router-link class="a-tag2" v-bind:to="{ name : 'UserEdit', params : { id: user.id }}"><el-dropdown-item>パスワード変更</el-dropdown-item></router-link>
+                  <el-popconfirm
+                  title="本当にログアウトしますか?"
+                  confirm-button-text="Yes"
+                  cancel-button-text="No"
+                  @confirm="logout"
+                  >
+                    <el-dropdown-item slot="reference">ログアウト</el-dropdown-item>
+                  </el-popconfirm>
+                </el-dropdown-menu>
+              </el-dropdown>
+
+
             </div>
+
+            <div class="user-show-info-div" v-else>
+              <div class="user-show-btn-div">
+                <el-button type="primary" size="medium" v-if="true">
+                  <i class="el-icon-user"></i>フォロー
+                </el-button>
+
+                <el-button size="medium" v-else>
+                  <i class="el-icon-user"></i>フォロー解除
+                </el-button>
+              </div>
+            </div>
+
           </div>
           <div class="user-show-info-main">
             <div class="user-show-article-count-div">
@@ -105,6 +138,10 @@ export default {
           this.errors = error.response.data.ValidationErrors;
         });
     },
+    logout: function() {
+      this.$cookies.remove("JWT");
+      this.$router.push({ path: "/login" });
+    },
   }
 }
 </script>
@@ -177,9 +214,9 @@ export default {
   margin: 0;
   font-size: 0.9em;
 }
-.user-show-info-footer{
+/* .user-show-info-footer{
   
-}
+} */
 .user-show-comment-p{
   font-size: 1em;
   width: 480px;

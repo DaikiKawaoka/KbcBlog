@@ -191,7 +191,7 @@ func ArticleEdit(c echo.Context) error {
 		c.Logger().Error(err.Error())
 
 		// ステータスコード 500 でレスポンスを返却します。
-		return c.NoContent(http.StatusInternalServerError)
+		return c.JSON(http.StatusInternalServerError,"記事情報取得中にエラー発生")
 	}
 
 	// テンプレートに渡すデータを map に格納します。

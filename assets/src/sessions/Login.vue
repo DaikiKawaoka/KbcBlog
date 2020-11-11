@@ -72,9 +72,6 @@ export default {
 </script>
 
 <style>
-#login-all{
-
-}
 .box-card {
   width: 480px;
 }

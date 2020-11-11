@@ -43,15 +43,7 @@ export default {
           this.errors = error.response.data.ValidationErrors;
         });
     },
-    // login_user: function() {
-    //   axios
-    //     .get('/api/v1/sessions.json')
-    //     .then(response => {
-    //       if (response.status !== 201){
-    //         this.$router.push({ name: 'staticHome'})
-    //       }
-    //     })
-    // },
+    
   }
 };
 </script>

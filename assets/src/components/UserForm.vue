@@ -39,7 +39,7 @@
           <el-input v-model="user.KBC_mail"></el-input>
       </el-form-item>
 
-      <el-form-item label="パスワード" prop="password"
+      <el-form-item label="パスワード" prop="password" v-if="!edit"
       :rules="[
           { required: true, message: '入力必須です', trigger: 'blur' },
           { min: 8, max: 50, message: '8~50文字で入力してください', trigger: 'blur' },
@@ -47,7 +47,7 @@
           <el-input type="password" v-model="user.password" autocomplete="off"></el-input>
       </el-form-item>
 
-      <el-form-item label="パスワード確認" prop="password"
+      <el-form-item label="パスワード確認" prop="password" v-if="!edit"
       :rules="[
           { required: true, message: '入力必須です', trigger: 'blur' },
           { min: 8, max: 50, message: '8~50文字で入力してください', trigger: 'blur' },
@@ -67,7 +67,7 @@
 
  export default {
    props: {
-    user: {},
+    user: Object,
     errors: Object,
     edit: Boolean,
   },

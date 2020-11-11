@@ -114,3 +114,31 @@ func UserShow(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, data)
 }
+
+func UserEdit(c echo.Context) error {
+	userId := userIDFromToken(c)
+	myUser,err := repository.GetMyUser(userId)
+
+	if err != nil {
+		c.Logger().Error(err.Error())
+		return c.JSON(http.StatusInternalServerError,"userが存在しません")
+  }
+
+	id, _ := strconv.Atoi(c.Param("id"))
+
+	// 編集フォームの初期値として表示するために記事データを取得します。
+	user, err := repository.UserGetByID(id)
+	if err != nil {
+		// エラー内容をサーバーのログに出力します。
+		c.Logger().Error(err.Error())
+		// ステータスコード 500 でレスポンスを返却します。
+		return c.JSON(http.StatusInternalServerError,"User情報取得中にエラー発生")
+	}
+
+	// テンプレートに渡すデータを map に格納します。
+	data := map[string]interface{}{
+		"MyUser": myUser,
+		"User": user,
+	}
+	return c.JSON(http.StatusOK, data)
+}

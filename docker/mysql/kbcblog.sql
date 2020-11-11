@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS `users`(
   `passhash` varchar(255) NOT NULL,
   `mailname`char(10) NOT NULL,
   `name` varchar(20) NOT NULL,
+  `comment` varchar(150),
   PRIMARY KEY(`id`)
 );
 

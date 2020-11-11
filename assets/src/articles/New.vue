@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Header :isArticle="true" :isQuestion="false"></Header>
+    <Header :isArticle="true" :isQuestion="false" :user="user"></Header>
     <Article-form :article="article" :errors="errors" :create="create" @submit="createArticle" @cancell="goHome"></Article-form>
   </div>
 </template>

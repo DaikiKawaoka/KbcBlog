@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Header :isArticle="true" :isQuestion="false"></Header>
+    <Header :isArticle="true" :isQuestion="false" :user="user"></Header>
     <div class="index-main body-main">
       <div class="index-menu">
         <div></div>
