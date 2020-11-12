@@ -21,7 +21,7 @@ type User struct {
 	KBC_mail    string    `db:"mail" json:"KBC_mail"`
 	Name        string    `db:"name" json:"name" validate:"required,min=4,max=20"`
 	Comment     sql.NullString   `db:"comment" json:"comment" validate:"max=150"`
-	ArticleCount int      `db:"articleCount" json:"articleCount"`
+	PostCount int      `db:"PostCount" json:"postCount"` //投稿数
 }
 
 type LoginUser struct {

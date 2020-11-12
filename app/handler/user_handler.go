@@ -95,7 +95,7 @@ func UserShow(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError,"ユーザデータを取得中にエラー発生")
   }
 
-  if err := repository.AritcleCount(user); err != nil{
+  if err := repository.PostCount(user); err != nil{
     c.Logger().Error(err.Error())
 		// クライアントにステータスコード 500 でレスポンスを返します。
 		return c.JSON(http.StatusInternalServerError,"ユーザの投稿数取得中にエラー発生")

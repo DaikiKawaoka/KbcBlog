@@ -49,7 +49,7 @@
           <div class="user-show-info-main">
             <div class="user-show-article-count-div">
               <!-- UserArticleCount -->
-              <p class="edit-margin-p">{{user.articleCount}}</p>
+              <p class="edit-margin-p">{{user.postCount}}</p>
               <p class="edit-margin-p">投稿</p>
             </div>
             <div class="user-show-follower-count-div">
