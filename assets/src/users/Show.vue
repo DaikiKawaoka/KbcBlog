@@ -4,7 +4,16 @@
     <div class="user-show-all">
 
       <div class="user-show-header">
-        <div class="user-show-icon"></div>
+        <div class="user-show-icon">
+          <!-- <img class="user-show-icon-img" src="../assets/IMG_6217.jpeg"> -->
+          <div class="demo-image__preview">
+          <el-image 
+            style="width: 200px; height: 200px; border-radius: 50%;"
+            :src="url" 
+            :preview-src-list="srcList">
+          </el-image>
+          </div>
+        </div>
         <div class="user-show-info">
           <div class="user-show-info-header">
             <span class="user-show-name">{{user.name}}</span>
@@ -94,16 +103,24 @@
       </div>
 
       <div class="user-show-footer">
-        <div class="article-all-div">
-          <div v-for="article in articles" :key="article.id" class="article-show-div">
-            <div class="article-index-body">
-              <router-link v-bind:to="{ name : 'ArticleShow', params : { id: article.id }}" class="a-tag">
-                <h2 class="article-title-index"> {{article.title}} </h2>
-              </router-link>
-              <div class="article-index-username-updated">
-                <h3 class="article-index-update">投稿日 {{ article.Updated }}</h3>
+        <div class="user-show-post-menu">
+          <el-tabs :tab-position="tabPosition" style="height: 200px;">
+            <el-tab-pane label="記事">記事</el-tab-pane>
+            <el-tab-pane label="質問">質問</el-tab-pane>
+            <el-tab-pane label="いいね">いいね</el-tab-pane>
+            <el-tab-pane label="質問">質問</el-tab-pane>
+          </el-tabs>
+        </div>
+        <div class="post-all-div">
+          <div v-for="article in articles" :key="article.id" class="post-show-div">
+            <router-link v-bind:to="{ name : 'ArticleShow', params : { id: article.id }}" class="a-tag">
+              <div class="post-index-body">
+                  <h2 class="post-title-index"> {{article.title}} </h2>
+                <div class="post-index-username-updated">
+                  <h3 class="post-index-update">投稿日 {{ article.Updated }}</h3>
+                </div>
               </div>
-            </div>
+            </router-link>
           </div>
         </div>
       </div>
@@ -130,6 +147,9 @@ export default {
         }
       },
       errors: {},
+      url :"https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
+      srcList :["https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"],
+      tabPosition: 'left'
     }
   },
   components: {
@@ -196,20 +216,24 @@ export default {
   margin-left: 100px;
   margin-right: 100px;
 }
+
+/* header */
+
 .user-show-header{
   display: flex;
   padding-bottom: 10px;
-  /* border-bottom: 3px solid #fff; */
 }
 .user-show-icon{
   margin-top: 25px;
-  background-color: #ccc;
-  width: 150px;
-  height: 150px;
+  border-radius: 50%;
+}
+.user-show-icon-img {
+  width: 200px;
+  height: 200px;
   border-radius: 50%;
 }
 .user-show-info{
-  margin-left: 100px;
+  margin-left: 50px;
 }
 .user-show-info-header{
   display: flex;
@@ -254,9 +278,6 @@ export default {
   margin: 0;
   font-size: 0.9em;
 }
-/* .user-show-info-footer{
-  
-} */
 .user-show-comment-p{
   font-size: 1em;
   width: 480px;
@@ -265,19 +286,21 @@ export default {
   word-wrap: break-word;
 }
 
+/* body */
+
 .user-show-body{
   display: flex;
   width: 800px;
   height: 210px;
-  margin-right: auto;
-  margin-left: auto;
+  border-bottom: #000 1px solid;
+  padding: 0 0 30px 0;
+  margin: 0 auto 30px auto;
 }
 .user-show-link-info{
   width: 180px;
   height: 210px;
   margin-right: 20px;
   word-wrap: break-word;
-  /* background-color: #fff; */
   border-radius: 2px;
 }
 .user-show-link-div{
@@ -313,5 +336,64 @@ export default {
   line-height: 70px;
   margin: 0 0 0 10px;
   width: 100px;
+}
+
+/* footer */
+.user-show-footer{
+  display: flex;
+}
+
+.user-show-post-menu{
+  width: 270px;
+  margin-left: 50px;
+}
+
+
+.post-all-div{
+  width: 550px;
+  margin: 30px 50px 0 0;
+}
+.post-show-div{
+  margin-bottom: 5px;
+  padding-left: 20px;
+  border: solid 1px #ccc;
+  display: flex;
+  background: #eee;
+}
+.post-show-div:hover{
+  transition: 0.3s ;
+  background: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)
+}
+.post-user-icon{
+  margin-top: 25px;
+  background-color: #ccc;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+.post-index-body{
+  margin-left: 20px;
+}
+.post-index-username-updated{
+  display: flex;
+}
+.post-title-index{
+  font-size: 20px;
+  width: 500px;
+  text-align: left;
+  margin-bottom: 0;
+}
+.post-index-username,.post-index-update{
+  font-size: 13px;
+  color: #999;
+}
+.post-index-update{
+  margin-left: 20px;
+}
+.a-tag{
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
 }
 </style>
