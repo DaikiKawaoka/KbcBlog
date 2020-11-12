@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <Header :user="myUser"></Header>
-    <user-form :errors="errors" :user="myUser" :edit="true" @submit="updateUser"></user-form>
+    <user-form :errors="errors" :user="user" :edit="true" @submit="updateUser"></user-form>
   </div>
 </template>
 <script>
@@ -21,7 +21,15 @@ export default {
           Valid: Boolean
         }
       },
-      user:{},
+      user:{
+        KBCmail: "",
+        id : 0,
+        name: "",
+        comment: {
+          String: "",
+          Valid: Boolean
+        }
+      },
       errors: {}
     };
   },
@@ -56,11 +64,11 @@ export default {
   },
   methods: {
     updateUser: function() {
-      if (this.myUser.comment.String.length !== 0){
-        this.myUser.comment.Valid = true;
+      if (this.user.comment.String.length !== 0){
+        this.user.comment.Valid = true;
       }
       this.$axios
-        .patch(`http://localhost/api/restricted/Users/${this.myUser.id}`,this.myUser,{
+        .patch(`http://localhost/api/restricted/Users/${this.myUser.id}`,this.user,{
           headers: {
             Authorization: `Bearer ${this.$cookies.get("JWT")}`
           },
@@ -68,7 +76,7 @@ export default {
         .then(response => {
           console.log(response);
           console.log("プロフィール編集成功");
-          this.$router.push({ name: 'UserShow' , params : { id: this.myUser.id }});
+          this.$router.push({ name: 'UserShow' , params : { id: this.user.id }});
         })
         .catch(error => {
           console.log(error.response.data.ValidationErrors);

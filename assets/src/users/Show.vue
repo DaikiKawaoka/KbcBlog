@@ -70,6 +70,30 @@
       </div>
 
       <div class="user-show-body">
+        <div class="user-show-link-info">
+          <div class="user-show-link-div">
+            <p class="link-tag">github</p>
+            <p class="link-p"><a href="https://github.com/DaikiKawaoka" class="user-show-link-a">https://github.com/DaikiKawaokagit</a></p>
+          </div>
+          <div class="user-show-link-div">
+            <p class="link-tag">webサイト</p>
+            <p class="link-p"><a href="https://github.com/DaikiKawaoka" class="user-show-link-a">https://github.com/DaikiKaw</a></p>
+          </div>
+        </div>
+        <div class="user-show-body-info">
+          <div class="user-show-body-indiv user-like-lang-div">
+            <p class="user-show-body-div-in-p">好きな言語</p>
+          </div>
+          <div class="user-show-body-indiv user-post-article-div">
+            <p class="user-show-body-div-in-p">投稿記事</p>
+          </div>
+          <div class="user-show-body-indiv user-iine-div">
+            <p class="user-show-body-div-in-p">Good記事</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="user-show-footer">
         <div class="article-all-div">
           <div v-for="article in articles" :key="article.id" class="article-show-div">
             <div class="article-index-body">
@@ -82,10 +106,6 @@
             </div>
           </div>
         </div>
-      </div>
-
-      <div class="user-show-footer">
-
       </div>
     </div>
   </div>
@@ -178,8 +198,8 @@ export default {
 }
 .user-show-header{
   display: flex;
-  padding-bottom: 30px;
-  border-bottom: 3px solid #fff;
+  padding-bottom: 10px;
+  /* border-bottom: 3px solid #fff; */
 }
 .user-show-icon{
   margin-top: 25px;
@@ -243,5 +263,55 @@ export default {
   height: 100%;
   margin-bottom: 0;
   word-wrap: break-word;
+}
+
+.user-show-body{
+  display: flex;
+  width: 800px;
+  height: 210px;
+  margin-right: auto;
+  margin-left: auto;
+}
+.user-show-link-info{
+  width: 180px;
+  height: 210px;
+  margin-right: 20px;
+  word-wrap: break-word;
+  /* background-color: #fff; */
+  border-radius: 2px;
+}
+.user-show-link-div{
+  margin-top: 25px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)
+}
+.link-tag{
+  font-weight:bold;
+  margin: 5px;
+  font-size: 0.9em;
+}
+.link-p{
+  margin: 5px;
+  font-size: 0.8em;
+}
+.user-show-link-a{
+  color: #333;
+}
+.user-show-link-a:hover{
+  color: #409eff;
+}
+.user-show-body-info{
+  width: 550px;
+  background-color: rgb(43, 43, 43);
+  border-radius: 2px;
+}
+.user-show-body-indiv{
+  height: 70px;
+}
+.user-show-body-div-in-p{
+  color: rgb(197, 231, 0);
+  line-height: 70px;
+  margin: 0 0 0 10px;
+  width: 100px;
 }
 </style>
