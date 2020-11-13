@@ -8,7 +8,7 @@
           <!-- <img class="user-show-icon-img" src="../assets/IMG_6217.jpeg"> -->
           <div class="demo-image__preview">
           <el-image 
-            style="width: 200px; height: 200px; border-radius: 50%;"
+            style="width: 150px; height: 150px; border-radius: 50%;"
             :src="url" 
             :preview-src-list="srcList">
           </el-image>
@@ -228,12 +228,15 @@ export default {
   border-radius: 50%;
 }
 .user-show-icon-img {
-  width: 200px;
-  height: 200px;
+  width: 150px;
+  height: 150px;
   border-radius: 50%;
 }
 .user-show-info{
+  margin-top: 20px;
   margin-left: 50px;
+  padding: 0 25px 10px 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)
 }
 .user-show-info-header{
   display: flex;
@@ -282,7 +285,7 @@ export default {
   font-size: 1em;
   width: 480px;
   height: 100%;
-  margin-bottom: 0;
+  margin: 10px 0 0 15px;
   word-wrap: break-word;
 }
 
@@ -361,7 +364,7 @@ export default {
   background: #eee;
 }
 .post-show-div:hover{
-  transition: 0.3s ;
+  transition: 0.2s ;
   background: #fff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)
 }
