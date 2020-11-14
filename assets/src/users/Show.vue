@@ -104,10 +104,10 @@
 
       <div class="user-show-footer">
         <div class="user-show-post-menu">
-          <el-tabs :tab-position="tabPosition" style="height: 200px;">
-            <el-tab-pane label="記事">記事</el-tab-pane>
-            <el-tab-pane label="質問">質問</el-tab-pane>
-            <el-tab-pane label="いいね">いいね</el-tab-pane>
+          <el-tabs :tab-position="tabPosition" style="height: 200px; width: 170px;">
+            <el-tab-pane label="記事"><i class="el-icon-document"></i> 記事</el-tab-pane>
+            <el-tab-pane label="質問"><i class="el-icon-chat-round"></i> 質問</el-tab-pane>
+            <el-tab-pane label="いいね"><i class="el-icon-star-off"></i> いいね</el-tab-pane>
             <el-tab-pane label="質問">質問</el-tab-pane>
           </el-tabs>
         </div>
@@ -347,8 +347,7 @@ export default {
 }
 
 .user-show-post-menu{
-  width: 270px;
-  margin-left: 50px;
+  margin-left: 40px;
 }
 
 
