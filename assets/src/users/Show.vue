@@ -7,9 +7,9 @@
         <div class="user-show-icon">
           <!-- <img class="user-show-icon-img" src="../assets/IMG_6217.jpeg"> -->
           <div class="demo-image__preview">
-          <el-image 
+          <el-image
             style="width: 150px; height: 150px; border-radius: 50%;"
-            :src="url" 
+            :src="url"
             :preview-src-list="srcList">
           </el-image>
           </div>
@@ -82,11 +82,13 @@
         <div class="user-show-link-info">
           <div class="user-show-link-div">
             <p class="link-tag">github</p>
-            <p class="link-p"><a href="https://github.com/DaikiKawaoka" class="user-show-link-a">https://github.com/DaikiKawaokagit</a></p>
+            <p class="link-p" v-if="link.github.length > 0"><a :href="link.github" class="user-show-link-a">{{link.github}}</a></p>
+            <p class="link-p" v-else>未設定</p>
           </div>
           <div class="user-show-link-div">
             <p class="link-tag">webサイト</p>
-            <p class="link-p"><a href="https://github.com/DaikiKawaoka" class="user-show-link-a">https://github.com/DaikiKaw</a></p>
+            <p class="link-p" v-if="link.website.length > 0"><a :href="link.website" class="user-show-link-a">{{link.website}}</a></p>
+            <p class="link-p" v-else>未設定</p>
           </div>
         </div>
         <div class="user-show-body-info">
@@ -107,8 +109,8 @@
           <el-tabs :tab-position="tabPosition" style="height: 200px; width: 170px;">
             <el-tab-pane label="記事"><i class="el-icon-document"></i> 記事</el-tab-pane>
             <el-tab-pane label="質問"><i class="el-icon-chat-round"></i> 質問</el-tab-pane>
+            <el-tab-pane label="回答"><i class="el-icon-s-promotion"></i> 回答</el-tab-pane>
             <el-tab-pane label="いいね"><i class="el-icon-star-off"></i> いいね</el-tab-pane>
-            <el-tab-pane label="質問">質問</el-tab-pane>
           </el-tabs>
         </div>
         <div class="post-all-div">
@@ -144,8 +146,12 @@ export default {
         comment: {
           String: String,
           Valid: Boolean
-        }
+        },
       },
+        link:{
+          github: "https://github.com/DaikiKawaoka/",
+          website: "",
+        },
       errors: {},
       url :"https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
       srcList :["https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"],
