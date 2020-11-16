@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS `questions` (
 update `questions` set `created` = CURRENT_TIMESTAMP where `created` is null;
 update `questions` set `updated` = CURRENT_TIMESTAMP where `updated` is null;
 
-CREATE TABLE IF NOT EXISTS `favorites` (
+CREATE TABLE IF NOT EXISTS `article_likes` (
   `userid` int NOT NULL,
   `articleid` int NOT NULL,
   `created` datetime,
@@ -46,7 +46,17 @@ CREATE TABLE IF NOT EXISTS `favorites` (
   FOREIGN KEY (`articleid`) REFERENCES `articles`(`id`) ON DELETE CASCADE,
   PRIMARY KEY(`userid`,`articleid`)
 );
-update `favorites` set `created` = CURRENT_TIMESTAMP where `created` is null;
+update `article_likes` set `created` = CURRENT_TIMESTAMP where `created` is null;
+
+CREATE TABLE IF NOT EXISTS `question_likes` (
+  `userid` int NOT NULL,
+  `articleid` int NOT NULL,
+  `created` datetime,
+  FOREIGN KEY (`userid`) REFERENCES `users`(`id`) ON DELETE CASCADE,
+  FOREIGN KEY (`articleid`) REFERENCES `articles`(`id`) ON DELETE CASCADE,
+  PRIMARY KEY(`userid`,`articleid`)
+);
+update `question_likes` set `created` = CURRENT_TIMESTAMP where `created` is null;
 
 CREATE TABLE IF NOT EXISTS `article_comments` (
   `id` int AUTO_INCREMENT,

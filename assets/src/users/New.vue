@@ -20,12 +20,12 @@ export default {
   data() {
     return {
       user: {
-         name: '',
-         KBC_mail: '',
-         password: '',
-         password_confirmation: '',
-       },
-       errors: {}
+        name: '',
+        KBC_mail: '',
+        password: '',
+        password_confirmation: '',
+      },
+      errors: {}
     };
   },
   methods: {

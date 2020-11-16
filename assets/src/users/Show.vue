@@ -106,14 +106,15 @@
 
       <div class="user-show-footer">
         <div class="user-show-post-menu">
-          <el-tabs :tab-position="tabPosition" style="height: 200px; width: 170px;">
+          <el-tabs :tab-position="tabPosition" style="height: 200px; width: 170px;" @tab-click="handleClick">
             <el-tab-pane label="記事"><i class="el-icon-document"></i> 記事</el-tab-pane>
             <el-tab-pane label="質問"><i class="el-icon-chat-round"></i> 質問</el-tab-pane>
             <el-tab-pane label="回答"><i class="el-icon-s-promotion"></i> 回答</el-tab-pane>
             <el-tab-pane label="いいね"><i class="el-icon-star-off"></i> いいね</el-tab-pane>
           </el-tabs>
         </div>
-        <div class="post-all-div">
+
+        <div class="post-all-div" v-if="click_tab == 0">
           <div v-for="article in articles" :key="article.id" class="post-show-div">
             <router-link v-bind:to="{ name : 'ArticleShow', params : { id: article.id }}" class="a-tag">
               <div class="post-index-body">
@@ -125,6 +126,43 @@
             </router-link>
           </div>
         </div>
+        <div class="post-all-div" v-else-if="click_tab == 1">
+          <div v-for="article in articles" :key="article.id" class="post-show-div">
+            <router-link v-bind:to="{ name : 'ArticleShow', params : { id: article.id }}" class="a-tag">
+              <div class="post-index-body">
+                  <h2 class="post-title-index"> {{article.title}} </h2>
+                <div class="post-index-username-updated">
+                  <h3 class="post-index-update">投稿日 {{ article.Updated }}</h3>
+                </div>
+              </div>
+            </router-link>
+          </div>
+        </div>
+        <div class="post-all-div" v-else-if="click_tab == 2">
+          <div v-for="article in articles" :key="article.id" class="post-show-div">
+            <router-link v-bind:to="{ name : 'ArticleShow', params : { id: article.id }}" class="a-tag">
+              <div class="post-index-body">
+                  <h2 class="post-title-index"> {{article.title}} </h2>
+                <div class="post-index-username-updated">
+                  <h3 class="post-index-update">投稿日 {{ article.Updated }}</h3>
+                </div>
+              </div>
+            </router-link>
+          </div>
+        </div>
+        <div class="post-all-div" v-else-if="click_tab == 3">
+          <div v-for="article in articles" :key="article.id" class="post-show-div">
+            <router-link v-bind:to="{ name : 'ArticleShow', params : { id: article.id }}" class="a-tag">
+              <div class="post-index-body">
+                  <h2 class="post-title-index"> {{article.title}} </h2>
+                <div class="post-index-username-updated">
+                  <h3 class="post-index-update">投稿日 {{ article.Updated }}</h3>
+                </div>
+              </div>
+            </router-link>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
@@ -155,7 +193,9 @@ export default {
       errors: {},
       url :"https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
       srcList :["https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"],
-      tabPosition: 'left'
+      tabPosition: 'left',
+
+      click_tab: 0,
     }
   },
   components: {
@@ -203,6 +243,10 @@ export default {
           }
           this.errors = error.response.data.ValidationErrors;
         });
+    },
+    handleClick(tab) {
+      this.click_tab = tab.paneName;
+      console.log(this.click_tab);
     },
     logout: function() {
       this.$cookies.remove("JWT");

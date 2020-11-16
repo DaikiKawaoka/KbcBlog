@@ -37,6 +37,10 @@
         <div class="article-form__preview-body">
           <div class="article-body article-form__preview-body-contents" v-html="compiledMarkdown"></div>
         </div>
+
+        <button v-if="like" @click="click_like" class="like-btn">いいね <i class="el-icon-star-off"></i></button>
+        <el-button type="warning" v-else @click="click_like">いいね <i class="el-icon-star-on"></i></el-button>
+
       </div>
     </div>
     <div class="article-comment-all">
@@ -98,6 +102,7 @@ export default {
   data(){
     return {
       article: null,
+      like: Boolean,
       user: {},
       comment:{
         userid: 0,
@@ -211,6 +216,30 @@ export default {
           this.errors = error.response.data.ValidationErrors;
         });
     },
+
+    ChangeArticleLike(){
+      this.$axios
+        .post(`http://localhost/api/restricted/Articles/${this.article.id}/Likes`,{
+          headers: {
+            Authorization: `Bearer ${this.$cookies.get("JWT")}`
+          },
+        })
+        .then(response => {
+          this.$router.go({path: this.$router.currentRoute.path, force: true})
+          console.log(response)
+        })
+        .catch(error => {
+          if(error.response.status == 401){
+            this.$router.push({ path: "/login" });
+          }
+          this.errors = error.response.data.ValidationErrors;
+        });
+    },
+
+    click_like(){
+      this.like = !this.like;
+      this.ChangeArticleLike();
+    }
   }
 }
 </script>
@@ -303,5 +332,28 @@ export default {
   text-decoration: none;
   color: #606266;
 }
-
+.like-btn{
+  display: inline-block;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  background: #FFF;
+  border: 1px solid #DCDFE6;
+  color: #606266;
+  -webkit-appearance: none;
+  text-align: center;
+  box-sizing: border-box;
+  outline: 0;
+  margin: 0;
+  transition: .1s;
+  font-weight: 500;
+  padding: 12px 20px;
+  font-size: 14px;
+  border-radius: 4px;
+}
+.like-btn:hover{
+  color: #E6A23C;
+  border-color: #f5dab1;
+  background: #fdf6ec;
+}
 </style>

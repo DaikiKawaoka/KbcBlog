@@ -212,7 +212,7 @@ func QuestionCommentUpdate(comment *model.QuestionComment) (sql.Result, error) {
 
 func QuestionCommentDelete(id int) error {
 	// 記事データを削除するクエリ文字列を生成します。
-	query := "DELETE FROM question_comments WHERE id = ?"
+	query := "DELETE FROM question_comments WHERE id = ?;"
 
 	// トランザクションを開始します。
 	tx := db.MustBegin()
