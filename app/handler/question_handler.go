@@ -81,7 +81,7 @@ func QuestionIndex(c echo.Context) error {
 		c.Logger().Error(err.Error())
 
 		// クライアントにステータスコード 500 でレスポンスを返します。
-		return c.JSON(http.StatusInternalServerError,"記事の一覧データを取得中にエラー発生")
+		return c.JSON(http.StatusInternalServerError,"質問の一覧データを取得中にエラー発生")
 	}
 
 	// テンプレートに渡すデータを map に格納します。

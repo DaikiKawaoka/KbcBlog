@@ -65,7 +65,7 @@ func main() {
 	r.PATCH("/Users/:id", handler.UserUpdate)
 
 	// Like
-	r.POST("/Articles/:id/Likes", hendler.ArticleLike)
+	r.POST("/Articles/:id/Likes", handler.ArticleLike)
 
 	// Webサーバーをポート番号 8082 で起動する
 	e.Logger.Fatal(e.Start(":8082"))

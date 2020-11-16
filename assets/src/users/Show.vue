@@ -127,12 +127,12 @@
           </div>
         </div>
         <div class="post-all-div" v-else-if="click_tab == 1">
-          <div v-for="article in articles" :key="article.id" class="post-show-div">
-            <router-link v-bind:to="{ name : 'ArticleShow', params : { id: article.id }}" class="a-tag">
+          <div v-for="question in questions" :key="question.id" class="post-show-div">
+            <router-link v-bind:to="{ name : 'QuestionShow', params : { id: question.id }}" class="a-tag">
               <div class="post-index-body">
-                  <h2 class="post-title-index"> {{article.title}} </h2>
+                  <h2 class="post-title-index"> {{question.title}} </h2>
                 <div class="post-index-username-updated">
-                  <h3 class="post-index-update">投稿日 {{ article.Updated }}</h3>
+                  <h3 class="post-index-update">投稿日 {{ question.Updated }}</h3>
                 </div>
               </div>
             </router-link>
@@ -176,11 +176,13 @@ export default {
   data(){
     return {
       articles: Array,
+      questions: Array,
       myUser: {},
       user: {
         KBCmail: "",
         id : 0,
         name: "",
+        postCount: 0,
         comment: {
           String: String,
           Valid: Boolean
@@ -209,6 +211,7 @@ export default {
       },})
       .then(response => {
         this.articles = response.data.Articles
+        this.questions = response.data.Questions
         this.user = response.data.User
         this.myUser = response.data.MyUser
         console.log(response.data)

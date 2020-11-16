@@ -38,8 +38,11 @@
           <div class="article-body article-form__preview-body-contents" v-html="compiledMarkdown"></div>
         </div>
 
-        <button v-if="like" @click="click_like" class="like-btn">いいね <i class="el-icon-star-off"></i></button>
-        <el-button type="warning" v-else @click="click_like">いいね <i class="el-icon-star-on"></i></el-button>
+        <el-row>
+          <el-button v-if="like.isLike" type="warning" @click="click_like">いいね <i class="el-icon-star-on"></i></el-button>
+          <button v-else @click="click_like" class="like-btn">いいね <i class="el-icon-star-off"></i></button>
+          <span class="like-count-span">{{like.likeCount}}</span>
+        </el-row>
 
       </div>
     </div>
@@ -102,7 +105,10 @@ export default {
   data(){
     return {
       article: null,
-      like: Boolean,
+      like: {
+        isLike: Boolean,
+        likeCount: 0,
+      },
       user: {},
       comment:{
         userid: 0,
@@ -127,6 +133,7 @@ export default {
         this.article = response.data.Article
         this.user = response.data.user
         this.comments = response.data.Comments
+        this.like = response.data.Like
 
         //commentに各idを代入
         this.comment.articleid = this.article.id
@@ -219,14 +226,19 @@ export default {
 
     ChangeArticleLike(){
       this.$axios
-        .post(`http://localhost/api/restricted/Articles/${this.article.id}/Likes`,{
+        .post(`http://localhost/api/restricted/Articles/${this.article.id}/Likes`,this.article.id,{
           headers: {
             Authorization: `Bearer ${this.$cookies.get("JWT")}`
           },
         })
         .then(response => {
-          this.$router.go({path: this.$router.currentRoute.path, force: true})
           console.log(response)
+          this.like.isLike = !this.like.isLike;
+          if(this.like.isLike === false){
+            this.like.likeCount--;
+          }else{
+            this.like.likeCount++;
+          }
         })
         .catch(error => {
           if(error.response.status == 401){
@@ -237,7 +249,6 @@ export default {
     },
 
     click_like(){
-      this.like = !this.like;
       this.ChangeArticleLike();
     }
   }
@@ -355,5 +366,11 @@ export default {
   color: #E6A23C;
   border-color: #f5dab1;
   background: #fdf6ec;
+}
+.like-count-span{
+  margin-left: 10px;
+  font-size: 1.1em;
+  color:#E6A23C;
+  font-weight: bold;
 }
 </style>

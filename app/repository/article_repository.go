@@ -7,18 +7,6 @@ import (
 "app/model"
 )
 
-
-// func ArticleList() ([]*model.Article, error) {
-// 	query := `SELECT id,title,body FROM articles;`
-
-// 	var articles []*model.Article
-// 	if err := db.Select(&articles, query); err != nil {
-// 		return nil, err
-// 	}
-
-// 	return articles, nil
-// }
-
 // ArticleListByCursor ...
 func ArticleListByCursor(cursor int) ([]*model.Article, error) {
 	// 引数で渡されたカーソルの値が 0 以下の場合は、代わりに int 型の最大値で置き換えます。

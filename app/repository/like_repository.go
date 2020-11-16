@@ -5,18 +5,36 @@ import (
 "app/model"
 )
 
-func GetArticleLike(userId int, articleId int) (*model.ArticleLike, error) {
-	// クエリ文字列を生成します。
-	query := `SELECT * FROM article_likes WHERE userid = ? AND articleid = ?;`
+func GetArticleLike(userId int, articleId int) (int, error) {
+	query := `SELECT COUNT(*) FROM article_likes WHERE userid = ? AND articleid = ?;`
 
-	var like model.ArticleLike
+	var count int
 
-	if err := db.Get(&like, query, userId, articleId); err != nil {
-		return nil, err
+	if err := db.Get(&count, query, userId, articleId); err != nil {
+		return 0, err
 	}
-
 	// エラーがない場合は記事データを返却します。
-	return &like, nil
+	return count, nil
+}
+
+func GetArticleLikeCount(articleId int) (int,error) {
+	query := `SELECT COUNT(*) FROM article_likes WHERE articleid = ?;`
+	var count int
+	if err := db.Get(&count, query, articleId); err != nil {
+		return 0, err
+	}
+	// エラーがない場合は記事データを返却します。
+	return count, nil
+}
+
+func GetMyLikePost(articleId int) (int,error) {
+	query := `SELECT COUNT(*) FROM article_likes WHERE articleid = ?;`
+	var count int
+	if err := db.Get(&count, query, articleId); err != nil {
+		return 0, err
+	}
+	// エラーがない場合は記事データを返却します。
+	return count, nil
 }
 
 func CreateArticleLike(like *model.ArticleLike) error {

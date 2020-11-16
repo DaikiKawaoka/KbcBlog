@@ -103,18 +103,30 @@ func UserShow(c echo.Context) error {
 
   // リポジトリの処理を呼び出して記事の一覧データを取得します。
 	articles, err := repository.GetUserArticle(0,user.ID)
-
 	if err != nil {
 		c.Logger().Error(err.Error())
 		// クライアントにステータスコード 500 でレスポンスを返します。
 		return c.JSON(http.StatusInternalServerError,"ユーザの記事一覧データを取得中にエラー発生")
 	}
 
+	// リポジトリの処理を呼び出して記事の一覧データを取得します。
+	questions, err := repository.QuestionListByCursor(0)
+	if err != nil {
+		c.Logger().Error(err.Error())
+		return c.JSON(http.StatusInternalServerError,"質問の一覧データを取得中にエラー発生")
+	}
+
+	// if myUser.ID == user.ID{
+
+	// }
+
 	// テンプレートに渡すデータを map に格納します。
 	data := map[string]interface{}{
     "MyUser": myUser,
     "User":user,
 		"Articles": articles,
+		"Questions": questions,
+		// "likes" : likes,
 	}
 
 	return c.JSON(http.StatusOK, data)

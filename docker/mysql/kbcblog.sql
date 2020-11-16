@@ -50,11 +50,11 @@ update `article_likes` set `created` = CURRENT_TIMESTAMP where `created` is null
 
 CREATE TABLE IF NOT EXISTS `question_likes` (
   `userid` int NOT NULL,
-  `articleid` int NOT NULL,
+  `questionid` int NOT NULL,
   `created` datetime,
   FOREIGN KEY (`userid`) REFERENCES `users`(`id`) ON DELETE CASCADE,
-  FOREIGN KEY (`articleid`) REFERENCES `articles`(`id`) ON DELETE CASCADE,
-  PRIMARY KEY(`userid`,`articleid`)
+  FOREIGN KEY (`questionid`) REFERENCES `questions`(`id`) ON DELETE CASCADE,
+  PRIMARY KEY(`userid`,`questionid`)
 );
 update `question_likes` set `created` = CURRENT_TIMESTAMP where `created` is null;
 
