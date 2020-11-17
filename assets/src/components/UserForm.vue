@@ -38,6 +38,57 @@
         </el-input>
       </el-form-item>
 
+    <el-form-item label="好きな言語 TOP 3" v-if="edit">
+   <div class="select-div">
+      <el-select
+        style="width: 320px;"
+        v-model="user.languages"
+        multiple
+        size="large"
+        :multiple-limit=3
+        :collapse-tags="false"
+        no-match-text="一致する言語がありません"
+        filterable
+        :allow-create="false"
+        :default-first-option="true"
+        placeholder="好きな言語を最大3つまで選択してください">
+        <el-option
+          v-for="item in options"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value">
+        </el-option>
+      </el-select>
+    </div>
+  </el-form-item>
+
+
+
+
+
+
+      <el-form-item label="GithubアカウントのURL" prop="github" v-if="edit"
+      :rules="[
+          { pattern: /https\:\/\/github.com\/[\w]+/, message: '自分のGithubアカウントのURLを入力してください。', trigger: 'blur'},
+      ]">
+        <el-input
+          v-model="user.github"
+          show-word-limit
+          placeholder="例 https://github.com/DaikiKawaoka">
+        </el-input>
+      </el-form-item>
+
+      <el-form-item label="WebサイトのURL" prop="website" v-if="edit"
+      :rules="[
+          { pattern: /https?:\/\/[\w/:%#\$&\?\(\)~\.=\+\-]+/, message: 'リンクを入力してください。', trigger: 'blur'},
+      ]">
+        <el-input
+          v-model="user.website"
+          show-word-limit
+          placeholder="例  http://ec2-13-230-88-76.ap-northeast-1.compute.amazonaws.com/portfolio/">
+        </el-input>
+      </el-form-item>
+
       <el-form-item v-if="!edit"
       label="メールアドレス" prop="KBC_mail"
       :rules="[
@@ -80,6 +131,61 @@
   },
   data() {
     return{
+      options: [{
+          value: 'HTML/CSS',
+          label: 'HTML/CSS'
+        }, {
+          value: 'Java',
+          label: 'Java'
+        }, {
+          value: 'Python',
+          label: 'Python'
+        }, {
+          value: 'JavaScript',
+          label: 'JavaScript'
+        }, {
+          value: 'C/C++',
+          label: 'C/C++'
+        }, {
+          value: 'C#',
+          label: 'C#'
+        }, {
+          value: 'SQL',
+          label: 'SQL'
+        }, {
+          value: 'PHP',
+          label: 'PHP'
+        }, {
+          value: 'Ruby',
+          label: 'Ruby'
+        }, {
+          value: 'Rust',
+          label: 'Rust'
+        }, {
+          value: 'Go',
+          label: 'Go'
+        }, {
+          value: 'TypeScript',
+          label: 'TypeScript'
+        }, {
+          value: 'R',
+          label: 'R'
+        }, {
+          value: 'Perl',
+          label: 'Perl'
+        }, {
+          value: 'Kotlin',
+          label: 'Kotlin'
+        }, {
+          value: 'Swift',
+          label: 'Swift'
+        },{
+          value: 'VBA',
+          label: 'VBA'
+        },{
+          value: 'COBOL',
+          label: 'COBOL'
+        }],
       uploadedImage: '',
     }
     },
@@ -116,5 +222,9 @@ li{
 }
 .error-ul{
   display: flex;
+}
+.select-div{
+  margin-top: 40px;
+  margin-right: 50px;
 }
 </style>

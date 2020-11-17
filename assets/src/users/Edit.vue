@@ -28,7 +28,10 @@ export default {
         comment: {
           String: "",
           Valid: Boolean
-        }
+        },
+        github: "",
+        website: "",
+        languages:[],
       },
       errors: {}
     };

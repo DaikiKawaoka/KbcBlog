@@ -22,7 +22,10 @@ type User struct {
 	Name        string    `db:"name" json:"name" validate:"required,min=4,max=20"`
 	Comment     sql.NullString   `db:"comment" json:"comment" validate:"max=150"`
 	PostCount int      `db:"PostCount" json:"postCount"` //投稿数
+	Github      string    `db:"github" json:"github"`
+	Website     string    `db:"website" json:"website"`
 }
+
 
 type LoginUser struct {
 	ID          int       `db:"id" json:"id"`
