@@ -38,11 +38,12 @@
         </el-input>
       </el-form-item>
 
-    <el-form-item label="好きな言語 TOP 3" v-if="edit">
-   <div class="select-div">
+  <el-form-item label="好きな言語 TOP 3" v-if="edit">
+    <div class="select-div">
       <el-select
         style="width: 320px;"
-        v-model="user.languages"
+        v-model="langarray"
+        v-on:change="arrayChangeString"
         multiple
         size="large"
         :multiple-limit=3
@@ -64,26 +65,23 @@
 
 
 
-
-
-
-      <el-form-item label="GithubアカウントのURL" prop="github" v-if="edit"
+      <el-form-item label="GithubアカウントのURL" prop="github.String" v-if="edit"
       :rules="[
           { pattern: /https\:\/\/github.com\/[\w]+/, message: '自分のGithubアカウントのURLを入力してください。', trigger: 'blur'},
       ]">
         <el-input
-          v-model="user.github"
+          v-model="user.github.String"
           show-word-limit
           placeholder="例 https://github.com/DaikiKawaoka">
         </el-input>
       </el-form-item>
 
-      <el-form-item label="WebサイトのURL" prop="website" v-if="edit"
+      <el-form-item label="WebサイトのURL" prop="website.String" v-if="edit"
       :rules="[
           { pattern: /https?:\/\/[\w/:%#\$&\?\(\)~\.=\+\-]+/, message: 'リンクを入力してください。', trigger: 'blur'},
       ]">
         <el-input
-          v-model="user.website"
+          v-model="user.website.String"
           show-word-limit
           placeholder="例  http://ec2-13-230-88-76.ap-northeast-1.compute.amazonaws.com/portfolio/">
         </el-input>
@@ -131,6 +129,7 @@
   },
   data() {
     return{
+      langarray: [],
       options: [{
           value: 'HTML/CSS',
           label: 'HTML/CSS'
@@ -180,6 +179,9 @@
           value: 'Swift',
           label: 'Swift'
         },{
+          value: 'VB',
+          label: 'VB'
+        },{
           value: 'VBA',
           label: 'VBA'
         },{
@@ -189,7 +191,18 @@
       uploadedImage: '',
     }
     },
+    beforeUpdate() {
+      // 文字列のlangsを配列に変換
+        this.langarray = this.user.languages.String.split(',');
+        if(this.langarray[0].length == 0){
+          this.langarray = [];
+        }
+    },
     methods: {
+      arrayChangeString(){
+        this.user.languages.String = this.langarray.join(',');
+        // console.log(this.user.languages);
+      },
       // onImageUploaded(e) {
       //   // event(=e)から画像データを取得する
       //   // this.user.image = e.target.files[0]

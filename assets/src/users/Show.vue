@@ -82,35 +82,49 @@
         <div class="user-show-link-info">
           <div class="user-show-link-div">
             <p class="link-tag">github</p>
-            <p class="link-p" v-if="link.github.length > 0"><a :href="link.github" class="user-show-link-a">{{link.github}}</a></p>
+              <p class="link-p" v-if="user.github.Valid">
+                <span class="user-show-link-a" @click="open('github')">{{user.github.String}}</span>
+              </p>
             <p class="link-p" v-else>未設定</p>
           </div>
           <div class="user-show-link-div">
             <p class="link-tag">webサイト</p>
-            <p class="link-p" v-if="link.website.length > 0"><a :href="link.website" class="user-show-link-a">{{link.website}}</a></p>
+              <p class="link-p" v-if="user.website.Valid">
+                <span class="user-show-link-a" @click="open('website')">{{user.website.String}}</span>
+              </p>
             <p class="link-p" v-else>未設定</p>
           </div>
         </div>
         <div class="user-show-body-info">
           <div class="user-show-body-indiv user-like-lang-div">
-            <p class="user-show-body-div-in-p">好きな言語</p>
+            <span class="user-show-body-div-in-span">好きな言語</span>
+            <span v-if="user.languages.Valid">
+              <span v-for="(lang, key) in langarray" :key="key" class="user-like-languages-span">
+                {{lang}}
+              </span>
+            </span>
+            <span v-else>
+              <span class="not-conf">未設定</span>
+            </span>
           </div>
           <div class="user-show-body-indiv user-post-article-div">
-            <p class="user-show-body-div-in-p">投稿記事</p>
+            <span class="user-show-body-div-in-span">投稿記事</span>
+            <span class="not-conf">未設定</span>
           </div>
           <div class="user-show-body-indiv user-iine-div">
-            <p class="user-show-body-div-in-p">Good記事</p>
+            <span class="user-show-body-div-in-span">Good記事</span>
+            <span class="not-conf">未設定</span>
           </div>
         </div>
       </div>
 
       <div class="user-show-footer">
         <div class="user-show-post-menu">
-          <el-tabs :tab-position="tabPosition" style="height: 200px; width: 170px;" @tab-click="handleClick">
+          <el-tabs :tab-position="tabPosition" style="height: 150px; width: 170px;" @tab-click="handleClick">
             <el-tab-pane label="記事"><i class="el-icon-document"></i> 記事</el-tab-pane>
             <el-tab-pane label="質問"><i class="el-icon-chat-round"></i> 質問</el-tab-pane>
             <el-tab-pane label="回答"><i class="el-icon-s-promotion"></i> 回答</el-tab-pane>
-            <el-tab-pane label="いいね"><i class="el-icon-star-off"></i> いいね</el-tab-pane>
+            <!-- <el-tab-pane label="いいね"><i class="el-icon-star-off"></i> いいね</el-tab-pane> -->
           </el-tabs>
         </div>
 
@@ -178,6 +192,7 @@ export default {
       articles: Array,
       questions: Array,
       myUser: {},
+      langarray: [],
       user: {
         KBCmail: "",
         id : 0,
@@ -187,16 +202,23 @@ export default {
           String: String,
           Valid: Boolean
         },
-      },
-        link:{
-          github: "https://github.com/DaikiKawaoka/",
-          website: "",
+        github: {
+          String: "",
+          Valid: Boolean
         },
+        website: {
+          String: "",
+          Valid: Boolean
+        },
+        languages: {
+          String: "",
+          Valid: Boolean
+        },
+      },
       errors: {},
       url :"https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
       srcList :["https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"],
       tabPosition: 'left',
-
       click_tab: 0,
     }
   },
@@ -214,7 +236,8 @@ export default {
         this.questions = response.data.Questions
         this.user = response.data.User
         this.myUser = response.data.MyUser
-        console.log(response.data)
+        // 文字列のlangsを配列に変換
+        this.langarray = this.user.languages.String.split(',');
       })
       .catch(error => {
         if(error.response.status == 401){
@@ -226,6 +249,29 @@ export default {
   computed: {
   },
   methods: {
+    open(value) {
+      this.$confirm('外部ページへの移動を許可しますか?', 'Warning', {
+        confirmButtonText: '許可',
+        cancelButtonText: 'キャンセル',
+        type: 'warning',
+        center: true
+      }).then(() => {
+        // this.$message({
+        //   type: 'success',
+        //   message: 'Delete completed'
+        // });
+        if( value === "github"){
+          window.open(this.user.github.String, '_blank');
+        }else{
+          window.open(this.user.website.String, '_blank');
+        }
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '外部ページへの移動をキャンセルしました。'
+        });
+      });
+    },
     editUser: function() {
       this.$router.push({ path: `/Users/${this.$route.params.id}/edit` });
     },
@@ -375,6 +421,7 @@ export default {
 }
 .user-show-link-a{
   color: #333;
+  cursor: pointer;
 }
 .user-show-link-a:hover{
   color: #409eff;
@@ -387,11 +434,22 @@ export default {
 .user-show-body-indiv{
   height: 70px;
 }
-.user-show-body-div-in-p{
-  color: rgb(197, 231, 0);
+.user-show-body-div-in-span{
+  color: #94ff5f;
   line-height: 70px;
-  margin: 0 0 0 10px;
+  font-size: 0.9em;
+  margin: 0 10px 0 10px;
   width: 100px;
+}
+.user-like-languages-span{
+  font-size: 1.4em;
+  color: #fff;
+  font-weight: bold;
+  margin-left: 10px;
+}
+.not-conf{
+  color: #ccc;
+  margin-left: 10px;
 }
 
 /* footer */
@@ -414,6 +472,7 @@ export default {
   border: solid 1px #ccc;
   display: flex;
   background: #eee;
+  border-radius: 6px;
 }
 .post-show-div:hover{
   transition: 0.2s ;

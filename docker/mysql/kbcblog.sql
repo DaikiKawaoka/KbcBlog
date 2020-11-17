@@ -9,6 +9,9 @@ CREATE TABLE IF NOT EXISTS `users`(
   `passhash` varchar(255) NOT NULL,
   `name` varchar(20) NOT NULL,
   `comment` varchar(150),
+  `github` varchar(100),
+  `website` varchar(500),
+  `languages` varchar(50),
   PRIMARY KEY(`id`)
 );
 

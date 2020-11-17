@@ -65,7 +65,7 @@ func UserCreate(user *model.CreateUser) (sql.Result, error) {
 
 func UserGetByID(id int) (*model.User, error) {
 	// クエリ文字列を生成します。
-	query := `SELECT id,mail,name,comment
+	query := `SELECT id,mail,name,comment,github,website,languages
 	FROM users
 	WHERE id = ?`
 
@@ -86,7 +86,10 @@ func UserUpdate(user *model.User) error {
 	// クエリ文字列を生成します。
 	query := `UPDATE users
 	SET name = :name,
-			comment = :comment
+			comment = :comment,
+			github = :github,
+			website = :website,
+			languages = :languages
 	WHERE id = :id;`
 
 	// トランザクションを開始します。

@@ -110,7 +110,7 @@ func UserShow(c echo.Context) error {
 	}
 
 	// リポジトリの処理を呼び出して記事の一覧データを取得します。
-	questions, err := repository.QuestionListByCursor(0)
+	questions, err := repository.GetUserQuestion(0,user.ID)
 	if err != nil {
 		c.Logger().Error(err.Error())
 		return c.JSON(http.StatusInternalServerError,"質問の一覧データを取得中にエラー発生")

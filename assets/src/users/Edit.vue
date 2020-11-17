@@ -29,11 +29,20 @@ export default {
           String: "",
           Valid: Boolean
         },
-        github: "",
-        website: "",
-        languages:[],
+        github: {
+          String: "",
+          Valid: Boolean
+        },
+        website: {
+          String: "",
+          Valid: Boolean
+        },
+        languages: {
+          String: "",
+          Valid: Boolean
+        },
       },
-      errors: {}
+      errors: {},
     };
   },
   components: {
@@ -49,6 +58,8 @@ export default {
       .then(response => {
         this.myUser = response.data.MyUser
         this.user = response.data.User
+
+
         if(this.myUser.id !== this.user.id){
           this.$router.push({ path: "/" });
         }
@@ -67,9 +78,31 @@ export default {
   },
   methods: {
     updateUser: function() {
-      if (this.user.comment.String.length !== 0){
+      // commentが空かチェック
+      if (this.user.comment.length !== 0){
         this.user.comment.Valid = true;
+      }else{
+        this.user.comment.Valid = false;
       }
+      // githublinkが空かチェック
+      if (this.user.github.String.length !== 0){
+        this.user.github.Valid = true;
+      }else{
+        this.user.github.Valid = false;
+      }
+      // websitelinkが空かチェック
+      if (this.user.website.String.length !== 0){
+        this.user.website.Valid = true;
+      }else{
+        this.user.website.Valid = false;
+      }
+      // languagesが空かチェック
+      if (this.user.languages.String.length !== 0){
+        this.user.languages.Valid = true;
+      }else{
+        this.user.languages.Valid = false;
+      }
+
       this.$axios
         .patch(`http://localhost/api/restricted/Users/${this.myUser.id}`,this.user,{
           headers: {

@@ -5,6 +5,7 @@ import (
 // "math"
 )
 
+// 投稿数を取得
 func PostCount(user *model.User) error{
 	query := `SELECT COUNT(*) AS PostCount
 						FROM
