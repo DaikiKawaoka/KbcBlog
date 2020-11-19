@@ -2,10 +2,12 @@
   <div id="login-all">
     <Header :loginpage="loginpage"></Header>
     <div class="body-main-login">
-      <div v-if="errors.length != 0">
+      <div v-if="errors.length != 0" class="err-div-login">
         <ul class="error-ul" v-for="e in errors" :key="e">
-            <li class="error-icon-li"><i class="el-icon-warning-outline"></i></li>
-            <li><font color="red">{{ e }}</font></li>
+          <span class="error-span">
+            <li class="error-icon-li"><i class="el-icon-warning-outline err-i"></i></li>
+            <li><font color="red" class="err-text">{{ e }}</font></li>
+          </span>
         </ul>
       </div>
 
@@ -61,7 +63,7 @@ export default {
         .post('http://localhost/api/Login',{password: this.password, KBC_mail: this.KBC_mail})
         .then(response => {
           let token = response.data.token;
-          this.$cookies.set('JWT',token,"1h");
+          this.$cookies.set('JWT',token,"6h");
           this.$router.push({ path: "/" });
         })
         .catch(error => {
@@ -77,6 +79,7 @@ export default {
 <style>
 .body-main-login{
   height: 450px;
+  position:relative;
 }
 .box-card {
   width: 480px;
@@ -89,5 +92,25 @@ export default {
   bottom: 0px;
   left: 0px;
   margin: auto;
+}
+.err-div-login{
+  position:absolute;
+  top: 105px;
+  left: 550px;
+  z-index: 2;
+}
+.err-i{
+  font-size: 18px;
+  color:#F56C6C;
+}
+li{
+  list-style: none;
+}
+.error-span{
+  display: flex;
+  text-align: center;
+}
+.err-text{
+  font-size: 0.9em;
 }
 </style>

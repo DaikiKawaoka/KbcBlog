@@ -44,21 +44,24 @@ func Login(c echo.Context) error {
 	// ユーザ認証
 
 	loginUser, err := repository.GetLoginPassHash(loginReq.KBC_mail)
+	var errmessages[1] string;
 
 	if  err != nil{
 		// エラーの内容をサーバーのログに出力します。
     c.Logger().Error(err.Error())
 		// サーバー内の処理でエラーが発生した場合は 500 エラーを返却します。
 		message := "ユーザが存在しません。"
-    return c.JSON(http.StatusInternalServerError, message)
+		errmessages[0] = message;
+
+    return c.JSON(http.StatusInternalServerError, errmessages)
 	}
 
 	//パスワードとパスワードハッシュが一致しているか検証
 	if err := passwordVerify(loginUser.PassHash, loginReq.Password); err != nil{
     c.Logger().Error(err.Error())
 		message := "パスワードが違います。"
-    // サーバー内の処理でエラーが発生した場合は 500 エラーを返却します。
-    return c.JSON(http.StatusInternalServerError, message)
+		errmessages[0] = message;
+    return c.JSON(http.StatusInternalServerError, errmessages)
 	}
 
 	// Generate encoded token and send it as response.
@@ -84,7 +87,7 @@ func CreateToken(userID int) (string, error) {
 		userID,
 		"daiki",
 		jwt.StandardClaims{
-				ExpiresAt: time.Now().Add(time.Hour * 1).Unix(), // 有効期限を指定
+				ExpiresAt: time.Now().Add(time.Hour * 6).Unix(), // 有効期限を指定
 		},
 	}
 

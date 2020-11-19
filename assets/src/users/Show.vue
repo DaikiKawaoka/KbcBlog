@@ -151,7 +151,9 @@
                 <div class="post-index-body">
                     <h2 class="post-title-index"> {{article.title}} </h2>
                   <div class="post-index-username-updated">
-                    <h3 class="post-index-update">{{ article.Updated }}</h3>
+                    <i class="el-icon-star-on star-i"></i>
+                    <span class="likecount-span">{{article.likecount}}</span>
+                    <p class="post-index-update">{{ article.Updated }}</p>
                   </div>
                 </div>
               </router-link>
@@ -551,7 +553,17 @@ export default {
   color: #999;
 }
 .post-index-update{
-  margin-left: 350px;
+  margin-left: 300px;
+}
+.star-i{
+  color: orange;
+  margin-top: 15px;
+  font-size: 1.3em;
+}
+.likecount-span{
+  margin-top: 17px;
+  font-size: 0.8em;
+  color: #444;
 }
 .a-tag{
   color: #000;

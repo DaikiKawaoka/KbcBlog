@@ -82,8 +82,6 @@ func UserShow(c echo.Context) error {
 		c.Logger().Error(err.Error())
 		return c.JSON(http.StatusInternalServerError,"userが存在しません")
 	}
-	// パスパラメータから記事 ID を取得します。
-	// 文字列型で取得されるので、strconv パッケージを利用して数値型にキャストしています。
 	id, _ := strconv.Atoi(c.Param("id"))
 
 	// 記事データを取得します。
