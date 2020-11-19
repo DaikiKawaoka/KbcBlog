@@ -1,7 +1,7 @@
 <template>
   <div id="login-all">
     <Header :loginpage="loginpage"></Header>
-    <div class="body-main">
+    <div class="body-main-login">
       <div v-if="errors.length != 0">
         <ul class="error-ul" v-for="e in errors" :key="e">
             <li class="error-icon-li"><i class="el-icon-warning-outline"></i></li>
@@ -75,7 +75,7 @@ export default {
 </script>
 
 <style>
-.body-main{
+.body-main-login{
   height: 450px;
 }
 .box-card {
