@@ -5,6 +5,8 @@ import (
 "app/model"
 )
 
+
+
 // Article Like
 
 func GetArticleLike(userId int, articleId int) (int, error) {
@@ -65,6 +67,8 @@ func DeleteArticleLike(userid int, articleid int) error {
 
 
 
+
+
 // Question Like
 
 func GetQuestionLike(userId int, questionId int) (int, error) {
@@ -86,7 +90,6 @@ func GetQuestionLikeCount(questionId int) (int,error) {
 }
 
 func CreateQuestionLike(like *model.QuestionLike) error {
-
 	now := time.Now().In(jst)
   like.Created = now.Format("2006/01/02 15:04:05")
 
@@ -108,6 +111,58 @@ func DeleteQuestionLike(userid int, questionid int) error {
 	tx := db.MustBegin()
 
 	if _, err := tx.Exec(query, userid, questionid); err != nil {
+		tx.Rollback()
+		return err
+	}
+	return tx.Commit()
+}
+
+
+
+
+// Article Comment Like
+
+func GetArticleCommentLike(userId int, article_commentid int) (int, error) {
+	query := `SELECT COUNT(*) FROM article_comment_likes WHERE userid = ? AND article_commentid = ?;`
+	var count int
+	if err := db.Get(&count, query, userId, article_commentid); err != nil {
+		return 0, err
+	}
+	return count, nil
+}
+
+func GetArticleCommentLikeCount(articleCommentId int) (int,error) {
+	query := `SELECT COUNT(*) FROM article_comment_likes WHERE article_commentid = ?;`
+	var count int
+	if err := db.Get(&count, query, articleCommentId); err != nil {
+		return 0, err
+	}
+	return count, nil
+}
+
+func CreateArticleCommentLike(like *model.ArticleCommentLike) error {
+
+	now := time.Now().In(jst)
+  like.Created = now.Format("2006/01/02 15:04:05")
+
+  query := `INSERT INTO article_comment_likes (userid, article_commentid, created)
+	VALUES (:userid, :article_commentid, :created);`
+
+  tx := db.MustBegin()
+  _, err := tx.NamedExec(query, like)
+  if err != nil {
+    tx.Rollback()
+    return err
+  }
+  tx.Commit()
+  return nil
+}
+
+func DeleteArticleCommentLike(userid int, article_commentid int) error {
+	query := "DELETE FROM article_comment_likes WHERE userid = ? AND article_commentid = ?"
+	tx := db.MustBegin()
+
+	if _, err := tx.Exec(query, userid, article_commentid); err != nil {
 		tx.Rollback()
 		return err
 	}

@@ -133,13 +133,10 @@ func ArticleIndex(c echo.Context) error {
 func ArticleShow(c echo.Context) error {
 	userId := userIDFromToken(c)
 	myUser,err := repository.GetMyUser(userId)
-
 	if err != nil {
 		c.Logger().Error(err.Error())
 		return c.JSON(http.StatusInternalServerError,"userが存在しません")
 	}
-	// パスパラメータから記事 ID を取得します。
-	// 文字列型で取得されるので、strconv パッケージを利用して数値型にキャストしています。
 	id, _ := strconv.Atoi(c.Param("id"))
 
 	// 記事データを取得します。
@@ -172,12 +169,35 @@ func ArticleShow(c echo.Context) error {
 
 	// 記事データへのコメント一覧データを取得します。
 	comments, err := repository.ArticleCommentListByCursor(article.ID)
-
 	if err != nil {
 		c.Logger().Error(err.Error())
 		// クライアントにステータスコード 500 でレスポンスを返します。
 		return c.JSON(http.StatusInternalServerError,"記事のコメント一覧データを取得中にエラー発生")
 	}
+
+	var commentLike model.Like
+	for i, comment := range comments {
+		count, err := repository.GetArticleCommentLike(userId,comment.ID);
+		if err != nil {
+			c.Logger().Error(err.Error())
+			return c.JSON(http.StatusInternalServerError,"likeデータの取得中にエラー発生") //500
+		}
+		// ユーザがいいねしているか検証
+		if count > 0{
+			commentLike.IsLike = true
+		}else{
+			commentLike.IsLike = false
+		}
+		commentLike.LikeCount,err = repository.GetArticleCommentLikeCount(comment.ID)
+		if err != nil {
+			c.Logger().Error(err.Error())
+			return c.JSON(http.StatusInternalServerError,"likeデータのカウント数取得中にエラー発生") //500
+		}
+		comments[i].Like = commentLike
+	}
+
+
+
 
 	// テンプレートに渡すデータを map に格納します。
 	data := map[string]interface{}{

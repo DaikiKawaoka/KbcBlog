@@ -12,8 +12,9 @@ type ArticleComment struct {
 	Articleid   int       `db:"articleid" json:"articleid"`
 	UserName    string    `db:"name" json:"name"`
 	Text        string    `db:"text" form:"text" json:"text" validate:"required"`
-	Created     string `db:"created"`
-	Updated     string `db:"updated"`
+	Like   Like
+	Created     string    `db:"created"`
+	Updated     string    `db:"updated"`
 }
 
 // ValidationErrors ...
@@ -45,11 +46,12 @@ func (a *ArticleComment) ValidationErrors(err error) []string {
 type QuestionComment struct {
 	ID          int       `db:"id" json:"id"`
 	Userid      int       `db:"userid" form:"userid" json:"userid"`
-	Questionid   int       `db:"questionid" json:"questionid"`
+	Questionid   int      `db:"questionid" json:"questionid"`
 	UserName    string    `db:"name" json:"name"`
 	Text        string    `db:"text" form:"text" json:"text" validate:"required"`
-	Created     string `db:"created"`
-	Updated     string `db:"updated"`
+	Like   Like
+	Created     string    `db:"created"`
+	Updated     string    `db:"updated"`
 }
 
 // ValidationErrors ...

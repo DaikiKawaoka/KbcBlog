@@ -67,6 +67,8 @@ func main() {
 	// Like
 	r.POST("/Articles/:id/Likes", handler.ArticleLike)
 	r.POST("/Questions/:id/Likes", handler.QuestionLike)
+	r.POST("/Articles/Comments/:id/Likes",handler.ArticleCommentLike)
+	// r.POST("/Questions/Comments/:id/Likes",handler.QuestionCommentLike)
 
 	// Webサーバーをポート番号 8082 で起動する
 	e.Logger.Fatal(e.Start(":8082"))

@@ -90,3 +90,25 @@ CREATE TABLE IF NOT EXISTS `question_comments` (
 );
 update `question_comments` set `created` = CURRENT_TIMESTAMP where `created` is null;
 update `question_comments` set `updated` = CURRENT_TIMESTAMP where `updated` is null;
+
+CREATE TABLE IF NOT EXISTS `article_comment_likes` (
+  `id` int AUTO_INCREMENT,
+  `userid` int NOT NULL,
+  `article_commentid` int NOT NULL,
+  `created` datetime,
+  FOREIGN KEY (`userid`) REFERENCES `users`(`id`) ON DELETE CASCADE,
+  FOREIGN KEY (`article_commentid`) REFERENCES `article_comments`(`id`) ON DELETE CASCADE,
+  PRIMARY KEY(`id`)
+);
+update `article_comment_likes` set `created` = CURRENT_TIMESTAMP where `created` is null;
+
+CREATE TABLE IF NOT EXISTS `question_comment_likes` (
+  `id` int AUTO_INCREMENT,
+  `userid` int NOT NULL,
+  `question_commentid` int NOT NULL,
+  `created` datetime,
+  FOREIGN KEY (`userid`) REFERENCES `users`(`id`) ON DELETE CASCADE,
+  FOREIGN KEY (`question_commentid`) REFERENCES `question_comments`(`id`) ON DELETE CASCADE,
+  PRIMARY KEY(`id`)
+);
+update `question_comment_likes` set `created` = CURRENT_TIMESTAMP where `created` is null;

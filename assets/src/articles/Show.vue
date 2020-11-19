@@ -84,6 +84,14 @@
           <div class="comment-main">
             <div class="article-body comment-text" v-html="compiledMarkdownComment(c.text)"></div>
           </div>
+
+          <el-row>
+            <!-- <i class="el-icon-star-on"></i> -->
+            <i v-if="c.Like.isLike" class="el-icon-star-on comment-ster-i" @click="ChangeArticleCommentLike(index)"></i>
+            <i v-else class="el-icon-star-off not-comment-ster-i" @click="ChangeArticleCommentLike(index)"></i>
+            <span class="comment-like-count-span">{{c.Like.likeCount}}</span>
+          </el-row>
+
         </div>
       </div>
 
@@ -279,7 +287,32 @@ export default {
 
     click_like(){
       this.ChangeArticleLike();
-    }
+    },
+
+
+    ChangeArticleCommentLike(index){
+      this.$axios
+        .post(`http://localhost/api/restricted/Articles/Comments/${this.comments[index].id}/Likes`,this.comments[index].id,{
+          headers: {
+            Authorization: `Bearer ${this.$cookies.get("JWT")}`
+          },
+        })
+        .then(response => {
+          this.comments[index].Like.isLike = !this.comments[index].Like.isLike;
+          if(this.comments[index].Like.isLike === false){
+            this.comments[index].Like.likeCount--;
+          }else{
+            this.comments[index].Like.likeCount++;
+          }
+          console.log(response)
+        })
+        .catch(error => {
+          if(error.response.status == 401){
+            this.$router.push({ path: "/login" });
+          }
+          this.errors = error.response.data.ValidationErrors;
+        });
+    },
   }
 }
 </script>
@@ -401,5 +434,20 @@ export default {
   font-size: 1.1em;
   color:#E6A23C;
   font-weight: bold;
+}
+.comment-like-count-span{
+  margin-left: 1px;
+  font-size: 0.9em;
+}
+.comment-ster-i{
+  margin-left: 10px;
+  font-size: 2em;
+  cursor: pointer;
+  color:#E6A23C;
+}
+.not-comment-ster-i{
+  margin-left: 15px;
+  font-size: 1.6em;
+  cursor: pointer;
 }
 </style>
