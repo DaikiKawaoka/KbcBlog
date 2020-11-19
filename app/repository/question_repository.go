@@ -36,24 +36,6 @@ func QuestionGetByID(id int) (*model.Question, error) {
 	return &question, nil
 }
 
-// 回答した質問を取得
-func GetAnswerQuestionList(cursor int) ([]*model.Question, error){
-	if cursor <= 0 {
-		cursor = math.MaxInt32
-	}
-	query := `SELECT q.id id,q.userid userid,u.name name,q.title title,q.body body,q.created created,q.updated updated
-	FROM questions q,users u
-	WHERE q.id < ? and q.userid = u.id
-	ORDER BY q.id desc
-	LIMIT 10`
-
-	questions := make([]*model.Question, 0, 10)
-	if err := db.Select(&questions, query, cursor); err != nil {
-		return nil, err
-	}
-	return questions, nil
-}
-
 func QuestionCreate(question *model.Question) (sql.Result, error) {
 	now := time.Now().In(jst)
   question.Created = now.Format("2006/01/02 15:04:05")
@@ -152,4 +134,22 @@ func GetUserQuestion(cursor int,userid int) ([]*model.Question, error) {
 	}
 
 	return questions, nil
+}
+
+// 回答した質問を取得
+func GetAnswerQuestionList(cursor int, userid int) ([]*model.AnswerQuestion, error){
+	if cursor <= 0 {
+		cursor = math.MaxInt32
+	}
+	query := `SELECT q.id id,q.userid userid,u.name name,q.title title, c.text text,c.created created
+	FROM questions q,users u,question_comments c
+	WHERE q.id < ? AND q.userid = u.id AND q.id = c.questionid AND c.userid = ?
+	ORDER BY q.id desc
+	LIMIT 10`
+
+	answerQuestions := make([]*model.AnswerQuestion, 0, 10)
+	if err := db.Select(&answerQuestions, query, cursor ,userid); err != nil {
+		return nil, err
+	}
+	return answerQuestions, nil
 }

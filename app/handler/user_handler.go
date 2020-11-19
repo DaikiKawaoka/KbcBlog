@@ -113,12 +113,14 @@ func UserShow(c echo.Context) error {
 	questions, err := repository.GetUserQuestion(0,user.ID)
 	if err != nil {
 		c.Logger().Error(err.Error())
-		return c.JSON(http.StatusInternalServerError,"質問の一覧データを取得中にエラー発生")
+		return c.JSON(http.StatusInternalServerError,"ユーザの質問一覧データを取得中にエラー発生")
 	}
 
-	// if myUser.ID == user.ID{
-
-	// }
+	answerQuestions, err := repository.GetAnswerQuestionList(0,user.ID)
+	if err != nil {
+		c.Logger().Error(err.Error())
+		return c.JSON(http.StatusInternalServerError,"ユーザの回答一覧データを取得中にエラー発生")
+	}
 
 	// テンプレートに渡すデータを map に格納します。
 	data := map[string]interface{}{
@@ -126,6 +128,7 @@ func UserShow(c echo.Context) error {
     "User":user,
 		"Articles": articles,
 		"Questions": questions,
+		"AnswerQuestions" : answerQuestions,
 		// "likes" : likes,
 	}
 

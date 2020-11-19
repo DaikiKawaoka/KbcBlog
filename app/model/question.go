@@ -15,6 +15,15 @@ type Question struct {
 	Updated string `db:"updated"`
 }
 
+type AnswerQuestion struct {
+	ID      int       `db:"id" json:"id"`
+	Userid  int       `db:"userid" json:"userid"`
+	UserName string   `db:"name" json:"name"`
+	Title   string    `db:"title" json:"question_title"`
+	Text    string    `db:"text" json:"comment_text"`
+	Created string    `db:"created" json:"comment_created"`
+}
+
 // ValidationErrors ...
 func (q *Question) ValidationErrors(err error) []string {
 	// メッセージを格納するスライスを宣言します。

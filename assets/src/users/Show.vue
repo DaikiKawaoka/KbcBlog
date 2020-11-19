@@ -107,11 +107,27 @@
               <span class="not-conf">未設定</span>
             </span>
           </div>
-          <div class="user-show-body-indiv user-post-article-div">
-            <span class="user-show-body-div-in-span">投稿記事</span>
-            <span class="not-conf">未設定</span>
+          <div class="user-post-article-div">
+            <div class="div-in-span-article">投稿記事</div>
+            <!-- <span class="not-conf">未設定</span> -->
+            <div class="article-circle-div">
+              <el-progress type="circle" :percentage="33" color="#67C23A" :width="90"></el-progress>
+              <p class="article-circle-p">Java</p>
+            </div>
+            <div class="article-circle-div">
+              <el-progress type="circle" :percentage="25" color="#ff1493" :width="90"></el-progress>
+              <p class="article-circle-p">JavaScript</p>
+            </div>
+            <div class="article-circle-div">
+              <el-progress type="circle" :percentage="25" :width="90"></el-progress>
+              <p class="article-circle-p">JavaScript</p>
+            </div>
+            <div class="article-circle-div">
+              <el-progress type="circle" :percentage="25" color="#ff8c00" :width="90"></el-progress>
+              <p class="article-circle-p">JavaScript</p>
+            </div>
           </div>
-          <div class="user-show-body-indiv user-iine-div">
+          <div class="user-iine-div">
             <span class="user-show-body-div-in-span">Good記事</span>
             <span class="not-conf">未設定</span>
           </div>
@@ -129,51 +145,55 @@
         </div>
 
         <div class="post-all-div" v-if="click_tab == 0">
-          <div v-for="article in articles" :key="article.id" class="post-show-div">
-            <router-link v-bind:to="{ name : 'ArticleShow', params : { id: article.id }}" class="a-tag">
-              <div class="post-index-body">
-                  <h2 class="post-title-index"> {{article.title}} </h2>
-                <div class="post-index-username-updated">
-                  <h3 class="post-index-update">投稿日 {{ article.Updated }}</h3>
+          <div v-if="articles.length > 0">
+            <div v-for="article in articles" :key="article.id" class="post-show-div">
+              <router-link v-bind:to="{ name : 'ArticleShow', params : { id: article.id }}" class="a-tag">
+                <div class="post-index-body">
+                    <h2 class="post-title-index"> {{article.title}} </h2>
+                  <div class="post-index-username-updated">
+                    <h3 class="post-index-update">{{ article.Updated }}</h3>
+                  </div>
                 </div>
-              </div>
-            </router-link>
+              </router-link>
+            </div>
+          </div>
+          <div v-else>
+            <p class="no-post-array">記事はありません。</p>
           </div>
         </div>
         <div class="post-all-div" v-else-if="click_tab == 1">
-          <div v-for="question in questions" :key="question.id" class="post-show-div">
-            <router-link v-bind:to="{ name : 'QuestionShow', params : { id: question.id }}" class="a-tag">
-              <div class="post-index-body">
-                  <h2 class="post-title-index"> {{question.title}} </h2>
-                <div class="post-index-username-updated">
-                  <h3 class="post-index-update">投稿日 {{ question.Updated }}</h3>
+          <div v-if="questions.length > 0">
+            <div v-for="question in questions" :key="question.id" class="post-show-div">
+              <router-link v-bind:to="{ name : 'QuestionShow', params : { id: question.id }}" class="a-tag">
+                <div class="post-index-body">
+                    <h2 class="post-title-index"> {{question.title}} </h2>
+                  <div class="post-index-username-updated">
+                    <h3 class="post-index-update">{{ question.Updated }}</h3>
+                  </div>
                 </div>
-              </div>
-            </router-link>
+              </router-link>
+            </div>
+          </div>
+          <div v-else>
+            <p class="no-post-array">質問はありません。</p>
           </div>
         </div>
-        <div class="post-all-div" v-else-if="click_tab == 2">
-          <div v-for="article in articles" :key="article.id" class="post-show-div">
-            <router-link v-bind:to="{ name : 'ArticleShow', params : { id: article.id }}" class="a-tag">
-              <div class="post-index-body">
-                  <h2 class="post-title-index"> {{article.title}} </h2>
-                <div class="post-index-username-updated">
-                  <h3 class="post-index-update">投稿日 {{ article.Updated }}</h3>
+        <div class="post-all-div" v-else>
+          <div v-if="answerQuestions.length > 0">
+            <div v-for="(answer,index) in answerQuestions" :key="index" class="post-show-div">
+              <router-link v-bind:to="{ name : 'QuestionShow', params : { id: answer.id }}" class="a-tag">
+                <div class="answer-index-body">
+                    <span class="answer-question-title">「{{answer.question_title}}」</span> <span class="answer-question-title-last">に回答しました。</span>
+                    <p class="answer-comment-text"> {{answer.comment_text}} </p>
+                  <div class="post-index-username-updated">
+                    <h3 class="post-index-update">{{ answer.comment_created }}</h3>
+                  </div>
                 </div>
-              </div>
-            </router-link>
+              </router-link>
+            </div>
           </div>
-        </div>
-        <div class="post-all-div" v-else-if="click_tab == 3">
-          <div v-for="article in articles" :key="article.id" class="post-show-div">
-            <router-link v-bind:to="{ name : 'ArticleShow', params : { id: article.id }}" class="a-tag">
-              <div class="post-index-body">
-                  <h2 class="post-title-index"> {{article.title}} </h2>
-                <div class="post-index-username-updated">
-                  <h3 class="post-index-update">投稿日 {{ article.Updated }}</h3>
-                </div>
-              </div>
-            </router-link>
+          <div v-else>
+            <p class="no-post-array">回答はありません。</p>
           </div>
         </div>
 
@@ -191,6 +211,7 @@ export default {
     return {
       articles: Array,
       questions: Array,
+      answerQuestions: Array,
       myUser: {},
       langarray: [],
       user: {
@@ -234,6 +255,7 @@ export default {
       .then(response => {
         this.articles = response.data.Articles
         this.questions = response.data.Questions
+        this.answerQuestions = response.data.AnswerQuestions
         this.user = response.data.User
         this.myUser = response.data.MyUser
         // 文字列のlangsを配列に変換
@@ -393,7 +415,7 @@ export default {
 .user-show-body{
   display: flex;
   width: 800px;
-  height: 210px;
+  height: 230px;
   border-bottom: #000 1px solid;
   padding: 0 0 30px 0;
   margin: 0 auto 30px auto;
@@ -434,12 +456,35 @@ export default {
 .user-show-body-indiv{
   height: 70px;
 }
+.user-iine-div{
+  height: 60px;
+}
+.user-post-article-div{
+  display: flex;
+  height: 100px;
+}
+.article-circle-div{
+  height: 100px;
+}
+.article-circle-p{
+  margin: 0 0 0 20px;
+  font-size: 0.7em;
+  color: #fff;
+  text-align: center;
+}
 .user-show-body-div-in-span{
   color: #94ff5f;
   line-height: 70px;
   font-size: 0.9em;
   margin: 0 10px 0 10px;
   width: 100px;
+}
+.div-in-span-article{
+  color: #94ff5f;
+  font-size: 0.9em;
+  margin: 22px 10px 0 10px;
+  width: 72px;
+  height: 20px;
 }
 .user-like-languages-span{
   font-size: 1.4em;
@@ -468,7 +513,7 @@ export default {
 }
 .post-show-div{
   margin-bottom: 5px;
-  padding-left: 20px;
+  padding-left: 10px;
   border: solid 1px #ccc;
   display: flex;
   background: #eee;
@@ -503,11 +548,41 @@ export default {
   color: #999;
 }
 .post-index-update{
-  margin-left: 20px;
+  margin-left: 350px;
 }
 .a-tag{
   color: #000;
   text-decoration: none;
   cursor: pointer;
+}
+.answer-index-body{
+  margin-top: 10px;
+  width: 500px;
+  word-wrap: break-word;
+}
+.answer-question-title{
+  font-weight: bold;
+  font-size: 1.1em;
+}
+.answer-question-title-last{
+  font-size: 0.8em;
+  color: #555;
+}
+.answer-comment-text{
+  margin: 0;
+  width: 500px;
+  word-break: normal;
+}
+.no-post-array{
+  text-align: center;
+  color: #777;
+}
+.el-progress{
+  width: 80px;
+  height: 80px;
+  margin-left: 20px;
+}
+svg{
+  width: 80px;
 }
 </style>
