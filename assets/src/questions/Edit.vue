@@ -68,7 +68,8 @@ export default {
     },
 
     editQuestionAlert() {
-      this.$message({
+      this.$notify({
+        title: 'Success',
         message: '質問の内容を変更しました。',
         type: 'success'
       });

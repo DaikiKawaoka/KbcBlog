@@ -284,17 +284,14 @@ export default {
         type: 'warning',
         center: true
       }).then(() => {
-        // this.$message({
-        //   type: 'success',
-        //   message: 'Delete completed'
-        // });
         if( value === "github"){
           window.open(this.user.github.String, '_blank');
         }else{
           window.open(this.user.website.String, '_blank');
         }
       }).catch(() => {
-        this.$message({
+        this.$notify({
+          title: 'Cancell',
           type: 'info',
           message: '外部ページへの移動をキャンセルしました。'
         });
@@ -483,6 +480,14 @@ export default {
   color: #ccc;
   margin-left: 10px;
 }
+.el-progress{
+  width: 80px;
+  height: 80px;
+  margin-left: 20px;
+}
+svg{
+  width: 80px;
+}
 
 /* footer */
 .user-show-footer{
@@ -573,13 +578,5 @@ export default {
 .no-post-array{
   text-align: center;
   color: #777;
-}
-.el-progress{
-  width: 80px;
-  height: 80px;
-  margin-left: 20px;
-}
-svg{
-  width: 80px;
 }
 </style>

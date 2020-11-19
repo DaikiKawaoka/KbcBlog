@@ -202,7 +202,8 @@ export default {
         });
     },
     createCommentAlert() {
-      this.$message({
+      this.$notify({
+        title: 'Success',
         message: '記事にコメントを送信しました。',
         type: 'success'
       });
@@ -228,7 +229,8 @@ export default {
     },
 
     deleteArticleAlert() {
-      this.$message({
+      this.$notify({
+        title: 'Success',
         message: '記事を削除しました。',
         type: 'success'
       });
@@ -254,7 +256,8 @@ export default {
     },
 
     deleteCommentAlert() {
-      this.$message({
+      this.$notify({
+        title: 'Success',
         message: 'コメントを削除しました。',
         type: 'success'
       });

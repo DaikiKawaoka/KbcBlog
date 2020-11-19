@@ -74,7 +74,8 @@ export default {
     },
 
     createArticleAlert() {
-      this.$message({
+      this.$notify({
+        title: 'Success',
         message: '記事を投稿しました。',
         type: 'success'
       });

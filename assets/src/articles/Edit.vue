@@ -68,7 +68,8 @@ export default {
     },
 
     editArticleAlert() {
-      this.$message({
+      this.$notify({
+        title: 'Success',
         message: '記事の内容を変更しました。',
         type: 'success'
       });

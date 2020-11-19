@@ -74,7 +74,8 @@ export default {
     },
 
     createQuestionAlert() {
-      this.$message({
+      this.$notify({
+        title: 'Success',
         message: '質問を投稿しました。',
         type: 'success'
       });

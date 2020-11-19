@@ -119,7 +119,8 @@ export default {
     },
 
     editUserAlert() {
-      this.$message({
+      this.$notify({
+        title: 'Success',
         message: 'プロフィールを変更しました。',
         type: 'success'
       });

@@ -202,7 +202,8 @@ export default {
     },
 
     createCommentAlert() {
-      this.$message({
+      this.$notify({
+        title: 'Success',
         message: '質問に回答しました。',
         type: 'success'
       });
@@ -228,7 +229,8 @@ export default {
     },
 
     deleteCommentAlert() {
-      this.$message({
+      this.$notify({
+        title: 'Success',
         message: '自分の回答を削除しました。',
         type: 'success'
       });
@@ -254,7 +256,8 @@ export default {
     },
 
     deleteQuestionAlert() {
-      this.$message({
+      this.$notify({
+        title: 'Success',
         message: '質問を削除しました。',
         type: 'success'
       });
