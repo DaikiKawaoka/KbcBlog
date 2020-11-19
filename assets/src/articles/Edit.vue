@@ -57,9 +57,9 @@ export default {
             Authorization: `Bearer ${this.$cookies.get("JWT")}`
           },
         })
-        .then(response => {
+        .then(() => {
           this.$router.push({ path: `/Articles/${this.article.id}` });
-          console.log(response)
+          this.editArticleAlert();
         })
         .catch(error => {
           if(error.response.status == 401){
@@ -68,6 +68,14 @@ export default {
           this.errors = error.response.data.ValidationErrors;
         });
     },
+
+    editArticleAlert() {
+      this.$message({
+        message: '記事の内容を変更しました。',
+        type: 'success'
+      });
+    },
+
     goHome: function(){
       this.$router.push({ path: "/" });
     }

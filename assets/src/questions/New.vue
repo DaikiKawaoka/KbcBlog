@@ -63,9 +63,9 @@ export default {
             Authorization: `Bearer ${this.$cookies.get("JWT")}`
           },
         })
-        .then(response => {
+        .then(() => {
           this.$router.push({ path: "/Questions" });
-          console.log(response)
+          this.createQuestionAlert();
         })
         .catch(error => {
           if(error.response.status == 401){
@@ -74,6 +74,14 @@ export default {
           this.errors = error.response.data.ValidationErrors;
         });
     },
+
+    createQuestionAlert() {
+      this.$message({
+        message: '質問を投稿しました。',
+        type: 'success'
+      });
+    },
+
     goHome: function(){
       this.$router.push({ path: "/" });
     }

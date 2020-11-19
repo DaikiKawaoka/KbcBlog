@@ -62,7 +62,6 @@ export default {
         this.myUser = response.data.MyUser
         this.user = response.data.User
 
-
         if(this.myUser.id !== this.user.id){
           this.$router.push({ path: "/" });
         }
@@ -112,15 +111,21 @@ export default {
             Authorization: `Bearer ${this.$cookies.get("JWT")}`
           },
         })
-        .then(response => {
-          console.log(response);
-          console.log("プロフィール編集成功");
+        .then(() => {
           this.$router.push({ name: 'UserShow' , params : { id: this.user.id }});
+          this.editUserAlert();
         })
         .catch(error => {
           console.log(error.response.data.ValidationErrors);
           this.errors = error.response.data.ValidationErrors;
         });
+    },
+
+    editUserAlert() {
+      this.$message({
+        message: 'プロフィールを変更しました。',
+        type: 'success'
+      });
     },
   }
 };

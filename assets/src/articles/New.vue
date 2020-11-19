@@ -63,9 +63,9 @@ export default {
             Authorization: `Bearer ${this.$cookies.get("JWT")}`
           },
         })
-        .then(response => {
+        .then(() => {
           this.$router.push({ path: "/" });
-          console.log(response)
+          this.createArticleAlert();
         })
         .catch(error => {
           if(error.response.status == 401){
@@ -74,6 +74,14 @@ export default {
           this.errors = error.response.data.ValidationErrors;
         });
     },
+
+    createArticleAlert() {
+      this.$message({
+        message: '記事を投稿しました。',
+        type: 'success'
+      });
+    },
+
     goHome: function(){
       this.$router.push({ path: "/" });
     }

@@ -57,9 +57,9 @@ export default {
             Authorization: `Bearer ${this.$cookies.get("JWT")}`
           },
         })
-        .then(response => {
+        .then(() => {
           this.$router.push({ path: `/Questions/${this.question.id}` });
-          console.log(response)
+          this.editQuestionAlert();
         })
         .catch(error => {
           if(error.response.status == 401){
@@ -68,6 +68,14 @@ export default {
           this.errors = error.response.data.ValidationErrors;
         });
     },
+
+    editQuestionAlert() {
+      this.$message({
+        message: '質問の内容を変更しました。',
+        type: 'success'
+      });
+    },
+
     goHome: function(){
       this.$router.push({ path: "/" });
     }
