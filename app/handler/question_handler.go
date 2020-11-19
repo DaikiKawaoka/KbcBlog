@@ -138,11 +138,30 @@ func QuestionShow(c echo.Context) error {
 
 	// 記事データへのコメント一覧データを取得します。
 	comments, err := repository.QuestionCommentListByCursor(question.ID)
-
 	if err != nil {
 		c.Logger().Error(err.Error())
-		// クライアントにステータスコード 500 でレスポンスを返します。
-		return c.JSON(http.StatusInternalServerError,"質問のコメント一覧データを取得中にエラー発生")
+		return c.JSON(http.StatusInternalServerError,"質問のコメント一覧データを取得中にエラー発生") //500
+	}
+
+	var commentLike model.Like
+	for i, comment := range comments {
+		count, err := repository.GetQuestionCommentLike(userId,comment.ID);
+		if err != nil {
+			c.Logger().Error(err.Error())
+			return c.JSON(http.StatusInternalServerError,"likeデータの取得中にエラー発生") //500
+		}
+		// ユーザがいいねしているか検証
+		if count > 0{
+			commentLike.IsLike = true
+		}else{
+			commentLike.IsLike = false
+		}
+		commentLike.LikeCount,err = repository.GetQuestionCommentLikeCount(comment.ID)
+		if err != nil {
+			c.Logger().Error(err.Error())
+			return c.JSON(http.StatusInternalServerError,"likeデータのカウント数取得中にエラー発生") //500
+		}
+		comments[i].Like = commentLike
 	}
 
 	// テンプレートに渡すデータを map に格納します。

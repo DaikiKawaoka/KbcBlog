@@ -84,6 +84,14 @@
           <div class="comment-main">
             <div class="article-body comment-text" v-html="compiledMarkdownComment(c.text)"></div>
           </div>
+
+          <el-row>
+            <!-- <i class="el-icon-star-on"></i> -->
+            <i v-if="c.Like.isLike" class="el-icon-star-on comment-ster-i" @click="ChangeQuestionCommentLike(index)"></i>
+            <i v-else class="el-icon-star-off not-comment-ster-i" @click="ChangeQuestionCommentLike(index)"></i>
+            <span class="comment-like-count-span">{{c.Like.likeCount}}</span>
+          </el-row>
+
         </div>
       </div>
       <CommentForm :comment="comment" :errors="errors" :user="user" @submit="createQuestionComment"></CommentForm>
@@ -146,7 +154,6 @@ export default {
         if(error.response.status == 401){
           this.$router.push({ path: "/login" });
         }
-        console.log(error.response);
       }),
     function () {
       marked.setOptions({
@@ -260,8 +267,7 @@ export default {
             Authorization: `Bearer ${this.$cookies.get("JWT")}`
           },
         })
-        .then(response => {
-          console.log(response)
+        .then(() => {
           this.like.isLike = !this.like.isLike;
           if(this.like.isLike === false){
             this.like.likeCount--;
@@ -279,7 +285,30 @@ export default {
 
     click_like(){
       this.ChangeQuestionLike();
-    }
+    },
+
+    ChangeQuestionCommentLike(index){
+      this.$axios
+        .post(`http://localhost/api/restricted/Questions/Comments/${this.comments[index].id}/Likes`,this.comments[index].id,{
+          headers: {
+            Authorization: `Bearer ${this.$cookies.get("JWT")}`
+          },
+        })
+        .then(() => {
+          this.comments[index].Like.isLike = !this.comments[index].Like.isLike;
+          if(this.comments[index].Like.isLike === false){
+            this.comments[index].Like.likeCount--;
+          }else{
+            this.comments[index].Like.likeCount++;
+          }
+        })
+        .catch(error => {
+          if(error.response.status == 401){
+            this.$router.push({ path: "/login" });
+          }
+          this.errors = error.response.data.ValidationErrors;
+        });
+    },
   }
 }
 </script>

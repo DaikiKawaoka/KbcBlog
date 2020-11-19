@@ -58,13 +58,11 @@ export default {
       .then(response => {
         this.questions = response.data.Questions
         this.user = response.data.user
-        console.log(response.data)
       })
       .catch(error => {
         if(error.response.status == 401){
           this.$router.push({ path: "/login" });
         }
-        console.log(error.response);
       })
   },
 }

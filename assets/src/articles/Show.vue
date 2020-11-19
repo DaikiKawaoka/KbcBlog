@@ -155,7 +155,6 @@ export default {
         if(error.response.status == 401){
           this.$router.push({ path: "/login" });
         }
-        console.log(error.response);
       }),
     function () {
       marked.setOptions({
@@ -268,8 +267,7 @@ export default {
             Authorization: `Bearer ${this.$cookies.get("JWT")}`
           },
         })
-        .then(response => {
-          console.log(response)
+        .then(() => {
           this.like.isLike = !this.like.isLike;
           if(this.like.isLike === false){
             this.like.likeCount--;
@@ -297,14 +295,13 @@ export default {
             Authorization: `Bearer ${this.$cookies.get("JWT")}`
           },
         })
-        .then(response => {
+        .then(() => {
           this.comments[index].Like.isLike = !this.comments[index].Like.isLike;
           if(this.comments[index].Like.isLike === false){
             this.comments[index].Like.likeCount--;
           }else{
             this.comments[index].Like.likeCount++;
           }
-          console.log(response)
         })
         .catch(error => {
           if(error.response.status == 401){

@@ -35,14 +35,11 @@ export default {
     createUser: function() {
       axios
         .post('http://localhost/api/Users',this.user)
-        .then(response => {
-          // let e = response.data;
-          console.log(response);
+        .then(() => {
           console.log("user作成成功");
           this.$router.push({ name: 'LoginPage' });
         })
         .catch(error => {
-          console.log(error.response.data.ValidationErrors);
           this.errors = error.response.data.ValidationErrors;
         });
     },

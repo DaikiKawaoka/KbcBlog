@@ -75,6 +75,7 @@ func QuestionLike(c echo.Context) error {
 }
 
 
+
 // Article Comment Like
 
 func ArticleCommentLike(c echo.Context) error {
@@ -104,5 +105,39 @@ func ArticleCommentLike(c echo.Context) error {
 			return c.JSON(http.StatusInternalServerError, "likeデータ作成中にエラー発生") //500
 		}
 		return c.JSON(http.StatusOK, "ARTICLE COOMENT LIKE CREATE 成功")
+	}
+}
+
+
+
+// Question Comment Like
+
+func QuestionCommentLike(c echo.Context) error {
+	userId := userIDFromToken(c)
+	questionCommentId, _ := strconv.Atoi(c.Param("id"))
+	count, err := repository.GetQuestionCommentLike(userId,questionCommentId)
+	if err != nil {
+    c.Logger().Error(err.Error())
+    return c.JSON(http.StatusInternalServerError,"likeデータの取得中にエラー発生") //500
+	}
+	if count > 0 {
+		// Like削除
+		err := repository.DeleteQuestionCommentLike(userId, questionCommentId)
+		if err != nil {
+			c.Logger().Error(err.Error())
+			return c.JSON(http.StatusInternalServerError, "likeデータ削除中にエラー発生") //500
+		}
+		return c.JSON(http.StatusOK, "QUESTION COMMENT LIKE DELETE 成功")
+	}else{
+		var like model.QuestionCommentLike
+		like.Userid = userId
+		like.QuestionCommentid = questionCommentId
+		// Like作成
+		err := repository.CreateQuestionCommentLike(&like)
+		if err != nil {
+			c.Logger().Error(err.Error())
+			return c.JSON(http.StatusInternalServerError, "likeデータ作成中にエラー発生") //500
+		}
+		return c.JSON(http.StatusOK, "QUESTION COOMENT LIKE CREATE 成功")
 	}
 }

@@ -39,10 +39,8 @@ export default {
         if(this.user.id != this.article.userid){
           this.$router.push({ path: "/" });
         }
-        console.log(response)
       })
       .catch(error => {
-        console.log(error)
         if(error.response.status == 401){
             this.$router.push({ path: "/login" });
           }

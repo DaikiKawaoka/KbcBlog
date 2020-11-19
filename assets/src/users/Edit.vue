@@ -65,10 +65,8 @@ export default {
         if(this.myUser.id !== this.user.id){
           this.$router.push({ path: "/" });
         }
-        console.log(response)
       })
       .catch(error => {
-        console.log(error)
         if(error.response.status == 401){
             this.$router.push({ path: "/login" });
         }
@@ -116,7 +114,6 @@ export default {
           this.editUserAlert();
         })
         .catch(error => {
-          console.log(error.response.data.ValidationErrors);
           this.errors = error.response.data.ValidationErrors;
         });
     },

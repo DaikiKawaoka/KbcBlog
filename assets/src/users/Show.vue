@@ -272,7 +272,6 @@ export default {
         if(error.response.status == 401){
           this.$router.push({ path: "/login" });
         }
-        console.log(error.response);
       })
   },
   computed: {
@@ -304,27 +303,8 @@ export default {
     editUser: function() {
       this.$router.push({ path: `/Users/${this.$route.params.id}/edit` });
     },
-    deleteArticle: function() {
-      this.$axios
-        .delete(`http://localhost/api/restricted/Articles/${this.article.id}`,{
-          headers: {
-            Authorization: `Bearer ${this.$cookies.get("JWT")}`
-          },
-        })
-        .then(response => {
-          this.$router.push({ path: '/' });
-          console.log(response)
-        })
-        .catch(error => {
-          if(error.response.status == 401){
-            this.$router.push({ path: "/login" });
-          }
-          this.errors = error.response.data.ValidationErrors;
-        });
-    },
     handleClick(tab) {
       this.click_tab = tab.paneName;
-      console.log(this.click_tab);
     },
     logout: function() {
       this.$cookies.remove("JWT");

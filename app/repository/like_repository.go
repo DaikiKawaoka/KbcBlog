@@ -168,3 +168,54 @@ func DeleteArticleCommentLike(userid int, article_commentid int) error {
 	}
 	return tx.Commit()
 }
+
+
+
+
+// Question Comment Like
+
+func GetQuestionCommentLike(userId int, question_commentid int) (int, error) {
+	query := `SELECT COUNT(*) FROM question_comment_likes WHERE userid = ? AND question_commentid = ?;`
+	var count int
+	if err := db.Get(&count, query, userId, question_commentid); err != nil {
+		return 0, err
+	}
+	return count, nil
+}
+
+func GetQuestionCommentLikeCount(questionCommentId int) (int,error) {
+	query := `SELECT COUNT(*) FROM question_comment_likes WHERE question_commentid = ?;`
+	var count int
+	if err := db.Get(&count, query, questionCommentId); err != nil {
+		return 0, err
+	}
+	return count, nil
+}
+
+func CreateQuestionCommentLike(like *model.QuestionCommentLike) error {
+	now := time.Now().In(jst)
+  like.Created = now.Format("2006/01/02 15:04:05")
+
+  query := `INSERT INTO question_comment_likes (userid, question_commentid, created)
+	VALUES (:userid, :question_commentid, :created);`
+
+  tx := db.MustBegin()
+  _, err := tx.NamedExec(query, like)
+  if err != nil {
+    tx.Rollback()
+    return err
+  }
+  tx.Commit()
+  return nil
+}
+
+func DeleteQuestionCommentLike(userid int, question_commentid int) error {
+	query := "DELETE FROM question_comment_likes WHERE userid = ? AND question_commentid = ?"
+	tx := db.MustBegin()
+
+	if _, err := tx.Exec(query, userid, question_commentid); err != nil {
+		tx.Rollback()
+		return err
+	}
+	return tx.Commit()
+}

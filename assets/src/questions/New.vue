@@ -37,7 +37,6 @@ export default {
       },
     })
       .then(response => {
-        console.log(response.data)
         this.user.id = response.data.user.id
         this.user.KBC_mail = response.data.user.KBC_mail
         this.user.name = response.data.user.name
@@ -46,7 +45,6 @@ export default {
         if(error.response.status == 401){
           this.$router.push({ path: "/login" });
         }
-        console.log(error.response);
       })
   },
   components: {
