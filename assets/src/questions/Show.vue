@@ -49,7 +49,7 @@
     <div class="article-comment-all">
       <div class="article-comment-header">
         <i class="el-icon-chat-dot-round comment-icon"></i>
-        <p class="comment">コメント</p>
+        <p class="comment">回答</p>
       </div>
       <div v-for="(c,index) in comments" :key="c.id" class="article-comment-main">
         <div class="comment-div">
@@ -182,8 +182,9 @@ export default {
           if(this.comments == null){
             this.comments = [];
           }
-          this.comments.unshift(response.data.Comment)
+          this.comments.unshift(response.data.Comment);
           this.comment.text = "";
+          this.createCommentAlert();
         })
         .catch(error => {
           if(error.response.status == 401){
@@ -191,6 +192,13 @@ export default {
           }
           this.errors = error.response.data.ValidationErrors;
         });
+    },
+
+    createCommentAlert() {
+      this.$message({
+        message: '質問に回答しました。',
+        type: 'success'
+      });
     },
 
     deleteQuestionComment: function(commentId,index) {
@@ -200,9 +208,9 @@ export default {
             Authorization: `Bearer ${this.$cookies.get("JWT")}`
           },
         })
-        .then(response => {
+        .then(() => {
           this.comments.splice(index, 1);
-          console.log(response)
+          this.deleteCommentAlert();
         })
         .catch(error => {
           if(error.response.status == 401){
@@ -212,6 +220,13 @@ export default {
         });
     },
 
+    deleteCommentAlert() {
+      this.$message({
+        message: '自分の回答を削除しました。',
+        type: 'success'
+      });
+    },
+
     deleteQuestion: function() {
       this.$axios
         .delete(`http://localhost/api/restricted/Questions/${this.$route.params.id}`,{
@@ -219,9 +234,9 @@ export default {
             Authorization: `Bearer ${this.$cookies.get("JWT")}`
           },
         })
-        .then(response => {
+        .then(() => {
           this.$router.push({ path: '/Questions' });
-          console.log(response)
+          this.deleteQuestionAlert();
         })
         .catch(error => {
           if(error.response.status == 401){
@@ -229,6 +244,13 @@ export default {
           }
           this.errors = error.response.data.ValidationErrors;
         });
+    },
+
+    deleteQuestionAlert() {
+      this.$message({
+        message: '質問を削除しました。',
+        type: 'success'
+      });
     },
 
     ChangeQuestionLike(){

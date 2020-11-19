@@ -185,6 +185,7 @@ export default {
           }
           this.comments.unshift(response.data.Comment);
           this.comment.text = "";
+          this.createCommentAlert();
         })
         .catch(error => {
           if(error.response.status == 401){
@@ -192,6 +193,12 @@ export default {
           }
           this.errors = error.response.data.ValidationErrors;
         });
+    },
+    createCommentAlert() {
+      this.$message({
+        message: '記事にコメントを送信しました。',
+        type: 'success'
+      });
     },
 
     deleteArticle: function() {
@@ -201,9 +208,9 @@ export default {
             Authorization: `Bearer ${this.$cookies.get("JWT")}`
           },
         })
-        .then(response => {
+        .then(() => {
           this.$router.push({ path: '/' });
-          console.log(response)
+          this.deleteArticleAlert();
         })
         .catch(error => {
           if(error.response.status == 401){
@@ -213,6 +220,13 @@ export default {
         });
     },
 
+    deleteArticleAlert() {
+      this.$message({
+        message: '記事を削除しました。',
+        type: 'success'
+      });
+    },
+
     deleteArticleComment: function(commentId,index) {
       this.$axios
         .delete(`http://localhost/api/restricted/Articles/${this.article.id}/Comments/${commentId}`,{
@@ -220,9 +234,9 @@ export default {
             Authorization: `Bearer ${this.$cookies.get("JWT")}`
           },
         })
-        .then(response => {
+        .then(()=> {
           this.comments.splice(index, 1);
-          console.log(response)
+          this.deleteCommentAlert()
         })
         .catch(error => {
           if(error.response.status == 401){
@@ -230,6 +244,13 @@ export default {
           }
           this.errors = error.response.data.ValidationErrors;
         });
+    },
+
+    deleteCommentAlert() {
+      this.$message({
+        message: 'コメントを削除しました。',
+        type: 'success'
+      });
     },
 
     ChangeArticleLike(){
