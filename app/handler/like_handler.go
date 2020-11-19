@@ -10,28 +10,24 @@ import (
 )
 
 // like
+// Article Like
 
 func ArticleLike(c echo.Context) error {
-
 	userId := userIDFromToken(c)
-	// articleId取得
 	articleId, _ := strconv.Atoi(c.Param("id"))
-
 	count, err := repository.GetArticleLike(userId,articleId)
 	if err != nil {
-    // エラーの内容をサーバーのログに出力します。
     c.Logger().Error(err.Error())
-    // サーバー内の処理でエラーが発生した場合は 500 エラーを返却します。
-    return c.JSON(http.StatusInternalServerError,"likeデータの取得中にエラー発生")
+    return c.JSON(http.StatusInternalServerError,"likeデータの取得中にエラー発生") //500
 	}
 	if count > 0 {
 		// Like削除
 		err := repository.DeleteArticleLike(userId, articleId)
 		if err != nil {
 			c.Logger().Error(err.Error())
-			// 500 エラー
-			return c.JSON(http.StatusInternalServerError, "likeデータ削除中にエラー発生")
+			return c.JSON(http.StatusInternalServerError, "likeデータ削除中にエラー発生") //500
 		}
+		return c.JSON(http.StatusOK, "ARTICLE LIKE DELETE 成功")
 	}else{
 		var like model.ArticleLike
 		like.Userid = userId
@@ -40,11 +36,40 @@ func ArticleLike(c echo.Context) error {
 		err := repository.CreateArticleLike(&like)
 		if err != nil {
 			c.Logger().Error(err.Error())
-			// 500 エラー
-			return c.JSON(http.StatusInternalServerError, "likeデータ作成中にエラー発生")
+			return c.JSON(http.StatusInternalServerError, "likeデータ作成中にエラー発生") //500
 		}
+		return c.JSON(http.StatusOK, "ARTICLE LIKE CREATE 成功")
 	}
+}
 
-  // 処理成功時はステータスコード 200 でレスポンスを返却します。
-  return c.JSON(http.StatusOK, "LIKE change 成功")
+// Question Like
+
+func QuestionLike(c echo.Context) error {
+	userId := userIDFromToken(c)
+	questionId, _ := strconv.Atoi(c.Param("id"))
+	count, err := repository.GetQuestionLike(userId,questionId)
+	if err != nil {
+    c.Logger().Error(err.Error())
+    return c.JSON(http.StatusInternalServerError,"likeデータの取得中にエラー発生") //500
+	}
+	if count > 0 {
+		// Like削除
+		err := repository.DeleteQuestionLike(userId, questionId)
+		if err != nil {
+			c.Logger().Error(err.Error())
+			return c.JSON(http.StatusInternalServerError, "likeデータ削除中にエラー発生") //500
+		}
+		return c.JSON(http.StatusOK, "QUESTION LIKE DELETE 成功")
+	}else{
+		var like model.QuestionLike
+		like.Userid = userId
+		like.Questionid = questionId
+		// Like作成
+		err := repository.CreateQuestionLike(&like)
+		if err != nil {
+			c.Logger().Error(err.Error())
+			return c.JSON(http.StatusInternalServerError, "likeデータ作成中にエラー発生") //500
+		}
+		return c.JSON(http.StatusOK, "QUESTION LIKE CREATE 成功")
+	}
 }

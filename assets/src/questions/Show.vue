@@ -37,6 +37,13 @@
         <div class="article-form__preview-body">
           <div class="article-form__preview-body-contents" id="article-body" v-html="compiledMarkdown"></div>
         </div>
+
+        <el-row>
+          <el-button v-if="like.isLike" type="warning" @click="click_like">解除 <i class="el-icon-star-on"></i></el-button>
+          <button v-else @click="click_like" class="like-btn">いいね <i class="el-icon-star-off"></i></button>
+          <span class="like-count-span">{{like.likeCount}}</span>
+        </el-row>
+
       </div>
     </div>
     <div class="article-comment-all">
@@ -44,7 +51,7 @@
         <i class="el-icon-chat-dot-round comment-icon"></i>
         <p class="comment">コメント</p>
       </div>
-      <div v-for="c in comments" :key="c.id" class="article-comment-main">
+      <div v-for="(c,index) in comments" :key="c.id" class="article-comment-main">
         <div class="comment-div">
           <div class="comment-header">
             <div class="comment-header-div">
@@ -65,7 +72,7 @@
                     title="本当に削除しますか?"
                     confirm-button-text="Yes"
                     cancel-button-text="No"
-                    @confirm="deleteQuestionComment(c.id)"
+                    @confirm="deleteQuestionComment(c.id,index)"
                     >
                       <el-dropdown-item slot="reference">削除</el-dropdown-item>
                     </el-popconfirm>
@@ -99,9 +106,14 @@ export default {
   data(){
     return {
       question: null,
+      like: {
+        isLike: Boolean,
+        likeCount: 0,
+      },
       user: {},
       comment:{
         userid: 0,
+        name: "",
         questionid: 0,
         text: "",
       },
@@ -124,6 +136,7 @@ export default {
         this.question = response.data.Question
         this.user = response.data.user
         this.comments = response.data.Comments
+        this.like = response.data.Like
 
         //commentに各idを代入
         this.comment.questionid = this.question.id
@@ -158,6 +171,7 @@ export default {
   },
   methods: {
     createQuestionComment: function() {
+      this.comment.name = this.user.name;
       this.$axios
         .post(`http://localhost/api/restricted/Questions/${this.question.id}/Comments`, this.comment,{
           headers: {
@@ -165,8 +179,11 @@ export default {
           },
         })
         .then(response => {
-          this.$router.go({path: this.$router.currentRoute.path, force: true})
-          console.log(response)
+          if(this.comments == null){
+            this.comments = [];
+          }
+          this.comments.unshift(response.data.Comment)
+          this.comment.text = "";
         })
         .catch(error => {
           if(error.response.status == 401){
@@ -176,7 +193,7 @@ export default {
         });
     },
 
-    deleteQuestionComment: function(commentId) {
+    deleteQuestionComment: function(commentId,index) {
       this.$axios
         .delete(`http://localhost/api/restricted/Questions/${this.question.id}/Comments/${commentId}`,{
           headers: {
@@ -184,7 +201,7 @@ export default {
           },
         })
         .then(response => {
-          this.$router.go({path: this.$router.currentRoute.path, force: true})
+          this.comments.splice(index, 1);
           console.log(response)
         })
         .catch(error => {
@@ -213,6 +230,34 @@ export default {
           this.errors = error.response.data.ValidationErrors;
         });
     },
+
+    ChangeQuestionLike(){
+      this.$axios
+        .post(`http://localhost/api/restricted/Questions/${this.question.id}/Likes`,this.question.id,{
+          headers: {
+            Authorization: `Bearer ${this.$cookies.get("JWT")}`
+          },
+        })
+        .then(response => {
+          console.log(response)
+          this.like.isLike = !this.like.isLike;
+          if(this.like.isLike === false){
+            this.like.likeCount--;
+          }else{
+            this.like.likeCount++;
+          }
+        })
+        .catch(error => {
+          if(error.response.status == 401){
+            this.$router.push({ path: "/login" });
+          }
+          this.errors = error.response.data.ValidationErrors;
+        });
+    },
+
+    click_like(){
+      this.ChangeQuestionLike();
+    }
   }
 }
 </script>

@@ -118,21 +118,18 @@ func GetUserQuestion(cursor int,userid int) ([]*model.Question, error) {
 	}
 
 	// ID の降順に記事データを 10 件取得するクエリ文字列を生成します。
-	query := `SELECT q.id id,q.userid userid,u.name name,q.title title,q.body body,q.created created,q.updated updated
-	FROM questions q,users u
+	query := `SELECT q.id id,q.userid userid,u.name name,q.title title,q.body body,q.created created,q.updated updated, COUNT(l.id) likecount
+	FROM questions q inner join users u on q.userid = u.id
+	left join question_likes l on q.id = l.questionid
 	WHERE q.id < ? and q.userid = u.id and q.userid = ?
+	GROUP BY q.id,q.userid,u.name,q.title,q.body,q.created,q.updated
 	ORDER BY q.id desc
 	LIMIT 10`
 
-	// クエリ結果を格納するスライスを初期化します。
-	// 10 件取得すると決まっているため、サイズとキャパシティを指定しています。
 	questions := make([]*model.Question, 0, 10)
-
-	// クエリ結果を格納する変数、クエリ文字列、パラメータを指定してクエリを実行します。
 	if err := db.Select(&questions, query, cursor,userid); err != nil {
 		return nil, err
 	}
-
 	return questions, nil
 }
 

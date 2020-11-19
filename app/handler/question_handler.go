@@ -118,6 +118,24 @@ func QuestionShow(c echo.Context) error {
 		return c.NoContent(http.StatusInternalServerError)
 	}
 
+	// 記事データのいいねを取得する
+	var like model.Like
+	count, err := repository.GetQuestionLike(userId,id)
+	if err != nil {
+    c.Logger().Error(err.Error())
+    return c.JSON(http.StatusInternalServerError,"likeデータの取得中にエラー発生") //500
+	}
+	// ユーザがいいねしているか検証
+	if count > 0{
+		like.IsLike = true
+	}
+
+	like.LikeCount,err = repository.GetQuestionLikeCount(id)
+	if err != nil {
+    c.Logger().Error(err.Error())
+    return c.JSON(http.StatusInternalServerError,"likeデータのカウント数取得中にエラー発生") //500
+	}
+
 	// 記事データへのコメント一覧データを取得します。
 	comments, err := repository.QuestionCommentListByCursor(question.ID)
 
@@ -131,6 +149,7 @@ func QuestionShow(c echo.Context) error {
 	data := map[string]interface{}{
 		"user": myUser,
 		"Question": question,
+		"Like": like,
 		"Comments": comments,
 	}
 

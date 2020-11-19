@@ -46,7 +46,7 @@ func ArticleCommentCreate(c echo.Context) error {
   id, _ := res.LastInsertId()
 
   // 構造体に ID をセットします。
-  comment.ID = int(id)
+	comment.ID = int(id)
 
   // レスポンスの構造体に保存した記事のデータを格納します。
   out.Comment = &comment

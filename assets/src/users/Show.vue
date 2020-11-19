@@ -170,7 +170,9 @@
                 <div class="post-index-body">
                     <h2 class="post-title-index"> {{question.title}} </h2>
                   <div class="post-index-username-updated">
-                    <h3 class="post-index-update">{{ question.Updated }}</h3>
+                    <i class="el-icon-star-on star-i"></i>
+                    <span class="likecount-span">{{ question.likecount}}</span>
+                    <p class="post-index-update">{{ question.Updated }}</p>
                   </div>
                 </div>
               </router-link>

@@ -11,6 +11,7 @@ type Question struct {
 	UserName string   `db:"name" json:"name"`
 	Title   string    `db:"title" json:"title" validate:"required,max=50"`
 	Body    string    `db:"body" json:"body" validate:"required"`
+	LikeCount int     `db:"likecount" json:"likecount"`
 	Created string `db:"created"`
 	Updated string `db:"updated"`
 }
