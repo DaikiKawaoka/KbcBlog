@@ -87,6 +87,11 @@
   margin-top: 12px;
   margin-bottom: 8px;
 }
+.article-body > p{
+  word-break: normal;
+  word-wrap: break-word;
+
+}
 
 .article-body > ul > li,
 .article-body > ol > li {

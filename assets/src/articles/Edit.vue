@@ -2,11 +2,13 @@
   <div id="app">
     <Header :isArticle="true" :isQuestion="false" :user="user"></Header>
     <Article-form :article="article" :user="user" :errors="errors" :create="create" @submit="updateArticle" @cancell="goHome"></Article-form>
+    <Footer></Footer>
   </div>
 </template>
 
 <script>
 import Header from './../components/Header.vue'
+import Footer from './../components/Footer.vue';
 import ArticleForm from './../components/ArticleForm.vue'
 
 export default {
@@ -21,6 +23,7 @@ export default {
   },
   components: {
     Header,
+    Footer,
     ArticleForm
   },
   // createdの中でaxiosを使います。get()の中のURLは、nginx.confで設定してるので、 /api/ になっています。

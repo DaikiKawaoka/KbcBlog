@@ -2,12 +2,14 @@
   <div id="app">
     <Header :user="myUser"></Header>
     <user-form :errors="errors" :user="user" :edit="true" @submit="updateUser"></user-form>
+    <Footer></Footer>
   </div>
 </template>
 <script>
 // import axios from "axios";
 import UserForm from '../components/UserForm.vue';
 import Header from '../components/Header.vue';
+import Footer from './../components/Footer.vue';
 
 export default {
   data() {
@@ -48,6 +50,7 @@ export default {
   components: {
     UserForm,
     Header,
+    Footer,
   },
   created () {
     this.$axios.get(`http://localhost/api/restricted/Users/${this.$route.params.id}/edit`,{

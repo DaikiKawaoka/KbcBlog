@@ -2,11 +2,13 @@
   <div id="app">
     <Header :isArticle="true" :isQuestion="false" :user="user"></Header>
     <Article-form :article="article" :errors="errors" :create="create" @submit="createArticle" @cancell="goHome"></Article-form>
+    <Footer></Footer>
   </div>
 </template>
 
 <script>
 import Header from './../components/Header.vue'
+import Footer from './../components/Footer.vue';
 import ArticleForm from './../components/ArticleForm.vue'
 
 export default {
@@ -50,6 +52,7 @@ export default {
   },
   components: {
     Header,
+    Footer,
     ArticleForm
   },
   methods: {

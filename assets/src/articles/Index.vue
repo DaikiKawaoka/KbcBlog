@@ -26,12 +26,14 @@
         </div>
       </div>
     </div>
+    <Footer></Footer>
   </div>
 </template>
 
 <script>
 // import axios from "axios";
 import Header from './../components/Header.vue'
+import Footer from './../components/Footer.vue';
 
 export default {
   name: 'app',
@@ -42,7 +44,8 @@ export default {
     }
   },
   components: {
-    Header
+    Header,
+    Footer,
   },
   // createdの中でaxiosを使います。get()の中のURLは、nginx.confで設定してるので、 /api/ になっています。
   created () {
@@ -76,7 +79,6 @@ body {
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
   margin: 0 auto 0 auto;
-  padding-bottom: 30px;
   background-color: #F6F6F4;
 }
 .body-main{

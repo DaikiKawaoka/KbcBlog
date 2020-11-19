@@ -111,20 +111,20 @@
             <div class="div-in-span-article">投稿記事</div>
             <!-- <span class="not-conf">未設定</span> -->
             <div class="article-circle-div">
-              <el-progress type="circle" :percentage="33" color="#67C23A" :width="90"></el-progress>
+              <el-progress type="circle" :percentage="50" color="#67C23A" :width="90"></el-progress>
               <p class="article-circle-p">Java</p>
             </div>
             <div class="article-circle-div">
-              <el-progress type="circle" :percentage="25" color="#ff1493" :width="90"></el-progress>
+              <el-progress type="circle" :percentage="33" color="#ff1493" :width="90"></el-progress>
               <p class="article-circle-p">JavaScript</p>
             </div>
             <div class="article-circle-div">
               <el-progress type="circle" :percentage="25" :width="90"></el-progress>
-              <p class="article-circle-p">JavaScript</p>
+              <p class="article-circle-p">Go</p>
             </div>
             <div class="article-circle-div">
-              <el-progress type="circle" :percentage="25" color="#ff8c00" :width="90"></el-progress>
-              <p class="article-circle-p">JavaScript</p>
+              <el-progress type="circle" :percentage="18" color="#ff8c00" :width="90"></el-progress>
+              <p class="article-circle-p">PHP</p>
             </div>
           </div>
           <div class="user-iine-div">
@@ -199,11 +199,13 @@
 
       </div>
     </div>
+    <Footer></Footer>
   </div>
 </template>
 
 <script>
-import Header from './../components/Header.vue'
+import Header from './../components/Header.vue';
+import Footer from './../components/Footer.vue';
 
 export default {
   name: 'app',
@@ -245,6 +247,7 @@ export default {
   },
   components: {
     Header,
+    Footer,
   },
   // createdの中でaxiosを使います。get()の中のURLは、nginx.confで設定してるので、 /api/ になっています。
   created () {

@@ -2,17 +2,20 @@
   <div id="app">
     <Header></Header>
     <user-form :errors="errors" :user="user" @submit="createUser"></user-form>
+    <Footer></Footer>
   </div>
 </template>
 <script>
 import axios from "axios";
 import UserForm from '../components/UserForm.vue';
 import Header from '../components/Header.vue';
+import Footer from './../components/Footer.vue';
 
 export default {
   components: {
     UserForm,
     Header,
+    Footer,
   },
   created () {
     // this.login_user();

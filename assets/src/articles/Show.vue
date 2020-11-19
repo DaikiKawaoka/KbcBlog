@@ -89,11 +89,13 @@
 
       <CommentForm :comment="comment" :errors="errors" :user="user" @submit="createArticleComment"></CommentForm>
     </div>
+    <Footer></Footer>
   </div>
 </template>
 
 <script>
 import Header from './../components/Header.vue'
+import Footer from './../components/Footer.vue';
 import CommentForm from './../components/CommentForm.vue'
 import marked from 'marked';
 import hljs from 'highlight.js';
@@ -121,6 +123,7 @@ export default {
   },
   components: {
     Header,
+    Footer,
     CommentForm,
   },
   // createdの中でaxiosを使います。get()の中のURLは、nginx.confで設定してるので、 /api/ になっています。

@@ -30,12 +30,14 @@
 
       </el-card>
     </div>
+    <Footer></Footer>
   </div>
 </template>
 
 <script>
 import axios from "axios";
 import Header from './../components/Header.vue'
+import Footer from './../components/Footer.vue';
 
 export default {
   data() {
@@ -48,6 +50,7 @@ export default {
   },
   components: {
     Header,
+    Footer,
   },
   methods: {
     signup: function(){
@@ -72,6 +75,9 @@ export default {
 </script>
 
 <style>
+.body-main{
+  height: 450px;
+}
 .box-card {
   width: 480px;
 }
