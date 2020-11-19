@@ -61,9 +61,18 @@ export default {
       .catch(error => {
         if(error.response.status == 401){
           this.$router.push({ path: "/login" });
+          this.errorNotify();
         }
       })
   },
+  methods:{
+    errorNotify() {
+      this.$notify.error({
+        title: 'Error',
+        message: 'あなたのセッションはタイムアウトしました。再度ログインしてください。'
+      });
+    },
+  }
 }
 </script>
 

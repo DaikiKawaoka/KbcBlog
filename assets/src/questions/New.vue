@@ -44,6 +44,7 @@ export default {
       .catch(error => {
         if(error.response.status == 401){
           this.$router.push({ path: "/login" });
+          this.errorNotify();
         }
       })
   },
@@ -68,6 +69,7 @@ export default {
         .catch(error => {
           if(error.response.status == 401){
             this.$router.push({ path: "/login" });
+            this.errorNotify();
           }
           this.errors = error.response.data.ValidationErrors;
         });
@@ -83,7 +85,14 @@ export default {
 
     goHome: function(){
       this.$router.push({ path: "/" });
-    }
+    },
+
+    errorNotify() {
+      this.$notify.error({
+        title: 'Error',
+        message: 'あなたのセッションはタイムアウトしました。再度ログインしてください。'
+      });
+    },
   }
 }
 </script>

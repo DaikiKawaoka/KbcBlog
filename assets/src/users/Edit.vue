@@ -69,6 +69,7 @@ export default {
       .catch(error => {
         if(error.response.status == 401){
             this.$router.push({ path: "/login" });
+            this.errorNotify();
         }
         if(error.response.status == 400){
           this.$router.push({ path: "/" });
@@ -123,6 +124,13 @@ export default {
         title: 'Success',
         message: 'プロフィールを変更しました。',
         type: 'success'
+      });
+    },
+
+    errorNotify() {
+      this.$notify.error({
+        title: 'Error',
+        message: 'あなたのセッションはタイムアウトしました。再度ログインしてください。'
       });
     },
   }

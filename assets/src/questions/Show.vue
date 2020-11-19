@@ -153,6 +153,7 @@ export default {
       .catch(error => {
         if(error.response.status == 401){
           this.$router.push({ path: "/login" });
+          this.errorNotify();
         }
       }),
     function () {
@@ -196,6 +197,7 @@ export default {
         .catch(error => {
           if(error.response.status == 401){
             this.$router.push({ path: "/login" });
+            this.errorNotify();
           }
           this.errors = error.response.data.ValidationErrors;
         });
@@ -223,6 +225,7 @@ export default {
         .catch(error => {
           if(error.response.status == 401){
             this.$router.push({ path: "/login" });
+            this.errorNotify();
           }
           this.errors = error.response.data.ValidationErrors;
         });
@@ -250,6 +253,7 @@ export default {
         .catch(error => {
           if(error.response.status == 401){
             this.$router.push({ path: "/login" });
+            this.errorNotify();
           }
           this.errors = error.response.data.ValidationErrors;
         });
@@ -281,6 +285,7 @@ export default {
         .catch(error => {
           if(error.response.status == 401){
             this.$router.push({ path: "/login" });
+            this.errorNotify();
           }
           this.errors = error.response.data.ValidationErrors;
         });
@@ -308,9 +313,17 @@ export default {
         .catch(error => {
           if(error.response.status == 401){
             this.$router.push({ path: "/login" });
+            this.errorNotify();
           }
           this.errors = error.response.data.ValidationErrors;
         });
+    },
+
+    errorNotify() {
+      this.$notify.error({
+        title: 'Error',
+        message: 'あなたのセッションはタイムアウトしました。再度ログインしてください。'
+      });
     },
   }
 }

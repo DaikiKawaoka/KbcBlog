@@ -39,7 +39,6 @@
                 </el-dropdown-menu>
               </el-dropdown>
 
-
             </div>
 
             <div class="user-show-info-div" v-else>
@@ -271,6 +270,7 @@ export default {
       .catch(error => {
         if(error.response.status == 401){
           this.$router.push({ path: "/login" });
+          this.errorNotify();
         }
       })
   },
@@ -306,6 +306,13 @@ export default {
     logout: function() {
       this.$cookies.remove("JWT");
       this.$router.push({ path: "/login" });
+    },
+
+    errorNotify() {
+      this.$notify.error({
+        title: 'Error',
+        message: 'あなたのセッションはタイムアウトしました。再度ログインしてください。'
+      });
     },
   }
 }

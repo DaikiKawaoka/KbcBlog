@@ -112,3 +112,14 @@ CREATE TABLE IF NOT EXISTS `question_comment_likes` (
   PRIMARY KEY(`id`)
 );
 update `question_comment_likes` set `created` = CURRENT_TIMESTAMP where `created` is null;
+
+CREATE TABLE IF NOT EXISTS `follows` (
+  `id` int AUTO_INCREMENT,
+  `followerid` int NOT NULL,
+  `followedid` int NOT NULL,
+  `created` datetime,
+  FOREIGN KEY (`followerid`) REFERENCES `users`(`id`) ON DELETE CASCADE,
+  FOREIGN KEY (`followedid`) REFERENCES `users`(`id`) ON DELETE CASCADE,
+  PRIMARY KEY(`id`)
+);
+update `follows` set `created` = CURRENT_TIMESTAMP where `created` is null;
