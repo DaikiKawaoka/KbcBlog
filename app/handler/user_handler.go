@@ -107,7 +107,6 @@ func UserShow(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError,"ユーザの記事一覧データを取得中にエラー発生")
 	}
 
-	// リポジトリの処理を呼び出して記事の一覧データを取得します。
 	questions, err := repository.GetUserQuestion(0,user.ID)
 	if err != nil {
 		c.Logger().Error(err.Error())
@@ -119,6 +118,34 @@ func UserShow(c echo.Context) error {
 		c.Logger().Error(err.Error())
 		return c.JSON(http.StatusInternalServerError,"ユーザの回答一覧データを取得中にエラー発生")
 	}
+	
+
+	// Follow情報を取得
+	var follow model.Follow
+	if userId != user.ID{
+		count, err := repository.CheckFollow(userId,user.ID)
+		if err != nil {
+			c.Logger().Error(err.Error())
+			return c.JSON(http.StatusInternalServerError,"Follw情報取得中にエラー発生") //500
+		}
+		// ユーザがfollwしているか検証
+		if count > 0{
+			follow.IsFollow = true
+		}
+	}
+	// フォロー数取得
+	follow.FollowerCount,err = repository.GetFollowerCount(user.ID)
+	if err != nil {
+    c.Logger().Error(err.Error())
+    return c.JSON(http.StatusInternalServerError,"フォロー数取得中にエラー発生") //500
+	}
+	// フォロワー数取得
+	follow.FollowedCount,err = repository.GetFollowedCount(user.ID)
+	if err != nil {
+    c.Logger().Error(err.Error())
+    return c.JSON(http.StatusInternalServerError,"フォロワー数取得中にエラー発生") //500
+	}
+
 
 	// テンプレートに渡すデータを map に格納します。
 	data := map[string]interface{}{
@@ -127,6 +154,7 @@ func UserShow(c echo.Context) error {
 		"Articles": articles,
 		"Questions": questions,
 		"AnswerQuestions" : answerQuestions,
+		"Follow": follow,
 		// "likes" : likes,
 	}
 

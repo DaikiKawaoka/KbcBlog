@@ -70,6 +70,9 @@ func main() {
 	r.POST("/Articles/Comments/:id/Likes",handler.ArticleCommentLike)
 	r.POST("/Questions/Comments/:id/Likes",handler.QuestionCommentLike)
 
+	// Follow
+	r.POST("/Users/:id/Follow",handler.Follow)
+
 	// Webサーバーをポート番号 8082 で起動する
 	e.Logger.Fatal(e.Start(":8082"))
 	// e.Startの中はdocker-composeのgoコンテナで設定したportsを指定してください。

@@ -43,11 +43,11 @@
 
             <div class="user-show-info-div" v-else>
               <div class="user-show-btn-div">
-                <el-button type="primary" size="medium" v-if="true">
+                <el-button type="primary" size="medium" v-if="!follow.isfollow" @click="Follow_UnFollw">
                   <i class="el-icon-user"></i>フォロー
                 </el-button>
 
-                <el-button size="medium" v-else>
+                <el-button size="medium" v-else @click="Follow_UnFollw">
                   <i class="el-icon-user"></i>フォロー解除
                 </el-button>
               </div>
@@ -62,12 +62,12 @@
             </div>
             <div class="user-show-follower-count-div">
               <!-- Count -->
-              <p class="edit-margin-p">0</p>
+              <p class="edit-margin-p">{{follow.followedCount}}</p>
               <p class="edit-margin-p">フォロワー</p>
             </div>
             <div class="user-show-follow-count-div">
               <!-- Count -->
-              <p class="edit-margin-p">0</p>
+              <p class="edit-margin-p">{{follow.followerCount}}</p>
               <p class="edit-margin-p">フォロー</p>
             </div>
           </div>
@@ -218,6 +218,7 @@ export default {
       questions: Array,
       answerQuestions: Array,
       myUser: {},
+      follow:{},
       langarray: [],
       user: {
         KBCmail: "",
@@ -264,6 +265,7 @@ export default {
         this.answerQuestions = response.data.AnswerQuestions
         this.user = response.data.User
         this.myUser = response.data.MyUser
+        this.follow = response.data.Follow
         // 文字列のlangsを配列に変換
         this.langarray = this.user.languages.String.split(',');
       })
@@ -277,6 +279,32 @@ export default {
   computed: {
   },
   methods: {
+
+    Follow_UnFollw(){
+      this.$axios
+        .post(`http://localhost/api/restricted/Users/${this.user.id}/Follow`,this.user.id,{
+          headers: {
+            Authorization: `Bearer ${this.$cookies.get("JWT")}`
+          },
+        })
+        .then(response => {
+          this.follow.isfollow = !this.follow.isfollow;
+          if(this.follow.isfollow === false){
+            this.follow.followedCount--;
+          }else{
+            this.follow.followedCount++;
+          }
+          console.log(response)
+        })
+        .catch(error => {
+          if(error.response.status == 401){
+            this.$router.push({ path: "/login" });
+            this.errorNotify();
+          }
+          this.errors = error.response.data.ValidationErrors;
+        });
+    },
+
     open(value) {
       this.$confirm('外部ページへの移動を許可しますか?', 'Warning', {
         confirmButtonText: '許可',
