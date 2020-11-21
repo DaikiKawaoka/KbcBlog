@@ -53,19 +53,73 @@
               </div>
             </div>
 
+
+            <el-dialog title="フォロワー" :visible.sync="followerdialog" width="400px" :center="true">
+              <div class="dialog-all">
+                <ul class="dialog-ul">
+                  <li>
+                    <div>
+                      <div>
+                        <div>
+                          <!-- アイコン -->
+                        </div>
+                        <div>
+                          <div>
+                            <span><!-- 名前 --></span>
+                          </div>
+                          <div>
+                            <!-- コメント -->
+                          </div>
+                        </div>
+                      </div>
+                      <div>
+                        <!-- フォローボタン -->
+                        <el-button type="primary" size="small">
+                          <i class="el-icon-user"></i>フォロー
+                        </el-button>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </el-dialog>
+            <el-dialog title="フォロー" :visible.sync="followdialog" width="400px" :center="true">
+              <div class="dialog-all">
+                <p>aaaa</p>
+                <p>aaaa</p>
+                <p>aaaa</p>
+                <p>aaaa</p>
+                <p>aaaa</p>
+                <p>aaaa</p>
+                <p>aaaa</p>
+                <p>aaaa</p>
+                <p>aaaa</p>
+                <p>aaaa</p>
+                <p>aaaa</p>
+                <p>aaaa</p>
+              </div>
+              <!-- <el-table :data="gridData">
+                <el-table-column property="date" label="Date" width="150"></el-table-column>
+                <el-table-column property="name" label="Name" width="200"></el-table-column>
+                <el-table-column property="address" label="Address"></el-table-column>
+              </el-table> -->
+            </el-dialog>
+
+
+
           </div>
           <div class="user-show-info-main">
             <div class="user-show-article-count-div">
               <!-- UserArticleCount -->
               <p class="edit-margin-p">{{user.postCount}}</p>
-              <p class="edit-margin-p">投稿</p>
+              <p class="edit-margin-p">投稿<i class="el-icon-document"></i></p>
             </div>
-            <div class="user-show-follower-count-div">
+            <div class="user-show-follower-count-div" @click="followerdialog = true">
               <!-- Count -->
               <p class="edit-margin-p">{{follow.followedCount}}</p>
               <p class="edit-margin-p">フォロワー</p>
             </div>
-            <div class="user-show-follow-count-div">
+            <div class="user-show-follow-count-div" @click="followdialog = true">
               <!-- Count -->
               <p class="edit-margin-p">{{follow.followerCount}}</p>
               <p class="edit-margin-p">フォロー</p>
@@ -247,6 +301,8 @@ export default {
       srcList :["https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"],
       tabPosition: 'left',
       click_tab: 0,
+      followerdialog: false,
+      followdialog: false,
     }
   },
   components: {
@@ -414,9 +470,32 @@ export default {
   display: flex;
 }
 .user-show-article-count-div,.user-show-follower-count-div,.user-show-follow-count-div{
-  width: 100px;
+  margin-left: 20px;
+  width: 80px;
   text-align: center;
 }
+.user-show-follower-count-div,.user-show-follow-count-div{
+  cursor: pointer;
+}
+
+/* ダイアログ */
+.el-dialog--center{
+  padding: 0px;
+}
+.el-dialog__body{
+  padding: 0px;
+  height: 320px;
+}
+.dialog-all{
+  height: 100%;
+  overflow-y: scroll;
+}
+.dialog-ul{
+  margin: 0;
+}
+
+
+
 .edit-margin-p{
   margin: 0;
   font-size: 0.9em;
