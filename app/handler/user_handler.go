@@ -118,8 +118,6 @@ func UserShow(c echo.Context) error {
 		c.Logger().Error(err.Error())
 		return c.JSON(http.StatusInternalServerError,"ユーザの回答一覧データを取得中にエラー発生")
 	}
-	
-
 	// Follow情報を取得
 	var follow model.Follow
 	if userId != user.ID{
@@ -145,6 +143,15 @@ func UserShow(c echo.Context) error {
     c.Logger().Error(err.Error())
     return c.JSON(http.StatusInternalServerError,"フォロワー数取得中にエラー発生") //500
 	}
+	// フォロワーリスト取得
+	followers , err := GetFollowerInfoList(user.ID)
+	if err != nil {
+    c.Logger().Error(err.Error())
+    return c.JSON(http.StatusInternalServerError,"フォロー数取得中にエラー発生") //500
+	}
+
+	// フォローリスト取得
+	GetFollowedInfoList(user.ID)
 
 
 	// テンプレートに渡すデータを map に格納します。
@@ -155,6 +162,8 @@ func UserShow(c echo.Context) error {
 		"Questions": questions,
 		"AnswerQuestions" : answerQuestions,
 		"Follow": follow,
+		"Followers":followers,
+		"Followeds":followeds,
 		// "likes" : likes,
 	}
 

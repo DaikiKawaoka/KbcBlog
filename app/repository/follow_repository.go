@@ -30,13 +30,13 @@ import (
 	}
 
 	// 自分のフォロワーの情報を取得
-	func GetFollowedInfoList(userId int) (int, error) {
-		query := `SELECT COUNT(*) FROM follows WHERE followedid = ?;`
-		var count int
-		if err := db.Get(&count, query, userId); err != nil {
-			return 0, err
+	func GetFollowedInfoList(userId int) ([]*model.User, error) {
+		query := `SELECT u.id,u.name,u.comment FROM users u,follows f WHERE u.id = f.followerid AND f.followedid = ?;`
+		var users []*model.User
+		if err := db.Get(&users, query, userId); err != nil {
+			return nil, err
 		}
-		return count, nil
+		return users, nil
 	}
 
 	// フォロー人数を取得
