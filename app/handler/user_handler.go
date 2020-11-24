@@ -143,15 +143,34 @@ func UserShow(c echo.Context) error {
     c.Logger().Error(err.Error())
     return c.JSON(http.StatusInternalServerError,"フォロワー数取得中にエラー発生") //500
 	}
-	// フォロワーリスト取得
-	followers , err := GetFollowerInfoList(user.ID)
-	if err != nil {
-    c.Logger().Error(err.Error())
-    return c.JSON(http.StatusInternalServerError,"フォロー数取得中にエラー発生") //500
-	}
 
 	// フォローリスト取得
-	GetFollowedInfoList(user.ID)
+	followers , err := repository.GetFollowerInfoList(user.ID)
+	if err != nil {
+    c.Logger().Error(err.Error())
+    return c.JSON(http.StatusInternalServerError,"フォロワーリスト取得中にエラー発生") //500
+	}
+
+  // フォロワーリスト
+	followeds , err := repository.GetFollowedInfoList(user.ID)
+	if err != nil {
+    c.Logger().Error(err.Error())
+    return c.JSON(http.StatusInternalServerError,"フォロワーリスト取得中にエラー発生") //500
+	}
+
+	for _,f := range followeds {
+		count, err := repository.CheckFollow(userId,f.ID);
+		if err != nil {
+			c.Logger().Error(err.Error())
+			return c.JSON(http.StatusInternalServerError,"followcheck中にエラー発生") //500
+		}
+		// ユーザがいいねしているか検証
+		if count > 0{
+			f.IsFollowing = true
+		}else{
+			f.IsFollowing = false
+		}
+	}
 
 
 	// テンプレートに渡すデータを map に格納します。
@@ -162,8 +181,8 @@ func UserShow(c echo.Context) error {
 		"Questions": questions,
 		"AnswerQuestions" : answerQuestions,
 		"Follow": follow,
-		"Followers":followers,
-		"Followeds":followeds,
+		"Follows":followers,
+		"Followers":followeds,
 		// "likes" : likes,
 	}
 

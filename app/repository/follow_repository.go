@@ -20,20 +20,20 @@ import (
 	}
 
 	// 自分のフォローユーザの情報を取得
-	func GetFollowerInfoList(userId int) ([]*model.User, error) {
-		query := `SELECT u.id,u.name,u.comment FROM users u,follows f WHERE u.id = f.followedid AND f.followerid = ?;`
-		var users []*model.User
-		if err := db.Get(&users, query, userId); err != nil {
+	func GetFollowerInfoList(userId int) ([]*model.FUser, error) {
+		query := `SELECT u.id,u.name,u.comment,'true' as isfollowing FROM users u,follows f WHERE u.id = f.followedid AND f.followerid = ?;`
+		var users []*model.FUser
+		if err := db.Select(&users, query, userId); err != nil {
 			return nil, err
 		}
 		return users, nil
 	}
 
 	// 自分のフォロワーの情報を取得
-	func GetFollowedInfoList(userId int) ([]*model.User, error) {
+	func GetFollowedInfoList(userId int) ([]*model.FUser, error) {
 		query := `SELECT u.id,u.name,u.comment FROM users u,follows f WHERE u.id = f.followerid AND f.followedid = ?;`
-		var users []*model.User
-		if err := db.Get(&users, query, userId); err != nil {
+		var users []*model.FUser
+		if err := db.Select(&users, query, userId); err != nil {
 			return nil, err
 		}
 		return users, nil

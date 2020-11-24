@@ -86,14 +86,7 @@ export default {
 #header-nav{
   width: 50%;
 }
-ul{
-  margin: 0;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  list-style: none;
-  text-align: right;
-}
+
 .a-tag{
   line-height: 60px;
   font-size: 15px;
@@ -120,7 +113,12 @@ ul{
   font-size: 18px;
 }
 .header-right-ul{
-  margin-top: 10px;
+  margin: 10px 0 0 0;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  list-style: none;
+  text-align: right;
 }
 .header-user-icon{
   background-color: #ccc;

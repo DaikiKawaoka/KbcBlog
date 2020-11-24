@@ -1,4 +1,0 @@
-# app/handler
-handler/user_handler.go:147:21: undefined: GetFollowerInfoList
-handler/user_handler.go:154:2: undefined: GetFollowedInfoList
-handler/user_handler.go:166:15: undefined: followeds

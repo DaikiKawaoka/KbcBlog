@@ -57,24 +57,28 @@
             <el-dialog title="フォロワー" :visible.sync="followerdialog" width="400px" :center="true">
               <div class="dialog-all">
                 <ul class="dialog-ul">
-                  <li>
-                    <div>
-                      <div>
+                  <li class="dialog-li" v-for="(f,index) in this.followers" :key="f.id">
+                    <div class="dialog-main">
+                      <div class="dialog-main">
                         <div>
                           <!-- アイコン -->
+                          <div class="f-user-icon"></div>
                         </div>
-                        <div>
+                        <div class="f-info-div">
                           <div>
-                            <span><!-- 名前 --></span>
+                            <span>{{f.name}}</span>
                           </div>
-                          <div>
-                            <!-- コメント -->
+                          <div class="string-out">
+                            {{f.comment.String}}
                           </div>
                         </div>
                       </div>
-                      <div>
+                      <div class="follow-btn-div">
                         <!-- フォローボタン -->
-                        <el-button type="primary" size="small">
+                        <el-button size="small" v-if="f.isfollowing" @click="ChangeFollow(f,index,'followers')">
+                          <i class="el-icon-user"></i>フォロー中
+                        </el-button>
+                        <el-button type="primary" size="small" v-else @click="ChangeFollow(f,index,'followers')">
                           <i class="el-icon-user"></i>フォロー
                         </el-button>
                       </div>
@@ -83,26 +87,39 @@
                 </ul>
               </div>
             </el-dialog>
+
             <el-dialog title="フォロー" :visible.sync="followdialog" width="400px" :center="true">
               <div class="dialog-all">
-                <p>aaaa</p>
-                <p>aaaa</p>
-                <p>aaaa</p>
-                <p>aaaa</p>
-                <p>aaaa</p>
-                <p>aaaa</p>
-                <p>aaaa</p>
-                <p>aaaa</p>
-                <p>aaaa</p>
-                <p>aaaa</p>
-                <p>aaaa</p>
-                <p>aaaa</p>
+                <ul class="dialog-ul">
+                  <li class="dialog-li" v-for="(f,index) in this.follows" :key="f.id">
+                    <div class="dialog-main">
+                      <div class="dialog-main">
+                        <div>
+                          <!-- アイコン -->
+                          <div class="f-user-icon"></div>
+                        </div>
+                        <div class="f-info-div">
+                          <div>
+                            <span>{{f.name}}</span>
+                          </div>
+                          <div class="string-out">
+                            {{f.comment.String}}
+                          </div>
+                        </div>
+                      </div>
+                      <div class="follow-btn-div">
+                        <!-- フォローボタン -->
+                        <el-button size="small" v-if="f.isfollowing" @click="ChangeFollow(f,index,'follows')">
+                          <i class="el-icon-user"></i>フォロー中
+                        </el-button>
+                        <el-button type="primary" size="small" v-else @click="ChangeFollow(f,index,'follows')">
+                          <i class="el-icon-user"></i>フォロー
+                        </el-button>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
               </div>
-              <!-- <el-table :data="gridData">
-                <el-table-column property="date" label="Date" width="150"></el-table-column>
-                <el-table-column property="name" label="Name" width="200"></el-table-column>
-                <el-table-column property="address" label="Address"></el-table-column>
-              </el-table> -->
             </el-dialog>
 
 
@@ -135,17 +152,17 @@
         <div class="user-show-link-info">
           <div class="user-show-link-div">
             <p class="link-tag">github</p>
-              <p class="link-p" v-if="user.github.Valid">
-                <span class="user-show-link-a" @click="open('github')">{{user.github.String}}</span>
-              </p>
-            <p class="link-p" v-else>未設定</p>
+              <span v-if="user.github.Valid">
+                <p class="user-show-link-a string-out" @click="open('github')">{{user.github.String}}</p>
+              </span>
+            <p v-else>未設定</p>
           </div>
           <div class="user-show-link-div">
             <p class="link-tag">webサイト</p>
-              <p class="link-p" v-if="user.website.Valid">
-                <span class="user-show-link-a" @click="open('website')">{{user.website.String}}</span>
-              </p>
-            <p class="link-p" v-else>未設定</p>
+              <span v-if="user.website.Valid">
+                <p class="user-show-link-a string-out" @click="open('website')">{{user.website.String}}</p>
+              </span>
+            <p v-else>未設定</p>
           </div>
         </div>
         <div class="user-show-body-info">
@@ -273,6 +290,8 @@ export default {
       answerQuestions: Array,
       myUser: {},
       follow:{},
+      follows:[],
+      followers:[],
       langarray: [],
       user: {
         KBCmail: "",
@@ -322,6 +341,8 @@ export default {
         this.user = response.data.User
         this.myUser = response.data.MyUser
         this.follow = response.data.Follow
+        this.follows = response.data.Follows
+        this.followers = response.data.Followers
         // 文字列のlangsを配列に変換
         this.langarray = this.user.languages.String.split(',');
       })
@@ -398,6 +419,55 @@ export default {
         message: 'あなたのセッションはタイムアウトしました。再度ログインしてください。'
       });
     },
+
+    ChangeFollow(f,index,c){
+      this.$axios
+        .post(`http://localhost/api/restricted/Users/${f.id}/Follow`,f.id,{
+          headers: {
+            Authorization: `Bearer ${this.$cookies.get("JWT")}`
+          },
+        })
+        .then(() => {
+          if(c === "followers"){
+            //フォロワーリストのボタンが押された時
+            //フォローフォロワーボタンの切り替え
+            this.followers[index].isfollowing = !this.followers[index].isfollowing;
+            const w = this.follows.findIndex(item => item.id === this.followers[index].id)
+            if(w !== -1){
+              this.follows[w].isfollowing = !this.follows[w].isfollowing
+            }else{
+              //フォロワーリストから初めてフォローボタンを押した時に自分のフォローリストに追加処理
+              this.follows.push(f)
+            }
+            // followカウントの変更
+            if(this.followers[index].isfollowing === false){
+              this.follow.followerCount--;
+            }else{
+              this.follow.followerCount++;
+            }
+          }else{
+            //フォローリストのボタンが押された時
+            this.follows[index].isfollowing = !this.follows[index].isfollowing;
+            const w = this.followers.findIndex(item => item.id === this.follows[index].id)
+            if(w !== -1){
+              this.followers[w].isfollowing = !this.followers[w].isfollowing
+            }
+            if(this.follows[index].isfollowing === false){
+              this.follow.followerCount--;
+            }else{
+              this.follow.followerCount++;
+            }
+          }
+        })
+        .catch(error => {
+          if(error.response.status == 401){
+            this.$router.push({ path: "/login" });
+            this.errorNotify();
+          }
+          this.errors = error.response.data.ValidationErrors;
+        });
+    },
+
   }
 }
 </script>
@@ -490,8 +560,35 @@ export default {
   height: 100%;
   overflow-y: scroll;
 }
+.dialog-main{
+  display: flex;
+}
 .dialog-ul{
   margin: 0;
+  padding: 0;
+}
+.dialog-li{
+  margin-bottom: 7px;
+}
+.f-user-icon{
+  background-color: #ccc;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+}
+.f-info-div{
+  margin-left: 10px;
+  width: 190px;
+}
+.string-out{
+  overflow: hidden;
+  white-space: nowrap;
+	text-overflow: ellipsis;
+	-webkit-text-overflow: ellipsis; /* Safari */
+	-o-text-overflow: ellipsis; /* Opera */
+}
+.follow-btn-div{
+  margin-left: 10px;
 }
 
 
@@ -526,7 +623,9 @@ export default {
   border-radius: 2px;
 }
 .user-show-link-div{
+  height: 50px;
   margin-top: 25px;
+  border-radius: 4px;
   background-color: #fff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)
 }
@@ -535,13 +634,13 @@ export default {
   margin: 5px;
   font-size: 0.9em;
 }
-.link-p{
-  margin: 5px;
-  font-size: 0.8em;
-}
+
 .user-show-link-a{
   color: #333;
   cursor: pointer;
+  width: 160px;
+  margin: 0 0 0 5px;
+  font-size: 0.9em;
 }
 .user-show-link-a:hover{
   color: #409eff;
