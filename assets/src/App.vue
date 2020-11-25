@@ -19,6 +19,7 @@ import LoginPage from './sessions/Login.vue'
 import UserNew from './users/New'
 import UserShow from './users/Show'
 import UserEdit from './users/Edit'
+import PassEdit from './users/PassEdit'
 
 const router = new VueRouter({
   mode: 'history',
@@ -85,6 +86,11 @@ const router = new VueRouter({
       path: '/Users/:id(\\d+)/edit',
       name: 'UserEdit',
       component: UserEdit
+    },
+    {
+      path: '/Users/:id(\\d+)/password/edit',
+      name: 'PassEdit',
+      component: PassEdit
     },
   ]
 })

@@ -63,6 +63,8 @@ func main() {
 	r.GET("/Users/:id",handler.UserShow)
 	r.GET("/Users/:id/edit", handler.UserEdit)
 	r.PATCH("/Users/:id", handler.UserUpdate)
+	// Password
+	r.PATCH("/Users/:id/password/edit",handler.UserPasswordEdit)
 
 	// Like
 	r.POST("/Articles/:id/Likes", handler.ArticleLike)

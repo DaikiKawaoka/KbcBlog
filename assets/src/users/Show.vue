@@ -27,7 +27,7 @@
                   <i class="el-icon-setting"></i>
                 </span>
                 <el-dropdown-menu slot="dropdown">
-                  <router-link class="a-tag2" v-bind:to="{ name : 'UserEdit', params : { id: user.id }}"><el-dropdown-item>パスワード変更</el-dropdown-item></router-link>
+                  <router-link class="a-tag2" v-bind:to="{ name : 'PassEdit', params : { id: user.id }}"><el-dropdown-item>パスワード変更</el-dropdown-item></router-link>
                   <el-popconfirm
                   title="本当にログアウトしますか?"
                   confirm-button-text="Yes"
@@ -402,6 +402,7 @@ export default {
         });
       });
     },
+
     editUser: function() {
       this.$router.push({ path: `/Users/${this.$route.params.id}/edit` });
     },
