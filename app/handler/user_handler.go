@@ -40,10 +40,8 @@ func UserCreate(c echo.Context) error {
   if err := c.Validate(&createuser); err != nil {
     // エラーの内容をサーバーのログに出力します。
     c.Logger().Error(err.Error())
-
     // エラー内容を検査してカスタムエラーメッセージを取得します。
     out.ValidationErrors = createuser.ValidationErrors(err)
-
     // 解釈できたパラメータが許可されていない値の場合は 422 エラーを返却します。
     return c.JSON(http.StatusUnprocessableEntity, out)
   }

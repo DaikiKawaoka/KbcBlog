@@ -4,6 +4,14 @@
     <div class="passedit-all-div">
       <h1>パスワード変更</h1>
       <div class="passedit-main-div">
+
+        <div v-if="errors.length != 0">
+          <ul class="error-ul" v-for="e in errors" :key="e">
+              <li class="error-icon-li"><i class="el-icon-warning-outline"></i></li>
+              <li><font color="red">{{ e }}</font></li>
+          </ul>
+        </div>
+
         <el-form>
           <el-form-item label="現在のパスワード">
               <el-input type="password" v-model="passwords.currentPassword" autocomplete="off" show-password></el-input>
@@ -127,6 +135,19 @@ h1{
 .passedit-main-div{
   width: 500px;
   margin: 0 auto 0 auto;
+}
+i{
+  font-size: 25px;
+  color:#F56C6C;
+}
+li{
+  list-style: none;
+}
+.error-icon-li{
+  padding-right: 10px;
+}
+.error-ul{
+  display: flex;
 }
 
 </style>

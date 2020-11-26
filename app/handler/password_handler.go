@@ -10,6 +10,10 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+type PasswordEditOutput struct {
+  Message          string
+  ValidationErrors []string
+}
 
 // ArticleUpdate ...
 func UserPasswordEdit(c echo.Context) error {
@@ -25,27 +29,41 @@ func UserPasswordEdit(c echo.Context) error {
 	if reqID != refID {
 		return c.JSON(http.StatusBadRequest, "パス違い")
 	}
-	var article model.Article
-	var out ArticleUpdateOutput
+	var password model.Password
+	var out PasswordEditOutput
 
-	if err := c.Bind(&article); err != nil {
+	if err := c.Bind(&password); err != nil {
 		return c.JSON(http.StatusBadRequest, out)
 	}
 
-	if err := c.Validate(&article); err != nil {
-		out.ValidationErrors = article.ValidationErrors(err)
+	if err := c.Validate(&password); err != nil {
+		out.ValidationErrors = password.ValidationErrors(err)
 		return c.JSON(http.StatusUnprocessableEntity, out) //422
 	}
 
-	// 文字列型の ID を数値型にキャスト
-	articleID, _ := strconv.Atoi(reqID)
-	article.ID = articleID
-	_, err := repository.ArticleUpdate(&article)
+	password.ID , _ = strconv.Atoi(reqID)
 
+	dbpasshash,err := repository.GetPassword(password.ID);
 	if err != nil {
-		out.Message = err.Error()
+		out.Message = "パスワード取得中にエラー"
 		return c.JSON(http.StatusInternalServerError, out)
 	}
-	out.Article = &article
+
+	
+	if err := passwordVerify(dbpasshash, password.CurrentPassword); err != nil {
+		out.ValidationErrors = append(out.ValidationErrors, "現在のパスワードが違います。")
+		return c.JSON(http.StatusUnprocessableEntity, out)
+	}
+
+	if err := password.NewPasswordHash(); err != nil {
+		out.Message = "パスワードhash中にエラー"
+		return c.JSON(http.StatusInternalServerError, out)
+	}
+
+	if err := repository.PasswordUpdate(&password); err != nil{
+    out.Message = "update中にエラー"
+    return c.JSON(http.StatusInternalServerError, out)
+  }
+
 	return c.JSON(http.StatusOK, out)
 }
