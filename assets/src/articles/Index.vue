@@ -8,8 +8,8 @@
           <el-input placeholder="キーワード検索" v-model="searchText" suffix-icon="el-icon-search" style="width:200px; margin-left: 30px;"></el-input>
           <div class="order-div">
             <span class="order-span-left">並び替え</span>
-            <span class="order-span order-span-color">新着</span>
-            <span class="order-span">人気</span>
+            <span class="order-span" v-bind:class="{'order-span-color': orderNew }" @click="articleOrder('new')">新着</span>
+            <span class="order-span" v-bind:class="{ 'order-span-color': orderLike }" @click="articleOrder('like')">人気</span>
           </div>
         </div>
 
@@ -27,7 +27,8 @@
               <router-link v-bind:to="{ name : 'UserShow', params : { id: article.userid }}" class="a-tag">
                 <h3 class="article-index-username">by {{ article.name }}</h3>
               </router-link>
-              <h3 class="article-index-update"> {{ article.Updated | moment }}</h3>
+              <h3 class="article-index-update" v-if="orderNew"> {{ article.Updated | moment }}</h3>
+              <h3 class="article-index-update" v-else> {{ article.Updated | moment2 }}</h3>
               <i class="el-icon-star-on article-star-i"></i>
               <span class="article-likecount-span">{{article.likecount}}</span>
             </div>
@@ -60,6 +61,8 @@ export default {
       likeRanking: [],
       postRanking: [],
       searchText:"",
+      orderNew: true,
+      orderLike: false,
     }
   },
   components: {
@@ -73,7 +76,12 @@ export default {
       // locale関数を使って言語を設定すると、日本語で出力される
       moment.locale( 'ja' );
       return moment(date).fromNow();
-      // return moment(date).utc().format('YYYY/MM/DD HH:mm');
+      //return moment(date).utc().format('YYYY/MM/DD');
+    },
+    moment2: function (date) {
+      // locale関数を使って言語を設定すると、日本語で出力される
+      moment.locale( 'ja' );
+      return moment(date).utc().format('YYYY/MM/DD');
     }
   },
   // createdの中でaxiosを使います。get()の中のURLは、nginx.confで設定してるので、 /api/ になっています。
@@ -102,6 +110,28 @@ export default {
         title: 'Error',
         message: 'あなたのセッションはタイムアウトしました。再度ログインしてください。'
       });
+    },
+    articleOrder(c) {
+      this.$axios.get('http://localhost/api/restricted/Articles/LikeOrder', {
+      params: {
+        // ここにクエリパラメータを指定する
+        order: c
+      },
+      headers: {
+        Authorization: `Bearer ${this.$cookies.get("JWT")}`
+      },
+    })
+      .then(response => {
+        this.orderNew = !this.orderNew;
+        this.orderLike = !this.orderLike;
+        this.articles = response.data.Articles
+      })
+      .catch(error => {
+        if(error.response.status == 401){
+          this.$router.push({ path: "/login" });
+          this.errorNotify();
+        }
+      })
     },
   }
 }

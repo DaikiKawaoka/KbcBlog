@@ -127,6 +127,7 @@
 .user-name{
   width: 150px;
   font-size: 0.9em;
+  font-weight: bold;
   margin: 0 0 0 8px;
 }
 .like-count-div{

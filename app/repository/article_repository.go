@@ -8,21 +8,33 @@ import (
 )
 
 // ArticleListByCursor ...
-func ArticleListByCursor(cursor int) ([]*model.Article, error) {
+func ArticleListByCursor(cursor int,c string) ([]*model.Article, error) {
+
 	// 引数で渡されたカーソルの値が 0 以下の場合は、代わりに int 型の最大値で置き換えます。
 	if cursor <= 0 {
 		cursor = math.MaxInt32
 	}
+	var query string
 
-
-	// ID の降順に記事データを 10 件取得するクエリ文字列を生成します。
-	query := `SELECT a.id id,a.userid userid,u.name name,a.title title,a.created created,a.updated updated,COUNT(al.id) likecount
-	FROM articles a inner join users u on a.userid = u.id
-	left join article_likes al on a.id = al.articleid
-	WHERE a.id < ?
-	GROUP BY a.id,a.userid,u.name,a.title,a.created,a.updated
-	ORDER BY a.id desc
-	LIMIT 10`
+	if c == "new"{
+		// IDの降順に記事データを 10 件取得
+		query = `SELECT a.id id,a.userid userid,u.name name,a.title title,a.created created,a.updated updated,COUNT(al.id) likecount
+		FROM articles a inner join users u on a.userid = u.id
+		left join article_likes al on a.id = al.articleid
+		WHERE a.id < ?
+		GROUP BY a.id,a.userid,u.name,a.title,a.created,a.updated
+		ORDER BY a.id desc
+		LIMIT 10`
+	}else{
+		// いいね数の降順に記事データを 10 件取得
+		query = `SELECT a.id id,a.userid userid,u.name name,a.title title,a.created created,a.updated updated,COUNT(al.id) likecount
+		FROM articles a inner join users u on a.userid = u.id
+		left join article_likes al on a.id = al.articleid
+		WHERE a.id < ?
+		GROUP BY a.id,a.userid,u.name,a.title,a.created,a.updated
+		ORDER BY likecount desc
+		LIMIT 10`
+	}
 
 	// クエリ結果を格納するスライスを初期化します。
 	// 10 件取得すると決まっているため、サイズとキャパシティを指定しています。
