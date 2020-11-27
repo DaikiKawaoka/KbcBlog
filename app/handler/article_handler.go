@@ -74,9 +74,23 @@ func ArticleIndex(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError,"記事の一覧データを取得中にエラー発生")
 	}
 
+	likeRanking,err := repository.KBCRankingTop10("like")
+	if err != nil {
+		c.Logger().Error(err.Error())
+		return c.JSON(http.StatusInternalServerError,"likeRankingを取得中にエラー発生")
+	}
+
+	postRanking,err := repository.KBCRankingTop10("post")
+	if err != nil {
+		c.Logger().Error(err.Error())
+		return c.JSON(http.StatusInternalServerError,"likeRankingを取得中にエラー発生")
+	}
+
 	data := map[string]interface{}{
 		"user": myUser,
 		"Articles": articles,
+		"LikeRanking": likeRanking,
+		"PostRanking": postRanking,
 	}
 	return c.JSON(http.StatusOK, data)
 }

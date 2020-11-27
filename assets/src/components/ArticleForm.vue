@@ -74,8 +74,8 @@ import hljs from 'highlight.js';
 import 'highlight.js/styles/github.css';
 import './markdown.css';
 
- export default {
-   props: {
+export default {
+  props: {
     article: Object,
     errors: Array,
     create: Boolean,

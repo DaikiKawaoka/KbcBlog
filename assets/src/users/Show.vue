@@ -155,14 +155,14 @@
               <span v-if="user.github.Valid">
                 <p class="user-show-link-a string-out" @click="open('github')">{{user.github.String}}</p>
               </span>
-            <p v-else>未設定</p>
+            <p v-else class="not-conf-link">未設定</p>
           </div>
           <div class="user-show-link-div">
             <p class="link-tag">webサイト</p>
               <span v-if="user.website.Valid">
                 <p class="user-show-link-a string-out" @click="open('website')">{{user.website.String}}</p>
               </span>
-            <p v-else>未設定</p>
+            <p v-else class="not-conf-link">未設定</p>
           </div>
         </div>
         <div class="user-show-body-info">
@@ -642,6 +642,11 @@ export default {
   font-weight:bold;
   margin: 5px;
   font-size: 0.9em;
+}
+.not-conf-link{
+  color: #777;
+  font-size: 0.9em;
+  margin: 0 0 0 5px;
 }
 
 .user-show-link-a{

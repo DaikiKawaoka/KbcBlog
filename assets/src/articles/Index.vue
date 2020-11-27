@@ -36,7 +36,7 @@
 
       </div>
       <div>
-        <Ranking></Ranking>
+        <Ranking :likeRanking="likeRanking" :postRanking="postRanking"></Ranking>
       </div>
     </div>
     <Footer></Footer>
@@ -55,8 +55,10 @@ export default {
   name: 'app',
   data(){
     return {
-      articles: [],
       user: {},
+      articles: [],
+      likeRanking: [],
+      postRanking: [],
       searchText:"",
     }
   },
@@ -83,6 +85,8 @@ export default {
     })
       .then(response => {
         this.articles = response.data.Articles
+        this.likeRanking = response.data.LikeRanking
+        this.postRanking = response.data.PostRanking
         this.user = response.data.user
       })
       .catch(error => {

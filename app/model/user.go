@@ -33,6 +33,12 @@ type LoginUser struct {
 	PassHash    string    `db:"passhash"`
 }
 
+type RankingUser struct {
+	ID          int       `db:"id" json:"id"`
+	Name        string    `db:"name" json:"name"`
+	Count int     `db:"count" json:"count"`
+}
+
 // CreateUserからUserを作成
 func (u *User) SetupUser(cu CreateUser, id int) () {
 	u.ID = cu.ID

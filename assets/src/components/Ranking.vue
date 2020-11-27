@@ -4,51 +4,30 @@
       <h3 class="ranking-title">KBCユーザランキング<i class="el-icon-user-solid"></i></h3>
     </div>
     <ul class="ranking-ul">
-      <li class="ranking-li">
-        <div class="ranking-main">
+      <li class="ranking-li" v-for="(u,index) in this.likeRanking" :key="u.id">
+        <router-link v-bind:to="{ name : 'UserShow', params : { id: u.id }}" class="a-tag">
           <div class="ranking-main">
-            <div class="rank-number-div">
-              <!--- 順位--->
-              <span class="rank-number rank-1">1</span>
-            </div>
-            <div>
-              <!-- アイコン -->
-              <div class="user-icon"></div>
-            </div>
-            <div>
+            <div class="ranking-main">
+              <div class="rank-number-div">
+                <!--- 順位--->
+                <span class="rank-number" v-bind:class="`rank-${index + 1}`">{{ index + 1 }}</span>
+              </div>
               <div>
-                <p class="user-name">ああああああああああああああああああああ</p>
+                <!-- アイコン -->
+                <div class="user-icon"></div>
+              </div>
+              <div>
+                <div>
+                  <p class="user-name">{{ u.name }}</p>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="like-count-div">
-            <p class="like-count">66666</p>
-            <p class="like-tag"><i class="el-icon-star-off"></i></p>
-          </div>
-        </div>
-      </li>
-      <li class="ranking-li">
-        <div class="ranking-main">
-          <div class="ranking-main">
-            <div class="rank-number-div">
-              <!--- 順位--->
-              <span class="rank-number">10</span>
-            </div>
-            <div>
-              <!-- アイコン -->
-              <div class="user-icon"></div>
-            </div>
-            <div>
-              <div>
-                <p class="user-name">ああああああああああああああああああああ</p>
-              </div>
+            <div class="like-count-div">
+              <p class="like-count">{{ u.count }}</p>
+              <p class="like-tag"><i class="el-icon-star-off"></i></p>
             </div>
           </div>
-          <div class="like-count-div">
-            <p class="like-count">66666</p>
-            <p class="like-tag"><i class="el-icon-star-off"></i></p>
-          </div>
-        </div>
+        </router-link>
       </li>
     </ul>
 
@@ -56,166 +35,30 @@
       <h3 class="ranking-title">KBC投稿数ランキング<i class="el-icon-document-checked"></i></h3>
     </div>
     <ul class="ranking-ul">
-      <li class="ranking-li">
-        <div class="ranking-main">
+      <li class="ranking-li" v-for="(u,index) in this.postRanking" :key="u.id">
+        <router-link v-bind:to="{ name : 'UserShow', params : { id: u.id }}" class="a-tag">
           <div class="ranking-main">
-            <div>
-              <!--- 順位--->
-              <span class="rank-number rank-1">1</span>
-            </div>
-            <div>
-              <!-- アイコン -->
-              <div class="user-icon"></div>
-            </div>
-            <div>
+            <div class="ranking-main">
+              <div class="rank-number-div">
+                <!--- 順位--->
+                <span class="rank-number" v-bind:class="`rank-${index + 1}`">{{ index + 1 }}</span>
+              </div>
               <div>
-                <p class="user-name">ああああああああああああああああああああ</p>
+                <!-- アイコン -->
+                <div class="user-icon"></div>
+              </div>
+              <div>
+                <div>
+                  <p class="user-name">{{ u.name }}</p>
+                </div>
               </div>
             </div>
-          </div>
-          <div>
-            <p class="like-count">66666</p>
-            <p class="like-tag"><i class="el-icon-document"></i></p>
-          </div>
-        </div>
-      </li>
-      <li class="ranking-li">
-        <div class="ranking-main">
-          <div class="ranking-main">
-            <div>
-              <!--- 順位--->
-              <span class="rank-number rank-1">1</span>
-            </div>
-            <div>
-              <!-- アイコン -->
-              <div class="user-icon"></div>
-            </div>
-            <div>
-              <div>
-                <p class="user-name">ああああああああああああああああああああ</p>
-              </div>
+            <div class="like-count-div">
+              <p class="like-count">{{ u.count }}</p>
+              <p class="like-tag"><i class="el-icon-document"></i></p>
             </div>
           </div>
-          <div>
-            <p class="like-count">66666</p>
-            <p class="like-tag"><i class="el-icon-document"></i></p>
-          </div>
-        </div>
-      </li>
-      <li class="ranking-li">
-        <div class="ranking-main">
-          <div class="ranking-main">
-            <div>
-              <!--- 順位--->
-              <span class="rank-number rank-1">1</span>
-            </div>
-            <div>
-              <!-- アイコン -->
-              <div class="user-icon"></div>
-            </div>
-            <div>
-              <div>
-                <p class="user-name">ああああああああああああああああああああ</p>
-              </div>
-            </div>
-          </div>
-          <div>
-            <p class="like-count">66666</p>
-            <p class="like-tag"><i class="el-icon-document"></i></p>
-          </div>
-        </div>
-      </li>
-      <li class="ranking-li">
-        <div class="ranking-main">
-          <div class="ranking-main">
-            <div>
-              <!--- 順位--->
-              <span class="rank-number rank-1">1</span>
-            </div>
-            <div>
-              <!-- アイコン -->
-              <div class="user-icon"></div>
-            </div>
-            <div>
-              <div>
-                <p class="user-name">ああああああああああああああああああああ</p>
-              </div>
-            </div>
-          </div>
-          <div>
-            <p class="like-count">66666</p>
-            <p class="like-tag"><i class="el-icon-document"></i></p>
-          </div>
-        </div>
-      </li>
-      <li class="ranking-li">
-        <div class="ranking-main">
-          <div class="ranking-main">
-            <div>
-              <!--- 順位--->
-              <span class="rank-number rank-1">1</span>
-            </div>
-            <div>
-              <!-- アイコン -->
-              <div class="user-icon"></div>
-            </div>
-            <div>
-              <div>
-                <p class="user-name">ああああああああああああああああああああ</p>
-              </div>
-            </div>
-          </div>
-          <div>
-            <p class="like-count">66666</p>
-            <p class="like-tag"><i class="el-icon-document"></i></p>
-          </div>
-        </div>
-      </li>
-      <li class="ranking-li">
-        <div class="ranking-main">
-          <div class="ranking-main">
-            <div>
-              <!--- 順位--->
-              <span class="rank-number rank-1">1</span>
-            </div>
-            <div>
-              <!-- アイコン -->
-              <div class="user-icon"></div>
-            </div>
-            <div>
-              <div>
-                <p class="user-name">ああああああああああああああああああああ</p>
-              </div>
-            </div>
-          </div>
-          <div>
-            <p class="like-count">66666</p>
-            <p class="like-tag"><i class="el-icon-document"></i></p>
-          </div>
-        </div>
-      </li>
-      <li class="ranking-li">
-        <div class="ranking-main">
-          <div class="ranking-main">
-            <div>
-              <!--- 順位--->
-              <span class="rank-number rank-1">1</span>
-            </div>
-            <div>
-              <!-- アイコン -->
-              <div class="user-icon"></div>
-            </div>
-            <div>
-              <div>
-                <p class="user-name">ああああああああああああああああああああ</p>
-              </div>
-            </div>
-          </div>
-          <div>
-            <p class="like-count">66666</p>
-            <p class="like-tag"><i class="el-icon-document"></i></p>
-          </div>
-        </div>
+        </router-link>
       </li>
     </ul>
   </div>
@@ -223,6 +66,10 @@
 
 <script>
   export default {
+    props: {
+      likeRanking: Array,
+      postRanking: Array,
+    },
     data() {
       return {
       };
@@ -288,6 +135,7 @@
 .like-count{
   width: 100%;
   text-align: center;
+  font-weight: bold;
   margin: 0;
 }
 .like-tag{
