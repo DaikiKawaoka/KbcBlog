@@ -8,7 +8,7 @@
     </ul>
     <span>タグ</span>
     <div>
-      <el-cascader :options="options" :show-all-levels="false"></el-cascader>
+      <el-cascader :options="options" :show-all-levels="false" filterable></el-cascader>
     </div>
   </div>
 </template>
@@ -18,208 +18,224 @@
     data() {
       return {
         options: [{
-          value: '言語',
           label: 'プログラミング',
           children: [{
-            value: 'disciplines',
-            label: 'フロントエンド',
+            label: '言語',
             children: [{
-              value: 'consistency',
-              label: 'Consistency'
-            }, {
-              value: 'feedback',
-              label: 'Feedback'
-            }, {
-              value: 'efficiency',
-              label: 'Efficiency'
-            }, {
-              value: 'controllability',
-              label: 'Controllability'
-            }]
+          value: 'HTML',
+          label: 'HTML'
+        }, {
+          value: 'CSS',
+          label: 'CSS'
+        }, {
+          value: 'Java',
+          label: 'Java'
+        }, {
+          value: 'Python',
+          label: 'Python'
+        }, {
+          value: 'JavaScript',
+          label: 'JavaScript'
+        }, {
+          value: 'Node.js',
+          label: 'Node.js'
+        }, {
+          value: 'C/C++',
+          label: 'C/C++'
+        }, {
+          value: 'C#',
+          label: 'C#'
+        }, {
+          value: 'SQL',
+          label: 'SQL'
+        }, {
+          value: 'PHP',
+          label: 'PHP'
+        }, {
+          value: 'Ruby',
+          label: 'Ruby'
+        }, {
+          value: 'Rust',
+          label: 'Rust'
+        }, {
+          value: 'Go',
+          label: 'Go'
+        }, {
+          value: 'TypeScript',
+          label: 'TypeScript'
+        }, {
+          value: 'R',
+          label: 'R'
+        }, {
+          value: 'Perl',
+          label: 'Perl'
+        }, {
+          value: 'Kotlin',
+          label: 'Kotlin'
+        }, {
+          value: 'Swift',
+          label: 'Swift'
+        },{
+          value: 'VB',
+          label: 'VB'
+        },{
+          value: 'VBA',
+          label: 'VBA'
+        },{
+          value: 'COBOL',
+          label: 'COBOL'
+        }]
           }, {
-            value: 'navigation',
-            label: 'バックエンド',
+            label: 'フレームワーク',
             children: [{
-              value: 'side nav',
-              label: 'Side Navigation'
+              value: 'top nav',
+              label: 'Ruby on Rails'
             }, {
               value: 'top nav',
-              label: 'Top Navigation'
-            }]
-          }, {
-            value: 'navigation',
-            label: 'インフラ',
-            children: [{
-              value: 'side nav',
-              label: 'Side Navigation'
+              label: 'Vue.js'
             }, {
               value: 'top nav',
-              label: 'Top Navigation'
+              label: 'React'
+            }, {
+              value: 'top nav',
+              label: 'AngularJS'
+            }, {
+              value: 'top nav',
+              label: 'Spring Framework'
+            }, {
+              value: 'top nav',
+              label: 'Play Framework'
+            },{
+              value: 'top nav',
+              label: 'Bootstrap'
+            }, {
+              value: 'top nav',
+              label: 'CakePHP'
+            }, {
+              value: 'top nav',
+              label: 'Laravel'
+            }, {
+              value: 'top nav',
+              label: 'Django'
+            },]
+          }, {
+            label: 'OS',
+            children: [{
+              value: 'side nav',
+              label: 'Linux'
+            }, {
+              value: 'top nav',
+              label: 'Windows'
+            }, {
+              value: 'top nav',
+              label: 'macOS'
+            }, {
+              value: 'top nav',
+              label: 'iOS'
+            }, {
+              value: 'top nav',
+              label: 'Android'
+            }]
+          }, {
+            label: 'Webサーバ',
+            children: [{
+              value: 'side nav',
+              label: 'Apache'
+            }, {
+              value: 'top ',
+              label: 'Nginx'
+            }]
+          } , {
+            label: 'データベース',
+            children: [{
+              value: 'side nav',
+              label: 'MySQL'
+            }, {
+              value: 'top nav',
+              label: 'PostgreSQL'
+            }, {
+              value: 'top nav',
+              label: 'Oracle Database'
+            }, {
+              value: 'top nav',
+              label: 'SQLite'
+            }, {
+              value: 'top nav',
+              label: 'MongoDB'
+            }]
+          }, {
+            label: '技術',
+            children: [{
+              value: 'side nav',
+              label: 'AWS'
+            }, {
+              value: 'top nav',
+              label: 'Docker'
+            }, {
+              value: 'top nav',
+              label: 'kubernetes'
+            }, {
+              value: 'top nav',
+              label: 'Git/GitHub'
+            }, {
+              value: 'top nav',
+              label: 'WordPress'
+            }, {
+              value: 'top nav',
+              label: 'Firebase'
             }]
           }]
         }, {
-          value: 'component',
-          label: 'フレームワーク',
-          children: [{
-            value: 'basic',
-            label: 'Basic',
-            children: [{
+          label: '国家試験',
+          children: [
+            {
               value: 'layout',
-              label: 'Layout'
+              label: 'ITパスポート試験'
+            },{
+              value: 'layout',
+              label: '基本情報技術者試験'
             }, {
               value: 'color',
-              label: 'Color'
+              label: '応用情報技術者試験'
             }, {
               value: 'typography',
-              label: 'Typography'
+              label: '情報処理安全確保支援士試験'
             }, {
               value: 'icon',
-              label: 'Icon'
+              label: 'データベーススペシャリスト試験'
             }, {
               value: 'button',
-              label: 'Button'
+              label: 'ネットワークスペシャリスト試験'
+            }, {
+              value: 'button',
+              label: 'エンベデッドシステムスペシャリスト試験'
             }]
           }, {
-            value: 'form',
-            label: 'Form',
-            children: [{
-              value: 'radio',
-              label: 'Radio'
-            }, {
-              value: 'checkbox',
-              label: 'Checkbox'
-            }, {
-              value: 'input',
-              label: 'Input'
-            }, {
-              value: 'input-number',
-              label: 'InputNumber'
-            }, {
-              value: 'select',
-              label: 'Select'
-            }, {
-              value: 'cascader',
-              label: 'Cascader'
-            }, {
-              value: 'switch',
-              label: 'Switch'
-            }, {
-              value: 'slider',
-              label: 'Slider'
-            }, {
-              value: 'time-picker',
-              label: 'TimePicker'
-            }, {
-              value: 'date-picker',
-              label: 'DatePicker'
-            }, {
-              value: 'datetime-picker',
-              label: 'DateTimePicker'
-            }, {
-              value: 'upload',
-              label: 'Upload'
-            }, {
-              value: 'rate',
-              label: 'Rate'
-            }, {
-              value: 'form',
-              label: 'Form'
-            }]
-          }, {
-            value: 'data',
-            label: 'Data',
-            children: [{
-              value: 'table',
-              label: 'Table'
-            }, {
-              value: 'tag',
-              label: 'Tag'
-            }, {
-              value: 'progress',
-              label: 'Progress'
-            }, {
-              value: 'tree',
-              label: 'Tree'
-            }, {
-              value: 'pagination',
-              label: 'Pagination'
-            }, {
-              value: 'badge',
-              label: 'Badge'
-            }]
-          }, {
-            value: 'notice',
-            label: 'Notice',
-            children: [{
-              value: 'alert',
-              label: 'Alert'
-            }, {
-              value: 'loading',
-              label: 'Loading'
-            }, {
-              value: 'message',
-              label: 'Message'
-            }, {
-              value: 'message-box',
-              label: 'MessageBox'
-            }, {
-              value: 'notification',
-              label: 'Notification'
-            }]
-          }, {
-            value: 'navigation',
-            label: 'Navigation',
-            children: [{
-              value: 'menu',
-              label: 'NavMenu'
-            }, {
-              value: 'tabs',
-              label: 'Tabs'
-            }, {
-              value: 'breadcrumb',
-              label: 'Breadcrumb'
-            }, {
-              value: 'dropdown',
-              label: 'Dropdown'
-            }, {
-              value: 'steps',
-              label: 'Steps'
-            }]
-          }, {
-            value: 'others',
-            label: 'Others',
-            children: [{
-              value: 'dialog',
-              label: 'Dialog'
-            }, {
-              value: 'tooltip',
-              label: 'Tooltip'
-            }, {
-              value: 'popover',
-              label: 'Popover'
-            }, {
-              value: 'card',
-              label: 'Card'
-            }, {
-              value: 'carousel',
-              label: 'Carousel'
-            }, {
-              value: 'collapse',
-              label: 'Collapse'
-            }]
-          }]
-        }, {
-          value: 'resource',
           label: 'KBC',
           children: [{
             value: 'axure',
-            label: 'Axure Components'
+            label: 'ITイノベーション科'
           }, {
             value: 'sketch',
-            label: 'Sketch Templates'
+            label: 'ITエンジニア科'
           }, {
             value: 'docs',
-            label: 'Design Documentation'
+            label: 'ゲームクリエイター科'
+          }, {
+            value: 'docs',
+            label: '情報ビジネス科'
+          }]
+        }, {
+          label: 'その他',
+          children: [{
+            value: 'axure',
+            label: '初心者'
+          }, {
+            value: 'docs',
+            label: '就活'
+          }, {
+            value: 'docs',
+            label: 'KBC'
           }]
         }]
       };

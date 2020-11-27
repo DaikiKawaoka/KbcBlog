@@ -66,10 +66,10 @@
                         </div>
                         <div class="f-info-div">
                           <div>
-                            <span>{{f.name}}</span>
+                            <span class="f-user-name">{{f.name}}</span>
                           </div>
                           <div class="string-out">
-                            {{f.comment.String}}
+                            <span class="f-user-comment">{{f.comment.String}}</span>
                           </div>
                         </div>
                       </div>
@@ -100,10 +100,10 @@
                         </div>
                         <div class="f-info-div">
                           <div>
-                            <span>{{f.name}}</span>
+                            <span class="f-user-name">{{f.name}}</span>
                           </div>
                           <div class="string-out">
-                            {{f.comment.String}}
+                            <span class="f-user-comment">{{f.comment.String}}</span>
                           </div>
                         </div>
                       </div>
@@ -584,6 +584,13 @@ export default {
   width: 35px;
   height: 35px;
   border-radius: 50%;
+}
+.f-user-name{
+  color: #000;
+  font-weight: bold;
+}
+.f-user-comment{
+  font-size: 0.85em;
 }
 .f-info-div{
   margin-left: 10px;
