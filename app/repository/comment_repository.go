@@ -25,7 +25,7 @@ func ArticleCommentListByCursor(articleid int) ([]*model.ArticleComment, error) 
 }
 
 func ArticleCommentCreate(comment *model.ArticleComment) (sql.Result, error) {
-	now := time.Now().In(jst)
+	now := time.Now()
   comment.Created = now.Format("2006/01/02 15:04:05")
   comment.Updated = now.Format("2006/01/02 15:04:05")
   query := `INSERT INTO article_comments (userid, articleid, text, created, updated)
@@ -42,7 +42,7 @@ func ArticleCommentCreate(comment *model.ArticleComment) (sql.Result, error) {
 }
 
 func ArticleCommentUpdate(comment *model.ArticleComment) (sql.Result, error) {
-	now := time.Now().In(jst)
+	now := time.Now()
 	comment.Updated = now.Format("2006/01/02 15:04:05")
 	query := `UPDATE article_comments
 	SET text = :text,
@@ -91,7 +91,7 @@ func QuestionCommentListByCursor(questionId int) ([]*model.QuestionComment, erro
 }
 
 func QuestionCommentCreate(comment *model.QuestionComment) (sql.Result, error) {
-	now := time.Now().In(jst)
+	now := time.Now()
   comment.Created = now.Format("2006/01/02 15:04:05")
   comment.Updated = now.Format("2006/01/02 15:04:05")
   query := `INSERT INTO question_comments (userid, questionid, text, created, updated)
@@ -109,7 +109,7 @@ func QuestionCommentCreate(comment *model.QuestionComment) (sql.Result, error) {
 }
 
 func QuestionCommentUpdate(comment *model.QuestionComment) (sql.Result, error) {
-	now := time.Now().In(jst)
+	now := time.Now()
 	comment.Updated = now.Format("2006/01/02 15:04:05")
 	query := `UPDATE question_comments
 	SET text = :text,

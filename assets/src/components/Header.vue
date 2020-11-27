@@ -56,7 +56,9 @@ export default {
 <style scoped>
 #header{
   height: 60px;
-  background: #2ee002;
+  /* background: #2ee002; */
+  background: #fff;
+  border-bottom: #bbb solid 1px;
 }
 .header-body-main-div{
   display: flex;
@@ -81,7 +83,8 @@ export default {
   cursor: pointer;
 }
 .active{
-  border-bottom: 3px solid #e5ff00;
+  border-bottom: 2px solid #2ee002;
+  border-radius: 2px;
 }
 #header-nav{
   width: 50%;

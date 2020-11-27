@@ -60,7 +60,7 @@ import (
 	}
 
 	func Follow(follow *model.Following) error {
-		now := time.Now().In(jst)
+		now := time.Now()
 		follow.Created = now.Format("2006/01/02 15:04:05")
 		query := `INSERT INTO follows (followerid, followedid, created)
 		VALUES (:followerid, :followedid, :created);`

@@ -14,10 +14,13 @@ func ArticleListByCursor(cursor int) ([]*model.Article, error) {
 		cursor = math.MaxInt32
 	}
 
+
 	// ID の降順に記事データを 10 件取得するクエリ文字列を生成します。
-	query := `SELECT a.id id,a.userid userid,u.name name,a.title title,a.body body,a.created created,a.updated updated
-	FROM articles a,users u
-	WHERE a.id < ? and a.userid = u.id
+	query := `SELECT a.id id,a.userid userid,u.name name,a.title title,a.created created,a.updated updated,COUNT(al.id) likecount
+	FROM articles a inner join users u on a.userid = u.id
+	left join article_likes al on a.id = al.articleid
+	WHERE a.id < ?
+	GROUP BY a.id,a.userid,u.name,a.title,a.created,a.updated
 	ORDER BY a.id desc
 	LIMIT 10`
 
@@ -58,7 +61,7 @@ func ArticleGetByID(id int) (*model.Article, error) {
 // ArticleCreate ...
 func ArticleCreate(article *model.Article) (sql.Result, error) {
   // 現在日時を取得します
-	now := time.Now().In(jst)
+	now := time.Now()
 
   // 構造体に現在日時を設定します。
   article.Created = now.Format("2006/01/02 15:04:05")
@@ -93,7 +96,7 @@ func ArticleCreate(article *model.Article) (sql.Result, error) {
 // ArticleUpdate ...
 func ArticleUpdate(article *model.Article) (sql.Result, error) {
 	// 現在日時を取得します
-	now := time.Now().In(jst)
+	now := time.Now()
 
 	// 構造体に現在日時を設定します。
 	article.Updated = now.Format("2006/01/02 15:04:05")

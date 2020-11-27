@@ -73,7 +73,7 @@
                           </div>
                         </div>
                       </div>
-                      <div class="follow-btn-div">
+                      <div class="follow-btn-div" v-if="f.id !== myUser.id">
                         <!-- フォローボタン -->
                         <el-button size="small" v-if="f.isfollowing" @click="ChangeFollow(f,index,'followers')">
                           <i class="el-icon-user"></i>フォロー中
@@ -107,7 +107,7 @@
                           </div>
                         </div>
                       </div>
-                      <div class="follow-btn-div">
+                      <div class="follow-btn-div" v-if="f.id !== myUser.id">
                         <!-- フォローボタン -->
                         <el-button size="small" v-if="f.isfollowing" @click="ChangeFollow(f,index,'follows')">
                           <i class="el-icon-user"></i>フォロー中
@@ -223,7 +223,7 @@
                   <div class="post-index-username-updated">
                     <i class="el-icon-star-on star-i"></i>
                     <span class="likecount-span">{{article.likecount}}</span>
-                    <p class="post-index-update">{{ article.Updated }}</p>
+                    <p class="post-index-update">{{ article.Updated | moment }}</p>
                   </div>
                 </div>
               </router-link>
@@ -242,7 +242,7 @@
                   <div class="post-index-username-updated">
                     <i class="el-icon-star-on star-i"></i>
                     <span class="likecount-span">{{ question.likecount}}</span>
-                    <p class="post-index-update">{{ question.Updated }}</p>
+                    <p class="post-index-update">{{ question.Updated  | moment }}</p>
                   </div>
                 </div>
               </router-link>
@@ -260,7 +260,7 @@
                     <span class="answer-question-title">「{{answer.question_title}}」</span> <span class="answer-question-title-last">に回答しました。</span>
                     <p class="answer-comment-text"> {{answer.comment_text}} </p>
                   <div class="post-index-username-updated">
-                    <h3 class="post-index-update">{{ answer.comment_created }}</h3>
+                    <h3 class="post-index-update">{{ answer.comment_created | moment }}</h3>
                   </div>
                 </div>
               </router-link>
@@ -278,6 +278,7 @@
 </template>
 
 <script>
+import moment from 'moment'
 import Header from './../components/Header.vue';
 import Footer from './../components/Footer.vue';
 
@@ -352,6 +353,13 @@ export default {
           this.errorNotify();
         }
       })
+  },
+  filters: {
+    moment: function (date) {
+      // locale関数を使って言語を設定すると、日本語で出力される
+      moment.locale( 'ja' );
+      return moment(date).format('YYYY/MM/DD HH:mm');
+    }
   },
   computed: {
   },

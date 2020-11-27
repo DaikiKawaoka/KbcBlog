@@ -2,10 +2,17 @@
   <div id="app">
     <Header :isArticle="true" :isQuestion="false" :user="user"></Header>
     <div class="index-main body-main">
-      <div class="index-menu">
-        <div></div>
-      </div>
+      <Tag></Tag>
       <div class="article-all-div">
+        <div class="article-search-div">
+          <el-input placeholder="キーワード検索" v-model="searchText" suffix-icon="el-icon-search" style="width:200px; margin-left: 30px;"></el-input>
+          <div class="order-div">
+            <span class="order-span-left">並び替え</span>
+            <span class="order-span order-span-color">新着</span>
+            <span class="order-span">人気</span>
+          </div>
+        </div>
+
         <div v-for="article in articles" :key="article.id" class="article-show-div">
           <div class="article-user-icon">
             <router-link v-bind:to="{ name : 'UserShow', params : { id: article.userid }}" class="a-tag">
@@ -18,12 +25,18 @@
             </router-link>
             <div class="article-index-username-updated">
               <router-link v-bind:to="{ name : 'UserShow', params : { id: article.userid }}" class="a-tag">
-                <h3 class="article-index-username">{{ article.name }}</h3>
+                <h3 class="article-index-username">by {{ article.name }}</h3>
               </router-link>
-              <h3 class="article-index-update">投稿日 {{ article.Updated }}</h3>
+              <h3 class="article-index-update"> {{ article.Updated | moment }}</h3>
+              <i class="el-icon-star-on article-star-i"></i>
+              <span class="article-likecount-span">{{article.likecount}}</span>
             </div>
           </div>
         </div>
+
+      </div>
+      <div>
+        <Ranking></Ranking>
       </div>
     </div>
     <Footer></Footer>
@@ -33,7 +46,10 @@
 <script>
 // import axios from "axios";
 import Header from './../components/Header.vue'
-import Footer from './../components/Footer.vue';
+import Footer from './../components/Footer.vue'
+import Tag from './../components/Tag.vue'
+import Ranking from './../components/Ranking.vue'
+import moment from 'moment'
 
 export default {
   name: 'app',
@@ -41,11 +57,22 @@ export default {
     return {
       articles: [],
       user: {},
+      searchText:"",
     }
   },
   components: {
     Header,
     Footer,
+    Tag,
+    Ranking,
+  },
+  filters: {
+    moment: function (date) {
+      // locale関数を使って言語を設定すると、日本語で出力される
+      moment.locale( 'ja' );
+      return moment(date).fromNow();
+      // return moment(date).utc().format('YYYY/MM/DD HH:mm');
+    }
   },
   // createdの中でaxiosを使います。get()の中のURLは、nginx.confで設定してるので、 /api/ になっています。
   created () {
@@ -96,35 +123,39 @@ body {
   display: flex;
   margin-top: 30px;
 }
-.index-menu{
-  width: 300px;
+.article-all-div{
+  width: 500px;
   background-color: #F6F6F4;
 }
-.article-all-div{
-  width: 600px;
-  background-color: #fff;
-}
 .article-show-div{
-  padding-left: 20px;
+  background-color: #FFF;
+  padding-left: 10px;
   border: solid 1px #eee;
+  border-radius: 6px;
+  margin-bottom: 5px;
   display: flex;
+}
+.article-show-div:hover {
+  transition: 0.15s ;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
+  transform: translateY(-0.1875em);
 }
 .article-user-icon{
   margin-top: 25px;
   background-color: #ccc;
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
 }
 .article-index-body{
-  margin-left: 20px;
+  margin-left: 10px;
 }
-.article-index-username-updated{
+.article-index-username-updated,.article-search-div{
   display: flex;
 }
 .article-title-index{
-  font-size: 20px;
-  width: 500px;
+  font-size: 1.1em;
+  width: 440px;
   text-align: left;
   margin-bottom: 0;
 }
@@ -139,5 +170,37 @@ body {
   color: #000;
   text-decoration: none;
   cursor: pointer;
+}
+.article-search-div{
+  background-color: #F6F6F4;
+  padding-bottom: 8px;
+}
+.order-div{
+  padding-top: 20px;
+}
+.order-span{
+  margin-left: 10px;
+  cursor: pointer;
+}
+.order-span-left{
+  margin-left: 100px;
+  color: #777;
+}
+.order-span:hover{
+  opacity: 0.7;
+}
+.order-span-color{
+  color: #2ee002;
+}
+.article-star-i{
+  color: orange;
+  margin-top: 13px;
+  margin-left: 20px;
+  font-size: 1.3em;
+}
+.article-likecount-span{
+  margin-top: 15px;
+  font-size: 0.8em;
+  color: #777;
 }
 </style>

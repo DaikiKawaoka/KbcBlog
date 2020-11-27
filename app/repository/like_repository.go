@@ -38,7 +38,7 @@ func GetMyLikePost(articleId int) (int,error) {
 
 func CreateArticleLike(like *model.ArticleLike) error {
 
-	now := time.Now().In(jst)
+	now := time.Now()
   like.Created = now.Format("2006/01/02 15:04:05")
 
   query := `INSERT INTO article_likes (userid, articleid, created)
@@ -90,7 +90,7 @@ func GetQuestionLikeCount(questionId int) (int,error) {
 }
 
 func CreateQuestionLike(like *model.QuestionLike) error {
-	now := time.Now().In(jst)
+	now := time.Now()
   like.Created = now.Format("2006/01/02 15:04:05")
 
   query := `INSERT INTO question_likes (userid, questionid, created)
@@ -142,7 +142,7 @@ func GetArticleCommentLikeCount(articleCommentId int) (int,error) {
 
 func CreateArticleCommentLike(like *model.ArticleCommentLike) error {
 
-	now := time.Now().In(jst)
+	now := time.Now()
   like.Created = now.Format("2006/01/02 15:04:05")
 
   query := `INSERT INTO article_comment_likes (userid, article_commentid, created)
@@ -193,7 +193,7 @@ func GetQuestionCommentLikeCount(questionCommentId int) (int,error) {
 }
 
 func CreateQuestionCommentLike(like *model.QuestionCommentLike) error {
-	now := time.Now().In(jst)
+	now := time.Now()
   like.Created = now.Format("2006/01/02 15:04:05")
 
   query := `INSERT INTO question_comment_likes (userid, question_commentid, created)

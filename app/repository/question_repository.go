@@ -37,7 +37,7 @@ func QuestionGetByID(id int) (*model.Question, error) {
 }
 
 func QuestionCreate(question *model.Question) (sql.Result, error) {
-	now := time.Now().In(jst)
+	now := time.Now()
   question.Created = now.Format("2006/01/02 15:04:05")
   question.Updated = now.Format("2006/01/02 15:04:05")
   query := `INSERT INTO questions (userid,title, body, created, updated)
@@ -55,7 +55,7 @@ func QuestionCreate(question *model.Question) (sql.Result, error) {
 
 func QuestionUpdate(question *model.Question) (sql.Result, error) {
 	// 現在日時を取得します
-	now := time.Now().In(jst)
+	now := time.Now()
 
 	// 構造体に現在日時を設定します。
 	question.Updated = now.Format("2006/01/02 15:04:05")

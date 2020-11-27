@@ -20,7 +20,7 @@
               <router-link v-bind:to="{ name : 'UserShow', params : { id: question.userid }}" class="a-tag">
                 <h3 class="article-index-username">{{ question.name }}</h3>
               </router-link>
-              <h3 class="article-index-update">投稿日 {{ question.Updated }}</h3>
+              <h3 class="article-index-update">投稿日 {{ question.Updated | moment }}</h3>
             </div>
           </div>
         </div>
@@ -32,6 +32,7 @@
 
 <script>
 // import axios from "axios";
+import moment from 'moment'
 import Header from './../components/Header.vue'
 import Footer from './../components/Footer.vue';
 
@@ -66,6 +67,14 @@ export default {
         }
       })
   },
+  filters: {
+    moment: function (date) {
+      // locale関数を使って言語を設定すると、日本語で出力される
+      moment.locale( 'ja' );
+      return moment(date).fromNow();
+      // return moment(date).utc().format('YYYY/MM/DD HH:mm');
+    }
+  },
   methods:{
     errorNotify() {
       this.$notify.error({
@@ -90,7 +99,7 @@ body {
   margin-top: 30px;
 }
 .index-menu{
-  width: 300px;
+  width: 150px;
   background-color: #F6F6F4;
 }
 .question-all-div{

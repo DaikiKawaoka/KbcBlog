@@ -10,8 +10,8 @@
           </div>
           <div class="comment-header-div">
             <div class="article-create-update-date-div">
-              <p class="article-create-date"> 作成日 {{ article.Created }}</p>
-              <p class="article-create-date"> 更新日 {{ article.Updated }}</p>
+              <p class="article-create-date"> 作成日 {{ article.Created | moment }}</p>
+              <p class="article-create-date"> 更新日 {{ article.Updated | moment }}</p>
             </div>
             <span v-if="article.userid === user.id" class="dropdown-span">
               <el-dropdown>
@@ -60,7 +60,7 @@
             </div>
             <div class="comment-header-div">
               <div>
-                <p class="comment-create-date">投稿日 {{c.Created}}</p>
+                <p class="comment-create-date">投稿日 {{c.Created | moment}}</p>
               </div>
               <span v-if="c.userid === user.id" class="dropdown-span">
                 <el-dropdown>
@@ -102,6 +102,7 @@
 </template>
 
 <script>
+import moment from 'moment'
 import Header from './../components/Header.vue'
 import Footer from './../components/Footer.vue';
 import CommentForm from './../components/CommentForm.vue'
@@ -166,6 +167,13 @@ export default {
           return hljs.highlightAuto(code, [lang]).value
         }
       });
+    }
+  },
+  filters: {
+    moment: function (date) {
+      // locale関数を使って言語を設定すると、日本語で出力される
+      moment.locale( 'ja' );
+      return moment(date).format('YYYY/MM/DD HH:mm');
     }
   },
   computed: {
