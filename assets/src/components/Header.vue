@@ -57,7 +57,7 @@ export default {
 #header{
   height: 60px;
   /* background: #2ee002; */
-  background: #fff;
+  background: #eee;
   border-bottom: #bbb solid 1px;
 }
 .header-body-main-div{

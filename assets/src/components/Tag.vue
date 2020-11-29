@@ -247,6 +247,7 @@
 .tag-all{
   width: 210px;
   background-color: #F6F6F4;
+  /* background-color: #15202b; */
 }
 .tag-header{
   margin-top: 20px;

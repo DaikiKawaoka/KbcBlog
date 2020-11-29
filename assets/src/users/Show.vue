@@ -109,7 +109,7 @@
                       </div>
                       <div class="follow-btn-div" v-if="f.id !== myUser.id">
                         <!-- フォローボタン -->
-                        <el-button size="small" v-if="f.isfollowing" @click="ChangeFollow(f,index,'follows')">
+                        <el-button size="small" v-if="f.isfollowing" @click="ChangeFollow(f,index,'followers')">
                           <i class="el-icon-user"></i>フォロー中
                         </el-button>
                         <el-button type="primary" size="small" v-else @click="ChangeFollow(f,index,'follows')">

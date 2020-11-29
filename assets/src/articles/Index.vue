@@ -148,6 +148,7 @@ body {
   color: #2c3e50;
   margin: 0 auto 0 auto;
   background-color: #F6F6F4;
+  /* background-color: #15202b; */
 }
 .body-main{
   width: 1000px;
@@ -160,6 +161,7 @@ body {
 .article-all-div{
   width: 500px;
   background-color: #F6F6F4;
+  /* background-color: #15202b; */
 }
 .article-show-div{
   background-color: #FFF;
@@ -207,6 +209,7 @@ body {
 }
 .article-search-div{
   background-color: #F6F6F4;
+  /* background-color: #15202b; */
   padding-bottom: 8px;
 }
 .order-div{
