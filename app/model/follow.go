@@ -21,7 +21,6 @@ type Follow struct {
 
 type FUser struct {
 	ID          int              `db:"id" json:"id"`
-	KBC_mail    string           `db:"mail" json:"KBC_mail"`
 	Name        string           `db:"name" json:"name" validate:"required,min=4,max=20"`
 	Comment     sql.NullString   `db:"comment" json:"comment" validate:"max=150"`
 	IsFollowing bool             `db:"isfollowing" json:"isfollowing"`

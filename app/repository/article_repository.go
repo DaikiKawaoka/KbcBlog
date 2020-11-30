@@ -32,7 +32,7 @@ func ArticleListByCursor(cursor int,c string) ([]*model.Article, error) {
 		left join article_likes al on a.id = al.articleid
 		WHERE a.id < ?
 		GROUP BY a.id,a.userid,u.name,a.title,a.created,a.updated
-		ORDER BY likecount desc
+		ORDER BY likecount desc , a.id desc
 		LIMIT 10`
 	}
 

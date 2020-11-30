@@ -59,26 +59,28 @@
                 <ul class="dialog-ul">
                   <li class="dialog-li" v-for="(f,index) in this.followers" :key="f.id">
                     <div class="dialog-main">
-                      <div class="dialog-main">
-                        <div>
-                          <!-- アイコン -->
-                          <div class="f-user-icon"></div>
-                        </div>
-                        <div class="f-info-div">
+                      <router-link v-bind:to="{ name : 'UserShow', params : { id: f.id }}" class="a-tag">
+                        <div class="dialog-main">
                           <div>
-                            <span class="f-user-name">{{f.name}}</span>
+                            <!-- アイコン -->
+                            <div class="f-user-icon"></div>
                           </div>
-                          <div class="string-out">
-                            <span class="f-user-comment">{{f.comment.String}}</span>
+                          <div class="f-info-div">
+                            <div>
+                              <span class="f-user-name">{{f.name}}</span>
+                            </div>
+                            <div class="string-out">
+                              <span class="f-user-comment">{{f.comment.String}}</span>
+                            </div>
                           </div>
                         </div>
-                      </div>
+                      </router-link>
                       <div class="follow-btn-div" v-if="f.id !== myUser.id">
                         <!-- フォローボタン -->
-                        <el-button size="small" v-if="f.isfollowing" @click="ChangeFollow(f,index,'followers')">
+                        <el-button size="small" v-if="f.isfollowing" @click="ChangeFollow(f,index,'followers','unfo')">
                           <i class="el-icon-user"></i>フォロー中
                         </el-button>
-                        <el-button type="primary" size="small" v-else @click="ChangeFollow(f,index,'followers')">
+                        <el-button type="primary" size="small" v-else @click="ChangeFollow(f,index,'followers','fo')">
                           <i class="el-icon-user"></i>フォロー
                         </el-button>
                       </div>
@@ -93,26 +95,28 @@
                 <ul class="dialog-ul">
                   <li class="dialog-li" v-for="(f,index) in this.follows" :key="f.id">
                     <div class="dialog-main">
-                      <div class="dialog-main">
-                        <div>
-                          <!-- アイコン -->
-                          <div class="f-user-icon"></div>
-                        </div>
-                        <div class="f-info-div">
+                      <router-link v-bind:to="{ name : 'UserShow', params : { id: f.id }}" class="a-tag">
+                        <div class="dialog-main">
                           <div>
-                            <span class="f-user-name">{{f.name}}</span>
+                            <!-- アイコン -->
+                            <div class="f-user-icon"></div>
                           </div>
-                          <div class="string-out">
-                            <span class="f-user-comment">{{f.comment.String}}</span>
+                          <div class="f-info-div">
+                            <div>
+                              <span class="f-user-name">{{f.name}}</span>
+                            </div>
+                            <div class="string-out">
+                              <span class="f-user-comment">{{f.comment.String}}</span>
+                            </div>
                           </div>
                         </div>
-                      </div>
+                      </router-link>
                       <div class="follow-btn-div" v-if="f.id !== myUser.id">
                         <!-- フォローボタン -->
-                        <el-button size="small" v-if="f.isfollowing" @click="ChangeFollow(f,index,'followers')">
+                        <el-button size="small" v-if="f.isfollowing" @click="ChangeFollow(f,index,'follows','unfo')">
                           <i class="el-icon-user"></i>フォロー中
                         </el-button>
-                        <el-button type="primary" size="small" v-else @click="ChangeFollow(f,index,'follows')">
+                        <el-button type="primary" size="small" v-else @click="ChangeFollow(f,index,'follows','fo')">
                           <i class="el-icon-user"></i>フォロー
                         </el-button>
                       </div>
@@ -344,6 +348,9 @@ export default {
         this.follow = response.data.Follow
         this.follows = response.data.Follows
         this.followers = response.data.Followers
+        if(this.followers === null){
+          this.followers = [];
+        }
         // 文字列のlangsを配列に変換
         this.langarray = this.user.languages.String.split(',');
       })
@@ -375,8 +382,15 @@ export default {
         .then(response => {
           this.follow.isfollow = !this.follow.isfollow;
           if(this.follow.isfollow === false){
+            const w = this.followers.findIndex(item => item.id === this.myUser.id)
+            if(w !== -1){
+              //ユーザのフォロワー配列から自分を削除
+              this.followers.splice(w, 1);
+            }
             this.follow.followedCount--;
           }else{
+            const user={id: this.myUser.id,comment:this.myUser.comment, isfollowing: true, name: this.myUser.name}
+            this.followers.push(user)
             this.follow.followedCount++;
           }
           console.log(response)
@@ -429,7 +443,7 @@ export default {
       });
     },
 
-    ChangeFollow(f,index,c){
+    ChangeFollow(f,index,c,c2){
       this.$axios
         .post(`http://localhost/api/restricted/Users/${f.id}/Follow`,f.id,{
           headers: {
@@ -437,34 +451,48 @@ export default {
           },
         })
         .then(() => {
-          if(c === "followers"){
-            //フォロワーリストのボタンが押された時
-            //フォローフォロワーボタンの切り替え
-            this.followers[index].isfollowing = !this.followers[index].isfollowing;
-            const w = this.follows.findIndex(item => item.id === this.followers[index].id)
-            if(w !== -1){
-              this.follows[w].isfollowing = !this.follows[w].isfollowing
-            }else{
-              //フォロワーリストから初めてフォローボタンを押した時に自分のフォローリストに追加処理
-              this.follows.push(f)
-            }
-            // followカウントの変更
-            if(this.followers[index].isfollowing === false){
-              this.follow.followerCount--;
-            }else{
-              this.follow.followerCount++;
+          if(this.user.id === this.myUser.id){
+            if(c === "followers"){
+              if(c2 === 'fo'){
+                this.followers[index].isfollowing = true;
+                const w = this.follows.findIndex(item => item.id === this.followers[index].id)
+                if(w !== -1){
+                  this.follows[w].isfollowing = true
+                }else{
+                  //フォロワーリストから初めてフォローボタンを押した時に自分のフォローリストに追加処理
+                  this.follows.push(f)
+                }
+                this.follow.followerCount++;
+              }else{
+                this.followers[index].isfollowing = false;
+                const w = this.follows.findIndex(item => item.id === this.followers[index].id)
+                if(w !== -1){
+                  this.follows[w].isfollowing = false
+                }
+                this.follow.followerCount--;
+              }
+            }else{ // フォローリストのボタン
+              if(c2 === "fo"){
+                this.follows[index].isfollowing = true;
+                const w = this.followers.findIndex(item => item.id === this.follows[index].id)
+                if(w !== -1){
+                  this.followers[w].isfollowing = true;
+                }
+                this.follow.followerCount++;
+              }else{
+                this.follows[index].isfollowing = false;
+                const w = this.followers.findIndex(item => item.id === this.follows[index].id)
+                if(w !== -1){
+                  this.followers[w].isfollowing = false
+                }
+                this.follow.followerCount--;
+              }
             }
           }else{
-            //フォローリストのボタンが押された時
-            this.follows[index].isfollowing = !this.follows[index].isfollowing;
-            const w = this.followers.findIndex(item => item.id === this.follows[index].id)
-            if(w !== -1){
-              this.followers[w].isfollowing = !this.followers[w].isfollowing
-            }
-            if(this.follows[index].isfollowing === false){
-              this.follow.followerCount--;
+            if(c === "followers"){
+              this.followers[index].isfollowing = !this.followers[index].isfollowing;
             }else{
-              this.follow.followerCount++;
+              this.follows[index].isfollowing = !this.follows[index].isfollowing;
             }
           }
         })

@@ -15,11 +15,12 @@ import QuestionIndex from './questions/Index.vue'
 import QuestionShow from './questions/Show.vue'
 import QuestionEdit from './questions/Edit.vue'
 import QuestionNew from './questions/New.vue'
-import LoginPage from './sessions/Login.vue'
+import LoginPage from './sessions/Login'
 import UserNew from './users/New'
 import UserShow from './users/Show'
 import UserEdit from './users/Edit'
 import PassEdit from './users/PassEdit'
+import NotFound from './components/NotFound'
 
 const router = new VueRouter({
   mode: 'history',
@@ -91,6 +92,9 @@ const router = new VueRouter({
       path: '/Users/:id(\\d+)/password/edit',
       name: 'PassEdit',
       component: PassEdit
+    },
+    {
+      path: '*', component: NotFound
     },
   ]
 })

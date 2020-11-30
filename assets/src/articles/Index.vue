@@ -74,7 +74,7 @@ export default {
   filters: {
     moment: function (date) {
       // locale関数を使って言語を設定すると、日本語で出力される
-      moment.locale( 'ja' );
+      // moment.locale( 'ja' );
       return moment(date).fromNow();
       //return moment(date).utc().format('YYYY/MM/DD');
     },
@@ -122,8 +122,14 @@ export default {
       },
     })
       .then(response => {
-        this.orderNew = !this.orderNew;
-        this.orderLike = !this.orderLike;
+        if(c === "new"){
+          this.orderNew = true;
+          this.orderLike = false;
+        }else{
+          this.orderNew = false;
+          this.orderLike = true;
+        }
+
         this.articles = response.data.Articles
       })
       .catch(error => {
