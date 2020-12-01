@@ -22,6 +22,8 @@
       </el-input>
     </el-form-item>
 
+    <ArticleFormTag></ArticleFormTag>
+
     <el-row>
       <el-col :span="2"><div class="grid-content"></div></el-col>
       <el-col :span="4"><div class="grid-content"></div></el-col>
@@ -68,7 +70,7 @@
 </template>
 
 <script>
-
+import ArticleFormTag from './ArticleFormTag'
 import marked from 'marked';
 import hljs from 'highlight.js';
 import 'highlight.js/styles/github.css';
@@ -84,6 +86,9 @@ export default {
     return{
       isActive: false,
     }
+  },
+  components: {
+    ArticleFormTag,
   },
   created: function () {
     marked.setOptions({

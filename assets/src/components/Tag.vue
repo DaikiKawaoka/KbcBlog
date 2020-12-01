@@ -8,7 +8,7 @@
     </ul>
     <span>タグ</span>
     <div>
-      <el-cascader :options="options" :show-all-levels="false" filterable></el-cascader>
+      <el-cascader :options="options" :show-all-levels="false" filterable :props="{ checkStrictly: true,expandTrigger:'hover' }" ></el-cascader>
     </div>
   </div>
 </template>
