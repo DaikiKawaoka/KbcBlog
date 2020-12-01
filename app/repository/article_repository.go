@@ -18,7 +18,7 @@ func ArticleListByCursor(cursor int,c string) ([]*model.Article, error) {
 
 	if c == "new"{
 		// IDの降順に記事データを 10 件取得
-		query = `SELECT a.id id,a.userid userid,u.name name,a.title title,a.created created,a.updated updated,COUNT(al.id) likecount
+		query = `SELECT a.id id,a.userid userid,u.name name,a.title title,a.tag tag,a.created created,a.updated updated,COUNT(al.id) likecount
 		FROM articles a inner join users u on a.userid = u.id
 		left join article_likes al on a.id = al.articleid
 		WHERE a.id < ?
@@ -27,7 +27,7 @@ func ArticleListByCursor(cursor int,c string) ([]*model.Article, error) {
 		LIMIT 10`
 	}else{
 		// いいね数の降順に記事データを 10 件取得
-		query = `SELECT a.id id,a.userid userid,u.name name,a.title title,a.created created,a.updated updated,COUNT(al.id) likecount
+		query = `SELECT a.id id,a.userid userid,u.name name,a.title title,a.tag tag,a.created created,a.updated updated,COUNT(al.id) likecount
 		FROM articles a inner join users u on a.userid = u.id
 		left join article_likes al on a.id = al.articleid
 		WHERE a.id < ?
@@ -51,7 +51,7 @@ func ArticleListByCursor(cursor int,c string) ([]*model.Article, error) {
 // ArticleGetByID ...
 func ArticleGetByID(id int) (*model.Article, error) {
 	// クエリ文字列を生成します。
-	query := `SELECT a.id id,a.userid userid,u.name name,a.title title,a.body body,a.created created,a.updated updated
+	query := `SELECT a.id id,a.userid userid,u.name name,a.title title,a.body body,a.tag tag,a.created created,a.updated updated
 	FROM articles a,users u
 	WHERE a.id = ? and a.userid = u.id;`
 
@@ -80,8 +80,8 @@ func ArticleCreate(article *model.Article) (sql.Result, error) {
   article.Updated = now.Format("2006/01/02 15:04:05")
 
   // クエリ文字列を生成します。
-  query := `INSERT INTO articles (userid,title, body, created, updated)
-  VALUES (:userid, :title, :body, :created, :updated);`
+  query := `INSERT INTO articles (userid,title, body, tag, created, updated)
+  VALUES (:userid, :title, :body, :tag, :created, :updated);`
 
   // トランザクションを開始します。
   tx := db.MustBegin()

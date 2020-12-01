@@ -11,6 +11,7 @@ type Article struct {
 	UserName string   `db:"name" json:"name"`
 	Title   string    `db:"title" json:"title" validate:"required,max=50"`
 	Body    string    `db:"body" json:"body" validate:"required"`
+	Tag    string     `db:"tag" json:"tag" validate:"required"`
 	LikeCount int     `db:"likecount" json:"likecount"`
 	Created string `db:"created"`
 	Updated string `db:"updated"`
@@ -38,6 +39,8 @@ func (a *Article) ValidationErrors(err error) []string {
 			}
 		case "Body":
 			message = "本文を入力してください。"
+		case "Tag":
+			message = "タグが1つも選択されていません。"
 		}
 
 		// メッセージをスライスに追加します。

@@ -22,7 +22,7 @@
       </el-input>
     </el-form-item>
 
-    <ArticleFormTag></ArticleFormTag>
+    <ArticleFormTag :article="article"></ArticleFormTag>
 
     <el-row>
       <el-col :span="2"><div class="grid-content"></div></el-col>

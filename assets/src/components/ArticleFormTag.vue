@@ -4,11 +4,11 @@
     <div class="select-div">
       <el-select
         style="width: 400px;"
-        v-model="langarray"
+        v-model="tagArray"
         v-on:change="arrayChangeString"
         multiple
         size="large"
-        :multiple-limit=5
+        :multiple-limit=4
         :collapse-tags="false"
         no-match-text="一致するタグがありません"
         filterable
@@ -30,9 +30,12 @@
 
 <script>
   export default {
+    props: {
+      article: Object,
+    },
     data() {
       return {
-        langarray: [],
+        tagArray: [],
         options: [
           {
             value: 'プログラミング',
@@ -253,9 +256,18 @@
           }]
       };
     },
+    beforeUpdate() {
+      // 文字列のlangsを配列に変換
+      this.tagArray = this.article.tag.split(',');
+      if(this.tagArray[0].length == 0){
+        this.tagArray = [];
+      }
+      console.log('a')
+    },
     methods: {
       arrayChangeString(){
-        // this.user.languages.String = this.langarray.join(',');
+        this.article.tag = this.tagArray.join(',');
+        console.log(this.article.tag)
       },
     },
   };

@@ -7,14 +7,15 @@ import (
 
 // 投稿数を取得
 func PostCount(user *model.User) error{
-	query := `SELECT COUNT(*) AS PostCount
-						FROM
-						(
-							SELECT * FROM articles WHERE userid = ?
-							UNION
-							SELECT * FROM questions WHERE userid = ?
-							) AS posttable`;
-	if err := db.Get(user, query, user.ID, user.ID); err != nil {
+	// query := `SELECT COUNT(*) AS PostCount
+	// 					FROM
+	// 					(
+	// 						SELECT * FROM articles WHERE userid = ?
+	// 						UNION
+	// 						SELECT * FROM questions WHERE userid = ?
+	// 						) AS posttable`;
+	query := `SELECT COUNT(*) AS PostCount FROM articles WHERE userid = ?`;
+	if err := db.Get(user, query, user.ID); err != nil {
 		return err
 	}
 	return nil

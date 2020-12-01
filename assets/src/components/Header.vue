@@ -57,7 +57,7 @@ export default {
 #header{
   height: 60px;
   /* background: #2ee002; */
-  background: #eee;
+  background: #24292e;
   border-bottom: #bbb solid 1px;
 }
 .header-body-main-div{
@@ -71,7 +71,7 @@ export default {
 .title{
   line-height: 60px;
   margin: 0;
-  color: #000;
+  color: #fff;
   text-decoration: none;
   cursor: pointer;
 }
@@ -79,7 +79,7 @@ export default {
   margin-left: 30px;
   margin-bottom: 10px;
   padding: 0 12px 7px 12px;
-  color: #606266;
+  color: #fff;
   cursor: pointer;
 }
 .active{
@@ -107,7 +107,7 @@ export default {
 }
 .el-dropdown-link {
   cursor: pointer;
-  color: #606566;
+  color: #fff;
 }
 .el-icon-arrow-down {
   font-size: 12px;

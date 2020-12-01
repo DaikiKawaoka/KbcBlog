@@ -24,6 +24,7 @@ export default {
         userid: 0,
         title: "",
         body: "",
+        tag: "",
       },
       errors: [],
       create: true,

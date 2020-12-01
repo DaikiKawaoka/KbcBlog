@@ -20,6 +20,10 @@
             </router-link>
           </div>
           <div class="article-index-body">
+            <div class="article-tag-div">
+              <i class="el-icon-collection-tag tag-icon"></i>
+              <span class="article-tag no-magin">{{ article.tag }}</span>
+            </div>
             <router-link v-bind:to="{ name : 'ArticleShow', params : { id: article.id }}" class="a-tag">
               <h2 class="article-title-index"> {{article.title}} </h2>
             </router-link>
@@ -80,7 +84,6 @@ export default {
     },
     moment2: function (date) {
       // locale関数を使って言語を設定すると、日本語で出力される
-      moment.locale( 'ja' );
       return moment(date).utc().format('YYYY/MM/DD');
     }
   },
@@ -199,7 +202,7 @@ body {
   font-size: 1.1em;
   width: 440px;
   text-align: left;
-  margin-bottom: 0;
+  margin: 0;
 }
 .article-index-username,.article-index-update{
   font-size: 13px;
@@ -245,5 +248,21 @@ body {
   margin-top: 15px;
   font-size: 0.8em;
   color: #777;
+}
+.no-magin{
+  margin: 0;
+}
+.article-tag-div{
+  display: flex;
+}
+.tag-icon{
+  color: blue;
+  margin-top: 2px;
+  font-size: 0.6em;
+}
+.article-tag{
+  font-size: 0.6em;
+  color: #999;
+  width: 440px;
 }
 </style>

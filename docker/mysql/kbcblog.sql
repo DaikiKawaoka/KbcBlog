@@ -20,6 +20,7 @@ CREATE TABLE IF NOT EXISTS `articles` (
   `userid` int NOT NULL,
   `title` varchar(100) NOT NULL,
   `body` mediumtext NOT NULL,
+  `tag`  varchar(120) NOT NULL,
   `created` datetime,
   `updated` datetime,
   PRIMARY KEY(`id`),
