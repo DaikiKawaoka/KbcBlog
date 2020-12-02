@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <Header :isArticle="true" :isQuestion="false" :user="user"></Header>
-    <Article-form :article="article" :user="user" :errors="errors" :create="create" @submit="updateArticle" @cancell="goHome"></Article-form>
+    <Article-form :article="article" :user="user" :errors="errors" :create="create" @submit="updateArticle" @cancell="goHome" :tagArray="tagArray"></Article-form>
     <Footer></Footer>
   </div>
 </template>
@@ -19,6 +19,7 @@ export default {
       article : {},
       errors: [],
       create: false,
+      tagArray: [],
     }
   },
   components: {
@@ -36,6 +37,14 @@ export default {
       .then(response => {
         this.user = response.data.user
         this.article = response.data.Article
+
+        // 文字列のlangsを配列に変換
+      const w = this.article.tag;
+      this.tagArray = w.split(',');
+      if(this.tagArray[0].length == 0){
+        this.tagArray = [];
+      }
+
         if(this.user.id != this.article.userid){
           this.$router.push({ path: "/" });
         }

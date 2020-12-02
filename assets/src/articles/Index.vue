@@ -89,9 +89,13 @@ export default {
   },
   // createdの中でaxiosを使います。get()の中のURLは、nginx.confで設定してるので、 /api/ になっています。
   created () {
+    const jst = this.$cookies.get("JWT");
+    if(jst === null){
+      this.$router.push({ path: "/login" });
+    }
     this.$axios.get('http://localhost/api/restricted/Articles',{
       headers: {
-        Authorization: `Bearer ${this.$cookies.get("JWT")}`
+        Authorization: `Bearer ${jst}`
       },
     })
       .then(response => {

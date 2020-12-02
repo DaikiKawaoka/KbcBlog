@@ -117,7 +117,8 @@ func ArticleUpdate(article *model.Article) (sql.Result, error) {
 	query := `UPDATE articles
 	SET title = :title,
 			body = :body,
-			updated = :updated
+			updated = :updated,
+			tag  = :tag
 	WHERE id = :id;`
 
 	// トランザクションを開始します。

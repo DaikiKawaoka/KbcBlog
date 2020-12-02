@@ -63,7 +63,7 @@ export default {
         .post('http://localhost/api/Login',{password: this.password, KBC_mail: this.KBC_mail})
         .then(response => {
           let token = response.data.token;
-          this.$cookies.set('JWT',token,"6h");
+          this.$cookies.set('JWT',token,"10000h");
           this.$router.push({ path: "/" });
         })
         .catch(error => {

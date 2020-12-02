@@ -32,10 +32,11 @@
   export default {
     props: {
       article: Object,
+      tagArray: Array,
     },
     data() {
       return {
-        tagArray: [],
+        tagArray2: [],
         options: [
           {
             value: 'プログラミング',
@@ -256,17 +257,20 @@
           }]
       };
     },
-    beforeUpdate() {
-      // 文字列のlangsを配列に変換
-      this.tagArray = this.article.tag.split(',');
-      if(this.tagArray[0].length == 0){
-        this.tagArray = [];
-      }
-      console.log('a')
+    mounted(){
+      this.tagArray2 = this.tagArray
     },
+    beforeUpdate(){
+      this.tagArray2 = this.article.tag.split(',');
+      if(this.tagArray2[0].length == 0){
+        this.tagArray2 = [];
+      }
+      console.log(this.tagArray2)
+      console.log(this.article)
+  },
     methods: {
       arrayChangeString(){
-        this.article.tag = this.tagArray.join(',');
+        this.article.tag = this.tagArray2.join(',');
         console.log(this.article.tag)
       },
     },
