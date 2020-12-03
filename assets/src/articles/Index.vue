@@ -2,7 +2,7 @@
   <div id="app">
     <Header :isArticle="true" :isQuestion="false" :user="user"></Header>
     <div class="index-main body-main">
-      <Tag></Tag>
+      <Tag @scopetag="scopetag" :tag="tag"></Tag>
       <div class="article-all-div">
         <div class="article-search-div">
           <el-input placeholder="キーワード検索" v-model="searchText" suffix-icon="el-icon-search" style="width:200px; margin-left: 30px;"></el-input>
@@ -65,6 +65,8 @@ export default {
       likeRanking: [],
       postRanking: [],
       searchText:"",
+      tag: "",
+      order: "new",
       orderNew: true,
       orderLike: false,
     }
@@ -118,11 +120,13 @@ export default {
         message: 'あなたのセッションはタイムアウトしました。再度ログインしてください。'
       });
     },
+
     articleOrder(c) {
-      this.$axios.get('http://localhost/api/restricted/Articles/LikeOrder', {
+      this.$axios.get('http://localhost/api/restricted/Articles/scope', {
       params: {
         // ここにクエリパラメータを指定する
-        order: c
+        order: c,
+        tag: this.tag
       },
       headers: {
         Authorization: `Bearer ${this.$cookies.get("JWT")}`
@@ -130,13 +134,14 @@ export default {
     })
       .then(response => {
         if(c === "new"){
+          this.order = "new"
           this.orderNew = true;
           this.orderLike = false;
         }else{
+          this.order = "like"
           this.orderNew = false;
           this.orderLike = true;
         }
-
         this.articles = response.data.Articles
       })
       .catch(error => {
@@ -146,7 +151,29 @@ export default {
         }
       })
     },
-  }
+
+    scopetag() {
+      this.$axios.get('http://localhost/api/restricted/Articles/scope', {
+      params: {
+        order: this.order,
+        tag: this.tag
+      },
+      headers: {
+        Authorization: `Bearer ${this.$cookies.get("JWT")}`
+      },
+    })
+      .then(response => {
+        this.articles = response.data.Articles
+        console.log("スコープしました"+this.tag+this.order)
+      })
+      .catch(error => {
+        if(error.response.status == 401){
+          this.$router.push({ path: "/login" });
+          this.errorNotify();
+        }
+      })
+    },
+  },
 }
 </script>
 

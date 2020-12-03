@@ -123,220 +123,199 @@ export default {
       tagArray: [],
         options: [
           {
-            value: 'プログラミング',
+            value: ' プログラミング ',
             label: 'プログラミング'
           }, {
-            value: 'プログラミング言語',
-            label: 'プログラミング言語',
+            value: ' 言語 ',
+            label: '言語',
           }, {
-            value: 'HTML',
+            value: ' HTML ',
             label: 'HTML'
           }, {
-            value: 'CSS',
+            value: ' CSS ',
             label: 'CSS'
           }, {
-            value: 'Java',
+            value: ' Java ',
             label: 'Java'
           }, {
-            value: 'Python',
+            value: ' Python ',
             label: 'Python'
           }, {
-            value: 'JavaScript',
+            value: ' JavaScript ',
             label: 'JavaScript'
           }, {
-            value: 'Node.js',
+            value: ' Node.js ',
             label: 'Node.js'
           }, {
-            value: 'C/C++',
+            value: ' C/C++ ',
             label: 'C/C++'
           }, {
-            value: 'C#',
+            value: ' C# ',
             label: 'C#'
           }, {
-            value: 'SQL',
+            value: ' SQL ',
             label: 'SQL'
           }, {
-            value: 'PHP',
+            value: ' PHP ',
             label: 'PHP'
           }, {
-            value: 'Ruby',
+            value: ' Ruby ',
             label: 'Ruby'
           }, {
-            value: 'Rust',
-            label: 'Rust'
-          }, {
-            value: 'Go',
+            value: ' Go ',
             label: 'Go'
           }, {
-            value: 'TypeScript',
+            value: ' TypeScript ',
             label: 'TypeScript'
           }, {
-            value: 'R',
-            label: 'R'
-          }, {
-            value: 'Perl',
-            label: 'Perl'
-          }, {
-            value: 'Kotlin',
+            value: ' Kotlin ',
             label: 'Kotlin'
           }, {
-            value: 'Swift',
+            value: ' Swift ',
             label: 'Swift'
           },{
-            value: 'VB',
-            label: 'VB'
-          },{
-            value: 'VBA',
-            label: 'VBA'
-          },{
-            value: 'COBOL',
-            label: 'COBOL'
-          }, {
-            value: 'フレームワーク',
+            value: ' フレームワーク ',
             label: 'フレームワーク',
           } ,{
-            value: 'Ruby on Rails',
-            label: 'Ruby on Rails'
+            value: ' Rails ',
+            label: 'Rails'
           }, {
-            value: 'Vue.js',
+            value: ' Vue.js ',
             label: 'Vue.js'
           }, {
-            value: 'React',
+            value: ' React ',
             label: 'React'
           }, {
-            value: 'AngularJS',
+            value: ' AngularJS ',
             label: 'AngularJS'
           }, {
-            value: 'Spring Framework',
+            value: ' Spring Framework ',
             label: 'Spring Framework'
           }, {
-            value: 'Play Framework',
+            value: ' Play Framework ',
             label: 'Play Framework'
           },{
-            value: 'Bootstrap',
+            value: ' Bootstrap ',
             label: 'Bootstrap'
           }, {
-            value: 'CakePHP',
+            value: ' CakePHP ',
             label: 'CakePHP'
           }, {
-            value: '9Laravel',
+            value: ' Laravel ',
             label: 'Laravel'
           }, {
-            value: 'Django',
+            value: ' Django ',
             label: 'Django'
           }, {
-            value: 'OS',
+            value: ' OS ',
             label: 'OS',
           }, {
-            value: 'Linux',
+            value: ' Linux ',
             label: 'Linux'
           }, {
-            value: 'Windows',
+            value: ' Windows ',
             label: 'Windows'
           }, {
-            value: 'macOS',
+            value: ' macOS ',
             label: 'macOS'
           }, {
-            value: 'iOS',
+            value: ' iOS ',
             label: 'iOS'
           }, {
-            value: 'Android',
+            value: ' Android ',
             label: 'Android'
           }, {
-            value: 'Webサーバ',
+            value: ' Webサーバ ',
             label: 'Webサーバ',
           }, {
-            value: 'Apache',
+            value: ' Apache ',
             label: 'Apache'
           }, {
-            value: 'Nginx',
+            value: ' Nginx ',
             label: 'Nginx'
           }, {
-            value: 'データベース',
+            value: ' ネットワーク ',
+            label: 'ネットワーク',
+          }, {
+            value: ' セキュリティ ',
+            label: 'セキュリティ',
+          },{
+            value: ' データベース ',
             label: 'データベース',
           }, {
-            value: 'MySQL',
+            value: ' MySQL ',
             label: 'MySQL'
           }, {
-            value: 'PostgreSQL',
+            value: ' PostgreSQL ',
             label: 'PostgreSQL'
           }, {
-            value: 'Oracle Database',
+            value: ' Oracle Database ',
             label: 'Oracle Database'
           }, {
-            value: 'SQLite',
+            value: ' SQLite ',
             label: 'SQLite'
           }, {
-            value: 'MongoDB',
+            value: ' MongoDB ',
             label: 'MongoDB'
           }, {
-            value: '技術',
+            value: ' 技術 ',
             label: '技術',
           }, {
-            value: 'AWS',
+            value: ' AWS ',
             label: 'AWS'
           }, {
-            value: 'Docker',
+            value: ' Docker ',
             label: 'Docker'
           }, {
-            value: 'kubernetes',
+            value: ' kubernetes ',
             label: 'kubernetes'
           }, {
-            value: 'Git/GitHub',
+            value: ' Git/GitHub ',
             label: 'Git/GitHub'
           }, {
-            value: 'WordPress',
+            value: ' WordPress ',
             label: 'WordPress'
           }, {
-            value: 'Firebase',
+            value: ' Firebase ',
             label: 'Firebase'
           }, {
-            value: '国家試験',
+            value: ' 国家試験 ',
             label: '国家試験',
           }, {
-            value: 'ITパスポート試験',
+            value: ' ITパスポート試験 ',
             label: 'ITパスポート試験'
           },{
-            value: '基本情報技術者試験',
+            value: ' 基本情報技術者試験 ',
             label: '基本情報技術者試験'
           }, {
-            value: '応用情報技術者試験',
+            value: ' 応用情報技術者試験 ',
             label: '応用情報技術者試験'
           }, {
-            value: '情報処理安全確保支援士試験',
+            value: ' 情報処理安全確保支援士試験 ',
             label: '情報処理安全確保支援士試験'
-          }, {
-            value: 'データベーススペシャリスト試験',
-            label: 'データベーススペシャリスト試験'
-          }, {
-            value: 'ネットワークスペシャリスト試験',
-            label: 'ネットワークスペシャリスト試験'
-          }, {
-            value: 'エンベデッドシステムスペシャリスト試験',
-            label: 'エンベデッドシステムスペシャリスト試験'
-          }, {
-            value: 'KBC',
+          },{
+            value: ' KBC ',
             label: 'KBC',
           }, {
-            value: 'ITイノベーション科',
+            value: ' ITイノベーション科 ',
             label: 'ITイノベーション科'
           }, {
-            value: 'ITエンジニア科',
+            value: ' ITエンジニア科 ',
             label: 'ITエンジニア科'
           }, {
-            value: 'ゲームクリエイター科',
+            value: ' ゲームクリエイター科 ',
             label: 'ゲームクリエイター科'
           }, {
-            value: '情報ビジネス科',
+            value: ' 情報ビジネス科 ',
             label: '情報ビジネス科'
           }, {
-            value: 'その他',
+            value: ' その他 ',
             label: 'その他',
           }, {
-            value: '初心者',
+            value: ' 初心者 ',
             label: '初心者'
           }, {
-            value: '就活',
+            value: ' 就活 ',
             label: '就活'
           }]
     }

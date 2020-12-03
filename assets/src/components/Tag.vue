@@ -8,238 +8,238 @@
     </ul>
     <span>タグ</span>
     <div>
-      <el-cascader :options="options" :show-all-levels="false" filterable :props="{ checkStrictly: true,expandTrigger:'hover' }" ></el-cascader>
+      <el-cascader @change="event" v-model="scopetag" :options="options" :show-all-levels="false" filterable :props="{ checkStrictly: true,expandTrigger:'hover' }" ></el-cascader>
     </div>
   </div>
 </template>
 
 <script>
   export default {
+    props: {
+      tag: String,
+    },
     data() {
       return {
+        scopetag: "全て",
         options: [{
+          value: '全て',
+          label: '全て',
+        }, {
+          value: ' プログラミング ',
           label: 'プログラミング',
           children: [{
+            value: ' 言語 ',
             label: '言語',
             children: [{
-          value: 'HTML',
+          value: ' HTML ',
           label: 'HTML'
         }, {
-          value: 'CSS',
+          value: ' CSS ',
           label: 'CSS'
         }, {
-          value: 'Java',
+          value: ' Java ',
           label: 'Java'
         }, {
-          value: 'Python',
+          value: ' Python ',
           label: 'Python'
         }, {
-          value: 'JavaScript',
+          value: ' JavaScript ',
           label: 'JavaScript'
         }, {
-          value: 'Node.js',
+          value: ' Node.js ',
           label: 'Node.js'
         }, {
-          value: 'C/C++',
+          value: ' C/C++ ',
           label: 'C/C++'
         }, {
-          value: 'C#',
+          value: ' C# ',
           label: 'C#'
         }, {
-          value: 'SQL',
+          value: ' SQL ',
           label: 'SQL'
         }, {
-          value: 'PHP',
+          value: ' PHP ',
           label: 'PHP'
         }, {
-          value: 'Ruby',
+          value: ' Ruby ',
           label: 'Ruby'
         }, {
-          value: 'Rust',
-          label: 'Rust'
-        }, {
-          value: 'Go',
+          value: ' Go ',
           label: 'Go'
         }, {
-          value: 'TypeScript',
+          value: ' TypeScript ',
           label: 'TypeScript'
         }, {
-          value: 'R',
-          label: 'R'
-        }, {
-          value: 'Perl',
-          label: 'Perl'
-        }, {
-          value: 'Kotlin',
+          value: ' Kotlin ',
           label: 'Kotlin'
         }, {
-          value: 'Swift',
+          value: ' Swift ',
           label: 'Swift'
-        },{
-          value: 'VB',
-          label: 'VB'
-        },{
-          value: 'VBA',
-          label: 'VBA'
-        },{
-          value: 'COBOL',
-          label: 'COBOL'
         }]
           }, {
+            value: ' フレームワーク ',
             label: 'フレームワーク',
             children: [{
-              value: 'top nav',
-              label: 'Ruby on Rails'
+              value: ' Rails ',
+              label: 'Rails'
             }, {
-              value: 'top nav',
+              value: ' Vue.js ',
               label: 'Vue.js'
             }, {
-              value: 'top nav',
+              value: ' React ',
               label: 'React'
             }, {
-              value: 'top nav',
+              value: ' AngularJS ',
               label: 'AngularJS'
             }, {
-              value: 'top nav',
+              value: ' Spring Framework ',
               label: 'Spring Framework'
             }, {
-              value: 'top nav',
+              value: ' Play Framework ',
               label: 'Play Framework'
             },{
-              value: 'top nav',
+              value: ' Bootstrap ',
               label: 'Bootstrap'
             }, {
-              value: 'top nav',
+              value: ' CakePHP ',
               label: 'CakePHP'
             }, {
-              value: 'top nav',
+              value: ' Laravel ',
               label: 'Laravel'
             }, {
-              value: 'top nav',
+              value: ' Django ',
               label: 'Django'
             },]
           }, {
+            value: ' OS ',
             label: 'OS',
             children: [{
-              value: 'side nav',
+              value: ' Linux ',
               label: 'Linux'
             }, {
-              value: 'top nav',
+              value: ' Windows ',
               label: 'Windows'
             }, {
-              value: 'top nav',
+              value: ' macOS ',
               label: 'macOS'
             }, {
-              value: 'top nav',
+              value: ' iOS ',
               label: 'iOS'
             }, {
-              value: 'top nav',
+              value: ' Android ',
               label: 'Android'
             }]
           }, {
+            value: ' Webサーバ ',
             label: 'Webサーバ',
             children: [{
-              value: 'side nav',
+              value: ' Apache ',
               label: 'Apache'
             }, {
-              value: 'top ',
+              value: 'Nginx',
               label: 'Nginx'
             }]
           } , {
+            value: ' データベース ',
             label: 'データベース',
             children: [{
-              value: 'side nav',
+              value: ' MySQL ',
               label: 'MySQL'
             }, {
-              value: 'top nav',
+              value: ' PostgreSQL ',
               label: 'PostgreSQL'
             }, {
-              value: 'top nav',
+              value: ' Oracle Database ',
               label: 'Oracle Database'
             }, {
-              value: 'top nav',
+              value: ' SQLite ',
               label: 'SQLite'
             }, {
-              value: 'top nav',
+              value: ' MongoDB ',
               label: 'MongoDB'
             }]
           }, {
+            value: ' ネットワーク ',
+            label: 'ネットワーク',
+          }, {
+            value: ' セキュリティ ',
+            label: 'セキュリティ',
+          }, {
+            value: ' 技術 ',
             label: '技術',
             children: [{
-              value: 'side nav',
+              value: ' AWS ',
               label: 'AWS'
             }, {
-              value: 'top nav',
+              value: ' Docker ',
               label: 'Docker'
             }, {
-              value: 'top nav',
+              value: ' kubernetes ',
               label: 'kubernetes'
             }, {
-              value: 'top nav',
+              value: ' Git/GitHub ',
               label: 'Git/GitHub'
             }, {
-              value: 'top nav',
+              value: ' WordPress ',
               label: 'WordPress'
             }, {
-              value: 'top nav',
+              value: ' Firebase ',
               label: 'Firebase'
             }]
           }]
         }, {
+          value: ' 国家試験 ',
           label: '国家試験',
           children: [
-            {
-              value: 'layout',
-              label: 'ITパスポート試験'
-            },{
-              value: 'layout',
-              label: '基本情報技術者試験'
-            }, {
-              value: 'color',
-              label: '応用情報技術者試験'
-            }, {
-              value: 'typography',
-              label: '情報処理安全確保支援士試験'
-            }, {
-              value: 'icon',
-              label: 'データベーススペシャリスト試験'
-            }, {
-              value: 'button',
-              label: 'ネットワークスペシャリスト試験'
-            }, {
-              value: 'button',
-              label: 'エンベデッドシステムスペシャリスト試験'
-            }]
+          {
+            value: ' ITパスポート試験 ',
+            label: 'ITパスポート試験'
+          },{
+            value: ' 基本情報技術者試験 ',
+            label: '基本情報技術者試験'
           }, {
+            value: ' 応用情報技術者試験 ',
+            label: '応用情報技術者試験'
+          }, {
+            value: ' 情報処理安全確保支援士試験 ',
+            label: '情報処理安全確保支援士試験'
+          }]
+        }, {
+          value: ' KBC ',
           label: 'KBC',
           children: [{
-            value: 'axure',
+            value: ' ITイノベーション科 ',
             label: 'ITイノベーション科'
           }, {
-            value: 'sketch',
+            value: ' ITエンジニア科 ',
             label: 'ITエンジニア科'
           }, {
-            value: 'docs',
+            value: ' ゲームクリエイター科 ',
             label: 'ゲームクリエイター科'
           }, {
-            value: 'docs',
+            value: ' 情報ビジネス科 ',
             label: '情報ビジネス科'
           }]
         }, {
+          value: ' その他 ',
           label: 'その他',
           children: [{
-            value: 'axure',
+            value: ' 初心者 ',
             label: '初心者'
           }, {
-            value: 'docs',
+            value: ' 就活 ',
             label: '就活'
-          }, {
-            value: 'docs',
-            label: 'KBC'
           }]
         }]
       };
-    }
+    },
+    methods: {
+      event() {
+        this.$parent.tag = this.scopetag[this.scopetag.length - 1]
+        console.log(this.scopetag)
+        this.$emit('scopetag', this.$parent.tag);
+      },
+    },
   };
 </script>
 

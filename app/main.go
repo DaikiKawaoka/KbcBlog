@@ -36,7 +36,7 @@ func main() {
 
 	// Article
 	r.GET("/Articles", handler.ArticleIndex)
-	r.GET("/Articles/LikeOrder", handler.ArticleIndexOrder) //いいね順
+	r.GET("/Articles/scope", handler.ArticleIndexOrder) //いいね順
 	r.GET("/Articles/new", handler.ArticleNew)
 	r.GET("/Articles/:id", handler.ArticleShow)
 	r.GET("/Articles/:id/edit", handler.ArticleEdit)

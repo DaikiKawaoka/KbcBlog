@@ -67,7 +67,7 @@ func ArticleIndex(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError,"userが存在しません")
 	}
 
-	articles, err := repository.ArticleListByCursor(0,"new")
+	articles, err := repository.ArticleListByCursor(0,"new","全て")
 
 	if err != nil {
 		c.Logger().Error(err.Error())
@@ -252,12 +252,13 @@ func ArticleDelete(c echo.Context) error {
 
 func ArticleIndexOrder(c echo.Context) error {
 
-	order := c.QueryParam("order")
-	articles, err := repository.ArticleListByCursor(0,order)
+	order := c.QueryParam("order")//並び順
+	tag := c.QueryParam("tag")//絞り込みタグ
+	articles, err := repository.ArticleListByCursor(0,order,tag)
 
 	if err != nil {
 		c.Logger().Error(err.Error())
-		return c.JSON(http.StatusInternalServerError,"記事の一覧データを取得中にエラー発生")
+		return c.JSON(http.StatusInternalServerError,"記事の一覧データ取得中にエラー発生")
 	}
 
 	data := map[string]interface{}{
