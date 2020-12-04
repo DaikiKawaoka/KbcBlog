@@ -34,6 +34,11 @@
           </div>
         </div>
         <h1 class="article-title">{{article.title}}</h1>
+        <div class="article-tags-div">
+          <div v-for="(tag,index) in tags" :key="index" class="article-tag-div">
+            <span>{{tag}}</span>
+          </div>
+        </div>
         <div class="article-form__preview-body">
           <div class="article-body article-form__preview-body-contents" v-html="compiledMarkdown"></div>
         </div>
@@ -129,6 +134,7 @@ export default {
       },
       comments: [],
       errors: {},
+      tags:[]
     }
   },
   components: {
@@ -147,6 +153,7 @@ export default {
         this.user = response.data.user
         this.comments = response.data.Comments
         this.like = response.data.Like
+        this.tags = this.article.tag.split(',');
 
         //commentに各idを代入
         this.comment.articleid = this.article.id
@@ -338,7 +345,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .article-show-main,.article-comment-all{
   width: 800px;
   margin: 30px auto 0 auto;
@@ -346,7 +353,9 @@ export default {
   padding: 20px;
 }
 .article-title{
-  padding: 0px 20px 20px 10px;
+  padding: 0px 20px 0px 10px;
+  font-size: 2.5em;
+  margin-bottom: 20px;
 }
 .article-comment-header{
   display: flex;
@@ -471,5 +480,21 @@ export default {
   margin-left: 15px;
   font-size: 1.6em;
   cursor: pointer;
+}
+.article-tags-div{
+  display: flex;
+  margin-bottom: 50px;
+  flex-wrap:wrap
+}
+.article-tag-div{
+  margin-left: 10px;
+  margin-top: 10px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  background: #eee;
+  color: #666;
+}
+.article-tag-div > span{
+  font-size: 0.9em;
 }
 </style>

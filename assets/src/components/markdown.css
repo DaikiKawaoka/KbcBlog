@@ -1,3 +1,6 @@
+.article-body{
+  padding-bottom: 50px;
+}
 .article-body > blockquote {
   background: #f3f3f3;
   padding: 10px 12px;
@@ -35,7 +38,9 @@
 
 
 .article-body > h1 {
-  font-size: 30px;
+  font-size: 1.7em;
+  border-bottom: #ccc solid 1px;
+  margin: 50px 0 20px 0;
 }
 
 .article-body > h2 {
@@ -86,11 +91,13 @@
 .article-body > ol {
   margin-top: 12px;
   margin-bottom: 8px;
+  line-height: 1.9;
+  font-family: -apple-system,Segoe UI,Helvetica Neue,Hiragino Kaku Gothic ProN,"メイリオ",meiryo,sans-serif;
 }
+
 .article-body > p{
   word-break: normal;
   word-wrap: break-word;
-
 }
 
 .article-body > ul > li,

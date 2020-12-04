@@ -8,7 +8,7 @@
         v-on:change="arrayChangeString"
         multiple
         size="large"
-        :multiple-limit=4
+        :multiple-limit=5
         :collapse-tags="false"
         no-match-text="一致するタグがありません"
         filterable

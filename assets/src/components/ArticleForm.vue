@@ -32,13 +32,13 @@
         v-on:change="arrayChangeString"
         multiple
         size="large"
-        :multiple-limit=4
+        :multiple-limit=5
         :collapse-tags="false"
         no-match-text="一致するタグがありません"
         filterable
         :allow-create="false"
         :default-first-option="true"
-        placeholder="関連するタグを最大4つまで選択してください。">
+        placeholder="関連するタグを最大5つまで選択してください。">
         <el-option
           v-for="item in options"
           :key="item.value"

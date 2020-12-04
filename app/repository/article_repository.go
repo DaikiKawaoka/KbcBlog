@@ -8,7 +8,7 @@ import (
 )
 
 // ArticleListByCursor ...
-func ArticleListByCursor(cursor int,order string,tag string) ([]*model.Article, error) {
+func ArticleListByCursor(cursor int,order string,tag string,text string) ([]*model.Article, error) {
 
 	articles := make([]*model.Article, 0, 10)
 	if cursor <= 0 {
@@ -30,22 +30,41 @@ func ArticleListByCursor(cursor int,order string,tag string) ([]*model.Article, 
 	}
 
 	if tag == "全て"{
-
-		query2 = "WHERE a.id < ? "
-		query = query1 + query2 + query3
-		// クエリ結果を格納する変数、クエリ文字列、パラメータを指定してクエリを実行します。
-		if err := db.Select(&articles, query, cursor); err != nil {
-			return nil, err
+		if text == ""{
+			query2 = "WHERE a.id < ? "
+			query = query1 + query2 + query3
+			// クエリ結果を格納する変数、クエリ文字列、パラメータを指定してクエリを実行します。
+			if err := db.Select(&articles, query, cursor); err != nil {
+				return nil, err
+			}
+		}else{
+			query2 = `WHERE a.id < ? AND a.title LIKE CONCAT("%",?,"%")`
+			query = query1 + query2 + query3
+			// クエリ結果を格納する変数、クエリ文字列、パラメータを指定してクエリを実行します。
+			if err := db.Select(&articles, query, cursor, text); err != nil {
+				return nil, err
+			}
 		}
 
 	}else{
-		query2 = `WHERE a.id < ? AND a.tag LIKE CONCAT("%",?,"%")`
-		query = query1 + query2 + query3
-		print(query)
-		// クエリ結果を格納する変数、クエリ文字列、パラメータを指定してクエリを実行します。
-		if err := db.Select(&articles, query, cursor,tag); err != nil {
-			return nil, err
+		if text == ""{
+			query2 = `WHERE a.id < ? AND a.tag LIKE CONCAT("%",?,"%")`
+			query = query1 + query2 + query3
+			print(query)
+			// クエリ結果を格納する変数、クエリ文字列、パラメータを指定してクエリを実行します。
+			if err := db.Select(&articles, query, cursor,tag); err != nil {
+				return nil, err
+			}
+		}else{
+			query2 = `WHERE a.id < ? AND a.tag LIKE CONCAT("%",?,"%") AND a.title LIKE CONCAT("%",?,"%")`
+			query = query1 + query2 + query3
+			print(query)
+			// クエリ結果を格納する変数、クエリ文字列、パラメータを指定してクエリを実行します。
+			if err := db.Select(&articles, query, cursor, tag, text); err != nil {
+				return nil, err
+			}
 		}
+
 
 	}
 

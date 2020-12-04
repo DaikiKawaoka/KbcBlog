@@ -5,7 +5,7 @@
       <Tag @scopetag="scopetag" :tag="tag"></Tag>
       <div class="article-all-div">
         <div class="article-search-div">
-          <el-input placeholder="キーワード検索" v-model="searchText" suffix-icon="el-icon-search" style="width:200px; margin-left: 30px;"></el-input>
+          <el-input placeholder="キーワード検索" v-model="searchText" suffix-icon="el-icon-search" style="width:200px; margin-left: 30px;" @input="scopetag"></el-input>
           <div class="order-div">
             <span class="order-span-left">並び替え</span>
             <span class="order-span" v-bind:class="{'order-span-color': orderNew }" @click="articleOrder('new')">新着</span>
@@ -42,7 +42,9 @@
         </div>
         <div v-else>
           <div class="article-show-div not-tag-div">
-            <p class="not-tag">タグ『{{ tag }}』の記事はまだありません。</p>
+            <p class="not-tag" v-if="searchText === '' ">タグ『{{ tag }}』の記事はまだありません。</p>
+            <p class="not-tag" v-else-if="tag === '全て'">キーワード『{{ searchText }}』の記事はありません。</p>
+            <p class="not-tag"  v-else>タグ『{{ tag }}』,キーワード『{{ searchText }}』の記事はありません。</p>
           </div>
         </div>
 
@@ -72,7 +74,7 @@ export default {
       likeRanking: [],
       postRanking: [],
       searchText:"",
-      tag: "",
+      tag: "全て",
       order: "new",
       orderNew: true,
       orderLike: false,
@@ -132,6 +134,7 @@ export default {
       this.$axios.get('http://localhost/api/restricted/Articles/scope', {
       params: {
         // ここにクエリパラメータを指定する
+        searchText: this.searchText,
         order: c,
         tag: this.tag
       },
@@ -162,6 +165,7 @@ export default {
     scopetag() {
       this.$axios.get('http://localhost/api/restricted/Articles/scope', {
       params: {
+        searchText: this.searchText,
         order: this.order,
         tag: this.tag
       },
@@ -307,6 +311,7 @@ body {
   width: 100%;
   text-align: center;
   color: #555;
+  font-size: 0.9em;
 }
 .not-tag-div{
   margin-top: 30px;

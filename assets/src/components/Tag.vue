@@ -20,6 +20,7 @@
     },
     data() {
       return {
+        value: '全て',
         scopetag: "全て",
         options: [{
           value: '全て',
