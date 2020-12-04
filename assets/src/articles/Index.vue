@@ -13,29 +13,36 @@
           </div>
         </div>
 
-        <div v-for="article in articles" :key="article.id" class="article-show-div">
-          <div class="article-user-icon">
-            <router-link v-bind:to="{ name : 'UserShow', params : { id: article.userid }}" class="a-tag">
-              <!-- image -->
-            </router-link>
-          </div>
-          <div class="article-index-body">
-            <div class="article-tag-div">
-              <i class="el-icon-collection-tag tag-icon"></i>
-              <span class="article-tag no-magin">{{ article.tag }}</span>
-            </div>
-            <router-link v-bind:to="{ name : 'ArticleShow', params : { id: article.id }}" class="a-tag">
-              <h2 class="article-title-index"> {{article.title}} </h2>
-            </router-link>
-            <div class="article-index-username-updated">
+        <div v-if="articles.length !== 0">
+          <div v-for="article in articles" :key="article.id" class="article-show-div">
+            <div class="article-user-icon">
               <router-link v-bind:to="{ name : 'UserShow', params : { id: article.userid }}" class="a-tag">
-                <h3 class="article-index-username">by {{ article.name }}</h3>
+                <!-- image -->
               </router-link>
-              <h3 class="article-index-update" v-if="orderNew"> {{ article.Updated | moment }}</h3>
-              <h3 class="article-index-update" v-else> {{ article.Updated | moment2 }}</h3>
-              <i class="el-icon-star-on article-star-i"></i>
-              <span class="article-likecount-span">{{article.likecount}}</span>
             </div>
+            <div class="article-index-body">
+              <div class="article-tag-div">
+                <i class="el-icon-collection-tag tag-icon"></i>
+                <span class="article-tag no-magin">{{ article.tag }}</span>
+              </div>
+              <router-link v-bind:to="{ name : 'ArticleShow', params : { id: article.id }}" class="a-tag">
+                <h2 class="article-title-index"> {{article.title}} </h2>
+              </router-link>
+              <div class="article-index-username-updated">
+                <router-link v-bind:to="{ name : 'UserShow', params : { id: article.userid }}" class="a-tag">
+                  <h3 class="article-index-username">by {{ article.name }}</h3>
+                </router-link>
+                <h3 class="article-index-update" v-if="orderNew"> {{ article.Updated | moment }}</h3>
+                <h3 class="article-index-update" v-else> {{ article.Updated | moment2 }}</h3>
+                <i class="el-icon-star-on article-star-i"></i>
+                <span class="article-likecount-span">{{article.likecount}}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div v-else>
+          <div class="article-show-div not-tag-div">
+            <p class="not-tag">タグ『{{ tag }}』の記事はまだありません。</p>
           </div>
         </div>
 
@@ -295,5 +302,15 @@ body {
   font-size: 0.6em;
   color: #999;
   width: 440px;
+}
+.not-tag{
+  width: 100%;
+  text-align: center;
+  color: #555;
+}
+.not-tag-div{
+  margin-top: 30px;
+  padding-top: 15px;
+  padding-bottom: 15px;
 }
 </style>

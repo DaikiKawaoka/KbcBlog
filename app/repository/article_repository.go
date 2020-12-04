@@ -39,12 +39,11 @@ func ArticleListByCursor(cursor int,order string,tag string) ([]*model.Article, 
 		}
 
 	}else{
-		query2 = `WHERE a.id < ? AND a.tag LIKE "%`+tag+`%"`
+		query2 = `WHERE a.id < ? AND a.tag LIKE CONCAT("%",?,"%")`
 		query = query1 + query2 + query3
-		print(tag)
 		print(query)
 		// クエリ結果を格納する変数、クエリ文字列、パラメータを指定してクエリを実行します。
-		if err := db.Select(&articles, query, cursor); err != nil {
+		if err := db.Select(&articles, query, cursor,tag); err != nil {
 			return nil, err
 		}
 
