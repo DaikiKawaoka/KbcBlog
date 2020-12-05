@@ -4,11 +4,23 @@
       <span class="tag-header-text">絞り込み</span>
     </div>
     <ul class="tag-ul">
-      <li>フレンドのみ</li>
+      <div class="on-display-flex">
+        <li class="f-text-li">フレンドのみ</li>
+        <el-switch
+          v-model="checked"
+          active-text="ON"
+          active-color="#13ce66"
+          :width="35"
+          inactive-text="OFF"
+          style="margin: 2px 0 0 6px;">
+        </el-switch>
+      </div>
     </ul>
-    <span>タグ</span>
-    <div>
-      <el-cascader @change="event" v-model="scopetag" :options="options" :show-all-levels="false" filterable :props="{ checkStrictly: true,expandTrigger:'hover' }" ></el-cascader>
+    <div class="tag-scope-div">
+      <span>タグ</span>
+      <div>
+        <el-cascader @change="event" v-model="scopetag" :options="options" :show-all-levels="false" filterable :props="{ checkStrictly: true,expandTrigger:'hover' }" ></el-cascader>
+      </div>
     </div>
   </div>
 </template>
@@ -20,6 +32,7 @@
     },
     data() {
       return {
+        checked:false,
         value: '全て',
         scopetag: "全て",
         options: [{
@@ -256,7 +269,20 @@
 .tag-header-text{
   color: #999;
 }
-ul{
-  padding: 0;
+.tag-ul{
+  padding: 20px 0 20px 0;
+  border-top: #bbb 1px solid;
+  border-bottom: #ccc 1px solid;
+}
+.tag-scope-div{
+  padding: 0 0 20px 0;
+  border-bottom: #bbb 1px solid;
+}
+.on-display-flex{
+  display: flex;
+}
+.f-text-li{
+  font-size: 0.95em;
+  font-weight:bolder;
 }
 </style>
