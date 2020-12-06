@@ -43,11 +43,13 @@
           <div class="article-body article-form__preview-body-contents" v-html="compiledMarkdown"></div>
         </div>
 
-        <el-row>
-          <el-button v-if="like.isLike" type="warning" @click="click_like">解除 <i class="el-icon-star-on"></i></el-button>
-          <button v-else @click="click_like" class="like-btn">いいね <i class="el-icon-star-off"></i></button>
-          <span class="like-count-span">{{like.likeCount}}</span>
-        </el-row>
+        <div class="article-like-btn-div">
+          <el-row>
+            <el-button v-if="like.isLike" type="warning" @click="click_like">解除 <i class="el-icon-star-on"></i></el-button>
+            <button v-else @click="click_like" class="like-btn">いいね <i class="el-icon-star-off"></i></button>
+            <span class="like-count-span">{{like.likeCount}}</span>
+          </el-row>
+        </div>
 
       </div>
     </div>
@@ -496,5 +498,8 @@ export default {
 }
 .article-tag-div > span{
   font-size: 0.9em;
+}
+.article-like-btn-div{
+  padding-top: 50px;
 }
 </style>
