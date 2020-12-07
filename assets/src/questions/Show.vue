@@ -395,5 +395,9 @@ export default {
 .comment-text{
   margin-bottom: 50px;
 }
+.a-tag2{
+  text-decoration: none;
+  color: #606266;
+}
 
 </style>

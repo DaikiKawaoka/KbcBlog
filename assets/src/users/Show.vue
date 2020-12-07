@@ -564,6 +564,10 @@ export default {
   cursor: pointer;
   height: 30px;
 }
+.a-tag2{
+  text-decoration: none;
+  color: #606266;
+}
 .user-show-info-div{
   display: flex;
   height: 50px;

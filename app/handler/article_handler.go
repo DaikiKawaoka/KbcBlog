@@ -60,15 +60,21 @@ func ArticleCreate(c echo.Context) error {
 
 func ArticleIndex(c echo.Context) error {
 
-	userId := userIDFromToken(c)
-	myUser,err := repository.GetMyUser(userId)
+	userID := userIDFromToken(c)
+	myUser,err := repository.GetMyUser(userID)
 	if err != nil {
 		c.Logger().Error(err.Error())
 		return c.JSON(http.StatusInternalServerError,"userが存在しません")
 	}
 
+	var scope model.Scope
+	scope.Order = "new"
+	scope.Tag = "全て"
+	scope.Text = ""
+	scope.FriendsOnly = false
+
 	// articles, err := repository.ArticleListByCursor(0,"new","全て","",false,userId)
-	articles, err := repository.ArticleListByCursor(0,"new","全て","")
+	articles, err := repository.ArticleListByCursor(0,&scope,userID)
 
 	if err != nil {
 		c.Logger().Error(err.Error())
@@ -251,17 +257,18 @@ func ArticleDelete(c echo.Context) error {
 	return c.JSON(http.StatusOK, fmt.Sprintf("Article %d is deleted.", id))
 }
 
+
 func ArticleIndexOrder(c echo.Context) error {
 
-	// userId := userIDFromToken(c)
-
-	order := c.QueryParam("order")//並び順
-	tag := c.QueryParam("tag")//絞り込みタグ
-	text := c.QueryParam("searchText")//絞り込みテキスト
-	// friendsOnly,_ := strconv.ParseBool(c.QueryParam("friendsOnly")) // フレンドのみ? true or false
+	userID := userIDFromToken(c)
+	var scope model.Scope
+	scope.Order = c.QueryParam("order")//並び順
+	scope.Tag = c.QueryParam("tag")//絞り込みタグ
+	scope.Text = c.QueryParam("searchText")//絞り込みテキスト
+	scope.FriendsOnly,_ = strconv.ParseBool(c.QueryParam("friendsOnly")) // フレンドのみ? true or false
 
 	// articles, err := repository.ArticleListByCursor(0,order,tag,text,friendsOnly,userId)
-	articles, err := repository.ArticleListByCursor(0,order,tag,text)
+	articles, err := repository.ArticleListByCursor(0,&scope,userID)
 
 	if err != nil {
 		c.Logger().Error(err.Error())

@@ -75,7 +75,6 @@ func UserCreate(c echo.Context) error {
 func UserShow(c echo.Context) error {
 	userId := userIDFromToken(c)
 	myUser,err := repository.GetMyUser(userId)
-
 	if err != nil {
 		c.Logger().Error(err.Error())
 		return c.JSON(http.StatusInternalServerError,"userが存在しません")
