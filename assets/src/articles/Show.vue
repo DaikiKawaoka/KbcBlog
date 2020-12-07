@@ -4,10 +4,12 @@
     <div class="article-show-main">
       <div v-if="this.article != null">
         <div class="comment-header">
-          <div class="comment-header-div">
-            <div class="comment-user-icon"></div>
-            <p class="comment-user-name">{{ article.name }}</p>
-          </div>
+          <router-link v-bind:to="{ name : 'UserShow', params : { id: article.userid }}" class="a-tag">
+            <div class="comment-header-div">
+              <div class="comment-user-icon"></div>
+              <p class="comment-user-name">{{ article.name }}</p>
+            </div>
+          </router-link>
           <div class="comment-header-div">
             <div class="article-create-update-date-div">
               <p class="article-create-date"> 作成日 {{ article.Created | moment }}</p>
