@@ -2,7 +2,7 @@
   <div id="app">
     <Header :isArticle="true" :isQuestion="false" :user="user"></Header>
     <div class="index-main body-main">
-      <Tag @scopetag="scopetag" :tag="tag"></Tag>
+      <Tag @scopetag="scopetag" :tag="tag" :friendsOnly="friendsOnly" @update:friendsOnly="friendsOnly=$event"></Tag>
       <div class="article-all-div">
         <div class="article-search-div">
           <el-input placeholder="キーワード検索" v-model="searchText" suffix-icon="el-icon-search" style="width:200px; margin-left: 30px;" @input="scopetag"></el-input>
@@ -78,6 +78,7 @@ export default {
       order: "new",
       orderNew: true,
       orderLike: false,
+      friendsOnly: false,
     }
   },
   components: {
@@ -134,6 +135,7 @@ export default {
       this.$axios.get('http://localhost/api/restricted/Articles/scope', {
       params: {
         // ここにクエリパラメータを指定する
+        friendsOnly: this.friendsOnly,
         searchText: this.searchText,
         order: c,
         tag: this.tag
@@ -165,6 +167,7 @@ export default {
     scopetag() {
       this.$axios.get('http://localhost/api/restricted/Articles/scope', {
       params: {
+        friendsOnly: this.friendsOnly,
         searchText: this.searchText,
         order: this.order,
         tag: this.tag
@@ -175,7 +178,6 @@ export default {
     })
       .then(response => {
         this.articles = response.data.Articles
-        console.log("スコープしました"+this.tag+this.order)
       })
       .catch(error => {
         if(error.response.status == 401){

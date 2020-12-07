@@ -80,8 +80,8 @@ func UserShow(c echo.Context) error {
 		c.Logger().Error(err.Error())
 		return c.JSON(http.StatusInternalServerError,"userが存在しません")
 	}
-	id, _ := strconv.Atoi(c.Param("id"))
 
+	id, _ := strconv.Atoi(c.Param("id"))
 	// 記事データを取得します。
 	user, err := repository.UserGetByID(id)
 
@@ -154,6 +154,20 @@ func UserShow(c echo.Context) error {
 	if err != nil {
     c.Logger().Error(err.Error())
     return c.JSON(http.StatusInternalServerError,"フォロワーリスト取得中にエラー発生") //500
+	}
+
+	for _,f := range followers {
+		count, err := repository.CheckFollow(userId,f.ID);
+		if err != nil {
+			c.Logger().Error(err.Error())
+			return c.JSON(http.StatusInternalServerError,"followcheck中にエラー発生") //500
+		}
+		// ユーザがいいねしているか検証
+		if count > 0{
+			f.IsFollowing = true
+		}else{
+			f.IsFollowing = false
+		}
 	}
 
 	for _,f := range followeds {

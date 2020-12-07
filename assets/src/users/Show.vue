@@ -371,7 +371,7 @@ export default {
   computed: {
   },
   methods: {
-
+    // 大きいフォローボタンを押した時
     Follow_UnFollw(){
       this.$axios
         .post(`http://localhost/api/restricted/Users/${this.user.id}/Follow`,this.user.id,{
@@ -443,6 +443,7 @@ export default {
       });
     },
 
+    // ChangeFollow(f,index,'follows','unfo')
     ChangeFollow(f,index,c,c2){
       this.$axios
         .post(`http://localhost/api/restricted/Users/${f.id}/Follow`,f.id,{
@@ -479,7 +480,7 @@ export default {
                   this.followers[w].isfollowing = true;
                 }
                 this.follow.followerCount++;
-              }else{
+              }else{ //アンフォロー
                 this.follows[index].isfollowing = false;
                 const w = this.followers.findIndex(item => item.id === this.follows[index].id)
                 if(w !== -1){

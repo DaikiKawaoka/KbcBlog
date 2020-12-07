@@ -18,6 +18,7 @@ func ArticleListByCursor(cursor int,order string,tag string,text string) ([]*mod
 	var query1 string
 	var query2 string
 	var query3 string
+	// query4 := "AND u.id = f.followerid AND f.followerid = ? "
 
 	query1 = "SELECT a.id id,a.userid userid,u.name name,a.title title,a.tag tag,a.created created,a.updated updated ,COUNT(al.id) likecount FROM articles a inner join users u on a.userid = u.id left join article_likes al on a.id = al.articleid "
 

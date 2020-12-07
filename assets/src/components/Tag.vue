@@ -7,7 +7,8 @@
       <div class="on-display-flex">
         <li class="f-text-li">フレンドのみ</li>
         <el-switch
-          v-model="checked"
+          v-model="innerVal"
+          @change="$emit('scopetag')"
           active-text="ON"
           active-color="#13ce66"
           :width="35"
@@ -29,6 +30,17 @@
   export default {
     props: {
       tag: String,
+      friendsOnly: Boolean,
+    },
+    computed: {
+      innerVal: {
+        get(){
+          return this.friendsOnly
+        },
+        set(friendsOnly){
+          this.$emit('update:friendsOnly', friendsOnly)
+        }
+      }
     },
     data() {
       return {
@@ -270,11 +282,13 @@
   color: #999;
 }
 .tag-ul{
+  width: 206px;
   padding: 20px 0 20px 0;
   border-top: #bbb 1px solid;
   border-bottom: #ccc 1px solid;
 }
 .tag-scope-div{
+  width: 206px;
   padding: 0 0 20px 0;
   border-bottom: #bbb 1px solid;
 }
