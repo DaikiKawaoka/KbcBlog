@@ -15,7 +15,8 @@
     "marked": "^1.1.1",
     "moment": "^2.29.1",
     "vue": "^2.6.11",
-    "vue-cookies": "^1.7.4"
+    "vue-cookies": "^1.7.4",
+    "vue-infinite-loading": "^2.4.5"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",

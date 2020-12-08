@@ -93,9 +93,16 @@ func ArticleIndex(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError,"likeRankingを取得中にエラー発生")
 	}
 
+	// 取得できた最後の記事の ID をカーソルとして設定します。
+	var cursor int
+	if len(articles) != 0 {
+		cursor = articles[len(articles)-1].ID
+	}
+
 	data := map[string]interface{}{
 		"user": myUser,
 		"Articles": articles,
+		"Cursor":   cursor,
 		"LikeRanking": likeRanking,
 		"PostRanking": postRanking,
 	}
@@ -260,6 +267,7 @@ func ArticleDelete(c echo.Context) error {
 
 func ArticleIndexOrder(c echo.Context) error {
 
+	cursor, _ := strconv.Atoi(c.QueryParam("cursor"))
 	userID := userIDFromToken(c)
 	var scope model.Scope
 	scope.Order = c.QueryParam("order")//並び順
@@ -268,15 +276,20 @@ func ArticleIndexOrder(c echo.Context) error {
 	scope.FriendsOnly,_ = strconv.ParseBool(c.QueryParam("friendsOnly")) // フレンドのみ? true or false
 
 	// articles, err := repository.ArticleListByCursor(0,order,tag,text,friendsOnly,userId)
-	articles, err := repository.ArticleListByCursor(0,&scope,userID)
+	articles, err := repository.ArticleListByCursor(cursor,&scope,userID)
 
 	if err != nil {
 		c.Logger().Error(err.Error())
 		return c.JSON(http.StatusInternalServerError,"記事の一覧データ取得中にエラー発生")
 	}
 
+	if len(articles) != 0 {
+		cursor = articles[len(articles)-1].ID
+	}
+
 	data := map[string]interface{}{
 		"Articles": articles,
+		"Cursor":   cursor,
 	}
 	return c.JSON(http.StatusOK, data)
 }

@@ -22,7 +22,7 @@ func ArticleListByCursor(cursor int, scope *model.Scope, userid int) ([]*model.A
 
 	if scope.FriendsOnly {
 		// フォローしているユーザの投稿のみ
-		query1 = "SELECT a.id id,a.userid userid,u.name name,a.title title,a.tag tag,a.created created,a.updated updated ,COUNT(al.id) likecount FROM articles a inner join users u on a.userid = u.id left join article_likes al on a.id = al.articleid left join follows f on a.userid = f.followedid "
+		query1 = "SELECT a.id id,a.userid userid,u.name name,a.title title,a.tag tag,a.created created,a.updated updated ,COUNT(al.id) likecount FROM articles a inner join users u on a.userid = u.id inner join article_likes al on a.id = al.articleid left join follows f on a.userid = f.followedid "
 	}else{
 		// 全てのユーザの投稿
 		query1 = "SELECT a.id id,a.userid userid,u.name name,a.title title,a.tag tag,a.created created,a.updated updated ,COUNT(al.id) likecount FROM articles a inner join users u on a.userid = u.id left join article_likes al on a.id = al.articleid "

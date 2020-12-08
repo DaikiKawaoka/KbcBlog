@@ -39,7 +39,13 @@
               </div>
             </div>
           </div>
+
+
+          <infinite-loading @infinite="scrollArticles" :identifier="infiniteId" spinner="spiral">
+            <span slot="no-more"></span>
+          </infinite-loading>
         </div>
+
         <div v-else>
           <div class="article-show-div not-tag-div">
             <p class="not-tag" v-if="searchText === '' ">タグ『{{ tag }}』の記事はまだありません。</p>
@@ -59,6 +65,7 @@
 
 <script>
 // import axios from "axios";
+import InfiniteLoading from 'vue-infinite-loading';
 import Header from './../components/Header.vue'
 import Footer from './../components/Footer.vue'
 import Tag from './../components/Tag.vue'
@@ -79,6 +86,9 @@ export default {
       orderNew: true,
       orderLike: false,
       friendsOnly: false,
+      cursor: 0,
+      page: 1,
+      infiniteId: +new Date(),
     }
   },
   components: {
@@ -86,6 +96,7 @@ export default {
     Footer,
     Tag,
     Ranking,
+    InfiniteLoading,
   },
   filters: {
     moment: function (date) {
@@ -115,6 +126,7 @@ export default {
         this.likeRanking = response.data.LikeRanking
         this.postRanking = response.data.PostRanking
         this.user = response.data.user
+        this.cursor = response.data.Cursor
       })
       .catch(error => {
         if(error.response.status == 401){
@@ -124,6 +136,7 @@ export default {
       })
   },
   methods:{
+
     errorNotify() {
       this.$notify.error({
         title: 'Error',
@@ -154,6 +167,7 @@ export default {
           this.orderNew = false;
           this.orderLike = true;
         }
+        this.changeType()
         this.articles = response.data.Articles
       })
       .catch(error => {
@@ -170,7 +184,7 @@ export default {
         friendsOnly: this.friendsOnly,
         searchText: this.searchText,
         order: this.order,
-        tag: this.tag
+        tag: this.tag,
       },
       headers: {
         Authorization: `Bearer ${this.$cookies.get("JWT")}`
@@ -185,6 +199,44 @@ export default {
           this.errorNotify();
         }
       })
+    },
+
+    scrollArticles($state) {
+      this.$axios.get('http://localhost/api/restricted/Articles/scope', {
+      params: {
+        friendsOnly: this.friendsOnly,
+        searchText: this.searchText,
+        order: this.order,
+        tag: this.tag,
+        cursor: this.cursor,
+      },
+      headers: {
+        Authorization: `Bearer ${this.$cookies.get("JWT")}`
+      },
+    })
+      .then(response => {
+        if (response.data.Articles.length) {
+          this.articles = this.articles.concat(response.data.Articles);
+          this.cursor = response.data.Cursor
+          this.page += 1;
+          $state.loaded();
+        } else {
+          $state.complete();
+        }
+      })
+      .catch(error => {
+        if(error.response.status == 401){
+          this.$router.push({ path: "/login" });
+          this.errorNotify();
+        }
+      })
+    },
+    changeType() {
+      this.page = 1;
+      this.infiniteId += 1;
+      this.cursor = 0;
+      console.log("aaaaa")
+      console.log(this.articles)
     },
   },
 }
