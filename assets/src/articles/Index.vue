@@ -127,6 +127,8 @@ export default {
         this.postRanking = response.data.PostRanking
         this.user = response.data.user
         this.cursor = response.data.Cursor
+        console.log("クリエイト")
+        console.log(this.cursor)
       })
       .catch(error => {
         if(error.response.status == 401){
@@ -145,13 +147,15 @@ export default {
     },
 
     articleOrder(c) {
+      this.changeType()
       this.$axios.get('http://localhost/api/restricted/Articles/scope', {
       params: {
         // ここにクエリパラメータを指定する
         friendsOnly: this.friendsOnly,
         searchText: this.searchText,
         order: c,
-        tag: this.tag
+        tag: this.tag,
+        cursor: this.cursor,
       },
       headers: {
         Authorization: `Bearer ${this.$cookies.get("JWT")}`
@@ -167,8 +171,10 @@ export default {
           this.orderNew = false;
           this.orderLike = true;
         }
-        this.changeType()
         this.articles = response.data.Articles
+        this.cursor = response.data.Cursor
+        console.log("並べ替え")
+        console.log(this.cursor)
       })
       .catch(error => {
         if(error.response.status == 401){
@@ -179,12 +185,14 @@ export default {
     },
 
     scopetag() {
+      this.changeType()
       this.$axios.get('http://localhost/api/restricted/Articles/scope', {
       params: {
         friendsOnly: this.friendsOnly,
         searchText: this.searchText,
         order: this.order,
         tag: this.tag,
+        cursor: this.cursor,
       },
       headers: {
         Authorization: `Bearer ${this.$cookies.get("JWT")}`
@@ -192,6 +200,9 @@ export default {
     })
       .then(response => {
         this.articles = response.data.Articles
+        this.cursor = response.data.Cursor
+        console.log("フレンドのみ")
+        console.log(this.cursor)
       })
       .catch(error => {
         if(error.response.status == 401){
@@ -219,6 +230,8 @@ export default {
           this.articles = this.articles.concat(response.data.Articles);
           this.cursor = response.data.Cursor
           this.page += 1;
+          console.log("スクロールしました")
+          console.log(this.cursor)
           $state.loaded();
         } else {
           $state.complete();
@@ -234,9 +247,8 @@ export default {
     changeType() {
       this.page = 1;
       this.infiniteId += 1;
+      this.articles = [];
       this.cursor = 0;
-      console.log("aaaaa")
-      console.log(this.articles)
     },
   },
 }
