@@ -24,10 +24,6 @@ func Follow(c echo.Context) error {
 			c.Logger().Error(err.Error())
 			return c.JSON(http.StatusInternalServerError, "UnFollow中にエラー発生") //500
 		}
-
-		// data := map[string]interface{}{
-		// 	"": articles,
-		// }
 		return c.JSON(http.StatusOK, "UnFollow 成功")
 	}else{
 		var follow model.Following

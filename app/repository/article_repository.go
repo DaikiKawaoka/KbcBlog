@@ -22,7 +22,7 @@ func ArticleListByCursor(cursor int, scope *model.Scope, userid int) ([]*model.A
 
 	if scope.FriendsOnly {
 		// フォローしているユーザの投稿のみ
-		query1 = "SELECT a.id id,a.userid userid,u.name name,a.title title,a.tag tag,a.created created,a.updated updated ,COUNT(al.id) likecount FROM articles a inner join users u on a.userid = u.id inner join article_likes al on a.id = al.articleid left join follows f on a.userid = f.followedid "
+		query1 = "SELECT a.id id,a.userid userid,u.name name,a.title title,a.tag tag,a.created created,a.updated updated ,COUNT(al.id) likecount FROM articles a inner join users u on a.userid = u.id inner join follows f on a.userid = f.followedid left join article_likes al on a.id = al.articleid  "
 	}else{
 		// 全てのユーザの投稿
 		query1 = "SELECT a.id id,a.userid userid,u.name name,a.title title,a.tag tag,a.created created,a.updated updated ,COUNT(al.id) likecount FROM articles a inner join users u on a.userid = u.id left join article_likes al on a.id = al.articleid "
@@ -39,10 +39,11 @@ func ArticleListByCursor(cursor int, scope *model.Scope, userid int) ([]*model.A
 	if scope.Tag == "全て"{
 		if scope.Text == ""{
 			if scope.FriendsOnly{
-				query2 = "WHERE a.id < ? AND (f.followerid = ? OR f.followedid = ?) "
+				// query2 = "WHERE a.id < ? AND (f.followerid = ? OR f.followedid = ?) "
+				query2 = "WHERE a.id < ? AND f.followerid = ? "
 				query = query1 + query2 + query3
 					// クエリ結果を格納する変数、クエリ文字列、パラメータを指定してクエリを実行します。
-				if err := db.Select(&articles, query, cursor,userid,userid); err != nil {
+				if err := db.Select(&articles, query, cursor,userid); err != nil {
 					return nil, err
 				}
 			}else{
@@ -55,10 +56,10 @@ func ArticleListByCursor(cursor int, scope *model.Scope, userid int) ([]*model.A
 			}
 		}else{
 			if scope.FriendsOnly{
-				query2 = `WHERE a.id < ? AND a.title LIKE CONCAT("%",?,"%") AND (f.followerid = ? OR f.followedid = ?) `
+				query2 = `WHERE a.id < ? AND a.title LIKE CONCAT("%",?,"%") AND f.followerid = ?  `
 				query = query1 + query2 + query3
 				// クエリ結果を格納する変数、クエリ文字列、パラメータを指定してクエリを実行します。
-				if err := db.Select(&articles, query, cursor, scope.Text,userid,userid); err != nil {
+				if err := db.Select(&articles, query, cursor, scope.Text,userid); err != nil {
 					return nil, err
 				}
 			}else{
@@ -74,10 +75,10 @@ func ArticleListByCursor(cursor int, scope *model.Scope, userid int) ([]*model.A
 	}else{
 		if scope.Text == "" {
 			if scope.FriendsOnly{
-				query2 = `WHERE a.id < ? AND a.tag LIKE CONCAT("%",?,"%") AND (f.followerid = ? OR f.followedid = ?) `
+				query2 = `WHERE a.id < ? AND a.tag LIKE CONCAT("%",?,"%") AND f.followerid = ? `
 				query = query1 + query2 + query3
 				// クエリ結果を格納する変数、クエリ文字列、パラメータを指定してクエリを実行します。
-				if err := db.Select(&articles, query, cursor, scope.Tag, userid,userid); err != nil {
+				if err := db.Select(&articles, query, cursor, scope.Tag, userid); err != nil {
 					return nil, err
 				}
 			}else{
@@ -91,9 +92,9 @@ func ArticleListByCursor(cursor int, scope *model.Scope, userid int) ([]*model.A
 			// query2 = `WHERE a.id < ? AND a.tag LIKE CONCAT("%",?,"%")`
 		}else{
 			if scope.FriendsOnly{
-				query2 = `WHERE a.id < ? AND a.tag LIKE CONCAT("%",?,"%") AND a.title LIKE CONCAT("%",?,"%") AND (f.followerid = ? OR f.followedid = ?) `
+				query2 = `WHERE a.id < ? AND a.tag LIKE CONCAT("%",?,"%") AND a.title LIKE CONCAT("%",?,"%") AND f.followerid = ? `
 				query = query1 + query2 + query3
-				if err := db.Select(&articles, query, cursor, scope.Tag, scope.Text,userid,userid); err != nil {
+				if err := db.Select(&articles, query, cursor, scope.Tag, scope.Text,userid); err != nil {
 					return nil, err
 				}
 			}else{

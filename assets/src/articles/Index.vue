@@ -2,14 +2,14 @@
   <div id="app">
     <Header :isArticle="true" :isQuestion="false" :user="user"></Header>
     <div class="index-main body-main">
-      <Tag @scopetag="scopetag" :tag="tag" :friendsOnly="friendsOnly" @update:friendsOnly="friendsOnly=$event"></Tag>
+      <Tag @scopetag="scopetag" :tag="tag" :friendsOnly="friendsOnly" @update:friendsOnly ="friendsOnly=$event"></Tag>
       <div class="article-all-div">
         <div class="article-search-div">
           <el-input placeholder="キーワード検索" v-model="searchText" suffix-icon="el-icon-search" style="width:200px; margin-left: 30px;" @input="scopetag"></el-input>
           <div class="order-div">
             <span class="order-span-left">並び替え</span>
-            <span class="order-span" v-bind:class="{'order-span-color': orderNew }" @click="articleOrder('new')">新着</span>
-            <span class="order-span" v-bind:class="{ 'order-span-color': orderLike }" @click="articleOrder('like')">人気</span>
+            <span class="order-span" v-bind:class="{'order-span-color': order === 'new' }" @click="articleOrder('new')">新着</span>
+            <span class="order-span" v-bind:class="{ 'order-span-color': order === 'like' }" @click="articleOrder('like')">人気</span>
           </div>
         </div>
 
@@ -32,8 +32,8 @@
                 <router-link v-bind:to="{ name : 'UserShow', params : { id: article.userid }}" class="a-tag">
                   <h3 class="article-index-username">by {{ article.name }}</h3>
                 </router-link>
-                <h3 class="article-index-update" v-if="orderNew"> {{ article.Updated | moment }}</h3>
-                <h3 class="article-index-update" v-else> {{ article.Updated | moment2 }}</h3>
+                <h3 class="article-index-update" v-if="order === 'new' "> {{ article.Created | moment }}</h3>
+                <h3 class="article-index-update" v-else> {{ article.Created | moment2 }}</h3>
                 <i class="el-icon-star-on article-star-i"></i>
                 <span class="article-likecount-span">{{article.likecount}}</span>
               </div>
@@ -42,15 +42,23 @@
 
 
           <infinite-loading @infinite="scrollArticles" :identifier="infiniteId" spinner="spiral">
-            <span slot="no-more"></span>
+            <span slot="no-more">----- 検索結果は以上です-----</span>
+            <span slot="no-results">----- 検索結果は以上です -----</span>
           </infinite-loading>
         </div>
 
         <div v-else>
-          <div class="article-show-div not-tag-div">
-            <p class="not-tag" v-if="searchText === '' ">タグ『{{ tag }}』の記事はまだありません。</p>
-            <p class="not-tag" v-else-if="tag === '全て'">キーワード『{{ searchText }}』の記事はありません。</p>
-            <p class="not-tag"  v-else>タグ『{{ tag }}』,キーワード『{{ searchText }}』の記事はありません。</p>
+          <div class="article-show-div not-tag-div" v-if="friendsOnly === false ">
+            <p class="not-tag" v-if="searchText === '' && tag !== '全て' ">タグ『{{ tag }}』の記事はまだありません。</p>
+            <p class="not-tag" v-else-if="tag === '全て' && searchText !== '' ">キーワード『{{ searchText }}』の記事はありません。</p>
+            <p class="not-tag"  v-else-if="tag !== '全て' && searchText !== '' ">タグ『{{ tag }}』,キーワード『{{ searchText }}』の記事はありません。</p>
+            <p class="not-tag" v-else>まだ記事が投稿されていません。</p>
+          </div>
+          <div class="article-show-div not-tag-div" v-else>
+            <p class="not-tag" v-if="searchText === '' && tag !== '全て' ">タグ『{{ tag }}』の記事はまだありません。</p>
+            <p class="not-tag" v-else-if="tag === '全て' && searchText !== '' ">キーワード『{{ searchText }}』の記事はありません。</p>
+            <p class="not-tag"  v-else-if="tag !== '全て' && searchText !== ''">タグ『{{ tag }}』,キーワード『{{ searchText }}』の記事はありません。</p>
+            <p class="not-tag" v-else >フレンドの記事はまだありません。</p>
           </div>
         </div>
 
@@ -81,11 +89,9 @@ export default {
       likeRanking: [],
       postRanking: [],
       searchText:"",
-      tag: "全て",
-      order: "new",
-      orderNew: true,
-      orderLike: false,
-      friendsOnly: false,
+      tag: String,
+      order: String,
+      friendsOnly: Boolean,
       cursor: 0,
       page: 1,
       infiniteId: +new Date(),
@@ -100,15 +106,26 @@ export default {
   },
   filters: {
     moment: function (date) {
-      // locale関数を使って言語を設定すると、日本語で出力される
-      // moment.locale( 'ja' );
       return moment(date).fromNow();
-      //return moment(date).utc().format('YYYY/MM/DD');
     },
     moment2: function (date) {
       // locale関数を使って言語を設定すると、日本語で出力される
       return moment(date).utc().format('YYYY/MM/DD');
     }
+  },
+  watch: {
+    searchText(newSearchText) {
+      localStorage.searchText = newSearchText;
+    },
+    order(newOrder) {
+      localStorage.order = newOrder;
+    },
+    tag(newTag) {
+      localStorage.tag = newTag;
+    },
+    friendsOnly(newFriendsOnly) {
+      localStorage.friendsOnly = newFriendsOnly;
+    },
   },
   // createdの中でaxiosを使います。get()の中のURLは、nginx.confで設定してるので、 /api/ になっています。
   created () {
@@ -116,7 +133,16 @@ export default {
     if(jst === null){
       this.$router.push({ path: "/login" });
     }
+    this.setUp()
     this.$axios.get('http://localhost/api/restricted/Articles',{
+      params: {
+        // ここにクエリパラメータを指定する
+        friendsOnly: this.friendsOnly,
+        searchText: this.searchText,
+        order: this.order,
+        tag: this.tag,
+        cursor: this.cursor,
+      },
       headers: {
         Authorization: `Bearer ${jst}`
       },
@@ -150,7 +176,6 @@ export default {
       this.changeType()
       this.$axios.get('http://localhost/api/restricted/Articles/scope', {
       params: {
-        // ここにクエリパラメータを指定する
         friendsOnly: this.friendsOnly,
         searchText: this.searchText,
         order: c,
@@ -164,12 +189,8 @@ export default {
       .then(response => {
         if(c === "new"){
           this.order = "new"
-          this.orderNew = true;
-          this.orderLike = false;
         }else{
           this.order = "like"
-          this.orderNew = false;
-          this.orderLike = true;
         }
         this.articles = response.data.Articles
         this.cursor = response.data.Cursor
@@ -249,6 +270,31 @@ export default {
       this.infiniteId += 1;
       this.articles = [];
       this.cursor = 0;
+    },
+
+    setUp() {
+      if (localStorage.searchText) {
+        this.searchText = localStorage.searchText;
+      }
+      if (localStorage.tag) {
+        this.tag = localStorage.tag;
+      }else{
+        this.tag = '全て'
+      }
+      if (localStorage.order) {
+        this.order = localStorage.order;
+      }else{
+        this.order = 'new'
+      }
+      if (localStorage.friendsOnly) {
+        if(localStorage.friendsOnly === "true"){
+          this.friendsOnly = true
+        }else{
+          this.friendsOnly = false
+        }
+      }else{
+        this.friendsOnly = false
+      }
     },
   },
 }

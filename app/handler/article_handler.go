@@ -68,10 +68,10 @@ func ArticleIndex(c echo.Context) error {
 	}
 
 	var scope model.Scope
-	scope.Order = "new"
-	scope.Tag = "全て"
-	scope.Text = ""
-	scope.FriendsOnly = false
+	scope.Order = c.QueryParam("order")//並び順
+	scope.Tag = c.QueryParam("tag")//絞り込みタグ
+	scope.Text = c.QueryParam("searchText")//絞り込みテキスト
+	scope.FriendsOnly,_ = strconv.ParseBool(c.QueryParam("friendsOnly")) // フレンドのみ? true or false
 
 	// articles, err := repository.ArticleListByCursor(0,"new","全て","",false,userId)
 	articles, err := repository.ArticleListByCursor(0,&scope,userID)

@@ -46,7 +46,7 @@
       return {
         checked:false,
         value: '全て',
-        scopetag: "全て",
+        scopetag: this.$parent.tag,
         options: [{
           value: '全て',
           label: '全て',
@@ -262,7 +262,6 @@
     methods: {
       event() {
         this.$parent.tag = this.scopetag[this.scopetag.length - 1]
-        console.log(this.scopetag)
         this.$emit('scopetag', this.$parent.tag);
       },
     },
