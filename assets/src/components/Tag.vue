@@ -2,6 +2,7 @@
   <div class="tag-all">
     <div class="tag-header">
       <span class="tag-header-text">絞り込み</span>
+      <i class="el-icon-circle-close close-btn" @click="$emit('reset')"></i>
     </div>
     <ul class="tag-ul">
       <div class="on-display-flex">
@@ -31,6 +32,11 @@
     props: {
       tag: String,
       friendsOnly: Boolean,
+    },
+    watch: {
+      tag: function(newHoge){
+        this.scopetag = newHoge
+      }
     },
     computed: {
       innerVal: {
@@ -297,5 +303,13 @@
 .f-text-li{
   font-size: 0.95em;
   font-weight:bolder;
+}
+.close-btn{
+  margin-left: 100px;
+  font-size: 1.2em;
+  cursor: pointer;
+}
+.close-btn:hover{
+  color: #999;
 }
 </style>

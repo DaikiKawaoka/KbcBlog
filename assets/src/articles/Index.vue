@@ -2,7 +2,7 @@
   <div id="app">
     <Header :isArticle="true" :isQuestion="false" :user="user"></Header>
     <div class="index-main body-main">
-      <Tag @scopetag="scopetag" :tag="tag" :friendsOnly="friendsOnly" @update:friendsOnly ="friendsOnly=$event"></Tag>
+      <Tag @scopetag="scopetag" :tag="tag" :friendsOnly="friendsOnly" @reset="reset" @update:friendsOnly ="friendsOnly=$event"></Tag>
       <div class="article-all-div">
         <div class="article-search-div">
           <el-input placeholder="キーワード検索" v-model="searchText" suffix-icon="el-icon-search" style="width:200px; margin-left: 30px;" @input="scopetag"></el-input>
@@ -296,6 +296,14 @@ export default {
         this.friendsOnly = false
       }
     },
+    reset(){
+      this.searchText = ''
+      this.tag = '全て'
+      this.order = 'new'
+      this.friendsOnly = false
+      console.log("aaaaa")
+      this.scopetag()
+    }
   },
 }
 </script>
