@@ -11,9 +11,6 @@ import (
 func ArticleListByCursor(cursor int, scope *model.Scope, userid int) ([]*model.Article, error) {
 
 	articles := make([]*model.Article, 0, 10)
-	if cursor <= 0 {
-		cursor = math.MaxInt32
-	}
 	var query string
 	var query1 string
 	var query2 string
@@ -31,43 +28,87 @@ func ArticleListByCursor(cursor int, scope *model.Scope, userid int) ([]*model.A
 	if scope.Order == "new"{
 		// IDの降順に記事データを 10 件取得
 		query3 = " GROUP BY a.id,a.userid,u.name,a.title,a.created,a.updated ORDER BY a.id desc LIMIT 10;"
+		if cursor <= 0 {
+			cursor = math.MaxInt32
+		}
 	}else{
 		// いいね数の降順に記事データを 10 件取得
-		query3 = " GROUP BY a.id,a.userid,u.name,a.title,a.created,a.updated ORDER BY likecount desc , a.id desc LIMIT 10;"
+		query3 = " GROUP BY a.id,a.userid,u.name,a.title,a.created,a.updated ORDER BY likecount desc , a.id desc LIMIT ?,10;"
 	}
 
 	if scope.Tag == "全て"{
 		if scope.Text == ""{
 			if scope.FriendsOnly{
-				// query2 = "WHERE a.id < ? AND (f.followerid = ? OR f.followedid = ?) "
-				query2 = "WHERE a.id < ? AND f.followerid = ? "
-				query = query1 + query2 + query3
-					// クエリ結果を格納する変数、クエリ文字列、パラメータを指定してクエリを実行します。
-				if err := db.Select(&articles, query, cursor,userid); err != nil {
-					return nil, err
+				if scope.Order == "new" {
+					// query2 = "WHERE a.id < ? AND (f.followerid = ? OR f.followedid = ?) "
+					query2 = "WHERE a.id < ? AND f.followerid = ? "
+					query = query1 + query2 + query3
+						// クエリ結果を格納する変数、クエリ文字列、パラメータを指定してクエリを実行します。
+					if err := db.Select(&articles, query, cursor,userid); err != nil {
+						return nil, err
+					}
+				}else{
+					// query2 = "WHERE a.id < ? AND (f.followerid = ? OR f.followedid = ?) "
+					query2 = "WHERE f.followerid = ? "
+					query = query1 + query2 + query3
+						// クエリ結果を格納する変数、クエリ文字列、パラメータを指定してクエリを実行します。
+					if err := db.Select(&articles, query, userid, cursor); err != nil {
+						return nil, err
+					}
 				}
 			}else{
-				query2 = "WHERE a.id < ? "
-				query = query1 + query2 + query3
-					// クエリ結果を格納する変数、クエリ文字列、パラメータを指定してクエリを実行します。
-				if err := db.Select(&articles, query, cursor); err != nil {
-					return nil, err
+				if scope.Order == "new" {
+					query2 = "WHERE a.id < ? "
+					query = query1 + query2 + query3
+						// クエリ結果を格納する変数、クエリ文字列、パラメータを指定してクエリを実行します。
+					if err := db.Select(&articles, query, cursor); err != nil {
+						return nil, err
+					}
+				}else{
+					// query2 = ""
+					query = query1 + query3
+					print("aaaaaaaaa")
+					println(cursor)
+					println("")
+					print(query)
+						// クエリ結果を格納する変数、クエリ文字列、パラメータを指定してクエリを実行します。
+					if err := db.Select(&articles, query, cursor); err != nil {
+						return nil, err
+					}
 				}
 			}
 		}else{
 			if scope.FriendsOnly{
-				query2 = `WHERE a.id < ? AND a.title LIKE CONCAT("%",?,"%") AND f.followerid = ?  `
-				query = query1 + query2 + query3
-				// クエリ結果を格納する変数、クエリ文字列、パラメータを指定してクエリを実行します。
-				if err := db.Select(&articles, query, cursor, scope.Text,userid); err != nil {
-					return nil, err
+				if scope.Order == "new" {
+					query2 = `WHERE a.id < ? AND a.title LIKE CONCAT("%",?,"%") AND f.followerid = ?  `
+					query = query1 + query2 + query3
+					// クエリ結果を格納する変数、クエリ文字列、パラメータを指定してクエリを実行します。
+					if err := db.Select(&articles, query, cursor, scope.Text,userid); err != nil {
+						return nil, err
+					}
+				}else{
+					query2 = `WHERE a.title LIKE CONCAT("%",?,"%") AND f.followerid = ?  `
+					query = query1 + query2 + query3
+					// クエリ結果を格納する変数、クエリ文字列、パラメータを指定してクエリを実行します。
+					if err := db.Select(&articles, query, scope.Text, userid, cursor); err != nil {
+						return nil, err
+					}
 				}
 			}else{
-				query2 = `WHERE a.id < ? AND a.title LIKE CONCAT("%",?,"%")`
-				query = query1 + query2 + query3
-				// クエリ結果を格納する変数、クエリ文字列、パラメータを指定してクエリを実行します。
-				if err := db.Select(&articles, query, cursor, scope.Text); err != nil {
-					return nil, err
+				if scope.Order == "new" {
+					query2 = `WHERE a.id < ? AND a.title LIKE CONCAT("%",?,"%")`
+					query = query1 + query2 + query3
+					// クエリ結果を格納する変数、クエリ文字列、パラメータを指定してクエリを実行します。
+					if err := db.Select(&articles, query, cursor, scope.Text); err != nil {
+						return nil, err
+					}
+				}else{
+					query2 = `WHERE a.title LIKE CONCAT("%",?,"%")`
+					query = query1 + query2 + query3
+					// クエリ結果を格納する変数、クエリ文字列、パラメータを指定してクエリを実行します。
+					if err := db.Select(&articles, query, scope.Text, cursor); err != nil {
+						return nil, err
+					}
 				}
 			}
 		}
@@ -75,33 +116,67 @@ func ArticleListByCursor(cursor int, scope *model.Scope, userid int) ([]*model.A
 	}else{
 		if scope.Text == "" {
 			if scope.FriendsOnly{
-				query2 = `WHERE a.id < ? AND a.tag LIKE CONCAT("%",?,"%") AND f.followerid = ? `
-				query = query1 + query2 + query3
-				// クエリ結果を格納する変数、クエリ文字列、パラメータを指定してクエリを実行します。
-				if err := db.Select(&articles, query, cursor, scope.Tag, userid); err != nil {
-					return nil, err
+				if scope.Order == "new" {
+					query2 = `WHERE a.id < ? AND a.tag LIKE CONCAT("%",?,"%") AND f.followerid = ? `
+					query = query1 + query2 + query3
+					// クエリ結果を格納する変数、クエリ文字列、パラメータを指定してクエリを実行します。
+					if err := db.Select(&articles, query, cursor, scope.Tag, userid); err != nil {
+						return nil, err
+					}
+				}else{
+					query2 = `WHERE a.tag LIKE CONCAT("%",?,"%") AND f.followerid = ? `
+					query = query1 + query2 + query3
+					// クエリ結果を格納する変数、クエリ文字列、パラメータを指定してクエリを実行します。
+					if err := db.Select(&articles, query, scope.Tag, userid, cursor); err != nil {
+						return nil, err
+					}
 				}
 			}else{
-				query2 = `WHERE a.id < ? AND a.tag LIKE CONCAT("%",?,"%")`
-				query = query1 + query2 + query3
-				// クエリ結果を格納する変数、クエリ文字列、パラメータを指定してクエリを実行します。
-				if err := db.Select(&articles, query, cursor, scope.Tag); err != nil {
-					return nil, err
+				if scope.Order == "new" {
+					query2 = `WHERE a.id < ? AND a.tag LIKE CONCAT("%",?,"%")`
+					query = query1 + query2 + query3
+					// クエリ結果を格納する変数、クエリ文字列、パラメータを指定してクエリを実行します。
+					if err := db.Select(&articles, query, cursor, scope.Tag); err != nil {
+						return nil, err
+					}
+				}else{
+					query2 = `WHERE a.tag LIKE CONCAT("%",?,"%")`
+					query = query1 + query2 + query3
+					// クエリ結果を格納する変数、クエリ文字列、パラメータを指定してクエリを実行します。
+					if err := db.Select(&articles, query, scope.Tag, cursor); err != nil {
+						return nil, err
+					}
 				}
 			}
 			// query2 = `WHERE a.id < ? AND a.tag LIKE CONCAT("%",?,"%")`
 		}else{
 			if scope.FriendsOnly{
-				query2 = `WHERE a.id < ? AND a.tag LIKE CONCAT("%",?,"%") AND a.title LIKE CONCAT("%",?,"%") AND f.followerid = ? `
-				query = query1 + query2 + query3
-				if err := db.Select(&articles, query, cursor, scope.Tag, scope.Text,userid); err != nil {
-					return nil, err
+				if scope.Order == "new" {
+					query2 = `WHERE a.id < ? AND a.tag LIKE CONCAT("%",?,"%") AND a.title LIKE CONCAT("%",?,"%") AND f.followerid = ? `
+					query = query1 + query2 + query3
+					if err := db.Select(&articles, query, cursor, scope.Tag, scope.Text, userid); err != nil {
+						return nil, err
+					}
+				}else{
+					query2 = `WHERE a.tag LIKE CONCAT("%",?,"%") AND a.title LIKE CONCAT("%",?,"%") AND f.followerid = ? `
+					query = query1 + query2 + query3
+					if err := db.Select(&articles, query, scope.Tag, scope.Text, userid, cursor); err != nil {
+						return nil, err
+					}
 				}
 			}else{
-				query2 = `WHERE a.id < ? AND a.tag LIKE CONCAT("%",?,"%") AND a.title LIKE CONCAT("%",?,"%")`
-				query = query1 + query2 + query3
-				if err := db.Select(&articles, query, cursor, scope.Tag, scope.Text); err != nil {
-					return nil, err
+				if scope.Order == "new" {
+					query2 = `WHERE a.id < ? AND a.tag LIKE CONCAT("%",?,"%") AND a.title LIKE CONCAT("%",?,"%")`
+					query = query1 + query2 + query3
+					if err := db.Select(&articles, query, cursor, scope.Tag, scope.Text); err != nil {
+						return nil, err
+					}
+				}else{
+					query2 = `WHERE a.tag LIKE CONCAT("%",?,"%") AND a.title LIKE CONCAT("%",?,"%")`
+					query = query1 + query2 + query3
+					if err := db.Select(&articles, query, scope.Tag, scope.Text, cursor); err != nil {
+						return nil, err
+					}
 				}
 			}
 		}

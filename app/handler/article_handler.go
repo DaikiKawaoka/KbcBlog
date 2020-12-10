@@ -283,8 +283,14 @@ func ArticleIndexOrder(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError,"記事の一覧データ取得中にエラー発生")
 	}
 
-	if len(articles) != 0 {
-		cursor = articles[len(articles)-1].ID
+	if scope.Order == "new" {
+		if len(articles) != 0 {
+			cursor = articles[len(articles)-1].ID
+		}
+	}else{
+		if len(articles) != 0 {
+			cursor = cursor + 10
+		}
 	}
 
 	data := map[string]interface{}{
