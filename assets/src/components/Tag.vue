@@ -2,7 +2,7 @@
   <div class="tag-all">
     <div class="tag-header">
       <span class="tag-header-text">絞り込み</span>
-      <i class="el-icon-circle-close close-btn" @click="$emit('reset')"></i>
+      <i title="絞り込みリセット" class="el-icon-circle-close close-btn" @click="$emit('reset')"></i>
     </div>
     <ul class="tag-ul">
       <div class="on-display-flex">
