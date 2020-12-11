@@ -282,6 +282,7 @@
 </template>
 
 <script>
+import countArrayValues from 'count-array-values'
 import moment from 'moment'
 import Header from './../components/Header.vue';
 import Footer from './../components/Footer.vue';
