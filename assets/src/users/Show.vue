@@ -282,7 +282,7 @@
 </template>
 
 <script>
-import countArrayValues from 'count-array-values'
+// import countArrayValues from 'count-array-values'
 import moment from 'moment'
 import Header from './../components/Header.vue';
 import Footer from './../components/Footer.vue';
@@ -299,6 +299,7 @@ export default {
       follows:[],
       followers:[],
       langarray: [],
+      tagArray: [],
       user: {
         KBCmail: "",
         id : 0,
@@ -354,6 +355,7 @@ export default {
         }
         // 文字列のlangsを配列に変換
         this.langarray = this.user.languages.String.split(',');
+        this.tagArray = response.data.Tags
       })
       .catch(error => {
         if(error.response.status == 401){

@@ -2,7 +2,7 @@
   <header id="header">
     <div class="body-main header-body-main-div">
       <div class="header-left">
-        <router-link to="/" class="a-tag"><h1 class="title">KBC Blog</h1></router-link>
+        <router-link to="/" class="a-tag"><h1 class="title" @click="$emit('reset')">KBC Blog</h1></router-link>
         <router-link to="/" class="a-tag2"><h3 v-if="!loginpage" class="header-article" v-bind:class="{ active: isArticle }">記事</h3></router-link>
         <router-link to="/Questions" class="a-tag2"><h3 v-if="!loginpage" class="header-question" v-bind:class="{ active: isQuestion }">質問</h3></router-link>
       </div>

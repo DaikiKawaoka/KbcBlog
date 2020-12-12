@@ -2738,6 +2738,11 @@ cosmiconfig@^5.0.0:
     js-yaml "^3.13.1"
     parse-json "^4.0.0"
 
+count-array-values@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/count-array-values/-/count-array-values-1.2.1.tgz#bf524c25626b24f08cc54a28599cd71fded6b7a9"
+  integrity sha1-v1JMJWJrJPCMxUooWZzXH97Wt6k=
+
 create-ecdh@^4.0.0:
   version "4.0.4"
   resolved "https://registry.yarnpkg.com/create-ecdh/-/create-ecdh-4.0.4.tgz#d6e7f4bffa66736085a0762fd3a632684dabcc4e"

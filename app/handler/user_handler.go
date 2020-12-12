@@ -183,6 +183,14 @@ func UserShow(c echo.Context) error {
 		}
 	}
 
+	// GetArticleTagsユーザ全記事のタグ配列取得
+	tags , err := repository.GetArticleTags(user.ID)
+	if err != nil {
+    c.Logger().Error(err.Error())
+    return c.JSON(http.StatusInternalServerError,"ユーザのタグ配列取得中にエラー発生") //500
+	}
+
+
 
 	// テンプレートに渡すデータを map に格納します。
 	data := map[string]interface{}{
@@ -194,6 +202,7 @@ func UserShow(c echo.Context) error {
 		"Follow": follow,
 		"Follows":followers,
 		"Followers":followeds,
+		"Tags": tags,
 		// "likes" : likes,
 	}
 

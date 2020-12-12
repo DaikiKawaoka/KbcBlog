@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Header :isArticle="true" :isQuestion="false" :user="user"></Header>
+    <Header :isArticle="true" :isQuestion="false" :user="user" @reset="reset"></Header>
     <div class="index-main body-main">
       <Tag @scopetag="scopetag" :tag="tag" :friendsOnly="friendsOnly" @reset="reset" @update:friendsOnly ="friendsOnly=$event"></Tag>
       <div class="article-all-div">
