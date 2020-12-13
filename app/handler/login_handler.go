@@ -13,24 +13,26 @@ import (
 	"github.com/dgrijalva/jwt-go"
 )
 
+// LoginRequest ...
 type LoginRequest struct {
-	KBC_mail    string    `json:"KBC_mail"`
+	KBCMail    string    `json:"KBC_mail"`
 	Password    string    `json:"password"`
 }
 
+// LoginResponse ...
 type LoginResponse struct {
 	Token string `json:"token"`
 	Message          string
   ValidationErrors []string
 }
 
-
+// JwtCustomClaims ...
 type JwtCustomClaims struct {
-	UserId      int
-	UserName    string
+	UserID      int
 	jwt.StandardClaims
 }
 
+// Login ...
 func Login(c echo.Context) error {
 
 	var loginReq LoginRequest
@@ -43,17 +45,14 @@ func Login(c echo.Context) error {
 
 	// ユーザ認証
 
-	loginUser, err := repository.GetLoginPassHash(loginReq.KBC_mail)
+	loginUser, err := repository.GetLoginPassHash(loginReq.KBCMail)
 	var errmessages[1] string;
 
 	if  err != nil{
-		// エラーの内容をサーバーのログに出力します。
     c.Logger().Error(err.Error())
-		// サーバー内の処理でエラーが発生した場合は 500 エラーを返却します。
 		message := "ユーザが存在しません。"
 		errmessages[0] = message;
-
-    return c.JSON(http.StatusInternalServerError, errmessages)
+    return c.JSON(http.StatusInternalServerError, errmessages) //500
 	}
 
 	//パスワードとパスワードハッシュが一致しているか検証
@@ -71,39 +70,34 @@ func Login(c echo.Context) error {
 		return err
 	}
 	loginRes.Token = t
-
-	// response
 	return c.JSON(http.StatusOK,loginRes)
 }
 
-// 登録したパスワードハッシュが入力パスワードにマッチするかどうかを調べる関数
+// passwordVerify 登録したパスワードハッシュが入力パスワードにマッチするかどうかを調べる関数
 func passwordVerify(hash, pw string) error {
 	return bcrypt.CompareHashAndPassword([]byte(hash), []byte(pw))
 }
 
+// CreateToken ...
 func CreateToken(userID int) (string, error) {
 
 	claims := &JwtCustomClaims{
 		userID,
-		"daiki",
 		jwt.StandardClaims{
 				ExpiresAt: time.Now().Add(time.Hour * 6).Unix(), // 有効期限を指定
 		},
 	}
-
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-
     t, err := token.SignedString([]byte("secret"))
     if err != nil {
         return "",err
 		}
-
 	return t, nil
 }
 
 func userIDFromToken(c echo.Context) int {
 	user := c.Get("user").(*jwt.Token)
 	claims := user.Claims.(*JwtCustomClaims)
-	uid := claims.UserId
+	uid := claims.UserID
 	return uid
 }

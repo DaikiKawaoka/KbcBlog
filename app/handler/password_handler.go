@@ -10,24 +10,20 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// PasswordEditOutput パスワード変更リターン型
 type PasswordEditOutput struct {
   Message          string
   ValidationErrors []string
 }
 
-// ArticleUpdate ...
+// UserPasswordEdit パスワード編集処理
 func UserPasswordEdit(c echo.Context) error {
-	// リクエスト送信元のパスを取得
 	ref := c.Request().Referer()
-	// リクエスト送信元のパスから記事 ID を抽出。
 	refID := strings.Split(ref, "/")[4]
-	// リクエスト URL のパスパラメータから記事 ID を抽出します。
 	reqID := c.Param("id")
 
-	// 編集画面で表示している記事と更新しようとしている記事が異なる場合は、
-	// 更新処理をせずに 400 エラーを返却します。
 	if reqID != refID {
-		return c.JSON(http.StatusBadRequest, "パス違い")
+		return c.JSON(http.StatusBadRequest, "パス違い") //400
 	}
 	var password model.Password
 	var out PasswordEditOutput
@@ -49,7 +45,6 @@ func UserPasswordEdit(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, out)
 	}
 
-	
 	if err := passwordVerify(dbpasshash, password.CurrentPassword); err != nil {
 		out.ValidationErrors = append(out.ValidationErrors, "現在のパスワードが違います。")
 		return c.JSON(http.StatusUnprocessableEntity, out)

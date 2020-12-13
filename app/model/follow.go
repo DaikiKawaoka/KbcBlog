@@ -8,8 +8,8 @@ import (
 // フォローされる人は「followed」
 type Following struct {
 	ID                 int       `db:"id" json:"id"`
-	FollowerId         int       `db:"followerid" json:"followerid"`
-	FollowedId         int       `db:"followedid" json:"followedid"`
+	FollowerID         int       `db:"followerid" json:"followerid"`
+	FollowedID         int       `db:"followedid" json:"followedid"`
   Created            string    `db:"created"`
 }
 
