@@ -11,36 +11,31 @@ import (
 
 //  article
 
+// ArticleCommentCreateOutput 記事コメント作成リターン型
 type ArticleCommentCreateOutput struct {
   Comment          *model.ArticleComment
   Message          string
   ValidationErrors []string
 }
 
-// ArticleCreate ...
+// ArticleCommentCreate 記事コメント作成処理
 func ArticleCommentCreate(c echo.Context) error {
   var comment model.ArticleComment
 	var out ArticleCommentCreateOutput
 
   if err := c.Bind(&comment); err != nil {
     c.Logger().Error(err.Error())
-    // リクエストの解釈に失敗した場合は 400 エラーを返却します。
-    return c.JSON(http.StatusBadRequest, out)
+    return c.JSON(http.StatusBadRequest, out) //400
 	}
-	// バリデーションチェックを実行します。
   if err := c.Validate(&comment); err != nil {
     c.Logger().Error(err.Error())
     out.ValidationErrors = comment.ValidationErrors(err)
-    // 解釈できたパラメータが許可されていない値の場合は 422 エラーを返却します。
-    return c.JSON(http.StatusUnprocessableEntity, out)
+    return c.JSON(http.StatusUnprocessableEntity, out) //422
   }
-  // repository を呼び出して保存処理を実行します。
   res, err := repository.ArticleCommentCreate(&comment)
   if err != nil {
-    // エラーの内容をサーバーのログに出力します。
     c.Logger().Error(err.Error())
-    // サーバー内の処理でエラーが発生した場合は 500 エラーを返却します。
-    return c.JSON(http.StatusInternalServerError, out)
+    return c.JSON(http.StatusInternalServerError, out) //500
 	}
   // SQL 実行結果から作成されたレコードの ID を取得します。
   id, _ := res.LastInsertId()
@@ -50,12 +45,10 @@ func ArticleCommentCreate(c echo.Context) error {
 
   // レスポンスの構造体に保存した記事のデータを格納します。
   out.Comment = &comment
-
-  // 処理成功時はステータスコード 200 でレスポンスを返却します。
   return c.JSON(http.StatusOK, out)
 }
 
-// ArticleIndex ...
+// ArticleCommentIndex 記事コメントリスト取得処理
 func ArticleCommentIndex(c echo.Context) error {
 
 	// 文字列型で取得されるので、strconv パッケージを利用して数値型にキャストしています。
@@ -79,6 +72,7 @@ func ArticleCommentIndex(c echo.Context) error {
 	return c.JSON(http.StatusOK, data)
 }
 
+// ArticleCommentDelete 記事コメント削除処理
 func ArticleCommentDelete(c echo.Context) error {
 	// パスパラメータから記事 ID を取得します。
 	// 文字列型で取得されるので、strconv パッケージを利用して数値型にキャストしています。
@@ -101,13 +95,14 @@ func ArticleCommentDelete(c echo.Context) error {
 
 //  question
 
+// QuestionCommentCreateOutput 質問コメント作成リターン型
 type QuestionCommentCreateOutput struct {
   Comment          *model.QuestionComment
   Message          string
   ValidationErrors []string
 }
 
-// ArticleCreate ...
+// QuestionCommentCreate 質問コメント作成処理
 func QuestionCommentCreate(c echo.Context) error {
   var comment model.QuestionComment
 	var out QuestionCommentCreateOutput
@@ -145,6 +140,7 @@ func QuestionCommentCreate(c echo.Context) error {
   return c.JSON(http.StatusOK, out)
 }
 
+// QuestionCommentIndex 質問コメントリスト取得処理
 func QuestionCommentIndex(c echo.Context) error {
 
 	// 文字列型で取得されるので、strconv パッケージを利用して数値型にキャストしています。
@@ -168,6 +164,7 @@ func QuestionCommentIndex(c echo.Context) error {
 	return c.JSON(http.StatusOK, data)
 }
 
+// QuestionCommentDelete 質問コメント削除処理
 func QuestionCommentDelete(c echo.Context) error {
 	// パスパラメータから記事 ID を取得します。
 	// 文字列型で取得されるので、strconv パッケージを利用して数値型にキャストしています。

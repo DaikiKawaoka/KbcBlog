@@ -11,11 +11,11 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-
+// ArticleNew 新規記事作成ページアクセス
 func ArticleNew(c echo.Context) error {
-	userId := userIDFromToken(c)
+	userID := userIDFromToken(c)
 
-	myUser,err := repository.GetMyUser(userId)
+	myUser,err := repository.GetMyUser(userID)
 	if err != nil {
 		c.Logger().Error(err.Error())
 		return c.JSON(http.StatusInternalServerError,"userが存在しません")
@@ -27,13 +27,14 @@ func ArticleNew(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, data)
 }
-
+// ArticleCreateOutput 新規記事作成のリターン型
 type ArticleCreateOutput struct {
   Article          *model.Article
   Message          string
   ValidationErrors []string
 }
 
+// ArticleCreate 新規記事作成処理
 func ArticleCreate(c echo.Context) error {
   var article model.Article
   var out ArticleCreateOutput
@@ -58,6 +59,7 @@ func ArticleCreate(c echo.Context) error {
   return c.JSON(http.StatusOK, out)
 }
 
+// ArticleIndex 記事一覧ページ
 func ArticleIndex(c echo.Context) error {
 
 	userID := userIDFromToken(c)
@@ -109,9 +111,10 @@ func ArticleIndex(c echo.Context) error {
 	return c.JSON(http.StatusOK, data)
 }
 
+// ArticleShow 記事詳細ページ
 func ArticleShow(c echo.Context) error {
-	userId := userIDFromToken(c)
-	myUser,err := repository.GetMyUser(userId)
+	userID := userIDFromToken(c)
+	myUser,err := repository.GetMyUser(userID)
 	if err != nil {
 		c.Logger().Error(err.Error())
 		return c.JSON(http.StatusInternalServerError,"userが存在しません")
@@ -127,7 +130,7 @@ func ArticleShow(c echo.Context) error {
 
 	// 記事データのいいねを取得する
 	var like model.Like
-	count, err := repository.GetArticleLike(userId,id)
+	count, err := repository.GetArticleLike(userID,id)
 	if err != nil {
     c.Logger().Error(err.Error())
     return c.JSON(http.StatusInternalServerError,"likeデータの取得中にエラー発生") //500
@@ -153,7 +156,7 @@ func ArticleShow(c echo.Context) error {
 
 	var commentLike model.Like
 	for i, comment := range comments {
-		count, err := repository.GetArticleCommentLike(userId,comment.ID);
+		count, err := repository.GetArticleCommentLike(userID,comment.ID);
 		if err != nil {
 			c.Logger().Error(err.Error())
 			return c.JSON(http.StatusInternalServerError,"likeデータの取得中にエラー発生") //500
@@ -186,10 +189,10 @@ func ArticleShow(c echo.Context) error {
 	return c.JSON(http.StatusOK, data)
 }
 
-// ArticleEdit ...
+// ArticleEdit 記事編集ページアクセス
 func ArticleEdit(c echo.Context) error {
-	userId := userIDFromToken(c)
-	myUser,err := repository.GetMyUser(userId)
+	userID := userIDFromToken(c)
+	myUser,err := repository.GetMyUser(userID)
 
 	if err != nil {
 		c.Logger().Error(err.Error())
@@ -210,13 +213,14 @@ func ArticleEdit(c echo.Context) error {
 	return c.JSON(http.StatusOK, data)
 }
 
+// ArticleUpdateOutput 記事編集リターン型
 type ArticleUpdateOutput struct {
 	Article          *model.Article
 	Message          string
 	ValidationErrors []string
 }
 
-// ArticleUpdate ...
+// ArticleUpdate 記事編集処理
 func ArticleUpdate(c echo.Context) error {
 	// リクエスト送信元のパスを取得
 	ref := c.Request().Referer()
@@ -255,6 +259,7 @@ func ArticleUpdate(c echo.Context) error {
 	return c.JSON(http.StatusOK, out)
 }
 
+// ArticleDelete 記事作成処理
 func ArticleDelete(c echo.Context) error {
 	id, _ := strconv.Atoi(c.Param("id"))
 	if err := repository.ArticleDelete(id); err != nil {
@@ -264,7 +269,7 @@ func ArticleDelete(c echo.Context) error {
 	return c.JSON(http.StatusOK, fmt.Sprintf("Article %d is deleted.", id))
 }
 
-
+// ArticleIndexOrder 記事一覧のスクロール時に次の10記事を返す
 func ArticleIndexOrder(c echo.Context) error {
 
 	cursor, _ := strconv.Atoi(c.QueryParam("cursor"))
