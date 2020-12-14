@@ -6,6 +6,8 @@ import (
 
 // フォローする人は「follower」
 // フォローされる人は「followed」
+
+// Following ...
 type Following struct {
 	ID                 int       `db:"id" json:"id"`
 	FollowerID         int       `db:"followerid" json:"followerid"`
@@ -13,12 +15,14 @@ type Following struct {
   Created            string    `db:"created"`
 }
 
+// Follow ...
 type Follow struct {
-	IsFollow              bool     `json:"isfollow"`
+	IsFollow              bool      `json:"isfollow"`
 	FollowerCount         int       `db:"followercount" json:"followerCount"`
 	FollowedCount         int       `db:"followedcount" json:"followedCount"`
 }
 
+// FUser ...
 type FUser struct {
 	ID          int              `db:"id" json:"id"`
 	Name        string           `db:"name" json:"name" validate:"required,min=4,max=20"`

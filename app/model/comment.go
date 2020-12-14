@@ -4,8 +4,7 @@ import (
 	"gopkg.in/go-playground/validator.v9"
 )
 
-// ArticleComment
-
+// ArticleComment ...
 type ArticleComment struct {
 	ID          int       `db:"id" json:"id"`
 	Userid      int       `db:"userid" form:"userid" json:"userid"`
@@ -41,8 +40,7 @@ func (a *ArticleComment) ValidationErrors(err error) []string {
 	return errMessages
 }
 
-//QuestionComment
-
+//QuestionComment ...
 type QuestionComment struct {
 	ID          int       `db:"id" json:"id"`
 	Userid      int       `db:"userid" form:"userid" json:"userid"`

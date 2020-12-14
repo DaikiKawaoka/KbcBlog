@@ -119,6 +119,6 @@ type CustomValidator struct {
 
 // Validate ...
 func (cv *CustomValidator) Validate(i interface{}) error {
-	cv.validator.RegisterValidation("mail_check_regexp",model.Mail_check_regexp)
+	cv.validator.RegisterValidation("MailCheckRegexp",model.MailCheckRegexp)
 	return cv.validator.Struct(i)
 }

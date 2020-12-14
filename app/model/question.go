@@ -16,6 +16,7 @@ type Question struct {
 	Updated string `db:"updated"`
 }
 
+// AnswerQuestion ...
 type AnswerQuestion struct {
 	ID      int       `db:"id" json:"id"`
 	Userid  int       `db:"userid" json:"userid"`

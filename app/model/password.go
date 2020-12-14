@@ -2,10 +2,10 @@ package model
 
 import (
 	"gopkg.in/go-playground/validator.v9"
-	// "regexp"
 	"golang.org/x/crypto/bcrypt"
 )
 
+// Password ...
 type Password struct {
 	ID                      int       `db:"id" json:"id"`
 	CurrentPassword         string    `json:"currentPassword"`
@@ -13,41 +13,44 @@ type Password struct {
 	PasswordConfirmation    string    `json:"passwordConfirmation"`
 }
 
-// パスワードハッシュを作る
-func (u *Password) NewPasswordHash() error {
-	hash, err := bcrypt.GenerateFromPassword([]byte(u.NewPassword), bcrypt.DefaultCost)
+// NewPasswordHash パスワードハッシュを作る
+func (p *Password) NewPasswordHash() error {
+	hash, err := bcrypt.GenerateFromPassword([]byte(p.NewPassword), bcrypt.DefaultCost)
 	if err != nil {
 		return err
 	}
-	u.NewPassword = string(hash)
-	return nil
-}
-func (u *Password) CurrentPasswordHash() error {
-	hash, err := bcrypt.GenerateFromPassword([]byte(u.CurrentPassword), bcrypt.DefaultCost)
-	if err != nil {
-		return err
-	}
-	u.CurrentPassword = string(hash)
+	p.NewPassword = string(hash)
 	return nil
 }
 
-// 現在のパスワードがあっているかチェック
-func (u *Password) CurrentPassword_check(dbcurrentP string) bool{
-	if(u.CurrentPassword == dbcurrentP){
+// CurrentPasswordHash ...
+func (p *Password) CurrentPasswordHash() error {
+	hash, err := bcrypt.GenerateFromPassword([]byte(p.CurrentPassword), bcrypt.DefaultCost)
+	if err != nil {
+		return err
+	}
+	p.CurrentPassword = string(hash)
+	return nil
+}
+
+// CurrentPasswordCheck 現在のパスワードがあっているかチェック
+func (p *Password) CurrentPasswordCheck(dbcurrentP string) bool{
+	if(p.CurrentPassword == dbcurrentP){
 		return true
 	}
 	return false
 }
 
-func (u *Password) NewPassword_check() bool{
-	if(u.NewPassword == u.PasswordConfirmation){
+// NewPasswordCheck ...
+func (p *Password) NewPasswordCheck() bool{
+	if(p.NewPassword == p.PasswordConfirmation){
 		return true
 	}
 	return false
 }
 
-
-func (a *Password) ValidationErrors(err error) []string {
+// ValidationErrors ...
+func (p *Password) ValidationErrors(err error) []string {
 	// メッセージを格納するスライスを宣言します。
 	var errMessages []string
 
@@ -67,7 +70,7 @@ func (a *Password) ValidationErrors(err error) []string {
 				message = "パスワードは8文字以上です。"
 			case "max":
 				message = "パスワードは最大50文字です。"
-			case "password_check":
+			case "passwordCheck":
 				message = "パスワードとパスワード確認が異なります。"
 			}
 		}
@@ -77,7 +80,7 @@ func (a *Password) ValidationErrors(err error) []string {
 		}
 	}
 	//password-check
-	if a.NewPassword_check() != true{
+	if p.NewPasswordCheck() != true{
 		message := "パスワードとパスワード確認が異なります。"
 		errMessages = append(errMessages, message)
 	}

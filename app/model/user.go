@@ -7,18 +7,20 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+// CreateUser ...
 type CreateUser struct {
 	ID          int       `db:"id" json:"id"`
 	Name        string    `db:"name" json:"name" validate:"required,min=4,max=20"`
-	KBC_mail    string    `db:"mail" json:"KBC_mail" validate:"required,mail_check_regexp"`
+	KBCMail    string    `db:"mail" json:"KBC_mail" validate:"required,"`
 	Password    string    `json:"password" validate:"required,min=8,max=50"`
-	Pass_cfm    string    `json:"password_confirmation"`
+	PassCfm    string    `json:"password_confirmation"`
 	PassHash    string    `db:"passhash"`
 }
 
+// User ...
 type User struct {
 	ID          int       `db:"id" json:"id"`
-	KBC_mail    string    `db:"mail" json:"KBC_mail"`
+	KBCMail    string    `db:"mail" json:"KBC_mail"`
 	Name        string    `db:"name" json:"name" validate:"required,min=4,max=20"`
 	Comment     sql.NullString   `db:"comment" json:"comment" validate:"max=150"`
 	PostCount int      `db:"PostCount" json:"postCount"` //投稿数
@@ -27,25 +29,27 @@ type User struct {
 	Languages   sql.NullString    `db:"languages" json:"languages"`
 }
 
+// LoginUser ...
 type LoginUser struct {
 	ID          int       `db:"id" json:"id"`
-	KBC_mail    string    `db:"mail" json:"KBC_mail"`
+	KBCMail    string    `db:"mail" json:"KBC_mail"`
 	PassHash    string    `db:"passhash"`
 }
 
+// RankingUser ...
 type RankingUser struct {
 	ID          int       `db:"id" json:"id"`
 	Name        string    `db:"name" json:"name"`
 	Count int     `db:"count" json:"count"`
 }
 
-// CreateUserからUserを作成
+// SetupUser CreateUserからUserを作成
 func (u *User) SetupUser(cu CreateUser, id int) () {
 	u.ID = cu.ID
 	u.Name = cu.Name
 }
 
-// パスワードハッシュを作る
+// PasswordHash パスワードハッシュを作る
 func (u *CreateUser) PasswordHash() (string, error) {
 	hash, err := bcrypt.GenerateFromPassword([]byte(u.Password), bcrypt.DefaultCost)
 	if err != nil {
@@ -55,7 +59,8 @@ func (u *CreateUser) PasswordHash() (string, error) {
 	return string(hash), err
 }
 
-func (a *CreateUser) ValidationErrors(err error) []string {
+// ValidationErrors ...
+func (u *CreateUser) ValidationErrors(err error) []string {
 	// メッセージを格納するスライスを宣言します。
 	var errMessages []string
 
@@ -75,11 +80,11 @@ func (a *CreateUser) ValidationErrors(err error) []string {
 			case "max":
 				message = "名前は最大20文字です。"
 			}
-		case "KBC_mail":
+		case "KBCMail":
 			switch err.Tag() {
 			case "required":
 				message = "メールアドレスを入力してください。"
-			case "mail_check_regexp":
+			case "MailCheckRegexp":
 				message = "河原学園のメールアドレスを入力してください。"
 			}
 		case "Password":
@@ -101,7 +106,7 @@ func (a *CreateUser) ValidationErrors(err error) []string {
 		}
 	}
 	//password-check
-	if a.Password_check() != true{
+	if u.PasswordCheck() != true{
 		message := "パスワードとパスワード確認が異なります。"
 		errMessages = append(errMessages, message)
 	}
@@ -109,7 +114,7 @@ func (a *CreateUser) ValidationErrors(err error) []string {
 }
 
 // ValidationErrors ...
-func (a *User) ValidationErrors(err error) []string {
+func (u *User) ValidationErrors(err error) []string {
 	var errMessages []string
 	// 複数のエラーが発生する場合があるのでループ処理を行います。
 	for _, err := range err.(validator.ValidationErrors) {
@@ -137,14 +142,17 @@ func (a *User) ValidationErrors(err error) []string {
 	}
 	return errMessages
 }
-func Mail_check_regexp(fl validator.FieldLevel) bool {  //引数の型、返り値は固定
+
+// MailCheckRegexp ...
+func MailCheckRegexp(fl validator.FieldLevel) bool {  //引数の型、返り値は固定
 	reg := `[\w\-\._]+@(stu.)?kawahara.ac.jp`
 	str := fl.Field().String()
 	return regexp.MustCompile(reg).Match([]byte(str))
 }
 
-func (u *CreateUser) Password_check() bool{
-	if(u.Password == u.Pass_cfm){
+// PasswordCheck ...
+func (u *CreateUser) PasswordCheck() bool{
+	if(u.Password == u.PassCfm){
 		return true
 	}
 	return false
