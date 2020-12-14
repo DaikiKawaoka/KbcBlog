@@ -7,10 +7,10 @@ import (
 "app/model"
 )
 
+// KBCRankingTop10 ...
 func KBCRankingTop10(c string) ([]*model.RankingUser, error) {
 
 	var query string
-
 	if c == "like" {
 		query = `SELECT u.id id, u.name name, COUNT(*) count
 		FROM articles a inner join users u on a.userid = u.id

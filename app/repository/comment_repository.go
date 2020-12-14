@@ -6,8 +6,7 @@ import (
 "app/model"
 )
 
-// ArticleComment
-
+// ArticleCommentListByCursor ...
 func ArticleCommentListByCursor(articleid int) ([]*model.ArticleComment, error) {
 
 	query := `SELECT c.id id,c.userid userid,c.articleid articleid,u.name name,c.text text,c.created created,c.updated updated
@@ -24,6 +23,7 @@ func ArticleCommentListByCursor(articleid int) ([]*model.ArticleComment, error) 
 	return comments, nil
 }
 
+// ArticleCommentCreate ...
 func ArticleCommentCreate(comment *model.ArticleComment) (sql.Result, error) {
 	now := time.Now()
   comment.Created = now.Format("2006/01/02 15:04:05")
@@ -41,6 +41,7 @@ func ArticleCommentCreate(comment *model.ArticleComment) (sql.Result, error) {
   return res, nil
 }
 
+// ArticleCommentUpdate ...
 func ArticleCommentUpdate(comment *model.ArticleComment) (sql.Result, error) {
 	now := time.Now()
 	comment.Updated = now.Format("2006/01/02 15:04:05")
@@ -60,6 +61,7 @@ func ArticleCommentUpdate(comment *model.ArticleComment) (sql.Result, error) {
 	return res, nil
 }
 
+// ArticleCommentDelete ...
 func ArticleCommentDelete(id int) error {
 	query := "DELETE FROM article_comments WHERE id = ?"
 	tx := db.MustBegin()
@@ -72,9 +74,8 @@ func ArticleCommentDelete(id int) error {
 
 
 
-//QuestionComment
-
-func QuestionCommentListByCursor(questionId int) ([]*model.QuestionComment, error) {
+//QuestionCommentListByCursor ...
+func QuestionCommentListByCursor(questionID int) ([]*model.QuestionComment, error) {
 
 	query := `SELECT c.id id,c.userid userid,c.questionid questionid,u.name name,c.text text,c.created created,c.updated updated
 	FROM question_comments c,users u
@@ -83,13 +84,14 @@ func QuestionCommentListByCursor(questionId int) ([]*model.QuestionComment, erro
 
 	var comments []*model.QuestionComment
 
-	if err := db.Select(&comments, query, questionId); err != nil {
+	if err := db.Select(&comments, query, questionID); err != nil {
 		return nil, err
 	}
 
 	return comments, nil
 }
 
+// QuestionCommentCreate ...
 func QuestionCommentCreate(comment *model.QuestionComment) (sql.Result, error) {
 	now := time.Now()
   comment.Created = now.Format("2006/01/02 15:04:05")
@@ -108,6 +110,7 @@ func QuestionCommentCreate(comment *model.QuestionComment) (sql.Result, error) {
   return res, nil
 }
 
+// QuestionCommentUpdate ...
 func QuestionCommentUpdate(comment *model.QuestionComment) (sql.Result, error) {
 	now := time.Now()
 	comment.Updated = now.Format("2006/01/02 15:04:05")
@@ -127,6 +130,7 @@ func QuestionCommentUpdate(comment *model.QuestionComment) (sql.Result, error) {
 	return res, nil
 }
 
+// QuestionCommentDelete ...
 func QuestionCommentDelete(id int) error {
 	query := "DELETE FROM question_comments WHERE id = ?;"
 	tx := db.MustBegin()

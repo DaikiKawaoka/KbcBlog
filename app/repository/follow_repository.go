@@ -9,56 +9,57 @@ import (
 	// フォローされる人は「followed」
 
 
-	// フォローしているかチェック
-	func CheckFollow(followerId int, followedId int) (int, error) {
+	// CheckFollow フォローしているかチェック
+	func CheckFollow(followerID int, followedID int) (int, error) {
 		query := `SELECT COUNT(*) FROM follows WHERE followerid = ? AND followedid = ?;`
 		var count int
-		if err := db.Get(&count, query, followerId, followedId); err != nil {
+		if err := db.Get(&count, query, followerID, followedID); err != nil {
 			return 0, err
 		}
 		return count, nil
 	}
 
-	// 自分のフォローユーザの情報を取得
-	func GetFollowerInfoList(userId int) ([]*model.FUser, error) {
+	// GetFollowerInfoList 自分のフォローユーザの情報を取得
+	func GetFollowerInfoList(userID int) ([]*model.FUser, error) {
 		query := `SELECT u.id,u.name,u.comment FROM users u,follows f WHERE u.id = f.followedid AND f.followerid = ?;`
 		var users []*model.FUser
-		if err := db.Select(&users, query, userId); err != nil {
+		if err := db.Select(&users, query, userID); err != nil {
 			return nil, err
 		}
 		return users, nil
 	}
 
-	// 自分のフォロワーの情報を取得
-	func GetFollowedInfoList(userId int) ([]*model.FUser, error) {
+	// GetFollowedInfoList 自分のフォロワーの情報を取得
+	func GetFollowedInfoList(userID int) ([]*model.FUser, error) {
 		query := `SELECT u.id,u.name,u.comment FROM users u,follows f WHERE u.id = f.followerid AND f.followedid = ?;`
 		var users []*model.FUser
-		if err := db.Select(&users, query, userId); err != nil {
+		if err := db.Select(&users, query, userID); err != nil {
 			return nil, err
 		}
 		return users, nil
 	}
 
-	// フォロー人数を取得
-	func GetFollowerCount(userId int) (int, error) {
+	// GetFollowerCount フォロー人数を取得
+	func GetFollowerCount(userID int) (int, error) {
 		query := `SELECT COUNT(*) FROM follows WHERE followerid = ?;`
 		var count int
-		if err := db.Get(&count, query, userId); err != nil {
+		if err := db.Get(&count, query, userID); err != nil {
 			return 0, err
 		}
 		return count, nil
 	}
 
-	// フォロワー人数を取得
-	func GetFollowedCount(userId int) (int, error) {
+	// GetFollowedCount フォロワー人数を取得
+	func GetFollowedCount(userID int) (int, error) {
 		query := `SELECT COUNT(*) FROM follows WHERE followedid = ?;`
 		var count int
-		if err := db.Get(&count, query, userId); err != nil {
+		if err := db.Get(&count, query, userID); err != nil {
 			return 0, err
 		}
 		return count, nil
 	}
 
+	// Follow ...
 	func Follow(follow *model.Following) error {
 		now := time.Now()
 		follow.Created = now.Format("2006/01/02 15:04:05")
@@ -74,6 +75,7 @@ import (
 		return nil
 	}
 
+	// UnFollow ...
 	func UnFollow(followerid int,followedid int) error {
 		query := "DELETE FROM follows WHERE followerid = ? AND followedid = ?"
 		tx := db.MustBegin()

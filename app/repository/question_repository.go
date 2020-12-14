@@ -7,6 +7,7 @@ import (
 "app/model"
 )
 
+//QuestionListByCursor ...
 func QuestionListByCursor(cursor int) ([]*model.Question, error) {
 	if cursor <= 0 {
 		cursor = math.MaxInt32
@@ -24,6 +25,7 @@ func QuestionListByCursor(cursor int) ([]*model.Question, error) {
 	return questions, nil
 }
 
+// QuestionGetByID ...
 func QuestionGetByID(id int) (*model.Question, error) {
 	query := `SELECT q.id id,q.userid userid,u.name name,q.title title,q.body body,q.created created,q.updated updated
 	FROM questions q,users u
@@ -36,6 +38,7 @@ func QuestionGetByID(id int) (*model.Question, error) {
 	return &question, nil
 }
 
+// QuestionCreate ...
 func QuestionCreate(question *model.Question) (sql.Result, error) {
 	now := time.Now()
   question.Created = now.Format("2006/01/02 15:04:05")
@@ -53,70 +56,45 @@ func QuestionCreate(question *model.Question) (sql.Result, error) {
   return res, nil
 }
 
+// QuestionUpdate ...
 func QuestionUpdate(question *model.Question) (sql.Result, error) {
-	// 現在日時を取得します
 	now := time.Now()
-
-	// 構造体に現在日時を設定します。
 	question.Updated = now.Format("2006/01/02 15:04:05")
 
-	// クエリ文字列を生成します。
 	query := `UPDATE questions
 	SET title = :title,
 			body = :body,
 			updated = :updated
 	WHERE id = :id;`
 
-	// トランザクションを開始します。
 	tx := db.MustBegin()
-
-	// クエリ文字列と引数で渡ってきた構造体を指定して、SQL を実行します。
-	// クエリ文字列内の :title, :body, :id には、
-	// 第 2 引数の Article 構造体の Title, Body, ID が bind されます。
-	// 構造体に db タグで指定した値が紐付けされます。
 	res, err := tx.NamedExec(query, question)
 
 	if err != nil {
-		// エラーが発生した場合はロールバックします。
 		tx.Rollback()
-
-		// エラーを返却します。
 		return nil, err
 	}
-
-	// エラーがない場合はコミットします。
 	tx.Commit()
-
-	// SQL の実行結果を返却します。
 	return res, nil
 }
 
-func QuestionDelete(id int) error {
-	// 記事データを削除するクエリ文字列を生成します。
+// QuestionDelete ...
+func QuestionDelete(ID int) error {
 	query := "DELETE FROM questions WHERE id = ?"
-
-	// トランザクションを開始します。
 	tx := db.MustBegin()
-
-	// クエリ文字列とパラメータを指定して SQL を実行します。
-	if _, err := tx.Exec(query, id); err != nil {
-		// エラーが発生した場合はロールバックします。
+	if _, err := tx.Exec(query, ID); err != nil {
 		tx.Rollback()
-
-		// エラー内容を返却します。
 		return err
 	}
-
-	// エラーがない場合はコミットします。
 	return tx.Commit()
 }
 
-func GetUserQuestion(cursor int,userid int) ([]*model.Question, error) {
+// GetUserQuestion ...
+func GetUserQuestion(cursor int,userID int) ([]*model.Question, error) {
 	// 引数で渡されたカーソルの値が 0 以下の場合は、代わりに int 型の最大値で置き換えます。
 	if cursor <= 0 {
 		cursor = math.MaxInt32
 	}
-
 	// ID の降順に記事データを 10 件取得するクエリ文字列を生成します。
 	query := `SELECT q.id id,q.userid userid,u.name name,q.title title,q.body body,q.created created,q.updated updated, COUNT(l.id) likecount
 	FROM questions q inner join users u on q.userid = u.id
@@ -127,14 +105,14 @@ func GetUserQuestion(cursor int,userid int) ([]*model.Question, error) {
 	LIMIT 10`
 
 	questions := make([]*model.Question, 0, 10)
-	if err := db.Select(&questions, query, cursor,userid); err != nil {
+	if err := db.Select(&questions, query, cursor,userID); err != nil {
 		return nil, err
 	}
 	return questions, nil
 }
 
-// 回答した質問を取得
-func GetAnswerQuestionList(cursor int, userid int) ([]*model.AnswerQuestion, error){
+// GetAnswerQuestionList 回答した質問を取得
+func GetAnswerQuestionList(cursor int, userID int) ([]*model.AnswerQuestion, error){
 	if cursor <= 0 {
 		cursor = math.MaxInt32
 	}
@@ -145,7 +123,7 @@ func GetAnswerQuestionList(cursor int, userid int) ([]*model.AnswerQuestion, err
 	LIMIT 10`
 
 	answerQuestions := make([]*model.AnswerQuestion, 0, 10)
-	if err := db.Select(&answerQuestions, query, cursor ,userid); err != nil {
+	if err := db.Select(&answerQuestions, query, cursor ,userID); err != nil {
 		return nil, err
 	}
 	return answerQuestions, nil

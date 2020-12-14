@@ -6,7 +6,7 @@ import (
 	"app/model"
 )
 
-// ArticleGetByID ...
+// GetLoginPassHash ...
 func GetLoginPassHash(mail string) (*model.LoginUser , error) {
 	var loginUser model.LoginUser
 

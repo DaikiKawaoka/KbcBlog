@@ -7,35 +7,37 @@ import (
 
 
 
-// Article Like
-
-func GetArticleLike(userId int, articleId int) (int, error) {
+// GetArticleLike ...
+func GetArticleLike(userID int, articleID int) (int, error) {
 	query := `SELECT COUNT(*) FROM article_likes WHERE userid = ? AND articleid = ?;`
 	var count int
-	if err := db.Get(&count, query, userId, articleId); err != nil {
+	if err := db.Get(&count, query, userID, articleID); err != nil {
 		return 0, err
 	}
 	return count, nil
 }
 
-func GetArticleLikeCount(articleId int) (int,error) {
+// GetArticleLikeCount ...
+func GetArticleLikeCount(articleID int) (int,error) {
 	query := `SELECT COUNT(*) FROM article_likes WHERE articleid = ?;`
 	var count int
-	if err := db.Get(&count, query, articleId); err != nil {
+	if err := db.Get(&count, query, articleID); err != nil {
 		return 0, err
 	}
 	return count, nil
 }
 
-func GetMyLikePost(articleId int) (int,error) {
+// GetMyLikePost ...
+func GetMyLikePost(articleID int) (int,error) {
 	query := `SELECT COUNT(*) FROM article_likes WHERE articleid = ?;`
 	var count int
-	if err := db.Get(&count, query, articleId); err != nil {
+	if err := db.Get(&count, query, articleID); err != nil {
 		return 0, err
 	}
 	return count, nil
 }
 
+// CreateArticleLike ...
 func CreateArticleLike(like *model.ArticleLike) error {
 
 	now := time.Now()
@@ -54,6 +56,7 @@ func CreateArticleLike(like *model.ArticleLike) error {
   return nil
 }
 
+// DeleteArticleLike ...
 func DeleteArticleLike(userid int, articleid int) error {
 	query := "DELETE FROM article_likes WHERE userid = ? AND articleid = ?"
 	tx := db.MustBegin()
@@ -69,26 +72,27 @@ func DeleteArticleLike(userid int, articleid int) error {
 
 
 
-// Question Like
-
-func GetQuestionLike(userId int, questionId int) (int, error) {
+// GetQuestionLike ...
+func GetQuestionLike(userID int, questionID int) (int, error) {
 	query := `SELECT COUNT(*) FROM question_likes WHERE userid = ? AND questionid = ?;`
 	var count int
-	if err := db.Get(&count, query, userId, questionId); err != nil {
+	if err := db.Get(&count, query, userID, questionID); err != nil {
 		return 0, err
 	}
 	return count, nil
 }
 
-func GetQuestionLikeCount(questionId int) (int,error) {
+// GetQuestionLikeCount ...
+func GetQuestionLikeCount(questionID int) (int,error) {
 	query := `SELECT COUNT(*) FROM question_likes WHERE questionid = ?;`
 	var count int
-	if err := db.Get(&count, query, questionId); err != nil {
+	if err := db.Get(&count, query, questionID); err != nil {
 		return 0, err
 	}
 	return count, nil
 }
 
+// CreateQuestionLike ...
 func CreateQuestionLike(like *model.QuestionLike) error {
 	now := time.Now()
   like.Created = now.Format("2006/01/02 15:04:05")
@@ -106,11 +110,12 @@ func CreateQuestionLike(like *model.QuestionLike) error {
   return nil
 }
 
-func DeleteQuestionLike(userid int, questionid int) error {
+// DeleteQuestionLike ...
+func DeleteQuestionLike(userID int, questionID int) error {
 	query := "DELETE FROM question_likes WHERE userid = ? AND questionid = ?"
 	tx := db.MustBegin()
 
-	if _, err := tx.Exec(query, userid, questionid); err != nil {
+	if _, err := tx.Exec(query, userID, questionID); err != nil {
 		tx.Rollback()
 		return err
 	}
@@ -120,26 +125,27 @@ func DeleteQuestionLike(userid int, questionid int) error {
 
 
 
-// Article Comment Like
-
-func GetArticleCommentLike(userId int, article_commentid int) (int, error) {
+// GetArticleCommentLike ...
+func GetArticleCommentLike(userID int, articleCommentID int) (int, error) {
 	query := `SELECT COUNT(*) FROM article_comment_likes WHERE userid = ? AND article_commentid = ?;`
 	var count int
-	if err := db.Get(&count, query, userId, article_commentid); err != nil {
+	if err := db.Get(&count, query, userID, articleCommentID); err != nil {
 		return 0, err
 	}
 	return count, nil
 }
 
-func GetArticleCommentLikeCount(articleCommentId int) (int,error) {
+// GetArticleCommentLikeCount ...
+func GetArticleCommentLikeCount(articleCommentID int) (int,error) {
 	query := `SELECT COUNT(*) FROM article_comment_likes WHERE article_commentid = ?;`
 	var count int
-	if err := db.Get(&count, query, articleCommentId); err != nil {
+	if err := db.Get(&count, query, articleCommentID); err != nil {
 		return 0, err
 	}
 	return count, nil
 }
 
+// CreateArticleCommentLike ...
 func CreateArticleCommentLike(like *model.ArticleCommentLike) error {
 
 	now := time.Now()
@@ -158,11 +164,12 @@ func CreateArticleCommentLike(like *model.ArticleCommentLike) error {
   return nil
 }
 
-func DeleteArticleCommentLike(userid int, article_commentid int) error {
+// DeleteArticleCommentLike ...
+func DeleteArticleCommentLike(userID int, articleCommentID int) error {
 	query := "DELETE FROM article_comment_likes WHERE userid = ? AND article_commentid = ?"
 	tx := db.MustBegin()
 
-	if _, err := tx.Exec(query, userid, article_commentid); err != nil {
+	if _, err := tx.Exec(query, userID, articleCommentID); err != nil {
 		tx.Rollback()
 		return err
 	}
@@ -172,26 +179,27 @@ func DeleteArticleCommentLike(userid int, article_commentid int) error {
 
 
 
-// Question Comment Like
-
-func GetQuestionCommentLike(userId int, question_commentid int) (int, error) {
+// GetQuestionCommentLike ...
+func GetQuestionCommentLike(userID int, questionCommentID int) (int, error) {
 	query := `SELECT COUNT(*) FROM question_comment_likes WHERE userid = ? AND question_commentid = ?;`
 	var count int
-	if err := db.Get(&count, query, userId, question_commentid); err != nil {
+	if err := db.Get(&count, query, userID, questionCommentID); err != nil {
 		return 0, err
 	}
 	return count, nil
 }
 
-func GetQuestionCommentLikeCount(questionCommentId int) (int,error) {
+// GetQuestionCommentLikeCount ...
+func GetQuestionCommentLikeCount(questionCommentID int) (int,error) {
 	query := `SELECT COUNT(*) FROM question_comment_likes WHERE question_commentid = ?;`
 	var count int
-	if err := db.Get(&count, query, questionCommentId); err != nil {
+	if err := db.Get(&count, query, questionCommentID); err != nil {
 		return 0, err
 	}
 	return count, nil
 }
 
+// CreateQuestionCommentLike ...
 func CreateQuestionCommentLike(like *model.QuestionCommentLike) error {
 	now := time.Now()
   like.Created = now.Format("2006/01/02 15:04:05")
@@ -209,11 +217,12 @@ func CreateQuestionCommentLike(like *model.QuestionCommentLike) error {
   return nil
 }
 
-func DeleteQuestionCommentLike(userid int, question_commentid int) error {
+// DeleteQuestionCommentLike ...
+func DeleteQuestionCommentLike(userid int, questionCommentID int) error {
 	query := "DELETE FROM question_comment_likes WHERE userid = ? AND question_commentid = ?"
 	tx := db.MustBegin()
 
-	if _, err := tx.Exec(query, userid, question_commentid); err != nil {
+	if _, err := tx.Exec(query, userid, questionCommentID); err != nil {
 		tx.Rollback()
 		return err
 	}

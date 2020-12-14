@@ -238,70 +238,42 @@ func ArticleCreate(article *model.Article) (sql.Result, error) {
 
 // ArticleUpdate ...
 func ArticleUpdate(article *model.Article) (sql.Result, error) {
-	// 現在日時を取得します
 	now := time.Now()
-
-	// 構造体に現在日時を設定します。
 	article.Updated = now.Format("2006/01/02 15:04:05")
 
-	// クエリ文字列を生成します。
 	query := `UPDATE articles
 	SET title = :title,
 			body = :body,
 			updated = :updated,
 			tag  = :tag
 	WHERE id = :id;`
-
-	// トランザクションを開始します。
 	tx := db.MustBegin()
-
-	// クエリ文字列と引数で渡ってきた構造体を指定して、SQL を実行します。
-	// クエリ文字列内の :title, :body, :id には、
-	// 第 2 引数の Article 構造体の Title, Body, ID が bind されます。
-	// 構造体に db タグで指定した値が紐付けされます。
 	res, err := tx.NamedExec(query, article)
 
 	if err != nil {
-		// エラーが発生した場合はロールバックします。
 		tx.Rollback()
-
-		// エラーを返却します。
 		return nil, err
 	}
-
-	// エラーがない場合はコミットします。
 	tx.Commit()
-
-	// SQL の実行結果を返却します。
 	return res, nil
 }
 
 // ArticleDelete ...
 func ArticleDelete(id int) error {
-	// 記事データを削除するクエリ文字列を生成します。
 	query := "DELETE FROM articles WHERE id = ?"
-
-	// トランザクションを開始します。
 	tx := db.MustBegin()
-
-	// クエリ文字列とパラメータを指定して SQL を実行します。
 	if _, err := tx.Exec(query, id); err != nil {
-		// エラーが発生した場合はロールバックします。
 		tx.Rollback()
-
-		// エラー内容を返却します。
 		return err
 	}
-
-	// エラーがない場合はコミットします。
 	return tx.Commit()
 }
 
+// GetUserArticle ...
 func GetUserArticle(cursor int,userid int) ([]*model.Article, error) {
 	if cursor <= 0 {
 		cursor = math.MaxInt32
 	}
-
 	query := `SELECT a.id id,a.userid userid,u.name name,a.title title,a.created created,a.updated updated, COUNT(l.id) likecount
 	FROM articles a inner join users u on a.userid = u.id
 	left join article_likes l on a.id = l.articleid
@@ -309,12 +281,7 @@ func GetUserArticle(cursor int,userid int) ([]*model.Article, error) {
 	GROUP BY a.id,a.userid,u.name,a.title,a.created,a.updated
 	ORDER BY a.id desc
 	LIMIT 10`
-
-	// クエリ結果を格納するスライスを初期化します。
-	// 10 件取得すると決まっているため、サイズとキャパシティを指定しています。
 	articles := make([]*model.Article, 0, 10)
-
-	// クエリ結果を格納する変数、クエリ文字列、パラメータを指定してクエリを実行します。
 	if err := db.Select(&articles, query, cursor,userid); err != nil {
 		return nil, err
 	}
