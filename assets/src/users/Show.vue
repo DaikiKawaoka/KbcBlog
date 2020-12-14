@@ -76,8 +76,7 @@
                         </div>
                       </router-link>
                       <div class="follow-btn-div" v-if="f.id !== myUser.id">
-                        <!-- フォローボタン -->
-                        <el-button size="small" v-if="f.isfollowing" @click="ChangeFollow(f,index,'followers','unfo')">
+                        <el-button size="small" v-if="f.isfollowing" @click="followConfirmationOpen(f,index,'followers','unfo')">
                           <i class="el-icon-user"></i>フォロー中
                         </el-button>
                         <el-button type="primary" size="small" v-else @click="ChangeFollow(f,index,'followers','fo')">
@@ -113,7 +112,7 @@
                       </router-link>
                       <div class="follow-btn-div" v-if="f.id !== myUser.id">
                         <!-- フォローボタン -->
-                        <el-button size="small" v-if="f.isfollowing" @click="ChangeFollow(f,index,'follows','unfo')">
+                        <el-button size="small" v-if="f.isfollowing" @click="followConfirmationOpen(f,index,'follows','unfo')">
                           <i class="el-icon-user"></i>フォロー中
                         </el-button>
                         <el-button type="primary" size="small" v-else @click="ChangeFollow(f,index,'follows','fo')">
@@ -183,27 +182,29 @@
           </div>
           <div class="user-post-article-div">
             <div class="div-in-span-article">投稿記事</div>
-            <!-- <span class="not-conf">未設定</span> -->
-            <div class="article-circle-div">
-              <el-progress type="circle" :percentage="50" color="#67C23A" :width="90"></el-progress>
-              <p class="article-circle-p">Java</p>
+            <div v-if="parcentArray.length !== 0" style="display: flex;">
+              <div v-if="parcentArray.length > 0" class="article-circle-div">
+                <el-progress type="circle" :percentage="parcentArray[0].count / user.postCount*100 " color="#67C23A" :width="90"></el-progress>
+                <p class="article-circle-p">{{ parcentArray[0].value }}</p>
+              </div>
+              <div v-if="parcentArray.length > 1" class="article-circle-div">
+                <el-progress type="circle" :percentage=" parcentArray[1].count / user.postCount*100 " color="#ff1493" :width="90"></el-progress>
+                <p class="article-circle-p">{{ parcentArray[1].value }}</p>
+              </div>
+              <div v-if="parcentArray.length > 2" class="article-circle-div">
+                <el-progress type="circle" :percentage=" parcentArray[2].count / user.postCount*100 " :width="90"></el-progress>
+                <p class="article-circle-p">{{ parcentArray[2].value }}</p>
+              </div>
+              <div v-if="parcentArray.length > 3" class="article-circle-div">
+                <el-progress type="circle" :percentage=" parcentArray[3].count / user.postCount*100 " color="#ff8c00" :width="90"></el-progress>
+                <p class="article-circle-p">{{ parcentArray[3].value }}</p>
+              </div>
             </div>
-            <div class="article-circle-div">
-              <el-progress type="circle" :percentage="33" color="#ff1493" :width="90"></el-progress>
-              <p class="article-circle-p">JavaScript</p>
-            </div>
-            <div class="article-circle-div">
-              <el-progress type="circle" :percentage="25" :width="90"></el-progress>
-              <p class="article-circle-p">Go</p>
-            </div>
-            <div class="article-circle-div">
-              <el-progress type="circle" :percentage="18" color="#ff8c00" :width="90"></el-progress>
-              <p class="article-circle-p">PHP</p>
-            </div>
+            <span v-else class="not-conf article-parcent-not-conf">No data</span>
           </div>
           <div class="user-iine-div">
             <span class="user-show-body-div-in-span">Good記事</span>
-            <span class="not-conf">未設定</span>
+            <span class="not-conf">No data</span>
           </div>
         </div>
       </div>
@@ -223,7 +224,11 @@
             <div v-for="article in articles" :key="article.id" class="post-show-div">
               <router-link v-bind:to="{ name : 'ArticleShow', params : { id: article.id }}" class="a-tag">
                 <div class="post-index-body">
-                    <h2 class="post-title-index"> {{article.title}} </h2>
+                    <div class="article-tag-div">
+                      <i class="el-icon-collection-tag tag-icon"></i>
+                      <span class="article-tag no-magin">{{ article.tag }}</span>
+                    </div>
+                    <h2 class="post-title-index article-title-index"> {{article.title}} </h2>
                   <div class="post-index-username-updated">
                     <i class="el-icon-star-on star-i"></i>
                     <span class="likecount-span">{{article.likecount}}</span>
@@ -300,6 +305,7 @@ export default {
       followers:[],
       langarray: [],
       tagArray: [],
+      parcentArray: [],
       user: {
         KBCmail: "",
         id : 0,
@@ -356,6 +362,7 @@ export default {
         // 文字列のlangsを配列に変換
         this.langarray = this.user.languages.String.split(',');
         this.tagArray = response.data.Tags
+        this.tagCountPercent()
       })
       .catch(error => {
         if(error.response.status == 401){
@@ -374,6 +381,34 @@ export default {
   computed: {
   },
   methods: {
+
+    tagCountPercent: function() {
+      let x = [];
+      let w;
+      this.tagArray.forEach(function( value ) {
+        w = value.split(',')
+        if(w.length > 1){
+          w.forEach(function(value2){
+            x.push(value2);
+          })
+        }else{
+          x.push(w[0])
+        }
+      });
+      // console.log(x)
+      var count = require('count-array-values')
+      w = count(x)
+      if(w.length > 3){
+        for(let i = 0; i < 4; i++){
+          this.parcentArray.push(w[i])
+        }
+      }else{
+        for(let i = 0; i < w.length; i++){
+          this.parcentArray.push(w[i])
+        }
+      }
+    },
+
     // 大きいフォローボタンを押した時
     Follow_UnFollw(){
       this.$axios
@@ -425,6 +460,16 @@ export default {
           type: 'info',
           message: '外部ページへの移動をキャンセルしました。'
         });
+      });
+    },
+
+    followConfirmationOpen(f,index,c,c2) {
+      this.$confirm(`${f.name}さんのフォローをやめますか?`, '確認', {
+        confirmButtonText: 'フォローをやめる',
+        cancelButtonText: 'キャンセル',
+        center: true
+      }).then(() => {
+        this.ChangeFollow(f,index,c,c2)
       });
     },
 
@@ -721,11 +766,15 @@ export default {
   height: 100px;
 }
 .article-circle-p{
+  width: 80px;
   margin: 0 0 0 20px;
   font-size: 0.7em;
   color: #fff;
   text-align: center;
+  text-overflow: ellipsis;
+  /* white-space: nowrap; */
 }
+
 .user-show-body-div-in-span{
   color: #94ff5f;
   line-height: 70px;
@@ -749,6 +798,10 @@ export default {
 .not-conf{
   color: #ccc;
   margin-left: 10px;
+}
+.article-parcent-not-conf{
+  height: 20px;
+  margin-top: 22px;
 }
 .el-progress{
   width: 80px;
@@ -778,12 +831,13 @@ svg{
   padding-left: 10px;
   border: solid 1px #ccc;
   display: flex;
-  background: #eee;
+  background: #fff;
   border-radius: 6px;
 }
 .post-show-div:hover{
   transition: 0.2s ;
   background: #fff;
+  border: solid 1px #409eff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)
 }
 .post-user-icon{
@@ -804,6 +858,9 @@ svg{
   width: 500px;
   text-align: left;
   margin-bottom: 0;
+}
+.article-title-index{
+  margin-top: 5px;
 }
 .post-index-username,.post-index-update{
   font-size: 13px;

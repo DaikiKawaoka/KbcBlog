@@ -274,7 +274,7 @@ func GetUserArticle(cursor int,userid int) ([]*model.Article, error) {
 	if cursor <= 0 {
 		cursor = math.MaxInt32
 	}
-	query := `SELECT a.id id,a.userid userid,u.name name,a.title title,a.created created,a.updated updated, COUNT(l.id) likecount
+	query := `SELECT a.id id,a.userid userid,u.name name,a.title title,a.tag tag,a.created created,a.updated updated, COUNT(l.id) likecount
 	FROM articles a inner join users u on a.userid = u.id
 	left join article_likes l on a.id = l.articleid
 	WHERE a.id < ? and a.userid = u.id and a.userid = ?
