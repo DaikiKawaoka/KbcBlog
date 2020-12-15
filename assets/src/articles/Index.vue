@@ -21,7 +21,7 @@
               </router-link>
             </div>
             <div class="article-index-body">
-              <div class="article-tag-div">
+              <div class="article-index-tag-div">
                 <i class="el-icon-collection-tag tag-icon"></i>
                 <span class="article-tag no-magin">{{ article.tag }}</span>
               </div>
@@ -73,7 +73,7 @@
 
 <script>
 // import axios from "axios";
-import InfiniteLoading from 'vue-infinite-loading';
+import InfiniteLoading from 'vue-infinite-loading'
 import Header from './../components/Header.vue'
 import Footer from './../components/Footer.vue'
 import Tag from './../components/Tag.vue'
@@ -127,12 +127,9 @@ export default {
       localStorage.friendsOnly = newFriendsOnly;
     },
   },
-  // createdの中でaxiosを使います。get()の中のURLは、nginx.confで設定してるので、 /api/ になっています。
+
   created () {
     const jst = this.$cookies.get("JWT");
-    if(jst === null){
-      this.$router.push({ path: "/login" });
-    }
     this.setUp()
     this.$axios.get('http://localhost/api/restricted/Articles',{
       params: {
@@ -153,13 +150,13 @@ export default {
         this.postRanking = response.data.PostRanking
         this.user = response.data.user
         this.cursor = response.data.Cursor
-        console.log("クリエイト")
-        console.log(this.cursor)
       })
       .catch(error => {
         if(error.response.status == 401){
+          if(jst !== null){
+            this.errorNotify();
+          }
           this.$router.push({ path: "/login" });
-          this.errorNotify();
         }
       })
   },
@@ -301,7 +298,6 @@ export default {
       this.tag = '全て'
       this.order = 'new'
       this.friendsOnly = false
-      console.log("aaaaa")
       this.scopetag()
     }
   },
@@ -344,6 +340,7 @@ body {
 }
 .article-show-div:hover {
   transition: 0.15s ;
+  border: solid 1.3px #409eff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
   transform: translateY(-0.1875em);
 }
@@ -414,7 +411,7 @@ body {
 .no-magin{
   margin: 0;
 }
-.article-tag-div{
+.article-index-tag-div{
   display: flex;
 }
 .tag-icon{

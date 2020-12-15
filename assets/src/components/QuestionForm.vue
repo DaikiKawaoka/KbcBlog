@@ -22,6 +22,42 @@
       </el-input>
     </el-form-item>
 
+  <div>
+    <el-form-item label="種類">
+      <div>
+        <el-radio v-model="question.category" label="Q&A" border>Q&A</el-radio>
+        <el-radio v-model="question.category" label="意見交換" border>意見交換</el-radio>
+      </div>
+    </el-form-item>
+  </div>
+
+    <div class="tag-all">
+    <el-form-item label="タグ">
+    <div class="select-div">
+      <el-select
+        style="width: 400px;"
+        v-model="tagArray"
+        v-on:change="arrayChangeString"
+        multiple
+        size="large"
+        :multiple-limit=5
+        :collapse-tags="false"
+        no-match-text="一致するタグがありません"
+        filterable
+        :allow-create="false"
+        :default-first-option="true"
+        placeholder="関連するタグを最大5つまで選択してください。">
+        <el-option
+          v-for="item in options"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value">
+        </el-option>
+      </el-select>
+    </div>
+  </el-form-item>
+  </div>
+
     <el-row>
       <el-col :span="2"><div class="grid-content"></div></el-col>
       <el-col :span="4"><div class="grid-content"></div></el-col>
@@ -81,6 +117,204 @@ import './markdown.css';
   data(){
     return{
       isActive: false,
+      tagArray: [],
+        options: [
+          {
+            value: ' プログラミング ',
+            label: 'プログラミング'
+          }, {
+            value: ' 言語 ',
+            label: '言語',
+          }, {
+            value: ' HTML ',
+            label: 'HTML'
+          }, {
+            value: ' CSS ',
+            label: 'CSS'
+          }, {
+            value: ' Java ',
+            label: 'Java'
+          }, {
+            value: ' Python ',
+            label: 'Python'
+          }, {
+            value: ' JavaScript ',
+            label: 'JavaScript'
+          }, {
+            value: ' Node.js ',
+            label: 'Node.js'
+          }, {
+            value: ' C/C++ ',
+            label: 'C/C++'
+          }, {
+            value: ' C# ',
+            label: 'C#'
+          }, {
+            value: ' SQL ',
+            label: 'SQL'
+          }, {
+            value: ' PHP ',
+            label: 'PHP'
+          }, {
+            value: ' Ruby ',
+            label: 'Ruby'
+          }, {
+            value: ' Go ',
+            label: 'Go'
+          }, {
+            value: ' TypeScript ',
+            label: 'TypeScript'
+          }, {
+            value: ' Kotlin ',
+            label: 'Kotlin'
+          }, {
+            value: ' Swift ',
+            label: 'Swift'
+          },{
+            value: ' フレームワーク ',
+            label: 'フレームワーク',
+          } ,{
+            value: ' Rails ',
+            label: 'Rails'
+          }, {
+            value: ' Vue.js ',
+            label: 'Vue.js'
+          }, {
+            value: ' React ',
+            label: 'React'
+          }, {
+            value: ' AngularJS ',
+            label: 'AngularJS'
+          }, {
+            value: ' Spring Framework ',
+            label: 'Spring Framework'
+          }, {
+            value: ' Play Framework ',
+            label: 'Play Framework'
+          },{
+            value: ' Bootstrap ',
+            label: 'Bootstrap'
+          }, {
+            value: ' CakePHP ',
+            label: 'CakePHP'
+          }, {
+            value: ' Laravel ',
+            label: 'Laravel'
+          }, {
+            value: ' Django ',
+            label: 'Django'
+          }, {
+            value: ' OS ',
+            label: 'OS',
+          }, {
+            value: ' Linux ',
+            label: 'Linux'
+          }, {
+            value: ' Windows ',
+            label: 'Windows'
+          }, {
+            value: ' macOS ',
+            label: 'macOS'
+          }, {
+            value: ' iOS ',
+            label: 'iOS'
+          }, {
+            value: ' Android ',
+            label: 'Android'
+          }, {
+            value: ' Webサーバ ',
+            label: 'Webサーバ',
+          }, {
+            value: ' Apache ',
+            label: 'Apache'
+          }, {
+            value: ' Nginx ',
+            label: 'Nginx'
+          }, {
+            value: ' ネットワーク ',
+            label: 'ネットワーク',
+          }, {
+            value: ' セキュリティ ',
+            label: 'セキュリティ',
+          },{
+            value: ' データベース ',
+            label: 'データベース',
+          }, {
+            value: ' MySQL ',
+            label: 'MySQL'
+          }, {
+            value: ' PostgreSQL ',
+            label: 'PostgreSQL'
+          }, {
+            value: ' Oracle Database ',
+            label: 'Oracle Database'
+          }, {
+            value: ' SQLite ',
+            label: 'SQLite'
+          }, {
+            value: ' MongoDB ',
+            label: 'MongoDB'
+          }, {
+            value: ' 技術 ',
+            label: '技術',
+          }, {
+            value: ' AWS ',
+            label: 'AWS'
+          }, {
+            value: ' Docker ',
+            label: 'Docker'
+          }, {
+            value: ' kubernetes ',
+            label: 'kubernetes'
+          }, {
+            value: ' Git/GitHub ',
+            label: 'Git/GitHub'
+          }, {
+            value: ' WordPress ',
+            label: 'WordPress'
+          }, {
+            value: ' Firebase ',
+            label: 'Firebase'
+          }, {
+            value: ' 国家試験 ',
+            label: '国家試験',
+          }, {
+            value: ' ITパスポート試験 ',
+            label: 'ITパスポート試験'
+          },{
+            value: ' 基本情報技術者試験 ',
+            label: '基本情報技術者試験'
+          }, {
+            value: ' 応用情報技術者試験 ',
+            label: '応用情報技術者試験'
+          }, {
+            value: ' 情報処理安全確保支援士試験 ',
+            label: '情報処理安全確保支援士試験'
+          },{
+            value: ' KBC ',
+            label: 'KBC',
+          }, {
+            value: ' ITイノベーション科 ',
+            label: 'ITイノベーション科'
+          }, {
+            value: ' ITエンジニア科 ',
+            label: 'ITエンジニア科'
+          }, {
+            value: ' ゲームクリエイター科 ',
+            label: 'ゲームクリエイター科'
+          }, {
+            value: ' 情報ビジネス科 ',
+            label: '情報ビジネス科'
+          }, {
+            value: ' その他 ',
+            label: 'その他',
+          }, {
+            value: ' 初心者 ',
+            label: '初心者'
+          }, {
+            value: ' 就活 ',
+            label: '就活'
+          }]
     }
   },
   created: function () {
@@ -93,6 +327,12 @@ import './markdown.css';
       }
     });
   },
+  beforeUpdate(){
+    this.tagArray = this.question.tag.split(',');
+    if(this.tagArray[0].length == 0){
+      this.tagArray = [];
+    }
+  },
   computed: {
     compiledMarkdown: function () {
       return marked(this.question.body)
@@ -101,7 +341,12 @@ import './markdown.css';
   methods: {
     active: function () {
       this.isActive = !this.isActive;
-    }
+    },
+    arrayChangeString(){
+      this.question.tag = this.tagArray.join(',');
+      // console.log(this.question.tag)
+      // console.log(this.tagArray2)
+    },
   }
  }
 </script>
@@ -167,6 +412,17 @@ li{
 }
 .error-ul{
   display: flex;
+}
+.tag-all{
+  width: 210px;
+  background-color: #F6F6F4;
+  /* background-color: #15202b; */
+}
+.tag-header{
+  margin-top: 20px;
+}
+.tag-header-text{
+  color: #999;
 }
 
 </style>

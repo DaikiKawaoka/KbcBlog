@@ -379,6 +379,7 @@ export default {
   font-size: 20px;
   font-weight: 600;
   margin-left: 10px;
+  margin-top: 33px;
   line-height: 50px;
 }
 .comment-div{

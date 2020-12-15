@@ -1,29 +1,74 @@
 <template>
   <div id="app">
-    <Header :isArticle="false" :isQuestion="true" :user="user"></Header>
+    <Header :isArticle="false" :isQuestion="true" :user="user" @reset="reset"></Header>
     <div class="index-main body-main">
-      <div class="index-menu">
-        <div></div>
-      </div>
+      <Tag @scopetag="scopetag" :tag="tag" :friendsOnly="friendsOnly" @reset="reset" @update:friendsOnly ="friendsOnly=$event"></Tag>
       <div class="question-all-div">
-        <div v-for="question in questions" :key="question.id" class="question-show-div">
-          <div class="question-user-icon">
-            <router-link v-bind:to="{ name : 'UserShow', params : { id: question.userid }}" class="a-tag">
-              <!-- image -->
-            </router-link>
-          </div>
-          <div class="question-index-body">
-            <router-link v-bind:to="{ name : 'QuestionShow', params : { id: question.id }}" class="a-tag">
-              <h2 class="question-title-index"> {{question.title}}</h2>
-            </router-link>
-            <div class="article-index-username-updated">
-              <router-link v-bind:to="{ name : 'UserShow', params : { id: question.userid }}" class="a-tag">
-                <h3 class="article-index-username">{{ question.name }}</h3>
-              </router-link>
-              <h3 class="article-index-update">投稿日 {{ question.Updated | moment }}</h3>
-            </div>
+        <div class="question-search-div">
+          <el-input placeholder="キーワード検索" v-model="searchText" suffix-icon="el-icon-search" style="width:200px; margin-left: 30px;" @input="scopetag"></el-input>
+          <div class="order-div">
+            <span class="order-span-left">並び替え</span>
+            <span class="order-span" v-bind:class="{'order-span-color': order === 'new' }" @click="questionOrder('new')">新着</span>
+            <span class="order-span" v-bind:class="{ 'order-span-color': order === 'like' }" @click="questionOrder('like')">人気</span>
           </div>
         </div>
+
+        <div v-if="questions.length !== 0">
+          <div v-for="question in questions" :key="question.id" class="question-show-div">
+            <div class="question-user-icon">
+              <router-link v-bind:to="{ name : 'UserShow', params : { id: question.userid }}" class="a-tag">
+                <!-- image -->
+              </router-link>
+            </div>
+            <div class="question-index-body">
+              <div class="question-tag-div">
+                <i class="el-icon-collection-tag tag-icon"></i>
+                <span class="question-tag no-magin">{{ question.tag }}</span>
+              </div>
+              <router-link v-bind:to="{ name : 'QuestionShow', params : { id: question.id }}" class="a-tag">
+                <h2 class="question-title-index"> {{question.title}} </h2>
+              </router-link>
+              <div class="question-index-username-updated">
+                <div>
+                  <p v-if="question.category === 'Q&A'" class="question-index-category p-QandA"> {{question.category}} </p>
+                  <p v-else class="question-index-category p-ikenkoukan"> {{question.category}} </p>
+                </div>
+                <router-link v-bind:to="{ name : 'UserShow', params : { id: question.userid }}" class="a-tag">
+                  <h3 class="question-index-username">by {{ question.name }}</h3>
+                </router-link>
+                <h3 class="question-index-update" v-if="order === 'new' "> {{ question.Created | moment }}</h3>
+                <h3 class="question-index-update" v-else> {{ question.Created | moment2 }}</h3>
+                <i class="el-icon-star-on question-star-i"></i>
+                <span class="question-likecount-span">{{question.likecount}}</span>
+              </div>
+            </div>
+          </div>
+
+
+          <infinite-loading @infinite="scrollQuestions" :identifier="infiniteId" spinner="spiral">
+            <span slot="no-more">----- 検索結果は以上です-----</span>
+            <span slot="no-results">----- 検索結果は以上です -----</span>
+          </infinite-loading>
+        </div>
+
+        <div v-else>
+          <div class="question-show-div not-tag-div" v-if="friendsOnly === false ">
+            <p class="not-tag" v-if="searchText === '' && tag !== '全て' ">タグ『{{ tag }}』の質問はまだありません。</p>
+            <p class="not-tag" v-else-if="tag === '全て' && searchText !== '' ">キーワード『{{ searchText }}』の質問はありません。</p>
+            <p class="not-tag"  v-else-if="tag !== '全て' && searchText !== '' ">タグ『{{ tag }}』,キーワード『{{ searchText }}』の質問はありません。</p>
+            <p class="not-tag" v-else>まだ質問が投稿されていません。</p>
+          </div>
+          <div class="question-show-div not-tag-div" v-else>
+            <p class="not-tag" v-if="searchText === '' && tag !== '全て' ">タグ『{{ tag }}』の質問はまだありません。</p>
+            <p class="not-tag" v-else-if="tag === '全て' && searchText !== '' ">キーワード『{{ searchText }}』の質問はありません。</p>
+            <p class="not-tag"  v-else-if="tag !== '全て' && searchText !== ''">タグ『{{ tag }}』,キーワード『{{ searchText }}』の質問はありません。</p>
+            <p class="not-tag" v-else >フレンドの質問はまだありません。</p>
+          </div>
+        </div>
+
+      </div>
+      <div>
+        <Ranking :likeRanking="likeRanking" :postRanking="postRanking"></Ranking>
       </div>
     </div>
     <Footer></Footer>
@@ -32,9 +77,13 @@
 
 <script>
 // import axios from "axios";
-import moment from 'moment'
+// import InfiniteLoading from 'vue-infinite-loading';
+import InfiniteLoading from 'vue-infinite-loading'
 import Header from './../components/Header.vue'
-import Footer from './../components/Footer.vue';
+import Footer from './../components/Footer.vue'
+import Tag from './../components/Tag.vue'
+import Ranking from './../components/Ranking.vue'
+import moment from 'moment'
 
 export default {
   name: 'app',
@@ -42,23 +91,72 @@ export default {
     return {
       questions: [],
       user: {},
-      type: "question"
+      likeRanking: [],
+      postRanking: [],
+      searchText:"",
+      tag: String,
+      order: String,
+      friendsOnly: Boolean,
+      cursor: 0,
+      page: 1,
+      infiniteId: +new Date(),
     }
   },
   components: {
     Header,
     Footer,
+    Tag,
+    Ranking,
+    InfiniteLoading,
   },
-  // createdの中でaxiosを使います。get()の中のURLは、nginx.confで設定してるので、 /api/ になっています。
+  filters: {
+    moment: function (date) {
+      return moment(date).fromNow();
+    },
+    moment2: function (date) {
+      // locale関数を使って言語を設定すると、日本語で出力される
+      return moment(date).utc().format('YYYY/MM/DD');
+    }
+  },
+  watch: {
+    searchText(newSearchText) {
+      localStorage.searchText = newSearchText;
+    },
+    order(newOrder) {
+      localStorage.order = newOrder;
+    },
+    tag(newTag) {
+      localStorage.tag = newTag;
+    },
+    friendsOnly(newFriendsOnly) {
+      localStorage.friendsOnly = newFriendsOnly;
+    },
+  },
   created () {
+    const jst = this.$cookies.get("JWT");
+    if(jst === null){
+      this.$router.push({ path: "/login" });
+    }
+    this.setUp()
     this.$axios.get('http://localhost/api/restricted/Questions',{
+      params: {
+        // ここにクエリパラメータを指定する
+        friendsOnly: this.friendsOnly,
+        searchText: this.searchText,
+        order: this.order,
+        tag: this.tag,
+        cursor: this.cursor,
+      },
       headers: {
-        Authorization: `Bearer ${this.$cookies.get("JWT")}`
+        Authorization: `Bearer ${jst}`
       },
     })
       .then(response => {
         this.questions = response.data.Questions
+        this.likeRanking = response.data.LikeRanking
+        this.postRanking = response.data.PostRanking
         this.user = response.data.user
+        this.cursor = response.data.Cursor
       })
       .catch(error => {
         if(error.response.status == 401){
@@ -67,14 +165,7 @@ export default {
         }
       })
   },
-  filters: {
-    moment: function (date) {
-      // locale関数を使って言語を設定すると、日本語で出力される
-      moment.locale( 'ja' );
-      return moment(date).fromNow();
-      // return moment(date).utc().format('YYYY/MM/DD HH:mm');
-    }
-  },
+
   methods:{
     errorNotify() {
       this.$notify.error({
@@ -82,57 +173,228 @@ export default {
         message: 'あなたのセッションはタイムアウトしました。再度ログインしてください。'
       });
     },
+
+    questionOrder(c) {
+      this.changeType()
+      this.$axios.get('http://localhost/api/restricted/Questions/scope', {
+      params: {
+        friendsOnly: this.friendsOnly,
+        searchText: this.searchText,
+        order: c,
+        tag: this.tag,
+        cursor: this.cursor,
+      },
+      headers: {
+        Authorization: `Bearer ${this.$cookies.get("JWT")}`
+      },
+    })
+      .then(response => {
+        if(c === "new"){
+          this.order = "new"
+        }else{
+          this.order = "like"
+        }
+        this.questions = response.data.Questions
+        this.cursor = response.data.Cursor
+        console.log("並べ替え")
+        console.log(this.cursor)
+      })
+      .catch(error => {
+        if(error.response.status == 401){
+          this.$router.push({ path: "/login" });
+          this.errorNotify();
+        }
+      })
+    },
+
+    scopetag() {
+      this.changeType()
+      this.$axios.get('http://localhost/api/restricted/Questions/scope', {
+      params: {
+        friendsOnly: this.friendsOnly,
+        searchText: this.searchText,
+        order: this.order,
+        tag: this.tag,
+        cursor: this.cursor,
+      },
+      headers: {
+        Authorization: `Bearer ${this.$cookies.get("JWT")}`
+      },
+    })
+      .then(response => {
+        this.questions = response.data.Questions
+        this.cursor = response.data.Cursor
+        console.log("フレンドのみ")
+        console.log(this.cursor)
+      })
+      .catch(error => {
+        if(error.response.status == 401){
+          this.$router.push({ path: "/login" });
+          this.errorNotify();
+        }
+      })
+    },
+
+    scrollQuestions($state) {
+      this.$axios.get('http://localhost/api/restricted/Questions/scope', {
+      params: {
+        friendsOnly: this.friendsOnly,
+        searchText: this.searchText,
+        order: this.order,
+        tag: this.tag,
+        cursor: this.cursor,
+      },
+      headers: {
+        Authorization: `Bearer ${this.$cookies.get("JWT")}`
+      },
+    })
+      .then(response => {
+        if (response.data.Questions.length) {
+          this.questions = this.questions.concat(response.data.Questions);
+          this.cursor = response.data.Cursor
+          this.page += 1;
+          console.log("スクロールしました")
+          console.log(this.cursor)
+          $state.loaded();
+        } else {
+          $state.complete();
+        }
+      })
+      .catch(error => {
+        if(error.response.status == 401){
+          this.$router.push({ path: "/login" });
+          this.errorNotify();
+        }
+      })
+    },
+    changeType() {
+      this.page = 1;
+      this.infiniteId += 1;
+      this.questions = [];
+      this.cursor = 0;
+    },
+
+    setUp() {
+      if (localStorage.searchText) {
+        this.searchText = localStorage.searchText;
+      }
+      if (localStorage.tag) {
+        this.tag = localStorage.tag;
+      }else{
+        this.tag = '全て'
+      }
+      if (localStorage.order) {
+        this.order = localStorage.order;
+      }else{
+        this.order = 'new'
+      }
+      if (localStorage.friendsOnly) {
+        if(localStorage.friendsOnly === "true"){
+          this.friendsOnly = true
+        }else{
+          this.friendsOnly = false
+        }
+      }else{
+        this.friendsOnly = false
+      }
+    },
+    reset(){
+      this.searchText = ''
+      this.tag = '全て'
+      this.order = 'new'
+      this.friendsOnly = false
+      this.scopetag()
+    }
   }
 }
 </script>
 
 <style>
-body {
-  margin: 0px;
-}
-.body-main{
-  width: 1000px;
-  margin: 0 auto 0 auto;
-}
-.index-main{
-  display: flex;
-  margin-top: 30px;
-}
-.index-menu{
-  width: 150px;
-  background-color: #F6F6F4;
-}
+
 .question-all-div{
-  width: 600px;
-  background-color: #fff;
+  width: 500px;
+  background-color: #F6F6F4;
+  /* background-color: #15202b; */
 }
 .question-show-div{
-  padding-left: 20px;
+  background-color: #FFF;
+  padding-left: 10px;
   border: solid 1px #eee;
+  border-radius: 6px;
+  margin-bottom: 5px;
   display: flex;
+}
+.question-show-div:hover {
+  transition: 0.15s ;
+  border: solid 1.3px #409eff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
+  transform: translateY(-0.1875em);
 }
 .question-user-icon{
   margin-top: 25px;
   background-color: #ccc;
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
 }
 .question-index-body{
-  margin-left: 20px;
+  margin-left: 10px;
+}
+.question-index-username-updated,.question-search-div{
+  display: flex;
+}
+.question-index-category{
+  padding: 1.5px;
+  margin-right: 10px;
+  border-radius: 2px;
+  color: #FFF;
+  font-weight: bold;
+}
+.p-QandA{
+  background: #dc143c;
+  font-size: 0.9em;
+}
+.p-ikenkoukan{
+  background: #4169e1;
+  font-size: 0.8em;
 }
 .question-title-index{
-  font-size: 20px;
-  width: 500px;
+  font-size: 1.1em;
+  width: 440px;
   text-align: left;
-  margin-bottom: 0;
+  margin: 0;
 }
-.question-user-name{
+.question-index-username,.question-index-update{
   font-size: 13px;
+  color: #999;
 }
-.a-tag{
-  color: #000;
-  text-decoration: none;
-  cursor: pointer;
+.question-index-update{
+  margin-left: 20px;
+}
+.question-search-div{
+  background-color: #F6F6F4;
+  padding-bottom: 8px;
+}
+
+.question-star-i{
+  color: orange;
+  margin-top: 13px;
+  margin-left: 20px;
+  font-size: 1.3em;
+}
+.question-likecount-span{
+  margin-top: 15px;
+  font-size: 0.8em;
+  color: #777;
+}
+
+.question-tag-div{
+  display: flex;
+}
+
+.question-tag{
+  font-size: 0.6em;
+  color: #999;
+  width: 440px;
 }
 </style>

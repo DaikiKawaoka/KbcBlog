@@ -47,26 +47,80 @@ func QuestionCreate(c echo.Context) error {
   return c.JSON(http.StatusOK, out)
 }
 
-// QuestionIndex 質問一覧ページ
+// QuestionIndex 記事一覧ページ
 func QuestionIndex(c echo.Context) error {
 
 	userID := userIDFromToken(c)
 	myUser,err := repository.GetMyUser(userID)
 	if err != nil {
 		c.Logger().Error(err.Error())
-		return c.JSON(http.StatusInternalServerError,"userが存在しません") //500
+		return c.JSON(http.StatusInternalServerError,"userが存在しません")
 	}
-	questions, err := repository.QuestionListByCursor(0)
+
+	var scope model.Scope
+	scope.Order = c.QueryParam("order")//並び順
+	scope.Tag = c.QueryParam("tag")//絞り込みタグ
+	scope.Text = c.QueryParam("searchText")//絞り込みテキスト
+	scope.FriendsOnly,_ = strconv.ParseBool(c.QueryParam("friendsOnly")) // フレンドのみ? true or false
+
+	questions, err := repository.QuestionListByCursor(0,&scope,userID)
+
 	if err != nil {
 		c.Logger().Error(err.Error())
-		return c.JSON(http.StatusInternalServerError,"質問の一覧データを取得中にエラー発生") //500
+		return c.JSON(http.StatusInternalServerError,"質問の一覧データを取得中にエラー発生")
 	}
+
+	// likeRanking,err := repository.KBCRankingTop10("like")
+	// if err != nil {
+	// 	c.Logger().Error(err.Error())
+	// 	return c.JSON(http.StatusInternalServerError,"likeRankingを取得中にエラー発生")
+	// }
+
+	// postRanking,err := repository.KBCRankingTop10("post")
+	// if err != nil {
+	// 	c.Logger().Error(err.Error())
+	// 	return c.JSON(http.StatusInternalServerError,"likeRankingを取得中にエラー発生")
+	// }
+
+	// 取得できた最後の記事の ID をカーソルとして設定します。
+	var cursor int
+	if len(questions) != 0 {
+		cursor = questions[len(questions)-1].ID
+	}
+
 	data := map[string]interface{}{
 		"user": myUser,
 		"Questions": questions,
+		"Cursor":   cursor,
+		// "LikeRanking": likeRanking,
+		// "PostRanking": postRanking,
 	}
 	return c.JSON(http.StatusOK, data)
 }
+
+
+
+
+// // QuestionIndex 質問一覧ページ
+// func QuestionIndex(c echo.Context) error {
+
+// 	userID := userIDFromToken(c)
+// 	myUser,err := repository.GetMyUser(userID)
+// 	if err != nil {
+// 		c.Logger().Error(err.Error())
+// 		return c.JSON(http.StatusInternalServerError,"userが存在しません") //500
+// 	}
+// 	questions, err := repository.QuestionListByCursor(0)
+// 	if err != nil {
+// 		c.Logger().Error(err.Error())
+// 		return c.JSON(http.StatusInternalServerError,"質問の一覧データを取得中にエラー発生") //500
+// 	}
+// 	data := map[string]interface{}{
+// 		"user": myUser,
+// 		"Questions": questions,
+// 	}
+// 	return c.JSON(http.StatusOK, data)
+// }
 
 // QuestionShow 質問詳細ページ
 func QuestionShow(c echo.Context) error {
@@ -226,4 +280,40 @@ func QuestionDelete(c echo.Context) error {
 	}
 	message := "質問を削除しました。"
 	return c.JSON(http.StatusOK, message)
+}
+
+// QuestionIndexOrder 質問一覧のスクロール時に次の10記事を返す
+func QuestionIndexOrder(c echo.Context) error {
+
+	cursor, _ := strconv.Atoi(c.QueryParam("cursor"))
+	userID := userIDFromToken(c)
+	var scope model.Scope
+	scope.Order = c.QueryParam("order")//並び順
+	scope.Tag = c.QueryParam("tag")//絞り込みタグ
+	scope.Text = c.QueryParam("searchText")//絞り込みテキスト
+	scope.FriendsOnly,_ = strconv.ParseBool(c.QueryParam("friendsOnly")) // フレンドのみ? true or false
+
+	// articles, err := repository.ArticleListByCursor(0,order,tag,text,friendsOnly,userId)
+	questions, err := repository.QuestionListByCursor(cursor,&scope,userID)
+
+	if err != nil {
+		c.Logger().Error(err.Error())
+		return c.JSON(http.StatusInternalServerError,"記事の一覧データ取得中にエラー発生")
+	}
+
+	if scope.Order == "new" {
+		if len(questions) != 0 {
+			cursor = questions[len(questions)-1].ID
+		}
+	}else{
+		if len(questions) != 0 {
+			cursor = cursor + 10
+		}
+	}
+
+	data := map[string]interface{}{
+		"Questions": questions,
+		"Cursor":   cursor,
+	}
+	return c.JSON(http.StatusOK, data)
 }

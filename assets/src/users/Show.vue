@@ -202,10 +202,10 @@
             </div>
             <span v-else class="not-conf article-parcent-not-conf">No data</span>
           </div>
-          <div class="user-iine-div">
+          <!-- <div class="user-iine-div">
             <span class="user-show-body-div-in-span">Good記事</span>
             <span class="not-conf">No data</span>
-          </div>
+          </div> -->
         </div>
       </div>
 
@@ -224,7 +224,7 @@
             <div v-for="article in articles" :key="article.id" class="post-show-div">
               <router-link v-bind:to="{ name : 'ArticleShow', params : { id: article.id }}" class="a-tag">
                 <div class="post-index-body">
-                    <div class="article-tag-div">
+                    <div class="article-index-tag-div">
                       <i class="el-icon-collection-tag tag-icon"></i>
                       <span class="article-tag no-magin">{{ article.tag }}</span>
                     </div>
@@ -247,8 +247,16 @@
             <div v-for="question in questions" :key="question.id" class="post-show-div">
               <router-link v-bind:to="{ name : 'QuestionShow', params : { id: question.id }}" class="a-tag">
                 <div class="post-index-body">
+                  <div class="article-index-tag-div">
+                    <i class="el-icon-collection-tag tag-icon"></i>
+                    <span class="article-tag no-magin">{{ question.tag }}</span>
+                  </div>
                     <h2 class="post-title-index"> {{question.title}} </h2>
                   <div class="post-index-username-updated">
+                    <div>
+                      <p v-if="question.category === 'Q&A'" class="question-index-category p-QandA"> {{question.category}} </p>
+                      <p v-else class="question-index-category p-ikenkoukan"> {{question.category}} </p>
+                    </div>
                     <i class="el-icon-star-on star-i"></i>
                     <span class="likecount-span">{{ question.likecount}}</span>
                     <p class="post-index-update">{{ question.Updated  | moment }}</p>
@@ -858,6 +866,7 @@ svg{
   width: 500px;
   text-align: left;
   margin-bottom: 0;
+  margin-top: 5px;
 }
 .article-title-index{
   margin-top: 5px;

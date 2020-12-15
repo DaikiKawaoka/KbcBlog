@@ -34,6 +34,17 @@
           </div>
         </div>
         <h1 class="article-title">{{question.title}}</h1>
+        <div class="article-tags-div">
+          <div v-if="question.category === 'Q&A'" class="article-tag-div question-show-category-div quesiton-show-category-Q">
+            <span>{{ question.category }}</span>
+          </div>
+          <div v-else class="article-tag-div question-show-category-div quesiton-show-category-I">
+            <span>{{ question.category }}</span>
+          </div>
+          <div v-for="(tag,index) in tags" :key="index" class="article-tag-div">
+            <span>{{tag}}</span>
+          </div>
+        </div>
         <div class="article-form__preview-body">
           <div class="article-form__preview-body-contents" id="article-body" v-html="compiledMarkdown"></div>
         </div>
@@ -128,6 +139,7 @@ export default {
       },
       comments: [],
       errors: {},
+      tags:[],
     }
   },
   components: {
@@ -146,6 +158,7 @@ export default {
         this.user = response.data.user
         this.comments = response.data.Comments
         this.like = response.data.Like
+        this.tags = this.question.tag.split(',');
 
         //commentに各idを代入
         this.comment.questionid = this.question.id
@@ -400,4 +413,143 @@ export default {
   color: #606266;
 }
 
+
+
+
+
+
+
+
+.article-show-main,.article-comment-all{
+  width: 800px;
+  margin: 30px auto 0 auto;
+  background-color: #fff;
+  padding: 20px;
+}
+.article-title{
+  padding: 0px 20px 0px 10px;
+  font-size: 2.5em;
+  margin-bottom: 20px;
+}
+.article-comment-header{
+  display: flex;
+  height: 50px;
+  margin-bottom: 50px;
+}
+.article-create-date,.article-update-date{
+  font-size: 10px;
+  line-height: 10px;
+}
+
+.comment-user-name{
+  margin-left: 10px;
+  line-height: 10px;
+}
+.comment-create-date{
+  font-size: 8px;
+}
+.comment-create-date,.comment-edit-icon{
+  text-align: right;
+  /* margin-left: 15px; */
+}
+.article-create-update-date-div{
+  margin-right: 10px;
+}
+.article-create-date,.article-update-date{
+  margin-top: 0;
+  font-size: 14px;
+}
+.dropdown-span{
+  margin-right: 20px;
+  margin-left: 20px;
+}
+.icon-menu-span{
+  text-align: center;
+  font-size: 22px;
+}
+.el-icon-more{
+  cursor: pointer;
+}
+.comment-text{
+  margin: 10px 15px 50px 15px;
+}
+.like-btn{
+  display: inline-block;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  background: #FFF;
+  border: 1px solid #DCDFE6;
+  color: #606266;
+  -webkit-appearance: none;
+  text-align: center;
+  box-sizing: border-box;
+  outline: 0;
+  margin: 0;
+  transition: .1s;
+  font-weight: 500;
+  padding: 12px 20px;
+  font-size: 14px;
+  border-radius: 4px;
+}
+.like-btn:hover{
+  color: #E6A23C;
+  border-color: #f5dab1;
+  background: #fdf6ec;
+}
+.like-count-span{
+  margin-left: 10px;
+  font-size: 1.1em;
+  color:#E6A23C;
+  font-weight: bold;
+}
+.comment-like-count-span{
+  margin-left: 1px;
+  font-size: 0.9em;
+  user-select: none;
+}
+.comment-ster-i{
+  margin-left: 10px;
+  font-size: 2em;
+  cursor: pointer;
+  color:#E6A23C;
+}
+.not-comment-ster-i{
+  margin-left: 15px;
+  font-size: 1.6em;
+  cursor: pointer;
+}
+.article-tags-div{
+  display: flex;
+  margin-bottom: 50px;
+  flex-wrap:wrap
+}
+.article-tag-div{
+  margin-left: 10px;
+  margin-top: 10px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  background: #eee;
+  color: #666;
+}
+.article-tag-div > span{
+  font-size: 0.9em;
+}
+.question-show-category-div{
+  margin-right: 10px;
+}
+.question-show-category-div > span{
+  color: #fff;
+  font-weight: bold;
+}
+.quesiton-show-category-Q{
+  background-color: #dc143c;
+}
+.quesiton-show-category-I{
+  background-color: #4169e1;
+}
+
+.article-like-btn-div{
+  padding-top: 50px;
+}
 </style>

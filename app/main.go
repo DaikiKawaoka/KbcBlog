@@ -36,7 +36,7 @@ func main() {
 
 	// Article
 	r.GET("/Articles", handler.ArticleIndex)
-	r.GET("/Articles/scope", handler.ArticleIndexOrder) //いいね順
+	r.GET("/Articles/scope", handler.ArticleIndexOrder)
 	r.GET("/Articles/new", handler.ArticleNew)
 	r.GET("/Articles/:id", handler.ArticleShow)
 	r.GET("/Articles/:id/edit", handler.ArticleEdit)
@@ -49,6 +49,7 @@ func main() {
 	r.DELETE("/Articles/:id/Comments/:cid", handler.ArticleCommentDelete)
   // Question
 	r.GET("/Questions", handler.QuestionIndex)
+	r.GET("/Questions/scope", handler.QuestionIndexOrder)
 	r.GET("/Questions/new", handler.QuestionNew)
 	r.GET("/Questions/:id", handler.QuestionShow)
 	r.GET("/Questions/:id/edit", handler.QuestionEdit)

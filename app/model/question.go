@@ -6,14 +6,16 @@ import (
 
 // Question ...
 type Question struct {
-	ID      int       `db:"id" json:"id"`
-	Userid  int       `db:"userid" json:"userid"`
-	UserName string   `db:"name" json:"name"`
-	Title   string    `db:"title" json:"title" validate:"required,max=50"`
-	Body    string    `db:"body" json:"body" validate:"required"`
+	ID        int       `db:"id" json:"id"`
+	Userid    int       `db:"userid" json:"userid"`
+	UserName  string   `db:"name" json:"name"`
+	Title     string    `db:"title" json:"title" validate:"required,max=50"`
+	Body      string    `db:"body" json:"body" validate:"required"`
+	Tag       string     `db:"tag" json:"tag" validate:"required"`
+	Category  string     `db:"category" json:"category" validate:"required"`
 	LikeCount int     `db:"likecount" json:"likecount"`
-	Created string `db:"created"`
-	Updated string `db:"updated"`
+	Created   string `db:"created"`
+	Updated   string `db:"updated"`
 }
 
 // AnswerQuestion ...
@@ -48,6 +50,10 @@ func (q *Question) ValidationErrors(err error) []string {
 			}
 		case "Body":
 			message = "本文を入力してください。"
+		case "Tag":
+			message = "タグが1つも選択されていません。"
+		case "Category":
+			message = "カテゴリーが選択されていません。"
 		}
 
 		// メッセージをスライスに追加します。
