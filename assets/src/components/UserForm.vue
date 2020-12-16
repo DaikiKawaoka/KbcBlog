@@ -16,12 +16,12 @@
       <el-form-item label="名前" prop="name"
       :rules="[
           { required: true, message: '入力必須です', trigger: 'blur' },
-          { min: 4, max: 20, message: '4~20文字で入力してください', trigger: 'blur' },
+          { min: 4, max: 10, message: '4~10文字で入力してください', trigger: 'blur' },
       ]">
         <el-input
           v-model="user.name"
           placeholder="name"
-          maxlength="20"
+          maxlength="10"
           show-word-limit
           name="user[name]"></el-input>
       </el-form-item>

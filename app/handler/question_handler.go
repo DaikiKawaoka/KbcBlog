@@ -70,17 +70,19 @@ func QuestionIndex(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError,"質問の一覧データを取得中にエラー発生")
 	}
 
-	// likeRanking,err := repository.KBCRankingTop10("like")
-	// if err != nil {
-	// 	c.Logger().Error(err.Error())
-	// 	return c.JSON(http.StatusInternalServerError,"likeRankingを取得中にエラー発生")
-	// }
+	// 質問数ランキング 変数の名前は適当
+	likeRanking,err := repository.KBCQuestionRankingTop10("post")
+	if err != nil {
+		c.Logger().Error(err.Error())
+		return c.JSON(http.StatusInternalServerError,"意欲的Rankingを取得中にエラー発生")
+	}
 
-	// postRanking,err := repository.KBCRankingTop10("post")
-	// if err != nil {
-	// 	c.Logger().Error(err.Error())
-	// 	return c.JSON(http.StatusInternalServerError,"likeRankingを取得中にエラー発生")
-	// }
+	// 回答数ランキング
+	postRanking,err := repository.KBCQuestionRankingTop10("like")
+	if err != nil {
+		c.Logger().Error(err.Error())
+		return c.JSON(http.StatusInternalServerError,"回答数Rankingを取得中にエラー発生")
+	}
 
 	// 取得できた最後の記事の ID をカーソルとして設定します。
 	var cursor int
@@ -92,8 +94,8 @@ func QuestionIndex(c echo.Context) error {
 		"user": myUser,
 		"Questions": questions,
 		"Cursor":   cursor,
-		// "LikeRanking": likeRanking,
-		// "PostRanking": postRanking,
+		"LikeRanking": likeRanking,
+		"PostRanking": postRanking,
 	}
 	return c.JSON(http.StatusOK, data)
 }

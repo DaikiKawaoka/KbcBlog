@@ -10,7 +10,7 @@ import (
 // CreateUser ...
 type CreateUser struct {
 	ID          int       `db:"id" json:"id"`
-	Name        string    `db:"name" json:"name" validate:"required,min=4,max=20"`
+	Name        string    `db:"name" json:"name" validate:"required,min=4,max=10"`
 	KBCMail    string    `db:"mail" json:"KBC_mail" validate:"required,"`
 	Password    string    `json:"password" validate:"required,min=8,max=50"`
 	PassCfm    string    `json:"password_confirmation"`
@@ -21,7 +21,7 @@ type CreateUser struct {
 type User struct {
 	ID          int       `db:"id" json:"id"`
 	KBCMail    string    `db:"mail" json:"KBC_mail"`
-	Name        string    `db:"name" json:"name" validate:"required,min=4,max=20"`
+	Name        string    `db:"name" json:"name" validate:"required,min=4,max=10"`
 	Comment     sql.NullString   `db:"comment" json:"comment" validate:"max=150"`
 	PostCount int      `db:"PostCount" json:"postCount"` //投稿数
 	Github      sql.NullString    `db:"github" json:"github"`
@@ -40,6 +40,7 @@ type LoginUser struct {
 type RankingUser struct {
 	ID          int       `db:"id" json:"id"`
 	Name        string    `db:"name" json:"name"`
+	Comment     sql.NullString   `db:"comment" json:"comment"`
 	Count int     `db:"count" json:"count"`
 }
 
@@ -78,7 +79,7 @@ func (u *CreateUser) ValidationErrors(err error) []string {
 			case "min":
 				message = "名前は4文字以上です。"
 			case "max":
-				message = "名前は最大20文字です。"
+				message = "名前は最大10文字です。"
 			}
 		case "KBCMail":
 			switch err.Tag() {
@@ -130,7 +131,7 @@ func (u *User) ValidationErrors(err error) []string {
 			case "min":
 				message = "名前は4文字以上です。"
 			case "max":
-				message = "名前は最大20文字です。"
+				message = "名前は最大10文字です。"
 			}
 		case "Comment":
 			message = "コメントは最大150文字です。"

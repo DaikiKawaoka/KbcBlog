@@ -21,6 +21,11 @@
               </el-dropdown-menu>
             </el-dropdown>
           </li>
+          <li>
+            <el-badge :value="200" :max="99" class="badge-all">
+              <el-button size="mini"><i class="el-icon-message-solid message-solid-i"></i></el-button>
+            </el-badge>
+          </li>
           <li class="a-tag logout-li" @click="myUserPage">
           <!-- <li class="a-tag logout-li"> -->
             <!-- <router-link v-bind:to="{ name : 'UserShow', params : { id: user.id }}" class="a-tag"> -->
@@ -128,5 +133,12 @@ export default {
   width: 40px;
   height: 40px;
   border-radius: 50%;
+}
+.badge-all{
+  margin-left: 15px;
+  margin-right: 10px;
+}
+.message-solid-i{
+  font-size: 1.5em;
 }
 </style>

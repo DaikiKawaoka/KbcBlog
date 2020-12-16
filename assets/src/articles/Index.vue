@@ -64,7 +64,7 @@
 
       </div>
       <div>
-        <Ranking :likeRanking="likeRanking" :postRanking="postRanking"></Ranking>
+        <Ranking :likeRanking="likeRanking" :postRanking="postRanking" :isArticle="true"></Ranking>
       </div>
     </div>
     <Footer></Footer>

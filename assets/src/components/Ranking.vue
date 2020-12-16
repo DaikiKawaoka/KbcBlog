@@ -1,7 +1,8 @@
 <template>
-  <div class="ranking-all">
+  <div v-if="isArticle" class="ranking-all">
+    <!-- article -->
     <div class="ranking-title-div">
-      <h3 class="ranking-title">KBCユーザランキング<i class="el-icon-user-solid"></i></h3>
+      <h3 class="ranking-title">人気ユーザーランキング<i class="el-icon-user-solid"></i></h3>
     </div>
     <ul class="ranking-ul">
       <li class="ranking-li" v-for="(u,index) in this.likeRanking" :key="u.id">
@@ -16,9 +17,12 @@
                 <!-- アイコン -->
                 <div class="user-icon"></div>
               </div>
-              <div>
-                <div>
-                  <p class="user-name">{{ u.name }}</p>
+              <div class="u-div-nameandcomment-width">
+                <div class="string-out">
+                  <span class="user-name">{{ u.name }}</span>
+                </div>
+                <div class="string-out">
+                  <span class="tag-user-comment">{{u.comment.String}}</span>
                 </div>
               </div>
             </div>
@@ -32,7 +36,7 @@
     </ul>
 
     <div class="ranking-title-div post-count-ranking">
-      <h3 class="ranking-title">KBC投稿数ランキング<i class="el-icon-document-checked"></i></h3>
+      <h3 class="ranking-title">投稿数ランキング<i class="el-icon-document-checked"></i></h3>
     </div>
     <ul class="ranking-ul">
       <li class="ranking-li" v-for="(u,index) in this.postRanking" :key="u.id">
@@ -47,9 +51,82 @@
                 <!-- アイコン -->
                 <div class="user-icon"></div>
               </div>
+              <div class="u-div-nameandcomment-width">
+                <div class="string-out">
+                  <span class="user-name">{{ u.name }}</span>
+                </div>
+                <div class="string-out">
+                  <span class="tag-user-comment">{{u.comment.String}}</span>
+                </div>
+              </div>
+            </div>
+            <div class="like-count-div">
+              <p class="like-count">{{ u.count }}</p>
+              <p class="like-tag"><i class="el-icon-document"></i></p>
+            </div>
+          </div>
+        </router-link>
+      </li>
+    </ul>
+  </div>
+  <div v-else class="ranking-all">
+    <!-- question -->
+    <div class="ranking-title-div">
+      <h3 class="ranking-title">意欲的ユーザーランキング<i class="el-icon-user-solid"></i></h3>
+    </div>
+    <ul class="ranking-ul">
+      <li class="ranking-li" v-for="(u,index) in this.likeRanking" :key="u.id">
+        <router-link v-bind:to="{ name : 'UserShow', params : { id: u.id }}" class="a-tag">
+          <div class="ranking-main">
+            <div class="ranking-main">
+              <div class="rank-number-div">
+                <!--- 順位--->
+                <span class="rank-number" v-bind:class="`rank-${index + 1}`">{{ index + 1 }}</span>
+              </div>
               <div>
-                <div>
-                  <p class="user-name">{{ u.name }}</p>
+                <!-- アイコン -->
+                <div class="user-icon"></div>
+              </div>
+              <div class="u-div-nameandcomment-width">
+                <div class="string-out">
+                  <span class="user-name">{{ u.name }}</span>
+                </div>
+                <div class="string-out">
+                  <span class="tag-user-comment">{{u.comment.String}}</span>
+                </div>
+              </div>
+            </div>
+            <div class="like-count-div">
+              <p class="like-count">{{ u.count }}</p>
+              <p class="like-tag"><i class="el-icon-star-off"></i></p>
+            </div>
+          </div>
+        </router-link>
+      </li>
+    </ul>
+
+    <div class="ranking-title-div post-count-ranking">
+      <h3 class="ranking-title">回答数ランキング<i class="el-icon-document-checked"></i></h3>
+    </div>
+    <ul class="ranking-ul">
+      <li class="ranking-li" v-for="(u,index) in this.postRanking" :key="u.id">
+        <router-link v-bind:to="{ name : 'UserShow', params : { id: u.id }}" class="a-tag">
+          <div class="ranking-main">
+            <div class="ranking-main">
+              <div class="rank-number-div">
+                <!--- 順位--->
+                <span class="rank-number" v-bind:class="`rank-${index + 1}`">{{ index + 1 }}</span>
+              </div>
+              <div>
+                <!-- アイコン -->
+                <div class="user-icon"></div>
+              </div>
+              <div class="u-div-nameandcomment-width">
+                <div class="string-out">
+                  <span class="user-name">{{ u.name }}</span>
+                </div>
+                <div class="string-out">
+                  <span class="tag-user-comment">{{u.comment.String}}</span>
                 </div>
               </div>
             </div>
@@ -69,6 +146,7 @@
     props: {
       likeRanking: Array,
       postRanking: Array,
+      isArticle: Boolean,
     },
     data() {
       return {
@@ -149,5 +227,18 @@
 
 .post-count-ranking{
   margin-top: 35px;
+}
+.u-div-nameandcomment-width{
+  width: 158px;
+}
+.string-out{
+  overflow: hidden;
+  white-space: nowrap;
+	text-overflow: ellipsis;
+	-webkit-text-overflow: ellipsis; /* Safari */
+	-o-text-overflow: ellipsis; /* Opera */
+}
+.tag-user-comment{
+  font-size: 0.7em;
 }
 </style>
