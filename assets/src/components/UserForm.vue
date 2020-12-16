@@ -131,8 +131,11 @@
     return{
       langarray: [],
       options: [{
-          value: 'HTML/CSS',
-          label: 'HTML/CSS'
+          value: 'HTML',
+          label: 'HTML'
+        }, {
+          value: 'CSS',
+          label: 'CSS'
         }, {
           value: 'Java',
           label: 'Java'
@@ -143,14 +146,14 @@
           value: 'JavaScript',
           label: 'JavaScript'
         }, {
-          value: 'C/C++',
-          label: 'C/C++'
+          value: 'C',
+          label: 'C'
+        }, {
+          value: 'C++',
+          label: 'C++'
         }, {
           value: 'C#',
           label: 'C#'
-        }, {
-          value: 'SQL',
-          label: 'SQL'
         }, {
           value: 'PHP',
           label: 'PHP'
@@ -178,15 +181,6 @@
         }, {
           value: 'Swift',
           label: 'Swift'
-        },{
-          value: 'VB',
-          label: 'VB'
-        },{
-          value: 'VBA',
-          label: 'VBA'
-        },{
-          value: 'COBOL',
-          label: 'COBOL'
         }],
       uploadedImage: '',
     }

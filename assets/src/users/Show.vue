@@ -169,13 +169,14 @@
           </div>
         </div>
         <div class="user-show-body-info">
-          <div class="user-show-body-indiv user-like-lang-div">
-            <span class="user-show-body-div-in-span">好きな言語</span>
-            <span v-if="user.languages.Valid">
-              <span v-for="(lang, key) in langarray" :key="key" class="user-like-languages-span">
-                {{lang}}
-              </span>
-            </span>
+          <div class="user-show-body-indiv">
+            <p class="user-show-body-div-in-p">好きな言語</p>
+            <div v-if="user.languages.Valid" class="user-like-lang-div">
+              <div v-for="(lang, key) in langarray" :key="key" class="user-like-lang-for-div">
+                <img :src="getImgUrl(lang)" width="50" height="50" class="lang-image">
+                <p class="user-like-languages-p">{{lang}}</p>
+              </div>
+            </div>
             <span v-else>
               <span class="not-conf">未設定</span>
             </span>
@@ -561,6 +562,13 @@ export default {
           this.errors = error.response.data.ValidationErrors;
         });
     },
+    getImgUrl(lang) {
+      // #はパス名で使えないから変換
+      if(lang === "C#"){
+        lang = "C-sharp"
+      }
+      return require('@/assets/pgsvg/'+lang+".svg")
+    },
 
   }
 }
@@ -761,7 +769,8 @@ export default {
   border-radius: 2px;
 }
 .user-show-body-indiv{
-  height: 70px;
+  display: flex;
+  height: 100px;
 }
 .user-iine-div{
   height: 60px;
@@ -783,11 +792,11 @@ export default {
   /* white-space: nowrap; */
 }
 
-.user-show-body-div-in-span{
+.user-show-body-div-in-p{
   color: #94ff5f;
-  line-height: 70px;
   font-size: 0.9em;
   margin: 0 10px 0 10px;
+  line-height: 100px;
   width: 100px;
 }
 .div-in-span-article{
@@ -797,11 +806,12 @@ export default {
   width: 72px;
   height: 20px;
 }
-.user-like-languages-span{
-  font-size: 1.4em;
+.user-like-languages-p{
+  font-size: 0.8em;
   color: #fff;
   font-weight: bold;
-  margin-left: 10px;
+  margin: 0;
+  text-align: center;
 }
 .not-conf{
   color: #ccc;
@@ -818,6 +828,16 @@ export default {
 }
 svg{
   width: 80px;
+}
+.lang-image{
+  padding-top: 10px;
+}
+.user-like-lang-div{
+  display: flex;
+  margin-left: 45px;
+}
+.user-like-lang-for-div{
+  margin-right: 50px;
 }
 
 /* footer */
