@@ -98,7 +98,7 @@
             </div>
             <div class="like-count-div">
               <p class="like-count">{{ u.count }}</p>
-              <p class="like-tag"><i class="el-icon-star-off"></i></p>
+              <p class="like-tag"><i class="el-icon-tickets"></i></p>
             </div>
           </div>
         </router-link>
@@ -132,7 +132,7 @@
             </div>
             <div class="like-count-div">
               <p class="like-count">{{ u.count }}</p>
-              <p class="like-tag"><i class="el-icon-document"></i></p>
+              <p class="like-tag"><i class="el-icon-chat-dot-round"></i></p>
             </div>
           </div>
         </router-link>

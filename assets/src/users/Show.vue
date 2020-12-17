@@ -178,7 +178,7 @@
               </div>
             </div>
             <span v-else>
-              <span class="not-conf">未設定</span>
+              <span class="not-conf lang-like-not-conf">未設定</span>
             </span>
           </div>
           <div class="user-post-article-div">
@@ -815,11 +815,15 @@ export default {
 }
 .not-conf{
   color: #ccc;
-  margin-left: 10px;
+  /* margin-left: 10px; */
+}
+.lang-like-not-conf{
+  line-height: 100px;
 }
 .article-parcent-not-conf{
   height: 20px;
   margin-top: 22px;
+  margin-left: 30px;
 }
 .el-progress{
   width: 80px;
