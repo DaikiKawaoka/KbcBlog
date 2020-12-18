@@ -140,6 +140,7 @@ export default {
       comments: [],
       errors: {},
       tags:[],
+      notificationCount: localStorage.notificationCount,
     }
   },
   components: {
@@ -159,6 +160,7 @@ export default {
         this.comments = response.data.Comments
         this.like = response.data.Like
         this.tags = this.question.tag.split(',');
+        this.notificationCount = response.data.NotificationCount
 
         //commentに各idを代入
         this.comment.questionid = this.question.id
@@ -346,7 +348,12 @@ export default {
         message: 'あなたのセッションはタイムアウトしました。再度ログインしてください。'
       });
     },
-  }
+  },
+  watch: {
+    notificationCount(newNotificationCount) {
+      localStorage.notificationCount = newNotificationCount;
+    },
+  },
 }
 </script>
 

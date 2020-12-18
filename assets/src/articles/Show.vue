@@ -137,6 +137,7 @@ export default {
       },
       comments: [],
       errors: {},
+      notificationCount: localStorage.notificationCount,
       tags:[]
     }
   },
@@ -156,6 +157,7 @@ export default {
         this.user = response.data.user
         this.comments = response.data.Comments
         this.like = response.data.Like
+        this.notificationCount = response.data.NotificationCount
         this.tags = this.article.tag.split(',');
 
         //commentに各idを代入
@@ -287,7 +289,13 @@ export default {
 
     ChangeArticleLike(){
       this.$axios
-        .post(`http://localhost/api/restricted/Articles/${this.article.id}/Likes`,this.article.id,{
+        .post(`http://localhost/api/restricted/Articles/${this.article.id}/Likes`,this.article.userid,{
+          params: {
+            articleid: this.article.id,
+            visiterid: this.user.id,
+            visitedid: this.article.userid,
+            action: "alike"
+          },
           headers: {
             Authorization: `Bearer ${this.$cookies.get("JWT")}`
           },
@@ -344,7 +352,13 @@ export default {
         message: 'あなたのセッションはタイムアウトしました。再度ログインしてください。'
       });
     },
-  }
+  },
+
+  watch: {
+    notificationCount(newNotificationCount) {
+      localStorage.notificationCount = newNotificationCount;
+    },
+  },
 }
 </script>
 

@@ -22,9 +22,38 @@
             </el-dropdown>
           </li>
           <li>
-            <el-badge :value="200" :max="99" class="badge-all">
+
+            <el-badge :value="notificationCount" :max="99" class="badge-all">
+              <el-popover
+                placement="bottom"
+                width="320"
+                trigger="click">
+                <!-- <el-table :data="user">
+                  <el-table-column width="150" property="date" label="date"></el-table-column>
+                  <el-table-column width="100" property="name" label="name"></el-table-column>
+                  <el-table-column width="300" property="address" label="address"></el-table-column>
+                </el-table> -->
+                <div>
+                  <p style="margin:0;"><i class="el-icon-message-solid"></i>お知らせ</p>
+                  <div>
+                    <div>
+                      
+                    </div>
+                  </div>
+                  <p>通知一覧を見る</p>
+                </div>
+                <el-button size="mini" slot="reference"><i class="el-icon-message-solid message-solid-i"></i></el-button>
+              </el-popover>
+            </el-badge>
+
+            <!-- <el-badge v-if="notificationCount === 0" :value="notificationCount" :hidden="true" :max="99" class="badge-all">
               <el-button size="mini"><i class="el-icon-message-solid message-solid-i"></i></el-button>
             </el-badge>
+            <el-badge v-else :value="notificationCount" :max="99" class="badge-all">
+              <el-button size="mini"><i class="el-icon-message-solid message-solid-i"></i></el-button>
+            </el-badge> -->
+
+
           </li>
           <li class="a-tag logout-li" @click="myUserPage">
           <!-- <li class="a-tag logout-li"> -->
@@ -46,6 +75,11 @@ export default {
     isArticle: Boolean,
     isQuestion: Boolean,
     user: Object,
+  },
+  data(){
+    return{
+      notificationCount: localStorage.notificationCount,
+    }
   },
   methods: {
     myUserPage: function() {

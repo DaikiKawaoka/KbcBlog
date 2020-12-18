@@ -19,6 +19,7 @@ export default {
       question : {},
       errors: [],
       create: false,
+      notificationCount: localStorage.notificationCount,
     }
   },
   components: {
@@ -36,6 +37,7 @@ export default {
       .then(response => {
         this.user = response.data.user
         this.question = response.data.Question
+        this.notificationCount = response.data.NotificationCount
         if(this.user.id != this.question.userid){
           this.$router.push({ path: "/Questions" });
         }
@@ -87,7 +89,12 @@ export default {
         message: 'あなたのセッションはタイムアウトしました。再度ログインしてください。'
       });
     },
-  }
+  },
+  watch: {
+    notificationCount(newNotificationCount) {
+      localStorage.notificationCount = newNotificationCount;
+    },
+  },
 }
 </script>
 

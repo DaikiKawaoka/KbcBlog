@@ -45,6 +45,7 @@ export default {
         },
       },
       errors: {},
+      notificationCount: localStorage.notificationCount,
     };
   },
   components: {
@@ -61,7 +62,7 @@ export default {
       .then(response => {
         this.myUser = response.data.MyUser
         this.user = response.data.User
-
+        this.notificationCount = response.data.NotificationCount
         if(this.myUser.id !== this.user.id){
           this.$router.push({ path: "/" });
         }
@@ -133,6 +134,11 @@ export default {
         message: 'あなたのセッションはタイムアウトしました。再度ログインしてください。'
       });
     },
-  }
+  },
+  watch: {
+    notificationCount(newNotificationCount) {
+      localStorage.notificationCount = newNotificationCount;
+    },
+  },
 };
 </script>

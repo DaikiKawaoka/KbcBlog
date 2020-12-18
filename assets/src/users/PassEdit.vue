@@ -59,6 +59,7 @@ export default {
         passwordConfirmation:"",
       },
       errors: {},
+      notificationCount: localStorage.notificationCount,
     };
   },
   components: {
@@ -77,6 +78,7 @@ export default {
         if(this.myUser.id !== this.user.id){
           this.$router.push({ path: "/" });
         }
+          this.notificationCount = response.data.NotificationCount
       })
       .catch(error => {
         if(error.response.status == 401){
@@ -120,7 +122,12 @@ export default {
         message: 'あなたのセッションはタイムアウトしました。再度ログインしてください。'
       });
     },
-  }
+  },
+  watch: {
+    notificationCount(newNotificationCount) {
+      localStorage.notificationCount = newNotificationCount;
+    },
+  },
 };
 </script>
 

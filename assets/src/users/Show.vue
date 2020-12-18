@@ -344,6 +344,7 @@ export default {
       click_tab: 0,
       followerdialog: false,
       followdialog: false,
+      notificationCount: localStorage.notificationCount,
     }
   },
   components: {
@@ -365,6 +366,7 @@ export default {
         this.follow = response.data.Follow
         this.follows = response.data.Follows
         this.followers = response.data.Followers
+        this.notificationCount = response.data.NotificationCount
         if(this.followers === null){
           this.followers = [];
         }
@@ -569,8 +571,12 @@ export default {
       }
       return require('@/assets/pgsvg/'+lang+".svg")
     },
-
-  }
+  },
+  watch: {
+    notificationCount(newNotificationCount) {
+      localStorage.notificationCount = newNotificationCount;
+    },
+  },
 }
 </script>
 

@@ -28,6 +28,7 @@ export default {
       },
       errors: [],
       create: true,
+      notificationCount: localStorage.notificationCount,
     }
   },
   // createdの中でaxiosを使います。get()の中のURLは、nginx.confで設定してるので、 /api/ になっています。
@@ -42,6 +43,7 @@ export default {
         this.user.KBC_mail = response.data.user.KBC_mail
         this.user.name = response.data.user.name
         this.article.userid = this.user.id
+        this.notificationCount = response.data.NotificationCount
       })
       .catch(error => {
         if(error.response.status == 401){
@@ -94,7 +96,12 @@ export default {
         message: 'あなたのセッションはタイムアウトしました。再度ログインしてください。'
       });
     },
-  }
+  },
+  watch: {
+    notificationCount(newNotificationCount) {
+      localStorage.notificationCount = newNotificationCount;
+    },
+  },
 }
 </script>
 

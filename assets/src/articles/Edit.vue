@@ -20,6 +20,7 @@ export default {
       errors: [],
       create: false,
       tagArray: [],
+      notificationCount: localStorage.notificationCount,
     }
   },
   components: {
@@ -37,6 +38,7 @@ export default {
       .then(response => {
         this.user = response.data.user
         this.article = response.data.Article
+        this.notificationCount = response.data.NotificationCount
 
         // 文字列のlangsを配列に変換
       const w = this.article.tag;
@@ -95,7 +97,13 @@ export default {
         message: 'あなたのセッションはタイムアウトしました。再度ログインしてください。'
       });
     },
-  }
+  },
+  watch: {
+    notificationCount(newNotificationCount) {
+      localStorage.notificationCount = newNotificationCount;
+    },
+  },
+
 }
 </script>
 

@@ -100,6 +100,7 @@ export default {
       cursor: 0,
       page: 1,
       infiniteId: +new Date(),
+      notificationCount: localStorage.notificationCount,
     }
   },
   components: {
@@ -131,6 +132,9 @@ export default {
     friendsOnly(newFriendsOnly) {
       localStorage.friendsOnly = newFriendsOnly;
     },
+    notificationCount(newNotificationCount) {
+      localStorage.notificationCount = newNotificationCount;
+    },
   },
   created () {
     const jst = this.$cookies.get("JWT");
@@ -157,6 +161,7 @@ export default {
         this.postRanking = response.data.PostRanking
         this.user = response.data.user
         this.cursor = response.data.Cursor
+        this.notificationCount = response.data.NotificationCount
       })
       .catch(error => {
         if(error.response.status == 401){
