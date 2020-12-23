@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS `users`(
   `id` int AUTO_INCREMENT,
   `mail` varchar(100) NOT NULL UNIQUE,
   `passhash` varchar(255) NOT NULL,
-  `name` varchar(20) NOT NULL,
+  `name` varchar(10) NOT NULL,
   `comment` varchar(150),
   `github` varchar(100),
   `website` varchar(500),
@@ -126,3 +126,26 @@ CREATE TABLE IF NOT EXISTS `follows` (
   PRIMARY KEY(`id`)
 );
 update `follows` set `created` = CURRENT_TIMESTAMP where `created` is null;
+
+CREATE TABLE IF NOT EXISTS `notifications` (
+  `id` int AUTO_INCREMENT,
+  `articleid` int,
+  `questionid` int,
+  `visiterid` int NOT NULL,
+  `visitedid` int NOT NULL,
+  `a_commentid` int,
+  `q_commentid` int,
+  `action` varchar(15) NOT NULL,
+  `checked` boolean NOT NULL default false,
+  `created` datetime,
+  `updated` datetime,
+  PRIMARY KEY(`id`),
+  FOREIGN KEY (`articleid`) REFERENCES `articles`(`id`) ON DELETE CASCADE,
+  FOREIGN KEY (`questionid`) REFERENCES `questions`(`id`) ON DELETE CASCADE,
+  FOREIGN KEY (`visiterid`) REFERENCES `users`(`id`) ON DELETE CASCADE,
+  FOREIGN KEY (`visitedid`) REFERENCES `users`(`id`) ON DELETE CASCADE,
+  FOREIGN KEY (`a_commentid`) REFERENCES `article_comments`(`id`) ON DELETE CASCADE,
+  FOREIGN KEY (`q_commentid`) REFERENCES `question_comments`(`id`) ON DELETE CASCADE,
+);
+update `notifications` set `created` = CURRENT_TIMESTAMP where `created` is null;
+update `notifications` set `updated` = CURRENT_TIMESTAMP where `updated` is null;

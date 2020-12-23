@@ -201,6 +201,16 @@ func ArticleGetByID(id int) (*model.Article, error) {
 	return &article, nil
 }
 
+// ArticleGetByID2 記事IDでユーザーIDだけ返す
+func ArticleGetByID2(id int) (int, error) {
+	query := `select userid from articles where id = ?;`
+	var userid int
+	if err := db.Get(&userid, query, id); err != nil {
+		return 0, err
+	}
+	return userid, nil
+}
+
 // ArticleCreate ...
 func ArticleCreate(article *model.Article) (sql.Result, error) {
   // 現在日時を取得します

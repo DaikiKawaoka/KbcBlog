@@ -192,6 +192,16 @@ func QuestionGetByID(id int) (*model.Question, error) {
 	return &question, nil
 }
 
+// QuestionGetByID2 記事IDでユーザーIDだけ返す
+func QuestionGetByID2(id int) (int, error) {
+	query := `select userid from questions where id = ?;`
+	var userid int
+	if err := db.Get(&userid, query, id); err != nil {
+		return 0, err
+	}
+	return userid, nil
+}
+
 // QuestionCreate ...
 func QuestionCreate(question *model.Question) (sql.Result, error) {
 	now := time.Now()

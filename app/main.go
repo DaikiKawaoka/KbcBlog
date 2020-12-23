@@ -2,7 +2,7 @@ package main
 
 import (
 	"log"
-	// "net/http"
+	"net/http"
 	// "time"
 	"app/handler"
 	"app/repository"
@@ -77,6 +77,11 @@ func main() {
 	// Follow
 	r.POST("/Users/:id/Follow",handler.Follow)
 
+	// Notificatino
+	r.GET("/Notifications",handler.Notifications)
+	r.GET("/Notifications/scope",handler.NotificationOrder)
+	r.DELETE("/Notifications", handler.NotificationDelete)
+
 	// Webサーバーをポート番号 8082 で起動する
 	e.Logger.Fatal(e.Start(":8082"))
 	// e.Startの中はdocker-composeのgoコンテナで設定したportsを指定してください。
@@ -106,6 +111,13 @@ func createMux() *echo.Echo {
 	e.Use(middleware.Logger())
 	//gzip圧縮スキームを使用してHTTP応答を圧縮します。
 	e.Use(middleware.Gzip())
+
+	// e.Use(middleware.CORS())
+
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+			AllowOrigins: []string{"http://localhost"},
+			AllowMethods: []string{http.MethodGet, http.MethodPut, http.MethodPost, http.MethodDelete},
+	}))
 
 	e.Validator = &CustomValidator{validator: validator.New()}
 

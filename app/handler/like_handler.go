@@ -38,6 +38,25 @@ func ArticleLike(c echo.Context) error {
 		c.Logger().Error(err.Error())
 		return c.JSON(http.StatusInternalServerError, "likeデータ作成中にエラー発生") //500
 	}
+
+	// 通知作成
+	var notification model.CreateNotification
+	visitedid,err := repository.ArticleGetByID2(articleID)
+	if err != nil {
+    c.Logger().Error(err.Error())
+    return c.JSON(http.StatusInternalServerError, "ユーザID取得中にエラー") //500
+	}
+	notification.Articleid = articleID
+	notification.Visiterid = userID
+	notification.Visitedid = visitedid
+	notification.Action = "alike"
+	if notification.Visitedid != notification.Visiterid{
+		if err := repository.NotificationCreate(&notification); err != nil {
+			c.Logger().Error(err.Error())
+			return c.JSON(http.StatusInternalServerError, "通知作成失敗")
+		}
+	}
+
 	return c.JSON(http.StatusOK, "ARTICLE LIKE CREATE 成功")
 }
 
@@ -68,6 +87,25 @@ func QuestionLike(c echo.Context) error {
 		c.Logger().Error(err.Error())
 		return c.JSON(http.StatusInternalServerError, "likeデータ作成中にエラー発生") //500
 	}
+
+		// 通知作成
+	var notification model.CreateNotification
+	visitedid,err := repository.QuestionGetByID2(questionID)
+	if err != nil {
+    c.Logger().Error(err.Error())
+    return c.JSON(http.StatusInternalServerError, "ユーザID取得中にエラー") //500
+	}
+	notification.Questionid = questionID
+	notification.Visiterid = userID
+	notification.Visitedid = visitedid
+	notification.Action = "qlike"
+	if notification.Visitedid != notification.Visiterid{
+		if err := repository.NotificationCreate(&notification); err != nil {
+			c.Logger().Error(err.Error())
+			return c.JSON(http.StatusInternalServerError, "通知作成失敗")
+		}
+	}
+
 	return c.JSON(http.StatusOK, "QUESTION LIKE CREATE 成功")
 }
 
@@ -100,6 +138,24 @@ func ArticleCommentLike(c echo.Context) error {
 		c.Logger().Error(err.Error())
 		return c.JSON(http.StatusInternalServerError, "likeデータ作成中にエラー発生") //500
 	}
+
+
+	// 通知作成
+	var notification model.CreateNotification
+	if err := c.Bind(&notification); err != nil {
+    c.Logger().Error(err.Error())
+    return c.JSON(http.StatusBadRequest, "代入失敗")
+	}
+	notification.Visiterid = userID
+	notification.ACommentid = articleCommentID
+	notification.Action = "aclike"
+	if notification.Visitedid != notification.Visiterid{
+		if err := repository.NotificationCreate(&notification); err != nil {
+			c.Logger().Error(err.Error())
+			return c.JSON(http.StatusInternalServerError, "通知作成失敗")
+		}
+	}
+
 	return c.JSON(http.StatusOK, "ARTICLE COOMENT LIKE CREATE 成功")
 }
 
@@ -132,5 +188,27 @@ func QuestionCommentLike(c echo.Context) error {
 		c.Logger().Error(err.Error())
 		return c.JSON(http.StatusInternalServerError, "likeデータ作成中にエラー発生") //500
 	}
+
+	// 通知作成
+	var notification model.CreateNotification
+	if err := c.Bind(&notification); err != nil {
+    c.Logger().Error(err.Error())
+    return c.JSON(http.StatusBadRequest, "代入失敗")
+	}
+	visitedid,err := repository.QuestionGetByID2(notification.Questionid)
+	if err != nil {
+    c.Logger().Error(err.Error())
+    return c.JSON(http.StatusInternalServerError, "ユーザID取得中にエラー") //500
+	}
+	notification.Visitedid = visitedid
+	notification.QCommentid = questionCommentID
+	notification.Action = "qclike"
+	if notification.Visitedid != notification.Visiterid{
+		if err := repository.NotificationCreate(&notification); err != nil {
+			c.Logger().Error(err.Error())
+			return c.JSON(http.StatusInternalServerError, "通知作成失敗")
+		}
+	}
+
 	return c.JSON(http.StatusOK, "QUESTION COOMENT LIKE CREATE 成功")
 }

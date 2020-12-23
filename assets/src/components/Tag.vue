@@ -1,27 +1,29 @@
 <template>
   <div class="tag-all">
-    <div class="tag-header">
-      <span class="tag-header-text">絞り込み</span>
-      <i title="絞り込みリセット" class="el-icon-circle-close close-btn" @click="$emit('reset')"></i>
-    </div>
-    <ul class="tag-ul">
-      <div class="on-display-flex">
-        <li class="f-text-li">フレンドのみ</li>
-        <el-switch
-          v-model="innerVal"
-          @change="$emit('scopetag')"
-          active-text="ON"
-          active-color="#13ce66"
-          :width="35"
-          inactive-text="OFF"
-          style="margin: 2px 0 0 6px;">
-        </el-switch>
+    <div class="fixed01">
+      <div class="tag-header">
+        <span class="tag-header-text">絞り込み</span>
+        <i title="絞り込みリセット" class="el-icon-circle-close close-btn" @click="$emit('reset')"></i>
       </div>
-    </ul>
-    <div class="tag-scope-div">
-      <span>タグ</span>
-      <div>
-        <el-cascader @change="event" v-model="scopetag" :options="options" :show-all-levels="false" filterable :props="{ checkStrictly: true,expandTrigger:'hover' }" ></el-cascader>
+      <ul class="tag-ul">
+        <div class="on-display-flex">
+          <li class="f-text-li">フレンドのみ</li>
+          <el-switch
+            v-model="innerVal"
+            @change="$emit('scopetag')"
+            active-text="ON"
+            active-color="#13ce66"
+            :width="35"
+            inactive-text="OFF"
+            style="margin: 2px 0 0 6px;">
+          </el-switch>
+        </div>
+      </ul>
+      <div class="tag-scope-div">
+        <span>タグ</span>
+        <div>
+          <el-cascader @change="event" v-model="scopetag" :options="options" :show-all-levels="false" filterable :props="{ checkStrictly: true,expandTrigger:'hover' }" ></el-cascader>
+        </div>
       </div>
     </div>
   </div>
@@ -280,11 +282,16 @@
   background-color: #F6F6F4;
   /* background-color: #15202b; */
 }
+.fixed01{
+  padding-top: 30px;
+  position: sticky;
+  top: 0;
+}
 .tag-header{
   margin-top: 20px;
 }
 .tag-header-text{
-  color: #999;
+  font-size: 1.1em;
 }
 .tag-ul{
   width: 206px;

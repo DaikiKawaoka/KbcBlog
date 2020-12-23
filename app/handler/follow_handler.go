@@ -28,7 +28,6 @@ func Follow(c echo.Context) error {
 		}
 		return c.JSON(http.StatusOK, "UnFollow 成功")
 	}
-
 		var follow model.Following
 		follow.FollowerID = followerID
 		follow.FollowedID = followedID
@@ -38,5 +37,19 @@ func Follow(c echo.Context) error {
 			c.Logger().Error(err.Error())
 			return c.JSON(http.StatusInternalServerError, "Follow中にエラー発生") //500
 		}
+
+
+	// 通知作成
+	var notification model.CreateNotification
+	if err := c.Bind(&notification); err != nil {
+			return err
+	}
+	if notification.Visitedid != notification.Visiterid{
+		if err := repository.NotificationCreate(&notification); err != nil {
+			c.Logger().Error(err.Error())
+			return c.JSON(http.StatusInternalServerError, "通知作成失敗")
+		}
+	}
+
 	return c.JSON(http.StatusOK, "Follow 成功")
 }

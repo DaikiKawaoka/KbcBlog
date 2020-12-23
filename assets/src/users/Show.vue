@@ -185,19 +185,19 @@
             <div class="div-in-span-article">投稿記事</div>
             <div v-if="parcentArray.length !== 0" style="display: flex;">
               <div v-if="parcentArray.length > 0" class="article-circle-div">
-                <el-progress type="circle" :percentage="parcentArray[0].count / user.postCount*100 " color="#67C23A" :width="90"></el-progress>
+                <el-progress type="circle" :percentage="Math.round(parcentArray[0].count / user.postCount*100) " color="#67C23A" :width="90"></el-progress>
                 <p class="article-circle-p">{{ parcentArray[0].value }}</p>
               </div>
               <div v-if="parcentArray.length > 1" class="article-circle-div">
-                <el-progress type="circle" :percentage=" parcentArray[1].count / user.postCount*100 " color="#ff1493" :width="90"></el-progress>
+                <el-progress type="circle" :percentage=" Math.round(parcentArray[1].count / user.postCount*100) " color="#ff1493" :width="90"></el-progress>
                 <p class="article-circle-p">{{ parcentArray[1].value }}</p>
               </div>
               <div v-if="parcentArray.length > 2" class="article-circle-div">
-                <el-progress type="circle" :percentage=" parcentArray[2].count / user.postCount*100 " :width="90"></el-progress>
+                <el-progress type="circle" :percentage=" Math.round(parcentArray[2].count / user.postCount*100) " :width="90"></el-progress>
                 <p class="article-circle-p">{{ parcentArray[2].value }}</p>
               </div>
               <div v-if="parcentArray.length > 3" class="article-circle-div">
-                <el-progress type="circle" :percentage=" parcentArray[3].count / user.postCount*100 " color="#ff8c00" :width="90"></el-progress>
+                <el-progress type="circle" :percentage=" Math.round(parcentArray[3].count / user.postCount*100) " color="#ff8c00" :width="90"></el-progress>
                 <p class="article-circle-p">{{ parcentArray[3].value }}</p>
               </div>
             </div>
@@ -423,7 +423,11 @@ export default {
     // 大きいフォローボタンを押した時
     Follow_UnFollw(){
       this.$axios
-        .post(`http://localhost/api/restricted/Users/${this.user.id}/Follow`,this.user.id,{
+        .post(`http://localhost/api/restricted/Users/${this.user.id}/Follow`,{
+            visiterid: this.myUser.id,
+            visitedid: this.user.id,
+            action: "follow"
+          },{
           headers: {
             Authorization: `Bearer ${this.$cookies.get("JWT")}`
           },
@@ -505,7 +509,11 @@ export default {
     // ChangeFollow(f,index,'follows','unfo')
     ChangeFollow(f,index,c,c2){
       this.$axios
-        .post(`http://localhost/api/restricted/Users/${f.id}/Follow`,f.id,{
+        .post(`http://localhost/api/restricted/Users/${f.id}/Follow`,{
+            visiterid: this.myUser.id,
+            visitedid: this.f.id,
+            action: "follow"
+          },{
           headers: {
             Authorization: `Bearer ${this.$cookies.get("JWT")}`
           },

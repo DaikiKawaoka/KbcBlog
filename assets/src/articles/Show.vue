@@ -290,12 +290,6 @@ export default {
     ChangeArticleLike(){
       this.$axios
         .post(`http://localhost/api/restricted/Articles/${this.article.id}/Likes`,this.article.userid,{
-          params: {
-            articleid: this.article.id,
-            visiterid: this.user.id,
-            visitedid: this.article.userid,
-            action: "alike"
-          },
           headers: {
             Authorization: `Bearer ${this.$cookies.get("JWT")}`
           },
@@ -324,7 +318,7 @@ export default {
 
     ChangeArticleCommentLike(index){
       this.$axios
-        .post(`http://localhost/api/restricted/Articles/Comments/${this.comments[index].id}/Likes`,this.comments[index].id,{
+        .post(`http://localhost/api/restricted/Articles/Comments/${this.comments[index].id}/Likes`,{articleid:this.article.id,visitedid:this.comments[index].userid},{
           headers: {
             Authorization: `Bearer ${this.$cookies.get("JWT")}`
           },

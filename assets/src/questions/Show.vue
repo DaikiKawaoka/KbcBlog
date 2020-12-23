@@ -292,7 +292,7 @@ export default {
 
     ChangeQuestionLike(){
       this.$axios
-        .post(`http://localhost/api/restricted/Questions/${this.question.id}/Likes`,this.question.id,{
+        .post(`http://localhost/api/restricted/Questions/${this.question.id}/Likes`,this.question.userid,{
           headers: {
             Authorization: `Bearer ${this.$cookies.get("JWT")}`
           },
@@ -320,7 +320,7 @@ export default {
 
     ChangeQuestionCommentLike(index){
       this.$axios
-        .post(`http://localhost/api/restricted/Questions/Comments/${this.comments[index].id}/Likes`,this.comments[index].id,{
+        .post(`http://localhost/api/restricted/Questions/Comments/${this.comments[index].id}/Likes`,{questionid:this.question.id,visiterid:this.comments[index].userid},{
           headers: {
             Authorization: `Bearer ${this.$cookies.get("JWT")}`
           },

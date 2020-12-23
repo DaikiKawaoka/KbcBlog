@@ -34,8 +34,9 @@
                   <el-table-column width="300" property="address" label="address"></el-table-column>
                 </el-table> -->
                 <div  v-if="notifications.length > 0">
-                  <p style="margin:0;"><i class="el-icon-message-solid"></i>お知らせ</p>
-                  <div>
+                  <span style="margin-right: 230px;"><i class="el-icon-message-solid"></i>お知らせ</span>
+                  <span style="margin:0;"><i v-on:click="deleteNotificationConfirmationOpen()" class="el-icon-delete" style="font-size: 1.4em; cursor:pointer;"></i></span>
+                  <div class="overflow">
                     <div v-for="notification in notifications" :key="notification.id" class="notification-body-div">
                       <div class="user-icon">
                         <div class="notification-user-icon">
@@ -51,39 +52,68 @@
                         </div></router-link>
                       </div>
                       <div v-else-if="notification.action === 'qlike'">
+                        <router-link class="a-tag-article" v-bind:to="{ name : 'QuestionShow', params : { id: notification.questionid.Int32 }}" >
                         <div><p class="notification-text">
                           <router-link v-bind:to="{ name : 'UserShow', params : { id: notification.userid }}" class="a-tag-n">
-                            <span class="visiter-name">{{notification.name}}</span></router-link> があなたの質問に「いいね！」しました。</p></div>
+                            <span class="visiter-name">{{notification.name}}</span></router-link> があなたの質問に「いいね！」しました。<span class="notification-created">{{ notification.Created | moment }}</span></p>
+                          </div></router-link>
                       </div>
                       <div v-else-if="notification.action === 'follow'">
                         <div><p class="notification-text">
                           <router-link v-bind:to="{ name : 'UserShow', params : { id: notification.userid }}" class="a-tag-n">
-                            <span class="visiter-name">{{notification.name}}</span></router-link> があなたをフォローしました。</p></div>
+                            <span class="visiter-name">{{notification.name}}</span></router-link> があなたをフォローしました。 <span class="notification-created">{{ notification.Created | moment }}</span></p></div>
                       </div>
                       <div v-else-if="notification.action === 'aclike'">
-                        <div><p class="notification-text">
-                          <router-link v-bind:to="{ name : 'UserShow', params : { id: notification.userid }}" class="a-tag-n">
-                            <span class="visiter-name">{{notification.name}}</span></router-link> があなたのコメントに「いいね！」しました。</p></div>
+                        <router-link class="a-tag-article" v-bind:to="{ name : 'ArticleShow', params : { id: notification.articleid.Int32 }}" >
+                          <div><p class="notification-text">
+                            <router-link v-bind:to="{ name : 'UserShow', params : { id: notification.userid }}" class="a-tag-n">
+                              <span class="visiter-name">{{notification.name}}</span></router-link> があなたのコメントに「いいね！」しました。 <span class="notification-created">{{ notification.Created | moment }}</span></p>
+                              <div class="notification-comment-div">
+                                <span class="notification-comment-p">{{notification.a_text.String}}</span>
+                              </div>
+                          </div>
+                        </router-link>
                       </div>
                       <div v-else-if="notification.action === 'qclike'">
-                        <div><p class="notification-text">
-                          <router-link v-bind:to="{ name : 'UserShow', params : { id: notification.userid }}" class="a-tag-n">
-                            <span class="visiter-name">{{notification.name}}</span></router-link> があなたのコメントに「いいね！」しました。</p></div>
+                        <router-link class="a-tag-article" v-bind:to="{ name : 'QuestionShow', params : { id: notification.questionid.Int32 }}" >
+                          <div><p class="notification-text">
+                            <router-link v-bind:to="{ name : 'UserShow', params : { id: notification.userid }}" class="a-tag-n">
+                              <span class="visiter-name">{{notification.name}}</span></router-link> があなたのコメントに「いいね！」しました。 <span class="notification-created">{{ notification.Created | moment }}</span></p>
+                              <div class="notification-comment-div">
+                                <span class="notification-comment-p">{{notification.q_text.String}}</span>
+                              </div>
+                          </div>
+                        </router-link>
                       </div>
                       <div v-else-if="notification.action === 'acomment'">
-                        <div><p class="notification-text">
-                          <router-link v-bind:to="{ name : 'UserShow', params : { id: notification.userid }}" class="a-tag-n">
-                            <span class="visiter-name">{{notification.name}}</span></router-link> があなたの記事に「コメント」しました。</p>
-                        </div>
+                        <router-link class="a-tag-article" v-bind:to="{ name : 'ArticleShow', params : { id: notification.articleid.Int32 }}" >
+                          <div><p class="notification-text">
+                            <router-link v-bind:to="{ name : 'UserShow', params : { id: notification.userid }}" class="a-tag-n">
+                              <span class="visiter-name">{{notification.name}}</span></router-link> があなたの記事に「コメント」しました。 <span class="notification-created">{{ notification.Created | moment }}</span></p>
+                              <div class="notification-comment-div">
+                                <span class="notification-comment-p">{{notification.a_text.String}}</span>
+                              </div>
+                          </div>
+                        </router-link>
                       </div>
                       <div v-else-if="notification.action === 'qcomment'">
-                        <div><p class="notification-text">
-                          <router-link v-bind:to="{ name : 'UserShow', params : { id: notification.userid }}" class="a-tag-n">
-                            <span class="visiter-name">{{notification.name}}</span></router-link> があなたの質問に「回答」しました。</p></div>
+                        <router-link class="a-tag-article" v-bind:to="{ name : 'QuestionShow', params : { id: notification.questionid.Int32 }}" >
+                          <div><p class="notification-text">
+                            <router-link v-bind:to="{ name : 'UserShow', params : { id: notification.userid }}" class="a-tag-n">
+                              <span class="visiter-name">{{notification.name}}</span></router-link> があなたの質問に「回答」しました。 <span class="notification-created">{{ notification.Created | moment }}</span></p>
+                              <div class="notification-comment-div">
+                                <span class="notification-comment-p">{{notification.q_text.String}}</span>
+                              </div>
+                          </div>
+                        </router-link>
                       </div>
                     </div>
+                    <infinite-loading @infinite="scrollNotifications" :identifier="infiniteId" spinner="spiral">
+                      <span slot="no-more"></span>
+                      <span slot="no-results"></span>
+                    </infinite-loading>
                   </div>
-                  <router-link to="/Notifications" class="a-tag2"><p class="text-center">通知一覧を見る</p></router-link>
+                  <!-- <router-link to="/Notifications" class="a-tag2"><p class="text-center">通知一覧を見る</p></router-link> -->
                 </div>
                 <div v-else>
                   <p style="margin:0;"><i class="el-icon-message-solid"></i>お知らせ</p>
@@ -115,6 +145,7 @@
 </template>
 
 <script>
+import InfiniteLoading from 'vue-infinite-loading'
 import moment from 'moment'
 export default {
   props: {
@@ -123,10 +154,16 @@ export default {
     isQuestion: Boolean,
     user: Object,
   },
+  components: {
+    InfiniteLoading,
+  },
   data(){
     return{
       notificationCount: localStorage.notificationCount,
       notifications: [],
+      notificationCursor: 0,
+      page: 1,
+      infiniteId: +new Date(),
     }
   },
   filters: {
@@ -147,20 +184,19 @@ export default {
         this.$router.go({ name : 'UserShow', params : { id: this.user.id }})
       }
     },
+
     click_notification_btn: function(){
-    const jst = this.$cookies.get("JWT");
-    this.$axios.get('http://localhost/api/restricted/Notifications',{
-      params: {
-        // ここにクエリパラメータを指定する
-        sender: "header",
-      },
-      headers: {
-        Authorization: `Bearer ${jst}`
-      },
-    })
+      this.changeType()
+      const jst = this.$cookies.get("JWT");
+      this.$axios.get('http://localhost/api/restricted/Notifications',{
+        headers: {
+          Authorization: `Bearer ${jst}`
+        },
+      })
       .then(response => {
         this.notifications = response.data.Notifications
         this.notificationCount = response.data.NotificationCount
+        this.notificationCursor += 4
       })
       .catch(error => {
         if(error.response.status == 401){
@@ -171,6 +207,78 @@ export default {
         }
       })
     },
+
+    scrollNotifications($state) {
+      this.$axios.get('http://localhost/api/restricted/Notifications/scope', {
+        params: {
+          notificationCursor: this.notificationCursor,
+        },
+        headers: {
+          Authorization: `Bearer ${this.$cookies.get("JWT")}`
+        },
+      })
+      .then(response => {
+        if (response.data.Notifications.length) {
+          this.notifications = this.notifications.concat(response.data.Notifications);
+          this.notificationCursor = response.data.NotificationCursor
+          this.page += 1;
+          $state.loaded();
+        } else {
+          $state.complete();
+        }
+      })
+      .catch(error => {
+        if(error.response.status == 401){
+          this.$router.push({ path: "/login" });
+          this.errorNotify();
+        }
+      })
+    },
+
+    deleteNotificationConfirmationOpen() {
+      this.$confirm(`通知を全て削除しますか？`, '確認', {
+        confirmButtonText: '削除',
+        cancelButtonText: 'キャンセル',
+        center: true
+      }).then(() => {
+        this.deleteNotification()
+      });
+    },
+
+    deleteNotification() {
+      this.$axios
+        .delete(`http://localhost/api/restricted/Notifications`,{
+          headers: {
+            Authorization: `Bearer ${this.$cookies.get("JWT")}`
+          },
+        })
+        .then(()=> {
+          this.notifications = []
+          this.deleteNotificationAlert()
+        })
+        .catch(error => {
+          if(error.response.status == 401){
+            this.$router.push({ path: "/login" });
+            this.errorNotify();
+          }
+        });
+    },
+
+    deleteNotificationAlert() {
+      this.$notify({
+        title: 'Success',
+        message: '通知を削除しました。',
+        type: 'success'
+      });
+    },
+
+    changeType() {
+      this.page = 1;
+      this.infiniteId += 1;
+      this.notifications = [];
+      this.notificationCursor = 0;
+    },
+
     errorNotify() {
       this.$notify.error({
         title: 'Error',
@@ -269,7 +377,12 @@ export default {
 .notification-body-div{
   display: flex;
   border-bottom: #ccc 1px solid;
-  height: 60px;
+  height: 80px;
+}
+.overflow{
+  height: 350px;
+  /* height: 100%; */
+  overflow-y: scroll;
 }
 .notification-body-div > .user-icon{
   margin: auto 10px auto 0;
@@ -286,12 +399,27 @@ export default {
 }
 .notification-text{
   margin: 0;
-  padding: 10px;
+  padding: 10px 10px 5px 10px;
   color: #000;
 }
 .notification-text > .a-tag-n {
   text-decoration: none;
   cursor: pointer;
+}
+.notification-comment-div{
+  overflow: hidden;
+  white-space: nowrap;
+	text-overflow: ellipsis;
+	-webkit-text-overflow: ellipsis; /* Safari */
+	-o-text-overflow: ellipsis; /* Opera */
+  width: 250px;
+  height: 20px;
+}
+.notification-comment-p{
+  margin: 0;
+  padding-left: 10px;
+  padding-right: 10px;
+  color: #666;
 }
 .visiter-name{
   font-weight: bold;

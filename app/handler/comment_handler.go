@@ -39,7 +39,26 @@ func ArticleCommentCreate(c echo.Context) error {
 	}
   id, _ := res.LastInsertId()
 	comment.ID = int(id)
-  out.Comment = &comment
+	out.Comment = &comment
+
+	// 通知作成
+	visitedid,err := repository.ArticleGetByID2(comment.Articleid)
+	if err != nil {
+    c.Logger().Error(err.Error())
+    return c.JSON(http.StatusInternalServerError, out) //500
+	}
+	var notification model.CreateNotification
+	notification.Articleid = comment.Articleid
+	notification.Visiterid = comment.Userid
+	notification.Visitedid = visitedid
+	notification.ACommentid = comment.ID
+	notification.Action = "acomment"
+	if notification.Visitedid != notification.Visiterid && notification.ACommentid > 0 {
+		if err := repository.NotificationCreate(&notification); err != nil {
+			c.Logger().Error(err.Error())
+			return c.JSON(http.StatusInternalServerError, "通知作成失敗")
+		}
+	}
   return c.JSON(http.StatusOK, out)
 }
 
@@ -99,7 +118,26 @@ func QuestionCommentCreate(c echo.Context) error {
 	}
   id, _ := res.LastInsertId()
   comment.ID = int(id)
-  out.Comment = &comment
+	out.Comment = &comment
+
+	// 通知作成
+	visitedid,err := repository.QuestionGetByID2(comment.Questionid)
+	if err != nil {
+    c.Logger().Error(err.Error())
+    return c.JSON(http.StatusInternalServerError, out) //500
+	}
+	var notification model.CreateNotification
+	notification.Questionid = comment.Questionid
+	notification.Visiterid = comment.Userid
+	notification.Visitedid = visitedid
+	notification.QCommentid = comment.ID
+	notification.Action = "qcomment"
+	if notification.Visitedid != notification.Visiterid && notification.QCommentid > 0 {
+		if err := repository.NotificationCreate(&notification); err != nil {
+			c.Logger().Error(err.Error())
+			return c.JSON(http.StatusInternalServerError, "通知作成失敗")
+		}
+	}
   return c.JSON(http.StatusOK, out)
 }
 

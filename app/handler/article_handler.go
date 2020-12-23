@@ -21,8 +21,16 @@ func ArticleNew(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError,"userが存在しません")
 	}
 
+	notificationCount, err := repository.GetNotificationCount(userID)
+	if err != nil {
+		c.Logger().Error(err.Error())
+		// クライアントにステータスコード 500 でレスポンスを返します。
+		return c.JSON(http.StatusInternalServerError,"通知数取得中にエアー発生")
+	}
+
 	data := map[string]interface{}{
 		"user": myUser,
+		"NotificationCount": notificationCount,
 	}
 
 	return c.JSON(http.StatusOK, data)
@@ -101,12 +109,20 @@ func ArticleIndex(c echo.Context) error {
 		cursor = articles[len(articles)-1].ID
 	}
 
+	notificationCount, err := repository.GetNotificationCount(userID)
+	if err != nil {
+		c.Logger().Error(err.Error())
+		// クライアントにステータスコード 500 でレスポンスを返します。
+		return c.JSON(http.StatusInternalServerError,"通知数取得中にエアー発生")
+	}
+
 	data := map[string]interface{}{
 		"user": myUser,
 		"Articles": articles,
 		"Cursor":   cursor,
 		"LikeRanking": likeRanking,
 		"PostRanking": postRanking,
+		"NotificationCount": notificationCount,
 	}
 	return c.JSON(http.StatusOK, data)
 }
@@ -175,8 +191,12 @@ func ArticleShow(c echo.Context) error {
 		comments[i].Like = commentLike
 	}
 
-
-
+	notificationCount, err := repository.GetNotificationCount(userID)
+	if err != nil {
+		c.Logger().Error(err.Error())
+		// クライアントにステータスコード 500 でレスポンスを返します。
+		return c.JSON(http.StatusInternalServerError,"通知数取得中にエアー発生")
+	}
 
 	// テンプレートに渡すデータを map に格納します。
 	data := map[string]interface{}{
@@ -184,6 +204,7 @@ func ArticleShow(c echo.Context) error {
 		"Article": article,
 		"Like": like,
 		"Comments": comments,
+		"NotificationCount": notificationCount,
 	}
 
 	return c.JSON(http.StatusOK, data)
@@ -206,9 +227,17 @@ func ArticleEdit(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError,"記事情報取得中にエラー発生")
 	}
 
+	notificationCount, err := repository.GetNotificationCount(userID)
+	if err != nil {
+		c.Logger().Error(err.Error())
+		// クライアントにステータスコード 500 でレスポンスを返します。
+		return c.JSON(http.StatusInternalServerError,"通知数取得中にエアー発生")
+	}
+
 	data := map[string]interface{}{
 		"user": myUser,
 		"Article": article,
+		"NotificationCount": notificationCount,
 	}
 	return c.JSON(http.StatusOK, data)
 }

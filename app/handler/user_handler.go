@@ -161,6 +161,13 @@ func UserShow(c echo.Context) error {
     return c.JSON(http.StatusInternalServerError,"ユーザのタグ配列取得中にエラー発生") //500
 	}
 
+	notificationCount, err := repository.GetNotificationCount(userID)
+	if err != nil {
+		c.Logger().Error(err.Error())
+		// クライアントにステータスコード 500 でレスポンスを返します。
+		return c.JSON(http.StatusInternalServerError,"通知数取得中にエアー発生")
+	}
+
 	// テンプレートに渡すデータを map に格納します。
 	data := map[string]interface{}{
     "MyUser": myUser,
@@ -172,6 +179,7 @@ func UserShow(c echo.Context) error {
 		"Follows":followers,
 		"Followers":followeds,
 		"Tags": tags,
+		"NotificationCount": notificationCount,
 		// "likes" : likes,
 	}
 
@@ -196,11 +204,19 @@ func UserEdit(c echo.Context) error {
 
   if myUser.ID != user.ID{
     return c.JSON(http.StatusBadRequest,"他人のプロフィールは編集できません。")
-  }
+	}
+
+	notificationCount, err := repository.GetNotificationCount(userID)
+	if err != nil {
+		c.Logger().Error(err.Error())
+		// クライアントにステータスコード 500 でレスポンスを返します。
+		return c.JSON(http.StatusInternalServerError,"通知数取得中にエアー発生")
+	}
 
 	data := map[string]interface{}{
 		"MyUser": myUser,
 		"User": user,
+		"NotificationCount": notificationCount,
 	}
 	return c.JSON(http.StatusOK, data)
 }
