@@ -123,14 +123,6 @@
               </el-popover>
             </el-badge>
 
-            <!-- <el-badge v-if="notificationCount === 0" :value="notificationCount" :hidden="true" :max="99" class="badge-all">
-              <el-button size="mini"><i class="el-icon-message-solid message-solid-i"></i></el-button>
-            </el-badge>
-            <el-badge v-else :value="notificationCount" :max="99" class="badge-all">
-              <el-button size="mini"><i class="el-icon-message-solid message-solid-i"></i></el-button>
-            </el-badge> -->
-
-
           </li>
           <li class="a-tag logout-li" @click="myUserPage">
           <!-- <li class="a-tag logout-li"> -->
