@@ -24,7 +24,6 @@ func ArticleNew(c echo.Context) error {
 	notificationCount, err := repository.GetNotificationCount(userID)
 	if err != nil {
 		c.Logger().Error(err.Error())
-		// クライアントにステータスコード 500 でレスポンスを返します。
 		return c.JSON(http.StatusInternalServerError,"通知数取得中にエアー発生")
 	}
 
@@ -83,7 +82,6 @@ func ArticleIndex(c echo.Context) error {
 	scope.Text = c.QueryParam("searchText")//絞り込みテキスト
 	scope.FriendsOnly,_ = strconv.ParseBool(c.QueryParam("friendsOnly")) // フレンドのみ? true or false
 
-	// articles, err := repository.ArticleListByCursor(0,"new","全て","",false,userId)
 	articles, err := repository.ArticleListByCursor(0,&scope,userID)
 
 	if err != nil {
@@ -166,8 +164,7 @@ func ArticleShow(c echo.Context) error {
 	comments, err := repository.ArticleCommentListByCursor(article.ID)
 	if err != nil {
 		c.Logger().Error(err.Error())
-		// クライアントにステータスコード 500 でレスポンスを返します。
-		return c.JSON(http.StatusInternalServerError,"記事のコメント一覧データを取得中にエラー発生")
+		return c.JSON(http.StatusInternalServerError,"記事のコメント一覧データを取得中にエラー発生") //500
 	}
 
 	var commentLike model.Like
@@ -194,8 +191,7 @@ func ArticleShow(c echo.Context) error {
 	notificationCount, err := repository.GetNotificationCount(userID)
 	if err != nil {
 		c.Logger().Error(err.Error())
-		// クライアントにステータスコード 500 でレスポンスを返します。
-		return c.JSON(http.StatusInternalServerError,"通知数取得中にエアー発生")
+		return c.JSON(http.StatusInternalServerError,"通知数取得中にエアー発生") //500
 	}
 
 	// テンプレートに渡すデータを map に格納します。
@@ -230,8 +226,7 @@ func ArticleEdit(c echo.Context) error {
 	notificationCount, err := repository.GetNotificationCount(userID)
 	if err != nil {
 		c.Logger().Error(err.Error())
-		// クライアントにステータスコード 500 でレスポンスを返します。
-		return c.JSON(http.StatusInternalServerError,"通知数取得中にエアー発生")
+		return c.JSON(http.StatusInternalServerError,"通知数取得中にエアー発生") //500
 	}
 
 	data := map[string]interface{}{
@@ -255,11 +250,11 @@ func ArticleUpdate(c echo.Context) error {
 	ref := c.Request().Referer()
 	// リクエスト送信元のパスから記事 ID を抽出。
 	refID := strings.Split(ref, "/")[4]
-	// リクエスト URL のパスパラメータから記事 ID を抽出します。
+	// リクエスト URL のパスパラメータから記事 ID を抽出。
 	reqID := c.Param("id")
 
 	// 編集画面で表示している記事と更新しようとしている記事が異なる場合は、
-	// 更新処理をせずに 400 エラーを返却します。
+	// 更新処理をせずに 400 エラーを返却
 	if reqID != refID {
 		return c.JSON(http.StatusBadRequest, "パス違い")
 	}
@@ -309,7 +304,6 @@ func ArticleIndexOrder(c echo.Context) error {
 	scope.Text = c.QueryParam("searchText")//絞り込みテキスト
 	scope.FriendsOnly,_ = strconv.ParseBool(c.QueryParam("friendsOnly")) // フレンドのみ? true or false
 
-	// articles, err := repository.ArticleListByCursor(0,order,tag,text,friendsOnly,userId)
 	articles, err := repository.ArticleListByCursor(cursor,&scope,userID)
 
 	if err != nil {

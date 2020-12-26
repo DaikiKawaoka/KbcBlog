@@ -32,7 +32,6 @@ export default {
       notificationCount: localStorage.notificationCount,
     }
   },
-  // createdの中でaxiosを使います。get()の中のURLは、nginx.confで設定してるので、 /api/ になっています。
   created () {
     this.$axios.get('http://localhost/api/restricted/Questions/new',{
       headers: {
