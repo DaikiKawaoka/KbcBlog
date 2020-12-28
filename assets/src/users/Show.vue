@@ -7,7 +7,7 @@
         <div class="user-show-icon">
           <img class="user-show-icon-img" src="../assets/IMG_6217.jpeg" @click="imgClick()">
           <el-dialog :visible.sync="dialogVisible" width="390px">
-              <img width="350px" height="350px" style="border-radius:50%" src="../assets/IMG_6217.jpeg" alt="">
+              <img width="350px" height="350px" style="border-radius:3px;" src="../assets/IMG_6217.jpeg" alt="">
               <span slot="footer" class="dialog-footer">
                 <el-button type="primary" @click="centerDialogVisible = false">変更</el-button>
                 <el-button type="danger" @click="centerDialogVisible = false">削除</el-button>
