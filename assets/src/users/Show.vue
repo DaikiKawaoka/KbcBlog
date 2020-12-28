@@ -5,14 +5,22 @@
 
       <div class="user-show-header">
         <div class="user-show-icon">
-          <!-- <img class="user-show-icon-img" src="../assets/IMG_6217.jpeg"> -->
-          <div class="demo-image__preview">
+          <img class="user-show-icon-img" src="../assets/IMG_6217.jpeg" @click="imgClick()">
+          <el-dialog :visible.sync="dialogVisible" width="390px">
+              <img width="350px" height="350px" style="border-radius:50%" src="../assets/IMG_6217.jpeg" alt="">
+              <span slot="footer" class="dialog-footer">
+                <el-button type="primary" @click="centerDialogVisible = false">変更</el-button>
+                <el-button type="danger" @click="centerDialogVisible = false">削除</el-button>
+              </span>
+          </el-dialog>
+
+          <!-- <div class="demo-image__preview">
           <el-image
             style="width: 150px; height: 150px; border-radius: 50%;"
             :src="url"
             :preview-src-list="srcList">
           </el-image>
-          </div>
+          </div> -->
         </div>
         <div class="user-show-info">
           <div class="user-show-info-header">
@@ -315,6 +323,7 @@ export default {
       langarray: [],
       tagArray: [],
       parcentArray: [],
+      dialogVisible: false,
       user: {
         KBCmail: "",
         id : 0,
@@ -579,6 +588,9 @@ export default {
       }
       return require('@/assets/pgsvg/'+lang+".svg")
     },
+    imgClick(){
+      this.dialogVisible = true
+    },
   },
   watch: {
     notificationCount(newNotificationCount) {
@@ -606,17 +618,17 @@ export default {
   padding-bottom: 10px;
 }
 .user-show-icon{
-  margin-top: 25px;
+  margin-top: 50px;
   border-radius: 50%;
 }
 .user-show-icon-img {
-  width: 150px;
-  height: 150px;
+  width: 180px;
+  height: 180px;
   border-radius: 50%;
 }
 .user-show-info{
   margin-top: 20px;
-  margin-left: 50px;
+  margin-left: 22px;
   padding: 0 25px 10px 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)
 }
