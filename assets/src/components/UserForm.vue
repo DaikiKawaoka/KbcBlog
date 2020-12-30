@@ -11,8 +11,6 @@
         </ul>
       </div>
 
-      <!-- <input name="uploadedImage" type="file" ref="file" v-on:change="onFileChange()" v-if="edit"> -->
-
       <el-form-item label="名前" prop="name"
       :rules="[
           { required: true, message: '入力必須です', trigger: 'blur' },
@@ -111,6 +109,13 @@
           <el-input type="password" v-model="user.password_confirmation" autocomplete="off"></el-input>
       </el-form-item>
 
+      <el-form-item label="性別" prop="sex" v-if="!edit">
+        <div style="margin-top: 40px">
+          <el-radio v-model="user.sex" :label="1" border>男性</el-radio>
+          <el-radio v-model="user.sex" :label="2" border>女性</el-radio>
+        </div>
+      </el-form-item>
+
       <el-form-item>
         <el-button type="submit" @click="$emit('submit')">登録</el-button>
       </el-form-item>
@@ -121,10 +126,10 @@
 <script>
 // import axios from 'axios'
 
- export default {
-   props: {
+  export default {
+    props: {
     user: Object,
-    errors: Object,
+    errors: Array,
     edit: Boolean,
   },
   data() {
@@ -187,31 +192,18 @@
     },
     beforeUpdate() {
       // 文字列のlangsを配列に変換
+      if(this.edit){
         this.langarray = this.user.languages.String.split(',');
         if(this.langarray[0].length == 0){
           this.langarray = [];
         }
+      }
     },
     methods: {
       arrayChangeString(){
         this.user.languages.String = this.langarray.join(',');
         // console.log(this.user.languages);
       },
-      // onImageUploaded(e) {
-      //   // event(=e)から画像データを取得する
-      //   // this.user.image = e.target.files[0]
-      //   // console.log(this.user.image);
-      //   // console.log(this.$parent.user.image);
-      // },
-      onFileChange() {
-      // let file = event.target.files[0] || event.dataTransfer.files
-      // let reader = new FileReader()
-      // reader.onload = () => {
-      //   this.uploadedImage = event.target.result
-      //   this.user.image = this.uploadedImage
-      // }
-      // reader.readAsDataURL(file)
-    },
     }
  }
 </script>

@@ -11,10 +11,11 @@ import (
 type CreateUser struct {
 	ID          int       `db:"id" json:"id"`
 	Name        string    `db:"name" json:"name" validate:"required,min=4,max=10"`
-	KBCMail    string    `db:"mail" json:"KBC_mail" validate:"required,"`
+  KBCMail string    `db:"mail" json:"KBC_mail" validate:"required,MailCheckRegexp"`
 	Password    string    `json:"password" validate:"required,min=8,max=50"`
 	PassCfm    string    `json:"password_confirmation"`
 	PassHash    string    `db:"passhash"`
+	Sex         int       `db:"sex" json:"sex" validate:"required"`
 }
 
 // User ...
@@ -27,6 +28,8 @@ type User struct {
 	Github      sql.NullString    `db:"github" json:"github"`
 	Website     sql.NullString    `db:"website" json:"website"`
 	Languages   sql.NullString    `db:"languages" json:"languages"`
+	ImgPath     sql.NullString    `db:"imgpath" json:"imgpath"`
+	Sex        int     `db:"sex" json:"sex"`
 }
 
 // LoginUser ...
@@ -99,6 +102,11 @@ func (u *CreateUser) ValidationErrors(err error) []string {
 				message = "パスワードは最大50文字です。"
 			case "password_check":
 				message = "パスワードとパスワード確認が異なります。"
+			}
+		case "Sex":
+			switch err.Tag(){
+				case "required":
+					message = "性別を選択してください。"
 			}
 		}
 		// メッセージをスライスに追加します。

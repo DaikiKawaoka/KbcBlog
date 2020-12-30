@@ -5,13 +5,30 @@
 
       <div class="user-show-header">
         <div class="user-show-icon">
-          <img class="user-show-icon-img" src="../assets/IMG_6217.jpeg" @click="imgClick()">
-          <el-dialog :visible.sync="dialogVisible" width="390px">
-              <img width="350px" height="350px" style="border-radius:3px;" src="../assets/IMG_6217.jpeg" alt="">
-              <span slot="footer" class="dialog-footer">
-                <el-button type="primary" @click="centerDialogVisible = false">変更</el-button>
-                <el-button type="danger" @click="centerDialogVisible = false">削除</el-button>
+            <img class="user-show-icon-img" :src="image_path()" @click="imgClick()">
+
+          <el-dialog v-if="user.id === myUser.id" :visible.sync="dialogVisible" width="400px" title="画像編集" center>
+              <img width="350px" height="350px" style="border-radius:3px;" :src="image_path()" alt="">
+              <!-- アイコンが初期の時 -->
+              <span v-if="user.imgpath.String === ''" slot="footer" class="dialog-footer">
+                <el-button type="primary" @click="$refs.input.click()">変更</el-button>
               </span>
+              <!-- アイコンが初期でないとき -->
+              <span v-else slot="footer" class="dialog-footer">
+                <el-button type="primary" @click="userImgUpdate()">変更</el-button>
+                <el-button type="danger" @click="userImgDelete()">削除</el-button>
+              </span>
+
+              <input
+                  style="display: none"
+                  ref="input"
+                  type="file"
+                  accept="image/jpeg, image/jpg, image/png"
+                >
+          </el-dialog>
+
+          <el-dialog v-else :visible.sync="dialogVisible" width="370px">
+              <img width="330px" height="330px" style="border-radius:3px;" :src="image_path()" alt="">
           </el-dialog>
 
           <!-- <div class="demo-image__preview">
@@ -345,6 +362,10 @@ export default {
           String: "",
           Valid: Boolean
         },
+        imgpath:{
+          String: "",
+          Valid: Boolean
+        },
       },
       errors: {},
       url :"https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
@@ -588,9 +609,68 @@ export default {
       }
       return require('@/assets/pgsvg/'+lang+".svg")
     },
+
     imgClick(){
       this.dialogVisible = true
     },
+
+    userImgUpdate(){
+      this.$axios
+        .patch(`http://localhost/api/restricted/Users/${this.myUser.id}/img`,this.user,{
+          headers: {
+            Authorization: `Bearer ${this.$cookies.get("JWT")}`
+          },
+        })
+        .then(() => {
+          // this.$router.push({ name: 'UserShow' , params : { id: this.user.id }});
+          // this.editUserAlert();
+        })
+        .catch(error => {
+          this.errors = error.response.data.ValidationErrors;
+        });
+    },
+
+    userImgDelete(){
+      this.$axios
+        .delete(`http://localhost/api/restricted/Users/${this.myUser.id}/img`,{
+          headers: {
+            Authorization: `Bearer ${this.$cookies.get("JWT")}`
+          },
+        })
+        .then(() => {
+          // this.$router.push({ name: 'UserShow' , params : { id: this.user.id }});
+          // this.editUserAlert();
+        })
+        .catch(error => {
+          this.errors = error.response.data.ValidationErrors;
+        });
+    },
+
+    image_path(){
+      if(this.user.imgpath.Valid === true){
+        return require("@/assets/userIcon/" + this.user.imgpath.String);
+      }else{
+        if(this.user.sex === 1){
+          return require("@/assets/userIcon/man.png");
+        }else if(this.user.sex === 2){
+          return require("@/assets/userIcon/woman.png");
+        }
+      }
+    },
+
+    // selectfileボタン押下時
+//     btnclick() {
+//       this.$refs.input.click();
+//     },
+    selectedFile() {
+      // this.isUploading = true;
+      // const file = this.$refs.input.files[0]
+      // if (!file) {
+      //   return;
+      // }
+      // 以下ファイルの操作
+    },
+
   },
   watch: {
     notificationCount(newNotificationCount) {
@@ -624,6 +704,7 @@ export default {
 .user-show-icon-img {
   width: 180px;
   height: 180px;
+  cursor: pointer;
   border-radius: 50%;
 }
 .user-show-info{

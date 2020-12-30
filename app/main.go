@@ -2,7 +2,6 @@ package main
 
 import (
 	"log"
-	"net/http"
 	// "time"
 	"app/handler"
 	"app/repository"
@@ -65,6 +64,9 @@ func main() {
 	r.GET("/Users/:id",handler.UserShow)
 	r.GET("/Users/:id/edit", handler.UserEdit)
 	r.PATCH("/Users/:id", handler.UserUpdate)
+	// UserIcon
+	r.PATCH("/Users/:id/img", handler.UserImgUpdate)
+	r.DELETE("/Users/:id/img", handler.UserImgDelete)
 	// Password
 	r.PATCH("/Users/:id/password/edit",handler.UserPasswordEdit)
 
@@ -114,10 +116,6 @@ func createMux() *echo.Echo {
 
 	// e.Use(middleware.CORS())
 
-	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
-			AllowOrigins: []string{"http://localhost"},
-			AllowMethods: []string{http.MethodGet, http.MethodPut, http.MethodPost, http.MethodDelete},
-	}))
 
 	e.Validator = &CustomValidator{validator: validator.New()}
 

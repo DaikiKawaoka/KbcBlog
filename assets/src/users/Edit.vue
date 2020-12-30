@@ -44,7 +44,7 @@ export default {
           Valid: Boolean
         },
       },
-      errors: {},
+      errors: [],
       notificationCount: localStorage.notificationCount,
     };
   },
@@ -117,6 +117,10 @@ export default {
         })
         .catch(error => {
           this.errors = error.response.data.ValidationErrors;
+          window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+          });
         });
     },
 

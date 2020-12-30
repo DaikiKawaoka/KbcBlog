@@ -27,8 +27,8 @@ func UserCreate(user *model.CreateUser) (sql.Result, error) {
     return nil, err
 	}
 
-  query := `INSERT INTO users (mail,passhash,name)
-	VALUES (:mail, :passhash, :name);`
+  query := `INSERT INTO users (mail,passhash,name,sex)
+	VALUES (:mail, :passhash, :name, :sex);`
 
   tx := db.MustBegin()
   res, err := tx.NamedExec(query, user)
@@ -42,7 +42,7 @@ func UserCreate(user *model.CreateUser) (sql.Result, error) {
 
 // UserGetByID ...
 func UserGetByID(id int) (*model.User, error) {
-	query := `SELECT id,mail,name,comment,github,website,languages
+	query := `SELECT id,mail,name,comment,github,website,languages,imgpath,sex
 	FROM users
 	WHERE id = ?`
 

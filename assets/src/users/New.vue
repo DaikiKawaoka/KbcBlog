@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Header></Header>
+    <Header :loginpage="true"></Header>
     <user-form :errors="errors" :user="user" @submit="createUser"></user-form>
     <Footer></Footer>
   </div>
@@ -27,8 +27,9 @@ export default {
         KBC_mail: '',
         password: '',
         password_confirmation: '',
+        sex: 0,
       },
-      errors: {}
+      errors: []
     };
   },
   methods: {
@@ -41,6 +42,10 @@ export default {
         })
         .catch(error => {
           this.errors = error.response.data.ValidationErrors;
+          window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+          });
         });
     },
   }

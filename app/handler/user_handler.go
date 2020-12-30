@@ -259,3 +259,18 @@ func UserUpdate(c echo.Context) error {
 	out.User = &user
 	return c.JSON(http.StatusOK, out)
 }
+
+// UserImgUpdate ...
+func UserImgUpdate(c echo.Context) error {
+	return c.JSON(http.StatusOK, "img変更成功")
+}
+
+// UserImgDelete ...
+func UserImgDelete(c echo.Context) error {
+	id, _ := strconv.Atoi(c.Param("id"))
+	if err := repository.ArticleDelete(id); err != nil {
+		c.Logger().Error(err.Error())
+		return c.JSON(http.StatusInternalServerError, "記事削除中にエラー発生")
+	}
+	return c.JSON(http.StatusOK, "img削除成功")
+}
