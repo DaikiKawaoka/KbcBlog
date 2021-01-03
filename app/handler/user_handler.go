@@ -262,6 +262,29 @@ func UserUpdate(c echo.Context) error {
 
 // UserImgUpdate ...
 func UserImgUpdate(c echo.Context) error {
+	userID := userIDFromToken(c)
+	myUser,err := repository.GetMyUser(userID)
+	if err != nil {
+		c.Logger().Error(err.Error())
+		return c.JSON(http.StatusInternalServerError,"userが存在しません")
+  }
+	id, _ := strconv.Atoi(c.Param("id"))
+	if myUser.ID != id {
+		return c.JSON(http.StatusBadRequest, "他人の情報は編集できません。") //400
+	}
+
+	if err := c.Bind(&myUser); err != nil {
+		return c.JSON(http.StatusBadRequest, "") //400
+  }
+	// 入力値のチェック
+	// if err := c.Validate(&user); err != nil {
+	// 	out.ValidationErrors = user.ValidationErrors(err)
+	// 	return c.JSON(http.StatusUnprocessableEntity, out)
+	// }
+  if err := repository.UserUpdate(myUser); err != nil{
+    c.Logger().Error(err.Error())
+    return c.JSON(http.StatusInternalServerError, "")
+  }
 	return c.JSON(http.StatusOK, "img変更成功")
 }
 
