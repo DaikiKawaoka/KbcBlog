@@ -19,7 +19,7 @@ func Follow(c echo.Context) error {
     return c.JSON(http.StatusInternalServerError,"followデータの取得中にエラー発生") //500
 	}
 
-	if count > 0 {
+	if count >= 1 {
 		// UnFollow
 		err := repository.UnFollow(followerID, followedID)
 		if err != nil {
