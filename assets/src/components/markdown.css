@@ -17,6 +17,10 @@
   border-radius: 4px;
 }
 
+.article-body img {
+  width: 800px;
+}
+
 .article-body pre {
   background: #272724;
   color: #fff;
