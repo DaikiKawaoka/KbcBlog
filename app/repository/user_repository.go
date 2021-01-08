@@ -7,7 +7,7 @@ import (
 
 // GetMyUser ...
 func GetMyUser(id int) (*model.User , error) {
-	query := `SELECT id,mail,name,comment
+	query := `SELECT id,mail,name,comment,imgdata64,sex
 	FROM users
 	WHERE id = ?;`
 
@@ -42,7 +42,7 @@ func UserCreate(user *model.CreateUser) (sql.Result, error) {
 
 // UserGetByID ...
 func UserGetByID(id int) (*model.User, error) {
-	query := `SELECT id,mail,name,comment,github,website,languages,imgpath,sex
+	query := `SELECT id,mail,name,comment,github,website,languages,sex,imgdata64
 	FROM users
 	WHERE id = ?`
 
@@ -73,4 +73,53 @@ func UserUpdate(user *model.User) error {
 	tx.Commit()
 
 	return nil
+}
+
+// UserImgUpdate ...
+func UserImgUpdate(user *model.UserImgUpdateClass) error {
+
+	query := `UPDATE users
+	SET imgdata64 = :imgdata64
+	WHERE id = :id;`
+
+	tx := db.MustBegin()
+	_, err := tx.NamedExec(query, user)
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+	tx.Commit()
+
+	return nil
+}
+
+// UserImgDelete ...
+func UserImgDelete(user *model.UserImgUpdateClass) error {
+
+	query := `UPDATE users
+	SET imgdata64 = null
+	WHERE id = :id;`
+
+	tx := db.MustBegin()
+	_, err := tx.NamedExec(query, user)
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+	tx.Commit()
+
+	return nil
+}
+
+// UserImgGetByID ...
+func UserImgGetByID(id int) (*model.User, error) {
+	query := `SELECT imgdata64
+	FROM users
+	WHERE id = ?`
+
+	var user model.User
+	if err := db.Get(&user, query, id); err != nil {
+		return nil, err
+	}
+	return &user, nil
 }
