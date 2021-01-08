@@ -62,6 +62,7 @@ func QuestionIndex(c echo.Context) error {
 	scope.Tag = c.QueryParam("tag")//絞り込みタグ
 	scope.Text = c.QueryParam("searchText")//絞り込みテキスト
 	scope.FriendsOnly,_ = strconv.ParseBool(c.QueryParam("friendsOnly")) // フレンドのみ? true or false
+	random,_ := strconv.Atoi(c.QueryParam("random")) // ランダムな数字 0 or 1
 
 	questions, err := repository.QuestionListByCursor(0,&scope,userID)
 
@@ -70,18 +71,22 @@ func QuestionIndex(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError,"質問の一覧データを取得中にエラー発生")
 	}
 
-	// 質問数ランキング 変数の名前は適当
-	likeRanking,err := repository.KBCQuestionRankingTop10("post")
-	if err != nil {
-		c.Logger().Error(err.Error())
-		return c.JSON(http.StatusInternalServerError,"意欲的Rankingを取得中にエラー発生")
-	}
+	var Ranking []*model.RankingUser
 
-	// 回答数ランキング
-	postRanking,err := repository.KBCQuestionRankingTop10("like")
-	if err != nil {
-		c.Logger().Error(err.Error())
-		return c.JSON(http.StatusInternalServerError,"回答数Rankingを取得中にエラー発生")
+	if random == 0 {
+		// 質問数ランキング
+		Ranking,err = repository.KBCQuestionRankingTop10("post")
+		if err != nil {
+			c.Logger().Error(err.Error())
+			return c.JSON(http.StatusInternalServerError,"意欲的Rankingを取得中にエラー発生")
+		}
+	}else{
+		// 回答数ランキング
+		Ranking,err = repository.KBCQuestionRankingTop10("like")
+		if err != nil {
+			c.Logger().Error(err.Error())
+			return c.JSON(http.StatusInternalServerError,"回答数Rankingを取得中にエラー発生")
+		}
 	}
 
 	// 取得できた最後の記事の ID をカーソルとして設定します。
@@ -101,8 +106,7 @@ func QuestionIndex(c echo.Context) error {
 		"user": myUser,
 		"Questions": questions,
 		"Cursor":   cursor,
-		"LikeRanking": likeRanking,
-		"PostRanking": postRanking,
+		"Ranking": Ranking,
 		"NotificationCount": notificationCount,
 	}
 	return c.JSON(http.StatusOK, data)
