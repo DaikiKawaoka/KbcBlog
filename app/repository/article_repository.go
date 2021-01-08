@@ -182,7 +182,7 @@ func ArticleListByCursor(cursor int, scope *model.Scope, userid int) ([]*model.A
 // ArticleGetByID ...
 func ArticleGetByID(id int) (*model.Article, error) {
 	// クエリ文字列を生成します。
-	query := `SELECT a.id id,a.userid userid,u.name name,a.title title,a.body body,a.tag tag,a.created created,a.updated updated
+	query := `SELECT a.id id,a.userid userid,u.name name, u.imgdata64 imgdata64, u.sex sex, a.title title,a.body body,a.tag tag,a.created created,a.updated updated
 	FROM articles a,users u
 	WHERE a.id = ? and a.userid = u.id;`
 
