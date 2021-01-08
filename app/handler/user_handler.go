@@ -123,48 +123,6 @@ func UserShow(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, "フォロワー数取得中にエラー発生") //500
 	}
 
-	// フォローリスト取得
-	followers, err := repository.GetFollowerInfoList(user.ID)
-	if err != nil {
-		c.Logger().Error(err.Error())
-		return c.JSON(http.StatusInternalServerError, "フォロワーリスト取得中にエラー発生") //500
-	}
-
-	// フォロワーリスト
-	followeds, err := repository.GetFollowedInfoList(user.ID)
-	if err != nil {
-		c.Logger().Error(err.Error())
-		return c.JSON(http.StatusInternalServerError, "フォロワーリスト取得中にエラー発生") //500
-	}
-
-	for _, f := range followers {
-		count, err := repository.CheckFollow(userID, f.ID)
-		if err != nil {
-			c.Logger().Error(err.Error())
-			return c.JSON(http.StatusInternalServerError, "followcheck中にエラー発生") //500
-		}
-		// ユーザがいいねしているか検証
-		if count > 0 {
-			f.IsFollowing = true
-		} else {
-			f.IsFollowing = false
-		}
-	}
-
-	for _, f := range followeds {
-		count, err := repository.CheckFollow(userID, f.ID)
-		if err != nil {
-			c.Logger().Error(err.Error())
-			return c.JSON(http.StatusInternalServerError, "followcheck中にエラー発生") //500
-		}
-		// ユーザがいいねしているか検証
-		if count > 0 {
-			f.IsFollowing = true
-		} else {
-			f.IsFollowing = false
-		}
-	}
-
 	// GetArticleTagsユーザ全記事のタグ配列取得
 	tags, err := repository.GetArticleTags(user.ID)
 	if err != nil {
@@ -187,8 +145,6 @@ func UserShow(c echo.Context) error {
 		"Questions":         questions,
 		"AnswerQuestions":   answerQuestions,
 		"Follow":            follow,
-		"Follows":           followers,
-		"Followers":         followeds,
 		"Tags":              tags,
 		"NotificationCount": notificationCount,
 		// "likes" : likes,
