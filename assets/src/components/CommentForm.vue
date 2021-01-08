@@ -9,10 +9,14 @@
     </div>
 
     <div class="comment-header">
+          <!-- <router-link v-bind:to="{ name : 'UserShow', params : { id: user.id }}" class="a-tag"> -->
         <div class="comment-header-div">
-          <div class="comment-user-icon"></div>
-          <p class="comment-user-name">{{ user.name }}</p>
+            <div class="comment-user-icon" v-if="user.imgdata64">
+              <img class="comment-user-icon" :src="image_path()">
+            </div>
+            <p class="comment-user-name">{{ user.name }}</p>
         </div>
+          <!-- </router-link> -->
         <div class="form-preview-icon">
           <el-button v-if="isActive" type="primary" icon="el-icon-open" circle v-on:click="active"></el-button>
           <el-button v-else icon="el-icon-turn-off" circle v-on:click="active"></el-button>
@@ -53,7 +57,7 @@ import '../components/commentFormMarkdown.css';
 export default {
   props: {
     comment: Object,
-    user: null,
+    user: Object,
     errors: Object,
   },
   data(){
@@ -79,7 +83,19 @@ export default {
   methods: {
     active: function () {
       this.isActive = !this.isActive;
-    }
+    },
+    image_path(){
+      if(this.user.imgdata64.Valid === true){
+        return 'data:image/jpeg;base64,' + this.user.imgdata64.String
+        // return require("@/assets/userIcon/" + this.user.imgdata64.String);
+      }else{
+        if(this.user.sex === 1){
+          return require("@/assets/userIcon/man.png");
+        }else if(this.user.sex === 2){
+          return require("@/assets/userIcon/woman.png");
+        }
+      }
+    },
   }
 }
 </script>
