@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS `users`(
   `website` varchar(500),
   `languages` varchar(50),
   -- `imgpath` varchar(200),
-  `imgfile` mediumblob,
+  `imgdata64` mediumblob,
   `sex` int, -- 1:男 2:女
   PRIMARY KEY(`id`)
 );
