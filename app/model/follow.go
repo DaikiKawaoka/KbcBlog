@@ -25,11 +25,9 @@ type Follow struct {
 // FUser ...
 type FUser struct {
 	ID          int              `db:"id" json:"id"`
-	Name        string           `db:"name" json:"name" validate:"required,min=4,max=20"`
-	Comment     sql.NullString   `db:"comment" json:"comment" validate:"max=150"`
+	Name        string           `db:"name" json:"name"`
+	Comment     sql.NullString   `db:"comment" json:"comment"`
+	ImgData64     sql.NullString    `db:"imgdata64" json:"imgdata64"`
+	Sex         int       `db:"sex" json:"sex"`
 	IsFollowing bool             `db:"isfollowing" json:"isfollowing"`
-	// PostCount int      `db:"PostCount" json:"postCount"` //投稿数
-	// Github      sql.NullString    `db:"github" json:"github"`
-	// Website     sql.NullString    `db:"website" json:"website"`
-	// Languages   sql.NullString    `db:"languages" json:"languages"`
 }

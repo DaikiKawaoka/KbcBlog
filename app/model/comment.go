@@ -1,6 +1,7 @@
 package model
 
 import (
+	"database/sql"
 	"gopkg.in/go-playground/validator.v9"
 )
 
@@ -10,6 +11,8 @@ type ArticleComment struct {
 	Userid      int       `db:"userid" form:"userid" json:"userid"`
 	Articleid   int       `db:"articleid" json:"articleid"`
 	UserName    string    `db:"name" json:"name"`
+	ImgData64     sql.NullString    `db:"imgdata64" json:"imgdata64"`
+	Sex         int       `db:"sex" json:"sex"`
 	Text        string    `db:"text" form:"text" json:"text" validate:"required"`
 	Like   Like
 	Created     string    `db:"created"`
@@ -38,6 +41,8 @@ type QuestionComment struct {
 	Userid      int       `db:"userid" form:"userid" json:"userid"`
 	Questionid   int      `db:"questionid" json:"questionid"`
 	UserName    string    `db:"name" json:"name"`
+	ImgData64     sql.NullString    `db:"imgdata64" json:"imgdata64"`
+	Sex         int       `db:"sex" json:"sex"`
 	Text        string    `db:"text" form:"text" json:"text" validate:"required"`
 	Like   Like
 	Created     string    `db:"created"`
