@@ -1,45 +1,14 @@
 <template>
   <div v-if="isArticle" class="ranking-all">
     <!-- article -->
-    <div class="ranking-title-div">
+    <div class="ranking-title-div" v-if="random === 0">
       <h3 class="ranking-title">人気ユーザーランキング<i class="el-icon-user-solid"></i></h3>
     </div>
-    <ul class="ranking-ul">
-      <li class="ranking-li" v-for="(u,index) in this.likeRanking" :key="u.id">
-        <router-link v-bind:to="{ name : 'UserShow', params : { id: u.id }}" class="a-tag">
-          <div class="ranking-main">
-            <div class="ranking-main">
-              <div class="rank-number-div">
-                <!--- 順位--->
-                <span class="rank-number" v-bind:class="`rank-${index + 1}`">{{ index + 1 }}</span>
-              </div>
-              <div>
-                <!-- アイコン -->
-                <div class="user-icon"></div>
-              </div>
-              <div class="u-div-nameandcomment-width">
-                <div class="string-out">
-                  <span class="user-name">{{ u.name }}</span>
-                </div>
-                <div class="string-out">
-                  <span class="tag-user-comment">{{u.comment.String}}</span>
-                </div>
-              </div>
-            </div>
-            <div class="like-count-div">
-              <p class="like-count">{{ u.count }}</p>
-              <p class="like-tag"><i class="el-icon-star-off"></i></p>
-            </div>
-          </div>
-        </router-link>
-      </li>
-    </ul>
-
-    <div class="ranking-title-div post-count-ranking">
+    <div class="ranking-title-div post-count-ranking" v-else>
       <h3 class="ranking-title">投稿数ランキング<i class="el-icon-document-checked"></i></h3>
     </div>
     <ul class="ranking-ul">
-      <li class="ranking-li" v-for="(u,index) in this.postRanking" :key="u.id">
+      <li class="ranking-li" v-for="(u,index) in this.Ranking" :key="u.id">
         <router-link v-bind:to="{ name : 'UserShow', params : { id: u.id }}" class="a-tag">
           <div class="ranking-main">
             <div class="ranking-main">
@@ -49,7 +18,8 @@
               </div>
               <div>
                 <!-- アイコン -->
-                <div class="user-icon"></div>
+                <!-- <div class="user-icon"></div> -->
+                <img class="user-icon" :src="image_path(u)">
               </div>
               <div class="u-div-nameandcomment-width">
                 <div class="string-out">
@@ -62,7 +32,10 @@
             </div>
             <div class="like-count-div">
               <p class="like-count">{{ u.count }}</p>
-              <p class="like-tag"><i class="el-icon-document"></i></p>
+              <p class="like-tag">
+                <i class="el-icon-star-off" v-if="random === 0"></i>
+                <i class="el-icon-document" v-else></i>
+              </p>
             </div>
           </div>
         </router-link>
@@ -71,45 +44,14 @@
   </div>
   <div v-else class="ranking-all">
     <!-- question -->
-    <div class="ranking-title-div">
+    <div class="ranking-title-div" v-if="random === 0">
       <h3 class="ranking-title">意欲的ユーザーランキング<i class="el-icon-user-solid"></i></h3>
     </div>
-    <ul class="ranking-ul">
-      <li class="ranking-li" v-for="(u,index) in this.likeRanking" :key="u.id">
-        <router-link v-bind:to="{ name : 'UserShow', params : { id: u.id }}" class="a-tag">
-          <div class="ranking-main">
-            <div class="ranking-main">
-              <div class="rank-number-div">
-                <!--- 順位--->
-                <span class="rank-number" v-bind:class="`rank-${index + 1}`">{{ index + 1 }}</span>
-              </div>
-              <div>
-                <!-- アイコン -->
-                <div class="user-icon"></div>
-              </div>
-              <div class="u-div-nameandcomment-width">
-                <div class="string-out">
-                  <span class="user-name">{{ u.name }}</span>
-                </div>
-                <div class="string-out">
-                  <span class="tag-user-comment">{{u.comment.String}}</span>
-                </div>
-              </div>
-            </div>
-            <div class="like-count-div">
-              <p class="like-count">{{ u.count }}</p>
-              <p class="like-tag"><i class="el-icon-tickets"></i></p>
-            </div>
-          </div>
-        </router-link>
-      </li>
-    </ul>
-
-    <div class="ranking-title-div post-count-ranking">
+    <div class="ranking-title-div post-count-ranking" v-else>
       <h3 class="ranking-title">回答数ランキング<i class="el-icon-document-checked"></i></h3>
     </div>
     <ul class="ranking-ul">
-      <li class="ranking-li" v-for="(u,index) in this.postRanking" :key="u.id">
+      <li class="ranking-li" v-for="(u,index) in this.Ranking" :key="u.id">
         <router-link v-bind:to="{ name : 'UserShow', params : { id: u.id }}" class="a-tag">
           <div class="ranking-main">
             <div class="ranking-main">
@@ -119,7 +61,8 @@
               </div>
               <div>
                 <!-- アイコン -->
-                <div class="user-icon"></div>
+                <!-- <div class="user-icon"></div> -->
+                <img class="user-icon" :src="image_path(u)">
               </div>
               <div class="u-div-nameandcomment-width">
                 <div class="string-out">
@@ -132,7 +75,10 @@
             </div>
             <div class="like-count-div">
               <p class="like-count">{{ u.count }}</p>
-              <p class="like-tag"><i class="el-icon-chat-dot-round"></i></p>
+              <p class="like-tag">
+                <i class="el-icon-tickets" v-if="random === 0 "></i>
+                <i class="el-icon-chat-dot-round" v-else></i>
+                </p>
             </div>
           </div>
         </router-link>
@@ -144,13 +90,27 @@
 <script>
   export default {
     props: {
-      likeRanking: Array,
-      postRanking: Array,
+      Ranking: Array,
+      random: Number,
       isArticle: Boolean,
     },
     data() {
       return {
       };
+    },
+    methods:{
+      image_path(u){
+        if(u.imgdata64.Valid === true){
+          return 'data:image/jpeg;base64,' + u.imgdata64.String
+          // return require("@/assets/userIcon/" + this.user.imgdata64.String);
+        }else{
+          if(u.sex === 1){
+            return require("@/assets/userIcon/man.png");
+          }else if(u.sex === 2){
+            return require("@/assets/userIcon/woman.png");
+          }
+        }
+      },
     }
   };
 </script>
@@ -158,8 +118,9 @@
 <style scoped>
 .ranking-all{
   margin-left: 20px;
-  /* margin-top: 40px; */
-  /* position: fixed; */
+  padding-top: 10px;
+  position: sticky;
+  top: 0;
 }
 .ranking-ul{
   background-color: #fff;
