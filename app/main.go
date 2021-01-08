@@ -66,6 +66,7 @@ func main() {
 	r.PATCH("/Users/:id", handler.UserUpdate)
 	// UserIcon
 	r.PATCH("/Users/:id/img", handler.UserImgUpdate)
+	r.POST("/Users/:id/img", handler.UserImgUpdate)
 	r.DELETE("/Users/:id/img", handler.UserImgDelete)
 	// Password
 	r.PATCH("/Users/:id/password/edit",handler.UserPasswordEdit)
@@ -77,6 +78,8 @@ func main() {
 	r.POST("/Questions/Comments/:id/Likes",handler.QuestionCommentLike)
 
 	// Follow
+	r.GET("/Users/:id/Following",handler.Following)
+	r.GET("/Users/:id/Followers",handler.Followers)
 	r.POST("/Users/:id/Follow",handler.Follow)
 
 	// Notificatino
