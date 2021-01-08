@@ -124,11 +124,8 @@
             </el-badge>
 
           </li>
-          <li class="a-tag logout-li" @click="myUserPage">
-          <!-- <li class="a-tag logout-li"> -->
-            <!-- <router-link v-bind:to="{ name : 'UserShow', params : { id: user.id }}" class="a-tag"> -->
-              <div class="header-user-icon"></div>
-            <!-- </router-link> -->
+          <li v-if="user.imgdata64">
+            <img class="header-user-icon" :src="image_path()" @click="myUserPage">
           </li>
         </ul>
       </nav>
@@ -144,7 +141,7 @@ export default {
     loginpage: Boolean,
     isArticle: Boolean,
     isQuestion: Boolean,
-    user: Object,
+    user: {},
   },
   components: {
     InfiniteLoading,
@@ -170,9 +167,24 @@ export default {
     },
   },
   methods: {
+
+    image_path(){
+      if(this.user.imgdata64.Valid === true){
+        return 'data:image/jpeg;base64,' + this.user.imgdata64.String
+        // return require("@/assets/userIcon/" + this.user.imgdata64.String);
+      }else{
+        if(this.user.sex === 1){
+          return require("@/assets/userIcon/man.png");
+        }else if(this.user.sex === 2){
+          return require("@/assets/userIcon/woman.png");
+        }
+      }
+    },
+
     myUserPage: function() {
-      this.$router.push({ name : 'UserShow', params : { id: this.user.id }});
       if(this.$router.currentRoute.path !== `/Users/${this.user.id}`){
+        this.$router.push({ name : 'UserShow', params : { id: this.user.id }});
+      }else{
         this.$router.go({ name : 'UserShow', params : { id: this.user.id }})
       }
     },
@@ -330,9 +342,6 @@ export default {
   text-decoration: none;
   color: #606266;
 }
-.logout-li{
-  margin-left: 20px;
-}
 .el-dropdown-link {
   cursor: pointer;
   color: #fff;
@@ -352,10 +361,11 @@ export default {
   text-align: right;
 }
 .header-user-icon{
-  background-color: #ccc;
   width: 40px;
   height: 40px;
   border-radius: 50%;
+  cursor: pointer;
+  margin-left: 15px;
 }
 .badge-all{
   margin-left: 15px;
