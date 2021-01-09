@@ -97,16 +97,18 @@
       :rules="[
           { required: true, message: '入力必須です', trigger: 'blur' },
           { min: 8, max: 50, message: '8~50文字で入力してください', trigger: 'blur' },
+          { pattern: /^(?=.*?[a-z])(?=.*?\d)[a-z\d]{8,100}$/i, message: '半角英字と半角数字それぞれ1文字以上含めてください。', trigger: 'blur' },
       ]">
-          <el-input type="password" v-model="user.password" autocomplete="off"></el-input>
+          <el-input type="password" v-model="user.password" autocomplete="off" show-password></el-input>
       </el-form-item>
 
-      <el-form-item label="パスワード確認" prop="password" v-if="!edit"
+      <el-form-item label="パスワード確認" prop="password_confirmation" v-if="!edit"
       :rules="[
           { required: true, message: '入力必須です', trigger: 'blur' },
           { min: 8, max: 50, message: '8~50文字で入力してください', trigger: 'blur' },
+          { pattern: /^(?=.*?[a-z])(?=.*?\d)[a-z\d]{8,100}$/i, message: '半角英字と半角数字それぞれ1文字以上含めてください。', trigger: 'blur' },
       ]">
-          <el-input type="password" v-model="user.password_confirmation" autocomplete="off"></el-input>
+          <el-input type="password" v-model="user.password_confirmation" autocomplete="off" show-password></el-input>
       </el-form-item>
 
       <el-form-item label="性別" prop="sex" v-if="!edit">
