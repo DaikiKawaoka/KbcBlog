@@ -19,10 +19,10 @@ func QuestionListByCursor(cursor int, scope *model.Scope, userid int) ([]*model.
 
 	if scope.FriendsOnly {
 		// フォローしているユーザの投稿のみ
-		query1 = "SELECT q.id id,q.userid userid,u.name name,u.imgdata64 imgdata64, u.sex sex,q.title title,q.tag tag,q.created created,q.updated updated ,COUNT(ql.id) likecount FROM questions q inner join users u on q.userid = u.id inner join follows f on q.userid = f.followedid left join question_likes ql on q.id = ql.questionid "
+		query1 = "SELECT q.id id,q.userid userid,u.name name, u.sex sex,q.title title,q.tag tag,q.created created,q.updated updated ,COUNT(ql.id) likecount FROM questions q inner join users u on q.userid = u.id inner join follows f on q.userid = f.followedid left join question_likes ql on q.id = ql.questionid "
 	}else{
 		// 全てのユーザの投稿
-		query1 = "SELECT q.id id,q.userid userid,u.name name,u.imgdata64 imgdata64, u.sex sex,q.title title,q.tag tag,q.category category,q.created created,q.updated updated ,COUNT(ql.id) likecount FROM questions q inner join users u on q.userid = u.id left join question_likes ql on q.id = ql.questionid "
+		query1 = "SELECT q.id id,q.userid userid,u.name name, u.sex sex,q.title title,q.tag tag,q.category category,q.created created,q.updated updated ,COUNT(ql.id) likecount FROM questions q inner join users u on q.userid = u.id left join question_likes ql on q.id = ql.questionid "
 	}
 
 	if scope.Order == "new"{
