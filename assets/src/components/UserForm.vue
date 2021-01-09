@@ -1,6 +1,6 @@
 <template>
   <div class="body-main">
-    <el-form :model="user">
+    <el-form :model="user" ref="userForm">
       <h2 v-if="edit">プロフィール編集</h2>
       <h2 v-else>ユーザー登録</h2>
 
@@ -111,15 +111,22 @@
           <el-input type="password" v-model="user.password_confirmation" autocomplete="off" show-password></el-input>
       </el-form-item>
 
-      <el-form-item label="性別" prop="sex" v-if="!edit">
-        <div style="margin-top: 40px">
-          <el-radio v-model="user.sex" :label="1" border>男性</el-radio>
-          <el-radio v-model="user.sex" :label="2" border>女性</el-radio>
-        </div>
+      <el-form-item label="性別" prop="sex" v-if="!edit"
+      :rules="[
+          { required: true, message: '選択必須です', trigger: 'change' },
+      ]">
+        <!-- <div style="margin-top: 40px"> -->
+          <el-radio-group v-model="user.sex">
+            <div style="margin-top: 40px">
+            <el-radio :label="1" border>男性</el-radio>
+            <el-radio :label="2" border>女性</el-radio>
+            </div>
+          </el-radio-group>
+        <!-- </div> -->
       </el-form-item>
 
       <el-form-item>
-        <el-button type="submit" @click="$emit('submit')">登録</el-button>
+        <el-button @click="userForm('userForm')">登録</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -206,8 +213,34 @@
         this.user.languages.String = this.langarray.join(',');
         // console.log(this.user.languages);
       },
+      userForm(formName) {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            this.openSuccess()
+            this.$emit('submit')
+          } else {
+            console.log('error submit!!');
+            this.openError()
+            return false;
+          }
+        });
+      },
+      openSuccess() {
+        this.$message({
+          showClose: true,
+          message: 'アカウントが作成できました。',
+          type: 'success'
+        });
+      },
+      openError() {
+        this.$message({
+          showClose: true,
+          message: '未入力の項目があります。',
+          type: 'error'
+        });
+      },
     }
- }
+  }
 </script>
 
 <style scoped>
