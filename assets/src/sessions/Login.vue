@@ -14,8 +14,9 @@
       <el-card class="box-card login">
 
         <div slot="header" class="clearfix">
-          <span>Login</span>
-          <el-button style="float: right; padding: 3px 0" type="text" @click="signup">Signup</el-button>
+          <span>ログイン</span>
+          <el-button style="float: right; padding: 3px 0" type="text" @click="signup">新規作成</el-button>
+          <el-button style="float: right; padding: 3px 0; margin-right: 10px;" type="text" @click="signup">ゲストログイン</el-button>
         </div>
 
         <el-form label-width="80px">
@@ -26,7 +27,7 @@
             <el-input type="password" placeholder="パスワード" v-model="password"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button style="float: right" type="primary" @click="login">Login</el-button>
+            <el-button style="float: right" type="primary" @click="login">ログイン</el-button>
           </el-form-item>
         </el-form>
 
