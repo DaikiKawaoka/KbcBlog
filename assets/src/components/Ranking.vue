@@ -8,7 +8,7 @@
       <h3 class="ranking-title">投稿数ランキング<i class="el-icon-document-checked"></i></h3>
     </div>
     <ul class="ranking-ul">
-      <li class="ranking-li" v-for="(u,index) in this.Ranking" :key="u.id">
+      <li class="ranking-li" v-for="(u,index) in this.Ranking" :key="u.id" v-bind:class="{ active: user.id === u.id }">
         <router-link v-bind:to="{ name : 'UserShow', params : { id: u.id }}" class="a-tag">
           <div class="ranking-main">
             <div class="ranking-main">
@@ -93,6 +93,7 @@
       Ranking: Array,
       random: Number,
       isArticle: Boolean,
+      user: {},
     },
     data() {
       return {
@@ -137,6 +138,9 @@
   width: 250px;
   padding: 7px 0 5px 0;
   border-bottom: #eee solid 1px;
+}
+.active{
+  border: #f0e68c 2.5px solid;
 }
 .rank-number{
   line-height: 40px;
