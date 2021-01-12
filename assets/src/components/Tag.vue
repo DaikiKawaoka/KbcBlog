@@ -278,7 +278,7 @@
 
 <style scoped>
 .tag-all{
-  width: 210px;
+  width: 225px;
   background-color: #F6F6F4;
   /* background-color: #15202b; */
 }
