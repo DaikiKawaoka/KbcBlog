@@ -18,6 +18,8 @@ CREATE TABLE IF NOT EXISTS `users`(
   PRIMARY KEY(`id`)
 );
 
+INSERT INTO users (id,mail,passhash,name,sex) VALUES (920437694,'kbc920437694@stu.kawahara.ac.jp','kawahara','guestuser',3);
+
 CREATE TABLE IF NOT EXISTS `articles` (
   `id` int AUTO_INCREMENT,
   `userid` int NOT NULL,
