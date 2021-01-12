@@ -1,33 +1,43 @@
 <template>
-  <div id="login-all">
+  <div id="app">
     <Header :loginpage="loginpage"></Header>
     <div class="body-main-login">
-      <div v-if="errors.length != 0" class="err-div-login">
-        <ul class="error-ul" v-for="e in errors" :key="e">
-          <span class="error-span">
-            <li class="error-icon-li"><i class="el-icon-warning-outline err-i"></i></li>
-            <li><font color="red" class="err-text">{{ e }}</font></li>
-          </span>
-        </ul>
-      </div>
 
       <el-card class="box-card login">
 
         <div slot="header" class="clearfix">
           <span>ログイン</span>
+
+          <div v-if="errors.length != 0" class="err-div-login">
+            <ul class="error-ul" v-for="e in errors" :key="e">
+              <span class="error-span">
+                <li class="error-icon-li"><i class="el-icon-warning-outline err-i"></i></li>
+                <li><font color="red" class="err-text">{{ e }}</font></li>
+              </span>
+            </ul>
+          </div>
+
           <el-button style="float: right; padding: 3px 0" type="text" @click="signup">新規作成</el-button>
-          <el-button style="float: right; padding: 3px 0; margin-right: 10px;" type="text" @click="signup">ゲストログイン</el-button>
+          <el-button style="float: right; padding: 3px 0; margin-right: 10px;" type="text" @click="guestLogin">ゲストログイン</el-button>
         </div>
 
-        <el-form label-width="80px">
-          <el-form-item label="KBC_mail">
-            <el-input type="email" placeholder="河原学園のメールアドレス" v-model="KBC_mail"></el-input>
+        <el-form label-width="80px" ref="loginForm" :model="loginUser">
+          <el-form-item label="KBC_mail" prop="KBC_mail"
+          :rules="[
+              { required: true , pattern: /[\w\-\._]+@(stu.)?kawahara.ac.jp/, message: '河原学園のメールアドレスを入力してください。', trigger: 'blur'},
+          ]">
+            <el-input type="email" placeholder="河原学園のメールアドレス" v-model="loginUser.KBC_mail"></el-input>
           </el-form-item>
-          <el-form-item label="Password">
-            <el-input type="password" placeholder="パスワード" v-model="password"></el-input>
+          <el-form-item label="Password" prop="password"
+      :rules="[
+          { required: true, message: '入力必須です', trigger: 'blur' },
+          { min: 8, max: 50, message: '8~50文字で入力してください', trigger: 'blur' },
+      ]">
+      <!-- { pattern: /^(?=.*?[a-z])(?=.*?\d)[a-z\d]{8,100}$/i, message: '半角英字と半角数字それぞれ1文字以上含めてください。', trigger: 'blur' }, -->
+            <el-input type="password" placeholder="パスワード" v-model="loginUser.password"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button style="float: right" type="primary" @click="login">ログイン</el-button>
+            <el-button style="float: right" type="primary" @click="loginForm('loginForm')">ログイン</el-button>
           </el-form-item>
         </el-form>
 
@@ -45,8 +55,10 @@ import Footer from './../components/Footer.vue';
 export default {
   data() {
     return {
-      KBC_mail: '',
-      password: '',
+      loginUser:{
+        KBC_mail: '',
+        password: '',
+      },
       errors: '',
       loginpage: true
     };
@@ -61,7 +73,7 @@ export default {
     },
     login: function() {
       axios
-        .post('http://localhost/api/Login',{password: this.password, KBC_mail: this.KBC_mail})
+        .post('http://localhost/api/Login',{password: this.loginUser.password, KBC_mail: this.loginUser.KBC_mail})
         .then(response => {
           let token = response.data.token;
           this.$cookies.set('JWT',token,"10000h");
@@ -72,7 +84,38 @@ export default {
             this.errors = error.response.data;
           // }
         });
-    }
+    },
+    guestLogin: function() {
+      axios
+        .get('http://localhost/api/guestLogin')
+        .then(response => {
+          let token = response.data.token;
+          this.$cookies.set('JWT',token,"10000h");
+          this.$router.push({ path: "/" });
+        })
+        .catch(error => {
+          // if (error.response.data && error.response.data.errors) {
+            this.errors = error.response.data;
+          // }
+        });
+    },
+    loginForm(formName) {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            this.login()
+          } else {
+            this.openError()
+            return false;
+          }
+        });
+      },
+      openError() {
+        this.$message({
+          showClose: true,
+          message: '入力項目に不備があります。',
+          type: 'error'
+        });
+      },
   }
 }
 </script>
@@ -96,8 +139,8 @@ export default {
 }
 .err-div-login{
   position:absolute;
-  top: 105px;
-  left: 550px;
+  top: 2px;
+  left: 50px;
   z-index: 2;
 }
 .err-i{

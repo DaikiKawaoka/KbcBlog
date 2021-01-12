@@ -1,30 +1,33 @@
 <template>
-  <div id="app">
+  <div id="app" v-if="user.id !== 920437694 && user.id !== 0 ">
     <Header :isArticle="false" :isQuestion="false" :user="myUser"></Header>
     <div class="user-show-all">
-
       <div class="user-show-header">
         <div class="user-show-icon">
-            <img class="user-show-icon-img" :src="image_path()" @click="imgClick()">
+            <img v-if="user.id === myUser.id" class="user-show-icon-img" :src="image_path1()" @click="imgClick()">
+            <img v-else class="user-show-icon-img" :src="image_path()" @click="imgClick()">
 
-          <el-dialog v-if="user.id === myUser.id" :visible.sync="dialogVisible" width="400px" title="画像編集" center>
-              <img width="350px" height="350px" style="border-radius:3px;" :src="image_path()" alt="">
+          <el-dialog v-if="user.id === myUser.id" :visible.sync="dialogVisible" width="400px" title="画像編集" center >
+              <img width="350px" height="350px" style="border-radius:3px;" :src="image_path1()" alt="">
               <!-- アイコンが初期の時 -->
-              <span v-if="user.imgpath.String === ''" slot="footer" class="dialog-footer">
+              <span v-if="myUser.imgdata64.String === ''" slot="footer" class="dialog-footer">
                 <el-button type="primary" @click="$refs.input.click()">変更</el-button>
               </span>
               <!-- アイコンが初期でないとき -->
               <span v-else slot="footer" class="dialog-footer">
-                <el-button type="primary" @click="userImgUpdate()">変更</el-button>
+                <el-button type="primary" @click="$refs.input.click()">変更</el-button>
                 <el-button type="danger" @click="userImgDelete()">削除</el-button>
               </span>
 
+            <form>
               <input
                   style="display: none"
                   ref="input"
                   type="file"
-                  accept="image/jpeg, image/jpg, image/png"
+                  accept="image/jpeg, image/png"
+                  @change="onFileChange"
                 >
+              </form>
           </el-dialog>
 
           <el-dialog v-else :visible.sync="dialogVisible" width="370px">
@@ -66,8 +69,17 @@
 
             </div>
 
+            <div class="user-show-info-div" v-else-if="user.id === 0">
+            </div>
+
             <div class="user-show-info-div" v-else>
-              <div class="user-show-btn-div">
+              <div v-if="myUser.id === 920437694" class="user-show-btn-div">
+                <el-button type="primary" size="medium" @click="loginDialog">
+                  <i class="el-icon-user"></i>フォロー
+                </el-button>
+              </div>
+
+              <div v-else class="user-show-btn-div">
                 <el-button type="primary" size="medium" v-if="!follow.isfollow" @click="Follow_UnFollw">
                   <i class="el-icon-user"></i>フォロー
                 </el-button>
@@ -79,8 +91,9 @@
             </div>
 
 
+
             <el-dialog title="フォロワー" :visible.sync="followerdialog" width="400px" :center="true">
-              <div class="dialog-all">
+              <div class="dialog-all" v-loading="followersloading">
                 <ul class="dialog-ul">
                   <li class="dialog-li" v-for="(f,index) in this.followers" :key="f.id">
                     <div class="dialog-main">
@@ -88,7 +101,7 @@
                         <div class="dialog-main">
                           <div>
                             <!-- アイコン -->
-                            <div class="f-user-icon"></div>
+                            <img class="f-user-icon" :src="image_path2(f)" alt="">
                           </div>
                           <div class="f-info-div">
                             <div>
@@ -100,7 +113,12 @@
                           </div>
                         </div>
                       </router-link>
-                      <div class="follow-btn-div" v-if="f.id !== myUser.id">
+                      <div class="follow-btn-div" v-if="myUser.id === 920437694">
+                        <el-button type="primary" size="small" @click="loginDialog">
+                          <i class="el-icon-user"></i>フォロー
+                        </el-button>
+                      </div>
+                      <div class="follow-btn-div" v-else-if="f.id !== myUser.id">
                         <el-button size="small" v-if="f.isfollowing" @click="followConfirmationOpen(f,index,'followers','unfo')">
                           <i class="el-icon-user"></i>フォロー中
                         </el-button>
@@ -115,7 +133,7 @@
             </el-dialog>
 
             <el-dialog title="フォロー" :visible.sync="followdialog" width="400px" :center="true">
-              <div class="dialog-all">
+              <div class="dialog-all" v-loading="followingloading">
                 <ul class="dialog-ul">
                   <li class="dialog-li" v-for="(f,index) in this.follows" :key="f.id">
                     <div class="dialog-main">
@@ -123,7 +141,7 @@
                         <div class="dialog-main">
                           <div>
                             <!-- アイコン -->
-                            <div class="f-user-icon"></div>
+                            <img class="f-user-icon" :src="image_path2(f)" alt="">
                           </div>
                           <div class="f-info-div">
                             <div>
@@ -135,7 +153,13 @@
                           </div>
                         </div>
                       </router-link>
-                      <div class="follow-btn-div" v-if="f.id !== myUser.id">
+                      <div class="follow-btn-div" v-if="myUser.id === 920437694">
+                        <!-- フォローボタン -->
+                        <el-button type="primary" size="small" @click="loginDialog">
+                          <i class="el-icon-user"></i>フォロー
+                        </el-button>
+                      </div>
+                      <div class="follow-btn-div" v-else-if="f.id !== myUser.id">
                         <!-- フォローボタン -->
                         <el-button size="small" v-if="f.isfollowing" @click="followConfirmationOpen(f,index,'follows','unfo')">
                           <i class="el-icon-user"></i>フォロー中
@@ -159,18 +183,18 @@
               <p class="edit-margin-p">{{user.postCount}}</p>
               <p class="edit-margin-p">投稿<i class="el-icon-document"></i></p>
             </div>
-            <div class="user-show-follower-count-div" @click="followerdialog = true">
+            <div class="user-show-follower-count-div" @click="GetFollowers()">
               <!-- Count -->
               <p class="edit-margin-p">{{follow.followedCount}}</p>
               <p class="edit-margin-p">フォロワー</p>
             </div>
-            <div class="user-show-follow-count-div" @click="followdialog = true">
+            <div class="user-show-follow-count-div" @click="GetFollowing()">
               <!-- Count -->
               <p class="edit-margin-p">{{follow.followerCount}}</p>
               <p class="edit-margin-p">フォロー</p>
             </div>
           </div>
-          <div class="user-show-info-footer">
+          <div class="user-show-info-footer" v-if="user.comment.Valid === true">
             <p class="user-show-comment-p">{{user.comment.String}}</p>
           </div>
         </div>
@@ -341,6 +365,7 @@ export default {
       tagArray: [],
       parcentArray: [],
       dialogVisible: false,
+      uploadFile:null,
       user: {
         KBCmail: "",
         id : 0,
@@ -362,19 +387,20 @@ export default {
           String: "",
           Valid: Boolean
         },
-        imgpath:{
+        imgdata64:{
           String: "",
           Valid: Boolean
         },
       },
       errors: {},
-      url :"https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
-      srcList :["https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"],
       tabPosition: 'left',
       click_tab: 0,
       followerdialog: false,
       followdialog: false,
       notificationCount: localStorage.notificationCount,
+      loading: null,
+      followersloading: false,
+      followingloading:false,
     }
   },
   components: {
@@ -383,6 +409,57 @@ export default {
   },
   // createdの中でaxiosを使います。get()の中のURLは、nginx.confで設定してるので、 /api/ になっています。
   created () {
+    this.openFullScreen()
+    // this.id = this.$route.params.id
+    this.$axios.get(`http://localhost/api/restricted/Users/${this.$route.params.id}`,{
+      headers: {
+        Authorization: `Bearer ${this.$cookies.get("JWT")}`
+      },})
+      .then(response => {
+        this.articles = response.data.Articles
+        this.questions = response.data.Questions
+        this.answerQuestions = response.data.AnswerQuestions
+        this.user = response.data.User
+        if(this.user.id === 920437694){
+          this.$router.push("/");
+        }
+        this.myUser = response.data.MyUser
+        this.follow = response.data.Follow
+        this.notificationCount = response.data.NotificationCount
+        if(this.followers === null){
+          this.followers = [];
+        }
+        // 文字列のlangsを配列に変換
+        this.langarray = this.user.languages.String.split(',');
+        this.tagArray = response.data.Tags
+        if(this.tagArray !== null){
+          this.tagCountPercent();
+        }
+        this.closeFullScreen()
+        //タイトル変更
+        document.title = `${this.user.name} 詳細ページ - KBC Blog`;
+      })
+      .catch(error => {
+        if(error.response.status == 401){
+          this.$router.push({ path: "/login" });
+          this.errorNotify();
+        }
+        this.closeFullScreen()
+      })
+  },
+
+  filters: {
+    moment: function (date) {
+      // locale関数を使って言語を設定すると、日本語で出力される
+      moment.locale( 'ja' );
+      return moment(date).format('YYYY/MM/DD HH:mm');
+    }
+  },
+  computed: {
+  },
+  methods: {
+
+    userUpdate: function(){
     this.$axios.get(`http://localhost/api/restricted/Users/${this.$route.params.id}`,{
       headers: {
         Authorization: `Bearer ${this.$cookies.get("JWT")}`
@@ -394,16 +471,19 @@ export default {
         this.user = response.data.User
         this.myUser = response.data.MyUser
         this.follow = response.data.Follow
-        this.follows = response.data.Follows
-        this.followers = response.data.Followers
         this.notificationCount = response.data.NotificationCount
         if(this.followers === null){
           this.followers = [];
         }
+        this.followerdialog = false
+        this.followdialog = false
         // 文字列のlangsを配列に変換
         this.langarray = this.user.languages.String.split(',');
         this.tagArray = response.data.Tags
-        this.tagCountPercent()
+        this.parcentArray = []
+        if(this.tagArray !== null){
+          this.tagCountPercent();
+        }
       })
       .catch(error => {
         if(error.response.status == 401){
@@ -412,16 +492,6 @@ export default {
         }
       })
   },
-  filters: {
-    moment: function (date) {
-      // locale関数を使って言語を設定すると、日本語で出力される
-      moment.locale( 'ja' );
-      return moment(date).format('YYYY/MM/DD HH:mm');
-    }
-  },
-  computed: {
-  },
-  methods: {
 
     tagCountPercent: function() {
       let x = [];
@@ -448,6 +518,52 @@ export default {
           this.parcentArray.push(w[i])
         }
       }
+    },
+
+    //フォローリスト取得
+
+    GetFollowing() {
+      this.followdialog = true
+      this.followingloading = true
+      this.$axios.get(`http://localhost/api/restricted/Users/${this.$route.params.id}/Following`, {
+        headers: {
+          Authorization: `Bearer ${this.$cookies.get("JWT")}`
+        },
+      })
+      .then(response => {
+        this.follows = response.data.Following
+        this.followingloading = false
+      })
+      .catch(error => {
+        if(error.response.status == 401){
+          this.$router.push({ path: "/login" });
+          this.errorNotify();
+        }
+        this.followingloading = false
+      })
+    },
+
+    //フォロワーリスト取得
+
+    GetFollowers() {
+      this.followerdialog = true
+      this.followersloading = true
+      this.$axios.get(`http://localhost/api/restricted/Users/${this.$route.params.id}/Followers`, {
+        headers: {
+          Authorization: `Bearer ${this.$cookies.get("JWT")}`
+        },
+      })
+      .then(response => {
+        this.followers = response.data.Followers
+        this.followersloading = false
+      })
+      .catch(error => {
+        if(error.response.status == 401){
+          this.$router.push({ path: "/login" });
+          this.errorNotify();
+        }
+        this.followersloading = false
+      })
     },
 
     // 大きいフォローボタンを押した時
@@ -538,10 +654,11 @@ export default {
 
     // ChangeFollow(f,index,'follows','unfo')
     ChangeFollow(f,index,c,c2){
+      console.log
       this.$axios
         .post(`http://localhost/api/restricted/Users/${f.id}/Follow`,{
             visiterid: this.myUser.id,
-            visitedid: this.f.id,
+            visitedid: f.id,
             action: "follow"
           },{
           headers: {
@@ -615,19 +732,30 @@ export default {
     },
 
     userImgUpdate(){
+      this.openFullScreen()
+      const data = new FormData();    // multipart/form-data形式のため、new
+      data.append('file', this.uploadFile);
       this.$axios
-        .patch(`http://localhost/api/restricted/Users/${this.myUser.id}/img`,this.user,{
+        .post(`http://localhost/api/restricted/Users/${this.myUser.id}/img`,data,{
           headers: {
-            Authorization: `Bearer ${this.$cookies.get("JWT")}`
+            'content-type': 'multipart/form-data',
+            Authorization: `Bearer ${this.$cookies.get("JWT")}`,
           },
         })
-        .then(() => {
-          // this.$router.push({ name: 'UserShow' , params : { id: this.user.id }});
-          // this.editUserAlert();
+        .then((response) => {
+          this.myUser.imgdata64 = response.data.ImgData64
+          this.closeFullScreen()
         })
         .catch(error => {
           this.errors = error.response.data.ValidationErrors;
+          this.closeFullScreen()
         });
+    },
+
+    onFileChange(e) {
+      e.preventDefault();
+      this.uploadFile = e.target.files[0]
+      this.userImgUpdate()
     },
 
     userImgDelete(){
@@ -637,9 +765,8 @@ export default {
             Authorization: `Bearer ${this.$cookies.get("JWT")}`
           },
         })
-        .then(() => {
-          // this.$router.push({ name: 'UserShow' , params : { id: this.user.id }});
-          // this.editUserAlert();
+        .then((response) => {
+          this.myUser.imgdata64 = response.data.ImgData64
         })
         .catch(error => {
           this.errors = error.response.data.ValidationErrors;
@@ -647,8 +774,8 @@ export default {
     },
 
     image_path(){
-      if(this.user.imgpath.Valid === true){
-        return require("@/assets/userIcon/" + this.user.imgpath.String);
+      if(this.user.imgdata64.Valid === true){
+        return 'data:image/jpeg;base64,' + this.user.imgdata64.String
       }else{
         if(this.user.sex === 1){
           return require("@/assets/userIcon/man.png");
@@ -658,25 +785,64 @@ export default {
       }
     },
 
-    // selectfileボタン押下時
-//     btnclick() {
-//       this.$refs.input.click();
-//     },
-    selectedFile() {
-      // this.isUploading = true;
-      // const file = this.$refs.input.files[0]
-      // if (!file) {
-      //   return;
-      // }
-      // 以下ファイルの操作
+    image_path1(){
+      if(this.myUser.imgdata64.Valid === true){
+        return 'data:image/jpeg;base64,' + this.myUser.imgdata64.String
+      }else{
+        if(this.myUser.sex === 1){
+          return require("@/assets/userIcon/man.png");
+        }else if(this.myUser.sex === 2){
+          return require("@/assets/userIcon/woman.png");
+        }
+      }
     },
+
+    image_path2(u){
+      if(u.imgdata64.Valid === true){
+        return 'data:image/jpeg;base64,' + u.imgdata64.String
+      }else{
+        if(u.sex === 1){
+          return require("@/assets/userIcon/man.png");
+        }else if(u.sex === 2){
+          return require("@/assets/userIcon/woman.png");
+        }
+      }
+    },
+
+    openFullScreen() {
+      this.loading = this.$loading({
+          lock: true,
+          text: 'Loading',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.98)'
+        });
+    },
+    closeFullScreen() {
+      this.loading.close();
+    },
+
+    loginDialog() {
+        this.$confirm('この機能を利用するにはログインする必要があります', 'ユーザー登録してみませんか？', {
+          confirmButtonText: 'ログイン',
+          cancelButtonText: 'キャンセル',
+          type: 'success',
+          center: true
+        }).then(() => {
+          this.$router.push("/Login");
+        }).catch(() => {
+        });
+      },
 
   },
   watch: {
     notificationCount(newNotificationCount) {
       localStorage.notificationCount = newNotificationCount;
     },
+    $route (){
+      this.userUpdate()
+    }
   },
+
 }
 </script>
 
@@ -762,15 +928,15 @@ export default {
 }
 
 /* ダイアログ */
-.el-dialog--center{
+/* .el-dialog--center{
   padding: 0px;
 }
 .el-dialog__body{
   padding: 0px;
   height: 320px;
-}
+} */
 .dialog-all{
-  height: 100%;
+  height: 320px;
   overflow-y: scroll;
 }
 .dialog-main{

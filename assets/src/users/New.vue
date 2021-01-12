@@ -27,7 +27,7 @@ export default {
         KBC_mail: '',
         password: '',
         password_confirmation: '',
-        sex: 0,
+        sex: '',
       },
       errors: []
     };

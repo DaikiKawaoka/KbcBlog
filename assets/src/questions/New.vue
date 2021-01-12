@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" v-if="user.id !== 920437694 && user.id !== 0 ">
     <Header :isArticle="false" :isQuestion="true" :user="user"></Header>
     <Question-form :question="question" :errors="errors" :create="create" @submit="createQuestion" @cancell="goHome"></Question-form>
     <Footer></Footer>
@@ -42,6 +42,9 @@ export default {
         this.user.id = response.data.user.id
         this.user.KBC_mail = response.data.user.KBC_mail
         this.user.name = response.data.user.name
+        if(this.user.id === 920437694){
+          this.$router.push("/");
+        }
         this.notificationCount = response.data.NotificationCount
       })
       .catch(error => {
@@ -58,6 +61,7 @@ export default {
   },
   methods: {
     createQuestion: function() {
+      document.title = `KBC Blog`;
       this.question.userid = this.user.id
       this.$axios
         .post('http://localhost/api/restricted/Questions', this.question,{

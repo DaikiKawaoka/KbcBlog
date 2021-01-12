@@ -15,11 +15,12 @@
 
         <div v-if="articles.length !== 0">
           <div v-for="article in articles" :key="article.id" class="article-show-div">
-            <div class="article-user-icon">
-              <router-link v-bind:to="{ name : 'UserShow', params : { id: article.userid }}" class="a-tag">
+            <!-- <div class="article-user-icon-div">
+              <router-link v-bind:to="{ name : 'UserShow', params : { id: article.userid }}" class="a-tag"> -->
                 <!-- image -->
-              </router-link>
-            </div>
+                <!-- <img class="article-user-icon" :src="image_path(article)"> -->
+              <!-- </router-link> -->
+            <!-- </div> -->
             <div class="article-index-body">
               <div class="article-index-tag-div">
                 <i class="el-icon-collection-tag tag-icon"></i>
@@ -64,7 +65,7 @@
 
       </div>
       <div>
-        <Ranking :likeRanking="likeRanking" :postRanking="postRanking" :isArticle="true"></Ranking>
+        <Ranking :Ranking="Ranking" :random="random" :isArticle="true" :user="user"></Ranking>
       </div>
     </div>
     <Footer></Footer>
@@ -86,8 +87,7 @@ export default {
     return {
       user: {},
       articles: [],
-      likeRanking: [],
-      postRanking: [],
+      Ranking: [],
       searchText:"",
       tag: String,
       order: String,
@@ -96,6 +96,8 @@ export default {
       page: 1,
       infiniteId: +new Date(),
       notificationCount: localStorage.notificationCount,
+      random: null,
+      loading: null,
     }
   },
   components: {
@@ -133,6 +135,9 @@ export default {
   },
 
   created () {
+    document.title = `KBC Blog`;
+    this.openFullScreen()
+    this.random = Math.floor(Math.random() * Math.floor(2));
     const jst = this.$cookies.get("JWT");
     this.setUp()
     this.$axios.get('http://localhost/api/restricted/Articles',{
@@ -143,6 +148,7 @@ export default {
         order: this.order,
         tag: this.tag,
         cursor: this.cursor,
+        random: this.random,
       },
       headers: {
         Authorization: `Bearer ${jst}`
@@ -150,11 +156,11 @@ export default {
     })
       .then(response => {
         this.articles = response.data.Articles
-        this.likeRanking = response.data.LikeRanking
-        this.postRanking = response.data.PostRanking
+        this.Ranking = response.data.Ranking
         this.user = response.data.user
         this.cursor = response.data.Cursor
         this.notificationCount = response.data.NotificationCount
+        this.closeFullScreen()
       })
       .catch(error => {
         if(error.response.status == 401){
@@ -163,15 +169,27 @@ export default {
           }
           this.$router.push({ path: "/login" });
         }
+        this.closeFullScreen()
       })
   },
   methods:{
-
     errorNotify() {
       this.$notify.error({
         title: 'Error',
         message: 'あなたのセッションはタイムアウトしました。再度ログインしてください。'
       });
+    },
+
+    openFullScreen() {
+      this.loading = this.$loading({
+          lock: true,
+          text: 'Loading',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.98)'
+        });
+    },
+    closeFullScreen() {
+      this.loading.close();
     },
 
     articleOrder(c) {
@@ -331,7 +349,7 @@ body {
   margin-top: 30px;
 }
 .article-all-div{
-  width: 500px;
+  width: 480px;
   background-color: #F6F6F4;
   /* background-color: #15202b; */
 }
@@ -349,9 +367,10 @@ body {
   box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
   transform: translateY(-0.1875em);
 }
-.article-user-icon{
+.article-user-icon-div{
   margin-top: 25px;
-  background-color: #ccc;
+}
+.article-user-icon{
   width: 30px;
   height: 30px;
   border-radius: 50%;

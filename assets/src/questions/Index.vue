@@ -13,13 +13,14 @@
           </div>
         </div>
 
-        <div v-if="questions.length !== 0">
+        <div v-if="questions.length !== 0" v-loading="questionloading"
+        element-loading-text="Loading..." element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 1)">
           <div v-for="question in questions" :key="question.id" class="question-show-div">
-            <div class="question-user-icon">
-              <router-link v-bind:to="{ name : 'UserShow', params : { id: question.userid }}" class="a-tag">
+            <!-- <div class="question-user-icon">
+              <router-link v-bind:to="{ name : 'UserShow', params : { id: question.userid }}" class="a-tag"> -->
                 <!-- image -->
-              </router-link>
-            </div>
+              <!-- </router-link>
+            </div> -->
             <div class="question-index-body">
               <div class="question-tag-div">
                 <i class="el-icon-collection-tag tag-icon"></i>
@@ -51,7 +52,8 @@
           </infinite-loading>
         </div>
 
-        <div v-else>
+        <div v-else v-loading="questionloading"
+        element-loading-text="Loading..." element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 1)">
           <div class="question-show-div not-tag-div" v-if="friendsOnly === false ">
             <p class="not-tag" v-if="searchText === '' && tag !== '全て' ">タグ『{{ tag }}』の質問はまだありません。</p>
             <p class="not-tag" v-else-if="tag === '全て' && searchText !== '' ">キーワード『{{ searchText }}』の質問はありません。</p>
@@ -68,7 +70,7 @@
 
       </div>
       <div>
-        <Ranking :likeRanking="likeRanking" :postRanking="postRanking"></Ranking>
+        <Ranking :Ranking="Ranking" :random="random"></Ranking>
       </div>
     </div>
     <Footer></Footer>
@@ -91,8 +93,7 @@ export default {
     return {
       questions: [],
       user: {},
-      likeRanking: [],
-      postRanking: [],
+      Ranking: [],
       searchText:"",
       tag: String,
       order: String,
@@ -101,6 +102,8 @@ export default {
       page: 1,
       infiniteId: +new Date(),
       notificationCount: localStorage.notificationCount,
+      random: null,
+      questionloading: false,
     }
   },
   components: {
@@ -137,6 +140,9 @@ export default {
     },
   },
   created () {
+    document.title = `KBC Blog`;
+    this.openFullScreen()
+    this.random = Math.floor(Math.random() * Math.floor(2));
     const jst = this.$cookies.get("JWT");
     if(jst === null){
       this.$router.push({ path: "/login" });
@@ -150,6 +156,7 @@ export default {
         order: this.order,
         tag: this.tag,
         cursor: this.cursor,
+        random: this.random,
       },
       headers: {
         Authorization: `Bearer ${jst}`
@@ -157,21 +164,35 @@ export default {
     })
       .then(response => {
         this.questions = response.data.Questions
-        this.likeRanking = response.data.LikeRanking
-        this.postRanking = response.data.PostRanking
+        this.Ranking = response.data.Ranking
         this.user = response.data.user
         this.cursor = response.data.Cursor
         this.notificationCount = response.data.NotificationCount
+        this.closeFullScreen()
       })
       .catch(error => {
         if(error.response.status == 401){
           this.$router.push({ path: "/login" });
           this.errorNotify();
         }
+        this.closeFullScreen()
       })
   },
 
   methods:{
+
+    openFullScreen() {
+      this.loading = this.$loading({
+          lock: true,
+          text: 'Loading',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.98)'
+        });
+    },
+    closeFullScreen() {
+      this.loading.close();
+    },
+
     errorNotify() {
       this.$notify.error({
         title: 'Error',
@@ -180,6 +201,7 @@ export default {
     },
 
     questionOrder(c) {
+      this.questionloading = true
       this.changeType()
       this.$axios.get('http://localhost/api/restricted/Questions/scope', {
       params: {
@@ -201,14 +223,14 @@ export default {
         }
         this.questions = response.data.Questions
         this.cursor = response.data.Cursor
-        console.log("並べ替え")
-        console.log(this.cursor)
+        this.questionloading = false
       })
       .catch(error => {
         if(error.response.status == 401){
           this.$router.push({ path: "/login" });
           this.errorNotify();
         }
+        this.questionloading = false
       })
     },
 
@@ -317,7 +339,7 @@ export default {
 <style>
 
 .question-all-div{
-  width: 500px;
+  width: 480px;
   background-color: #F6F6F4;
   /* background-color: #15202b; */
 }

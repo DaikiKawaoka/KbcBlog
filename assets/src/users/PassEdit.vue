@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" v-if="user.id !== 920437694 && user.id !== undefined ">
     <Header :user="myUser"></Header>
     <div class="passedit-all-div">
       <h1>パスワード変更</h1>
@@ -75,6 +75,9 @@ export default {
       .then(response => {
         this.myUser = response.data.MyUser
         this.user = response.data.User
+        if(this.user.id === 920437694){
+          this.$router.push("/");
+        }
         if(this.myUser.id !== this.user.id){
           this.$router.push({ path: "/" });
         }

@@ -15,10 +15,12 @@ func KBCArticleRankingTop10(c string) ([]*model.RankingUser, error) {
 		query = `SELECT u.id id, u.name name , u.comment comment, u.imgdata64 imgdata64, u.sex sex, COUNT(al.id) count
 		FROM users u LEFT JOIN articles a on a.userid = u.id
 		LEFT join article_likes al on al.articleid = a.id
+		WHERE u.id <> 920437694
 		GROUP BY u.id,u.name,u.comment ORDER BY count desc LIMIT 10;`
 	}else{
 		query = `SELECT u.id id, u.name name, u.comment comment, u.imgdata64 imgdata64, u.sex sex, COUNT(a.id) count
 		FROM users u LEFT JOIN articles a on a.userid = u.id
+		WHERE u.id <> 920437694
 		GROUP BY u.id,u.name,u.comment ORDER BY count desc LIMIT 10;`
 	}
 
@@ -39,6 +41,7 @@ func KBCQuestionRankingTop10(c string) ([]*model.RankingUser, error) {
 		// 質問数
 		query = `SELECT u.id id, u.name name,u.comment comment, u.imgdata64 imgdata64, u.sex sex, COUNT(q.id) count
 		FROM users u LEFT JOIN questions q on q.userid = u.id
+		WHERE u.id <> 920437694
 		GROUP BY u.id,u.name,u.comment
 		ORDER BY count desc
 		LIMIT 10;`
@@ -46,6 +49,7 @@ func KBCQuestionRankingTop10(c string) ([]*model.RankingUser, error) {
 		// 回答数
 		query = `SELECT u.id id, u.name name, u.comment comment, u.imgdata64 imgdata64, u.sex sex, COUNT(qc.id) count
 		FROM users u LEFT join question_comments qc on u.id = qc.userid
+		WHERE u.id <> 920437694
 		GROUP BY u.id,u.name,u.comment ORDER BY count desc LIMIT 10;`
 	}
 

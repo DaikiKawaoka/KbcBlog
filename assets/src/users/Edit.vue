@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" v-if="user.id !== 920437694 && user.id !== 0 ">
     <Header :user="myUser"></Header>
     <user-form :errors="errors" :user="user" :edit="true" @submit="updateUser"></user-form>
     <Footer></Footer>
@@ -62,6 +62,9 @@ export default {
       .then(response => {
         this.myUser = response.data.MyUser
         this.user = response.data.User
+        if(this.user.id === 920437694){
+          this.$router.push("/");
+        }
         this.notificationCount = response.data.NotificationCount
         if(this.myUser.id !== this.user.id){
           this.$router.push({ path: "/" });

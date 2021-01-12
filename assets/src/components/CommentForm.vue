@@ -1,5 +1,5 @@
 <template>
-  <div class="comment-form-all">
+  <div class="comment-form-all" v-if=" user.id !== 920437694 ">
 
     <div v-if="errors.length != 0">
       <ul class="error-ul" v-for="e in errors" :key="e">
@@ -45,6 +45,11 @@
         <el-button type="success" @click="$emit('submit')" class="submit-btn">投稿</el-button>
       </el-form>
     </div>
+  </div>
+  <div v-else>
+    <p class="guestUser-comment-p">コメントをするためにはログインが必要です。</p>
+    <div class="guestUser-signin-div"><el-button type="primary" @click="signup" class="guestUser-signin-btn">ユーザー登録</el-button></div>
+    <div class="guestUser-login-div">既にアカウントを持っている方は<el-button type="text" @click="login">こちら</el-button></div>
   </div>
 </template>
 
@@ -95,6 +100,12 @@ export default {
           return require("@/assets/userIcon/woman.png");
         }
       }
+    },
+    signup: function(){
+      this.$router.push("/Users/new");
+    },
+    login: function(){
+      this.$router.push("/Login");
     },
   }
 }
@@ -157,4 +168,19 @@ li{
 .error-ul{
   display: flex;
 }
+.guestUser-comment-p{
+  text-align: center;
+  font-size: 1.5em;
+}
+.guestUser-signin-div{
+  width: 125px;
+  margin-right: auto;
+  margin-left: auto;
+}
+.guestUser-login-div{
+  width: 300px;
+  margin: 15px auto 0 auto;
+}
+
+
 </style>

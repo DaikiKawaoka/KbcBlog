@@ -101,3 +101,27 @@ func userIDFromToken(c echo.Context) int {
 	uid := claims.UserID
 	return uid
 }
+
+
+// GuestLogin ...
+func GuestLogin(c echo.Context) error {
+
+	guestUser, err := repository.GetGuestUser()
+	var errmessages[1] string;
+	if  err != nil{
+    c.Logger().Error(err.Error())
+		message := "ユーザが存在しません。"
+		errmessages[0] = message;
+    return c.JSON(http.StatusInternalServerError, errmessages) //500
+	}
+
+	// Generate encoded token and send it as response.
+	var loginRes LoginResponse
+	t, err := CreateToken(guestUser.ID)
+	if err != nil {
+		print("aaaaaaa")
+		return err
+	}
+	loginRes.Token = t
+	return c.JSON(http.StatusOK,loginRes)
+}

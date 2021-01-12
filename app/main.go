@@ -23,6 +23,7 @@ func main() {
 
 	e.POST("/Users",handler.UserCreate)
 	e.POST("/Login",handler.Login)
+	e.GET("/guestLogin",handler.GuestLogin)
 
 	// Restricted group
 	r := e.Group("/restricted")

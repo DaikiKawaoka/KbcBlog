@@ -5,7 +5,7 @@
       <div v-if="this.question != null">
         <div class="comment-header">
           <div class="comment-header-div">
-            <div class="comment-user-icon"></div>
+            <img class="comment-user-icon" :src="image_path(question)">
             <p class="comment-user-name">{{ question.name }}</p>
           </div>
           <div class="comment-header-div">
@@ -49,7 +49,11 @@
           <div class="article-form__preview-body-contents" id="article-body" v-html="compiledMarkdown"></div>
         </div>
 
-        <el-row>
+        <el-row v-if="user.id === 920437694">
+          <button @click="loginDialog" class="like-btn">いいね <i class="el-icon-star-off"></i></button>
+          <span class="like-count-span">{{like.likeCount}}</span>
+        </el-row>
+        <el-row v-else>
           <el-button v-if="like.isLike" type="warning" @click="click_like">解除 <i class="el-icon-star-on"></i></el-button>
           <button v-else @click="click_like" class="like-btn">いいね <i class="el-icon-star-off"></i></button>
           <span class="like-count-span">{{like.likeCount}}</span>
@@ -66,7 +70,7 @@
         <div class="comment-div">
           <div class="comment-header">
             <div class="comment-header-div">
-              <div class="comment-user-icon"></div>
+              <img class="comment-user-icon" :src="image_path(c)">
               <p class="comment-user-name">{{c.name}}</p>
             </div>
             <div class="comment-header-div">
@@ -96,7 +100,13 @@
             <div class="article-body comment-text" v-html="compiledMarkdownComment(c.text)"></div>
           </div>
 
-          <el-row>
+          <el-row v-if="user.id === 920437694">
+            <!-- <i class="el-icon-star-on"></i> -->
+            <i class="el-icon-star-off not-comment-ster-i" @click="loginDialog"></i>
+            <span class="comment-like-count-span">{{c.Like.likeCount}}</span>
+          </el-row>
+
+          <el-row v-else>
             <!-- <i class="el-icon-star-on"></i> -->
             <i v-if="c.Like.isLike" class="el-icon-star-on comment-ster-i" @click="ChangeQuestionCommentLike(index)"></i>
             <i v-else class="el-icon-star-off not-comment-ster-i" @click="ChangeQuestionCommentLike(index)"></i>
@@ -150,6 +160,7 @@ export default {
   },
   // createdの中でaxiosを使います。get()の中のURLは、nginx.confで設定してるので、 /api/ になっています。
   created () {
+    this.openFullScreen()
     this.$axios.get(`http://localhost/api/restricted/Questions/${this.$route.params.id}`,{
       headers: {
         Authorization: `Bearer ${this.$cookies.get("JWT")}`
@@ -165,12 +176,14 @@ export default {
         //commentに各idを代入
         this.comment.questionid = this.question.id
         this.comment.userid = this.user.id
+        this.closeFullScreen()
       })
       .catch(error => {
         if(error.response.status == 401){
           this.$router.push({ path: "/login" });
           this.errorNotify();
         }
+        this.closeFullScreen()
       }),
     function () {
       marked.setOptions({
@@ -342,12 +355,49 @@ export default {
         });
     },
 
+    image_path(u){
+      if(u.imgdata64.Valid === true){
+        return 'data:image/jpeg;base64,' + u.imgdata64.String
+      }else{
+        if(u.sex === 1){
+          return require("@/assets/userIcon/man.png");
+        }else if(u.sex === 2){
+          return require("@/assets/userIcon/woman.png");
+        }
+      }
+    },
+
+    openFullScreen() {
+      this.loading = this.$loading({
+          lock: true,
+          text: 'Loading',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.95)'
+        });
+    },
+    closeFullScreen() {
+      this.loading.close();
+    },
+
     errorNotify() {
       this.$notify.error({
         title: 'Error',
         message: 'あなたのセッションはタイムアウトしました。再度ログインしてください。'
       });
     },
+
+    loginDialog() {
+        this.$confirm('この機能を利用するにはログインする必要があります', 'ユーザー登録してみませんか？', {
+          confirmButtonText: 'ログイン',
+          cancelButtonText: 'キャンセル',
+          type: 'success',
+          center: true
+        }).then(() => {
+          this.$router.push("/Login");
+        }).catch(() => {
+        });
+      },
+
   },
   watch: {
     notificationCount(newNotificationCount) {
@@ -397,7 +447,6 @@ export default {
   display: flex;
 }
 .comment-user-icon{
-  background-color: #ccc;
   width: 40px;
   height: 40px;
   border-radius: 50%;

@@ -1,12 +1,42 @@
 <template>
   <header id="header">
-    <div class="body-main header-body-main-div">
+
+    <!-- ログインしていない -->
+
+    <div class="body-main header-body-main-div" v-if="loginpage">
+      <div class="header-left">
+        <router-link to="/login" class="a-tag"><h1 class="title">KBC Blog</h1></router-link>
+      </div>
+      <div class="header-right">
+        <router-link to="/login" class="a-tag2"><span class="header-login-span">ログイン</span></router-link>
+      </div>
+    </div>
+
+    <!-- ゲストユーザー -->
+
+    <div class="body-main header-body-main-div" v-else-if="user.id === 920437694">
       <div class="header-left">
         <router-link to="/" class="a-tag"><h1 class="title" @click="$emit('reset')">KBC Blog</h1></router-link>
-        <router-link to="/" class="a-tag2"><h3 v-if="!loginpage" class="header-article" v-bind:class="{ active: isArticle }">記事</h3></router-link>
-        <router-link to="/Questions" class="a-tag2"><h3 v-if="!loginpage" class="header-question" v-bind:class="{ active: isQuestion }">質問</h3></router-link>
+        <router-link to="/" class="a-tag2"><h3 class="header-article" v-bind:class="{ active: isArticle }">記事</h3></router-link>
+        <router-link to="/Questions" class="a-tag2"><h3 class="header-question" v-bind:class="{ active: isQuestion }">質問</h3></router-link>
       </div>
-      <nav v-if="!loginpage" id="header-nav">
+      <div class="header-right">
+        <div class="header-login-btn-div">
+          <router-link to="/login" class="a-tag2"><span class="header-login-span">ログイン</span></router-link>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ログイン済み -->
+
+    <div class="body-main header-body-main-div" v-else-if="!loginpage && user.id !== undefined ">
+      <div class="header-left">
+        <router-link to="/" class="a-tag"><h1 class="title" @click="$emit('reset')">KBC Blog</h1></router-link>
+        <router-link to="/" class="a-tag2"><h3 class="header-article" v-bind:class="{ active: isArticle }">記事</h3></router-link>
+        <router-link to="/Questions" class="a-tag2"><h3 class="header-question" v-bind:class="{ active: isQuestion }">質問</h3></router-link>
+      </div>
+      <nav id="header-nav">
         <ul class="header-right-ul">
           <!-- <li><router-link tag="li" id="gift-nav" to="/Articles/new" class="a-tag">作成</router-link></li> -->
           <li>
@@ -125,7 +155,7 @@
 
           </li>
           <li v-if="user.imgdata64">
-            <img class="header-user-icon" :src="image_path()" @click="myUserPage">
+            <img v-if="user.sex !== 3" class="header-user-icon" :src="image_path()" @click="myUserPage">
           </li>
         </ul>
       </nav>
@@ -308,6 +338,9 @@ export default {
   width: 50%;
   display: flex;
 }
+.header-right{
+  width: 50%;
+}
 .title{
   line-height: 60px;
   margin: 0;
@@ -322,6 +355,18 @@ export default {
   color: #fff;
   cursor: pointer;
 }
+.header-login-span{
+  float: right;
+  margin-right: 30px;
+  margin-top: 15px;
+  padding: 7px 12px 7px 12px;
+  background: #1e90ff;
+  border-radius: 8%;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+}
+
 .active{
   border-bottom: 2px solid #2ee002;
   border-radius: 2px;
