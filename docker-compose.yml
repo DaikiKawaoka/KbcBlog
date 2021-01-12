@@ -46,6 +46,8 @@ services:
       MYSQL_ROOT_PASSWORD: "kbc_password"
       MYSQL_DATABASE: kbcblog-mysql
       TZ: 'Asia/Tokyo'
+    cap_add:
+      - SYS_NICE
     volumes:
       - ./docker/mysql:/docker-entrypoint-initdb.d
       - mysql_data:/var/lib/mysql
