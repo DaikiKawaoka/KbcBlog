@@ -242,8 +242,6 @@ export default {
       .then(response => {
         this.articles = response.data.Articles
         this.cursor = response.data.Cursor
-        console.log("フレンドのみ")
-        console.log(this.cursor)
       })
       .catch(error => {
         if(error.response.status == 401){
@@ -271,8 +269,6 @@ export default {
           this.articles = this.articles.concat(response.data.Articles);
           this.cursor = response.data.Cursor
           this.page += 1;
-          console.log("スクロールしました")
-          console.log(this.cursor)
           $state.loaded();
         } else {
           $state.complete();
