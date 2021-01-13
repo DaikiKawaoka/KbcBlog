@@ -288,7 +288,7 @@ func ArticleUpdate(c echo.Context) error {
 	return c.JSON(http.StatusOK, out)
 }
 
-// ArticleDelete 記事作成処理
+// ArticleDelete ...
 func ArticleDelete(c echo.Context) error {
 	id, _ := strconv.Atoi(c.Param("id"))
 	if err := repository.ArticleDelete(id); err != nil {
