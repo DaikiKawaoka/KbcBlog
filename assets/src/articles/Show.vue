@@ -53,8 +53,8 @@
           </el-row>
 
           <el-row v-else>
-            <el-button v-if="like.isLike" type="warning" @click="click_like">解除 <i class="el-icon-star-on"></i></el-button>
-            <button v-else @click="click_like" class="like-btn">いいね <i class="el-icon-star-off"></i></button>
+            <el-button v-if="like.isLike" @click="DeleteArticleLike" type="warning">解除 <i class="el-icon-star-on"></i></el-button>
+            <button v-else @click="CreateArticleLike" class="like-btn">いいね <i class="el-icon-star-off"></i></button>
             <span class="like-count-span">{{like.likeCount}}</span>
           </el-row>
         </div>
@@ -109,8 +109,8 @@
 
           <el-row v-else>
             <!-- <i class="el-icon-star-on"></i> -->
-            <i v-if="c.Like.isLike" class="el-icon-star-on comment-ster-i" @click="ChangeArticleCommentLike(index)"></i>
-            <i v-else class="el-icon-star-off not-comment-ster-i" @click="ChangeArticleCommentLike(index)"></i>
+            <i v-if="c.Like.isLike" class="el-icon-star-on comment-ster-i" @click="DeleteArticleCommentLike(index)"></i>
+            <i v-else class="el-icon-star-off not-comment-ster-i" @click="CreateArticleCommentLike(index)"></i>
             <span class="comment-like-count-span">{{c.Like.likeCount}}</span>
           </el-row>
         </div>
@@ -305,7 +305,7 @@ export default {
       });
     },
 
-    ChangeArticleLike(){
+    CreateArticleLike(){
       this.$axios
         .post(`http://localhost/api/restricted/Articles/${this.article.id}/Likes`,this.article.userid,{
           headers: {
@@ -313,12 +313,8 @@ export default {
           },
         })
         .then(() => {
-          this.like.isLike = !this.like.isLike;
-          if(this.like.isLike === false){
-            this.like.likeCount--;
-          }else{
-            this.like.likeCount++;
-          }
+          this.like.isLike = true
+          this.like.likeCount++;
         })
         .catch(error => {
           if(error.response.status == 401){
@@ -329,12 +325,27 @@ export default {
         });
     },
 
-    click_like(){
-      this.ChangeArticleLike();
+    DeleteArticleLike(){
+      this.$axios
+        .delete(`http://localhost/api/restricted/Articles/${this.article.id}/Likes`,{
+          headers: {
+            Authorization: `Bearer ${this.$cookies.get("JWT")}`
+          },
+        })
+        .then(() => {
+          this.like.isLike = false
+          this.like.likeCount--;
+        })
+        .catch(error => {
+          if(error.response.status == 401){
+            this.$router.push({ path: "/login" });
+            this.errorNotify();
+          }
+          this.errors = error.response.data.ValidationErrors;
+        });
     },
 
-
-    ChangeArticleCommentLike(index){
+    CreateArticleCommentLike(index){
       this.$axios
         .post(`http://localhost/api/restricted/Articles/Comments/${this.comments[index].id}/Likes`,{articleid:this.article.id,visitedid:this.comments[index].userid},{
           headers: {
@@ -342,12 +353,28 @@ export default {
           },
         })
         .then(() => {
-          this.comments[index].Like.isLike = !this.comments[index].Like.isLike;
-          if(this.comments[index].Like.isLike === false){
-            this.comments[index].Like.likeCount--;
-          }else{
-            this.comments[index].Like.likeCount++;
+          this.comments[index].Like.isLike = true
+          this.comments[index].Like.likeCount++;
+        })
+        .catch(error => {
+          if(error.response.status == 401){
+            this.$router.push({ path: "/login" });
+            this.errorNotify();
           }
+          this.errors = error.response.data.ValidationErrors;
+        });
+    },
+
+    DeleteArticleCommentLike(index){
+      this.$axios
+        .delete(`http://localhost/api/restricted/Articles/Comments/${this.comments[index].id}/Likes`,{
+          headers: {
+            Authorization: `Bearer ${this.$cookies.get("JWT")}`
+          },
+        })
+        .then(() => {
+          this.comments[index].Like.isLike = false
+          this.comments[index].Like.likeCount--;
         })
         .catch(error => {
           if(error.response.status == 401){

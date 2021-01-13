@@ -73,10 +73,14 @@ func main() {
 	r.PATCH("/Users/:id/password/edit",handler.UserPasswordEdit)
 
 	// Like
-	r.POST("/Articles/:id/Likes", handler.ArticleLike)
-	r.POST("/Questions/:id/Likes", handler.QuestionLike)
-	r.POST("/Articles/Comments/:id/Likes",handler.ArticleCommentLike)
-	r.POST("/Questions/Comments/:id/Likes",handler.QuestionCommentLike)
+	r.POST("/Articles/:id/Likes", handler.CreateArticleLike)
+	r.POST("/Questions/:id/Likes", handler.CreateQuestionLike)
+	r.POST("/Articles/Comments/:id/Likes",handler.CreateArticleCommentLike)
+	r.POST("/Questions/Comments/:id/Likes",handler.CreateQuestionCommentLike)
+	r.DELETE("/Articles/:id/Likes", handler.DeleteArticleLike)
+	r.DELETE("/Questions/:id/Likes", handler.DeleteQuestionLike)
+	r.DELETE("/Articles/Comments/:id/Likes",handler.DeleteArticleCommentLike)
+	r.DELETE("/Questions/Comments/:id/Likes",handler.DeleteQuestionCommentLike)
 
 	// Follow
 	r.GET("/Users/:id/Following",handler.Following)

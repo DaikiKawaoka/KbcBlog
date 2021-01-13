@@ -54,8 +54,8 @@
           <span class="like-count-span">{{like.likeCount}}</span>
         </el-row>
         <el-row v-else>
-          <el-button v-if="like.isLike" type="warning" @click="click_like">解除 <i class="el-icon-star-on"></i></el-button>
-          <button v-else @click="click_like" class="like-btn">いいね <i class="el-icon-star-off"></i></button>
+          <el-button v-if="like.isLike" type="warning" @click="DeleteQuestionLike">解除 <i class="el-icon-star-on"></i></el-button>
+          <button v-else @click="CreateQuestionLike" class="like-btn">いいね <i class="el-icon-star-off"></i></button>
           <span class="like-count-span">{{like.likeCount}}</span>
         </el-row>
 
@@ -108,8 +108,8 @@
 
           <el-row v-else>
             <!-- <i class="el-icon-star-on"></i> -->
-            <i v-if="c.Like.isLike" class="el-icon-star-on comment-ster-i" @click="ChangeQuestionCommentLike(index)"></i>
-            <i v-else class="el-icon-star-off not-comment-ster-i" @click="ChangeQuestionCommentLike(index)"></i>
+            <i v-if="c.Like.isLike" class="el-icon-star-on comment-ster-i" @click="DeleteQuestionCommentLike(index)"></i>
+            <i v-else class="el-icon-star-off not-comment-ster-i" @click="CreateQuestionCommentLike(index)"></i>
             <span class="comment-like-count-span">{{c.Like.likeCount}}</span>
           </el-row>
 
@@ -227,6 +227,8 @@ export default {
             this.comments = [];
           }
           this.comments.unshift(response.data.Comment);
+          this.comments[0].imgdata64.Valid = this.user.imgdata64.Valid
+          this.comments[0].imgdata64.String = this.user.imgdata64.String
           this.comment.text = "";
           this.createCommentAlert();
         })
@@ -303,7 +305,7 @@ export default {
       });
     },
 
-    ChangeQuestionLike(){
+    CreateQuestionLike(){
       this.$axios
         .post(`http://localhost/api/restricted/Questions/${this.question.id}/Likes`,this.question.userid,{
           headers: {
@@ -311,12 +313,8 @@ export default {
           },
         })
         .then(() => {
-          this.like.isLike = !this.like.isLike;
-          if(this.like.isLike === false){
-            this.like.likeCount--;
-          }else{
-            this.like.likeCount++;
-          }
+          this.like.isLike = true;
+          this.like.likeCount++;
         })
         .catch(error => {
           if(error.response.status == 401){
@@ -327,24 +325,56 @@ export default {
         });
     },
 
-    click_like(){
-      this.ChangeQuestionLike();
-    },
-
-    ChangeQuestionCommentLike(index){
+    DeleteQuestionLike(){
       this.$axios
-        .post(`http://localhost/api/restricted/Questions/Comments/${this.comments[index].id}/Likes`,{questionid:this.question.id,visiterid:this.comments[index].userid},{
+        .delete(`http://localhost/api/restricted/Questions/${this.question.id}/Likes`,{
           headers: {
             Authorization: `Bearer ${this.$cookies.get("JWT")}`
           },
         })
         .then(() => {
-          this.comments[index].Like.isLike = !this.comments[index].Like.isLike;
-          if(this.comments[index].Like.isLike === false){
-            this.comments[index].Like.likeCount--;
-          }else{
-            this.comments[index].Like.likeCount++;
+          this.like.isLike = false
+          this.like.likeCount--;
+        })
+        .catch(error => {
+          if(error.response.status == 401){
+            this.$router.push({ path: "/login" });
+            this.errorNotify();
           }
+          this.errors = error.response.data.ValidationErrors;
+        });
+    },
+
+    CreateQuestionCommentLike(index){
+      this.$axios
+        .post(`http://localhost/api/restricted/Questions/Comments/${this.comments[index].id}/Likes`,{questionid:this.question.id,visitedid:this.comments[index].userid},{
+          headers: {
+            Authorization: `Bearer ${this.$cookies.get("JWT")}`
+          },
+        })
+        .then(() => {
+          this.comments[index].Like.isLike = true;
+          this.comments[index].Like.likeCount++;
+        })
+        .catch(error => {
+          if(error.response.status == 401){
+            this.$router.push({ path: "/login" });
+            this.errorNotify();
+          }
+          this.errors = error.response.data.ValidationErrors;
+        });
+    },
+
+    DeleteQuestionCommentLike(index){
+      this.$axios
+        .delete(`http://localhost/api/restricted/Questions/Comments/${this.comments[index].id}/Likes`,{
+          headers: {
+            Authorization: `Bearer ${this.$cookies.get("JWT")}`
+          },
+        })
+        .then(() => {
+          this.comments[index].Like.isLike = false;
+          this.comments[index].Like.likeCount--;
         })
         .catch(error => {
           if(error.response.status == 401){
