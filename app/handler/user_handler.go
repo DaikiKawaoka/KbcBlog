@@ -258,11 +258,9 @@ func UserImgUpdate(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, "変更失敗")
 	}
 
-	user, err := repository.UserImgGetByID(imgUser.ID)
-	if err != nil {
-		c.Logger().Error(err.Error())
-		return c.JSON(http.StatusInternalServerError, "userが存在しません")
-	}
+	var user model.User
+	user.ImgData64.Valid = true
+	user.ImgData64.String = imgUser.ImgData64
 
 	data := map[string]interface{}{
 		"ImgData64": user.ImgData64,
@@ -286,11 +284,9 @@ func UserImgDelete(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, "削除失敗")
 	}
 
-	user, err := repository.UserImgGetByID(imgUser.ID)
-	if err != nil {
-		c.Logger().Error(err.Error())
-		return c.JSON(http.StatusInternalServerError, "userが存在しません")
-	}
+	var user model.User
+	user.ImgData64.Valid = false
+	user.ImgData64.String = ""
 
 	data := map[string]interface{}{
 		"ImgData64": user.ImgData64,

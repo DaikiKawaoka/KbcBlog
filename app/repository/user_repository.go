@@ -110,16 +110,3 @@ func UserImgDelete(user *model.UserImgUpdateClass) error {
 
 	return nil
 }
-
-// UserImgGetByID ...
-func UserImgGetByID(id int) (*model.User, error) {
-	query := `SELECT imgdata64
-	FROM users
-	WHERE id = ?`
-
-	var user model.User
-	if err := db.Get(&user, query, id); err != nil {
-		return nil, err
-	}
-	return &user, nil
-}
