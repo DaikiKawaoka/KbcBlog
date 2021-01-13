@@ -80,11 +80,11 @@
               </div>
 
               <div v-else class="user-show-btn-div">
-                <el-button type="primary" size="medium" v-if="!follow.isfollow" @click="Follow_UnFollw">
+                <el-button type="primary" size="medium" v-if="!follow.isfollow" @click="Follow">
                   <i class="el-icon-user"></i>フォロー
                 </el-button>
 
-                <el-button size="medium" v-else @click="Follow_UnFollw">
+                <el-button size="medium" v-else @click="BigBtnfollowConfirmationOpen()">
                   <i class="el-icon-user"></i>フォロー解除
                 </el-button>
               </div>
@@ -532,6 +532,10 @@ export default {
       })
       .then(response => {
         this.follows = response.data.Following
+        //nullの場合空の配列を代入
+        if(this.follows === null){
+          this.follows = []
+        }
         this.followingloading = false
       })
       .catch(error => {
@@ -555,6 +559,10 @@ export default {
       })
       .then(response => {
         this.followers = response.data.Followers
+        //nullの場合空の配列を代入
+        if(this.followers === null){
+          this.followers = []
+        }
         this.followersloading = false
       })
       .catch(error => {
@@ -567,7 +575,7 @@ export default {
     },
 
     // 大きいフォローボタンを押した時
-    Follow_UnFollw(){
+    Follow(){
       this.$axios
         .post(`http://localhost/api/restricted/Users/${this.user.id}/Follow`,{
             visiterid: this.myUser.id,
@@ -579,20 +587,38 @@ export default {
           },
         })
         .then(response => {
-          this.follow.isfollow = !this.follow.isfollow;
-          if(this.follow.isfollow === false){
-            const w = this.followers.findIndex(item => item.id === this.myUser.id)
-            if(w !== -1){
-              //ユーザのフォロワー配列から自分を削除
-              this.followers.splice(w, 1);
-            }
-            this.follow.followedCount--;
-          }else{
-            const user={id: this.myUser.id,comment:this.myUser.comment, isfollowing: true, name: this.myUser.name}
-            this.followers.push(user)
-            this.follow.followedCount++;
+          this.follow.isfollow = true;
+          this.follow.followedCount++;
+          // const user = {id: this.myUser.id,comment:this.myUser.comment, isfollowing: true, name: this.myUser.name, sex: this.MyUser.sex , imgdata64: this.MyUser.imgdata64}
+          // this.followers.push(user);
+          console.log(response);
+        })
+        .catch(error => {
+          if(error.response.status == 401){
+            this.$router.push({ path: "/login" });
+            this.errorNotify();
           }
-          console.log(response)
+          this.errors = error.response.data.ValidationErrors;
+        });
+    },
+
+    // 大きいフォローボタンを押した時
+    UnFollow(){
+      this.$axios
+        .delete(`http://localhost/api/restricted/Users/${this.user.id}/Follow`,{
+          headers: {
+            Authorization: `Bearer ${this.$cookies.get("JWT")}`
+          },
+        })
+        .then(response => {
+          this.follow.isfollow = false;
+          // const w = this.followers.findIndex(item => item.id === this.myUser.id)
+          // if(w !== -1){
+          //   //ユーザのフォロワー配列から自分を削除
+          //   this.followers.splice(w, 1);
+          // }
+          this.follow.followedCount--;
+          console.log(response);
         })
         .catch(error => {
           if(error.response.status == 401){
@@ -621,6 +647,16 @@ export default {
           type: 'info',
           message: '外部ページへの移動をキャンセルしました。'
         });
+      });
+    },
+
+    BigBtnfollowConfirmationOpen() {
+      this.$confirm(`${this.user.name}さんのフォローをやめますか?`, '確認', {
+        confirmButtonText: 'フォローをやめる',
+        cancelButtonText: 'キャンセル',
+        center: true
+      }).then(() => {
+        this.UnFollow()
       });
     },
 

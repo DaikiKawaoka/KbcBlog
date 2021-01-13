@@ -86,6 +86,7 @@ func main() {
 	r.GET("/Users/:id/Following",handler.Following)
 	r.GET("/Users/:id/Followers",handler.Followers)
 	r.POST("/Users/:id/Follow",handler.Follow)
+	r.DELETE("/Users/:id/Follow",handler.UnFollow)
 
 	// Notificatino
 	r.GET("/Notifications",handler.Notifications)

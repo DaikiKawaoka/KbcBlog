@@ -69,7 +69,8 @@
                   <span style="margin:0;"><i v-on:click="deleteNotificationConfirmationOpen()" class="el-icon-delete" style="font-size: 1.4em; cursor:pointer;"></i></span>
                   <div class="overflow">
                     <div v-for="notification in notifications" :key="notification.id" class="notification-body-div">
-                      <span v-if="notification.checked === false" class="notification-badge">●</span>
+                      <span v-if="notification.checked === true"></span>
+                      <span v-else class="notification-badge">●</span>
                       <!-- <div class="user-icon">
                         <div class="notification-user-icon"> -->
                           <!-- <router-link v-bind:to="{ name : 'UserShow', params : { id: notification.userid }}" class="a-tag">

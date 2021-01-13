@@ -333,7 +333,7 @@ export default {
           },
         })
         .then(() => {
-          this.like.isLike = false
+          this.like.isLike = false;
           this.like.likeCount--;
         })
         .catch(error => {

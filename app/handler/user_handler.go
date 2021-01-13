@@ -103,9 +103,9 @@ func UserShow(c echo.Context) error {
 		count, err := repository.CheckFollow(userID, user.ID)
 		if err != nil {
 			c.Logger().Error(err.Error())
-			return c.JSON(http.StatusInternalServerError, "Follw情報取得中にエラー発生") //500
+			return c.JSON(http.StatusInternalServerError, "Follow情報取得中にエラー発生") //500
 		}
-		// ユーザがfollwしているか検証
+		// ユーザがfollowしているか検証
 		if count > 0 {
 			follow.IsFollow = true
 		}
