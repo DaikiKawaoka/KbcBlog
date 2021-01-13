@@ -119,10 +119,10 @@
                         </el-button>
                       </div>
                       <div class="follow-btn-div" v-else-if="f.id !== myUser.id">
-                        <el-button size="small" v-if="f.isfollowing" @click="followConfirmationOpen(f,index,'followers','unfo')">
+                        <el-button size="small" v-if="f.isfollowing" @click="followConfirmationOpen(f,index,'followers')">
                           <i class="el-icon-user"></i>フォロー中
                         </el-button>
-                        <el-button type="primary" size="small" v-else @click="ChangeFollow(f,index,'followers','fo')">
+                        <el-button type="primary" size="small" v-else @click="ListFollow(f,index,'followers')">
                           <i class="el-icon-user"></i>フォロー
                         </el-button>
                       </div>
@@ -161,10 +161,10 @@
                       </div>
                       <div class="follow-btn-div" v-else-if="f.id !== myUser.id">
                         <!-- フォローボタン -->
-                        <el-button size="small" v-if="f.isfollowing" @click="followConfirmationOpen(f,index,'follows','unfo')">
+                        <el-button size="small" v-if="f.isfollowing" @click="followConfirmationOpen(f,index,'follows')">
                           <i class="el-icon-user"></i>フォロー中
                         </el-button>
-                        <el-button type="primary" size="small" v-else @click="ChangeFollow(f,index,'follows','fo')">
+                        <el-button type="primary" size="small" v-else @click="ListFollow(f,index,'follows')">
                           <i class="el-icon-user"></i>フォロー
                         </el-button>
                       </div>
@@ -660,13 +660,13 @@ export default {
       });
     },
 
-    followConfirmationOpen(f,index,c,c2) {
+    followConfirmationOpen(f,index,c) {
       this.$confirm(`${f.name}さんのフォローをやめますか?`, '確認', {
         confirmButtonText: 'フォローをやめる',
         cancelButtonText: 'キャンセル',
         center: true
       }).then(() => {
-        this.ChangeFollow(f,index,c,c2)
+        this.ListUnFollow(f,index,c)
       });
     },
 
@@ -688,9 +688,8 @@ export default {
       });
     },
 
-    // ChangeFollow(f,index,'follows','unfo')
-    ChangeFollow(f,index,c,c2){
-      console.log
+    // ChangeFollow(f,index,'follows')
+    ListFollow(f,index,c){
       this.$axios
         .post(`http://localhost/api/restricted/Users/${f.id}/Follow`,{
             visiterid: this.myUser.id,
@@ -704,46 +703,51 @@ export default {
         .then(() => {
           if(this.user.id === this.myUser.id){
             if(c === "followers"){
-              if(c2 === 'fo'){
-                this.followers[index].isfollowing = true;
-                const w = this.follows.findIndex(item => item.id === this.followers[index].id)
-                if(w !== -1){
-                  this.follows[w].isfollowing = true
-                }else{
-                  //フォロワーリストから初めてフォローボタンを押した時に自分のフォローリストに追加処理
-                  this.follows.push(f)
-                }
-                this.follow.followerCount++;
-              }else{
-                this.followers[index].isfollowing = false;
-                const w = this.follows.findIndex(item => item.id === this.followers[index].id)
-                if(w !== -1){
-                  this.follows[w].isfollowing = false
-                }
-                this.follow.followerCount--;
-              }
+              this.followers[index].isfollowing = true;
+              this.follow.followerCount++;
             }else{ // フォローリストのボタン
-              if(c2 === "fo"){
                 this.follows[index].isfollowing = true;
-                const w = this.followers.findIndex(item => item.id === this.follows[index].id)
-                if(w !== -1){
-                  this.followers[w].isfollowing = true;
-                }
                 this.follow.followerCount++;
-              }else{ //アンフォロー
-                this.follows[index].isfollowing = false;
-                const w = this.followers.findIndex(item => item.id === this.follows[index].id)
-                if(w !== -1){
-                  this.followers[w].isfollowing = false
-                }
-                this.follow.followerCount--;
-              }
             }
           }else{
             if(c === "followers"){
-              this.followers[index].isfollowing = !this.followers[index].isfollowing;
+              this.followers[index].isfollowing = true;
             }else{
-              this.follows[index].isfollowing = !this.follows[index].isfollowing;
+              this.follows[index].isfollowing = true;
+            }
+          }
+        })
+        .catch(error => {
+          if(error.response.status == 401){
+            this.$router.push({ path: "/login" });
+            this.errorNotify();
+          }
+          this.errors = error.response.data.ValidationErrors;
+        });
+    },
+
+    // ChangeFollow(f,index,'follows')
+    ListUnFollow(f,index,c){
+      this.$axios
+        .delete(`http://localhost/api/restricted/Users/${f.id}/Follow`,{
+          headers: {
+            Authorization: `Bearer ${this.$cookies.get("JWT")}`
+          },
+        })
+        .then(() => {
+          if(this.user.id === this.myUser.id){
+            if(c === "followers"){
+              this.followers[index].isfollowing = false;
+              this.follow.followerCount--;
+            }else{ // フォローリストのボタン
+              this.follows[index].isfollowing = false;
+              this.follow.followerCount--;
+            }
+          }else{
+            if(c === "followers"){
+              this.followers[index].isfollowing = false;
+            }else{
+              this.follows[index].isfollowing = false;
             }
           }
         })
