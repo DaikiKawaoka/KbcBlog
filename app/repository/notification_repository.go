@@ -28,7 +28,7 @@ func NotificationCreate(notification *model.CreateNotification) error {
     VALUES (:articleid,:a_commentid,:visiterid, :visitedid, :action, :created, :updated);`
 	case "qclike":
 		query = `INSERT INTO notifications (questionid,q_commentid,visiterid, visitedid, action, created, updated)
-    VALUES (:quesitonid,:q_commentid,:visiterid, :visitedid, :action, :created, :updated);`
+    VALUES (:questionid,:q_commentid,:visiterid, :visitedid, :action, :created, :updated);`
 	case "acomment":
 		query = `INSERT INTO notifications (articleid,a_commentid,visiterid, visitedid, action, created, updated)
     VALUES (:articleid,:a_commentid,:visiterid, :visitedid, :action, :created, :updated);`
