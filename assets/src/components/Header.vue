@@ -57,7 +57,8 @@
               <el-popover
                 placement="bottom"
                 width="320"
-                trigger="click">
+                trigger="click"
+                v-on:hide="hideNotifications">
                 <!-- <el-table :data="user">
                   <el-table-column width="150" property="date" label="date"></el-table-column>
                   <el-table-column width="100" property="name" label="name"></el-table-column>
@@ -68,12 +69,13 @@
                   <span style="margin:0;"><i v-on:click="deleteNotificationConfirmationOpen()" class="el-icon-delete" style="font-size: 1.4em; cursor:pointer;"></i></span>
                   <div class="overflow">
                     <div v-for="notification in notifications" :key="notification.id" class="notification-body-div">
-                      <div class="user-icon">
-                        <div class="notification-user-icon">
+                      <span v-if="notification.checked === false" class="notification-badge">●</span>
+                      <!-- <div class="user-icon">
+                        <div class="notification-user-icon"> -->
                           <!-- <router-link v-bind:to="{ name : 'UserShow', params : { id: notification.userid }}" class="a-tag">
                           </router-link> -->
-                        </div>
-                      </div>
+                        <!-- </div>
+                      </div> -->
                       <div v-if="notification.action === 'alike'">
                         <router-link class="a-tag-article" v-bind:to="{ name : 'ArticleShow', params : { id: notification.articleid.Int32 }}" >
                         <div><p class="notification-text">
@@ -229,7 +231,6 @@ export default {
       })
       .then(response => {
         this.notifications = response.data.Notifications
-        this.notificationCount = response.data.NotificationCount
         this.notificationCursor += 4
       })
       .catch(error => {
@@ -240,6 +241,10 @@ export default {
           this.$router.push({ path: "/login" });
         }
       })
+    },
+    // 通知一覧を閉じたとき、通知数を0にする処理
+    hideNotifications() {
+      this.notificationCount = 0;
     },
 
     scrollNotifications($state) {
@@ -423,6 +428,7 @@ export default {
 
 .notification-body-div{
   display: flex;
+  position: relative;
   border-bottom: #ccc 1px solid;
   height: 80px;
 }
@@ -477,5 +483,16 @@ export default {
 }
 .notification-created{
   color: #606266;
+}
+
+.notification-badge {
+  position:relative;
+  font-family: 'Courier New', Courier, monospace;
+  color: #ed4956;
+  /* position: relative; */
+  position: absolute;
+  top: 0px;
+  font-size: 1.2em;
+  /* text-shadow: 0px 0px 2px #008489; */
 }
 </style>
