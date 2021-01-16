@@ -16,14 +16,15 @@
               <p class="article-create-date"> 作成日 {{ article.Created | moment }}</p>
               <p class="article-create-date"> 更新日 {{ article.Updated | moment }}</p>
             </div>
-            <span v-if="article.userid === user.id" class="dropdown-span">
+            <span class="dropdown-span">
               <el-dropdown>
                 <span class="el-dropdown-link icon-menu-span">
                   <i class="el-icon-more"></i>
                 </span>
                 <el-dropdown-menu slot="dropdown">
-                  <router-link class="a-tag2" v-bind:to="{ name : 'ArticleEdit', params : { id: article.id }}"><el-dropdown-item>編集</el-dropdown-item></router-link>
+                  <router-link v-if="article.userid === user.id" class="a-tag2" v-bind:to="{ name : 'ArticleEdit', params : { id: article.id }}"><el-dropdown-item>編集</el-dropdown-item></router-link>
                   <el-popconfirm
+                  v-if="article.userid === user.id"
                   title="本当に削除しますか?"
                   confirm-button-text="Yes"
                   cancel-button-text="No"
@@ -31,6 +32,9 @@
                   >
                     <el-dropdown-item slot="reference">削除</el-dropdown-item>
                   </el-popconfirm>
+                  <router-link class="a-tag2" v-bind:to="{ name : 'ArticleMarkdown', params : { id: article.id }}">
+                    <el-dropdown-item>Markdownで見る</el-dropdown-item>
+                  </router-link>
                 </el-dropdown-menu>
               </el-dropdown>
             </span>
@@ -69,11 +73,12 @@
       <div v-for="(c,index) in comments" :key="c.id" class="article-comment-main">
         <div class="comment-div">
           <div class="comment-header">
-            <div class="comment-header-div">
-              <!-- <div class="comment-user-icon"></div> -->
-              <img class="comment-user-icon" :src="image_path(c)">
-              <p class="comment-user-name">{{c.name}}</p>
-            </div>
+            <router-link v-bind:to="{ name : 'UserShow', params : { id: c.userid }}" class="a-tag">
+              <div class="comment-header-div">
+                  <img class="comment-user-icon" :src="image_path(c)">
+                  <p class="comment-user-name">{{c.name}}</p>
+              </div>
+            </router-link>
             <div class="comment-header-div">
               <div>
                 <p class="comment-create-date">投稿日 {{c.Created | moment}}</p>

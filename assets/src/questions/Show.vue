@@ -13,14 +13,15 @@
               <p class="comment-create-date article-create-date"> 作成日 {{ question.Created | moment }}</p>
               <p class="comment-create-date article-update-date"> 更新日 {{ question.Updated | moment }}</p>
             </div>
-            <span v-if="question.userid === user.id" class="dropdown-span">
+            <span class="dropdown-span">
               <el-dropdown>
                 <span class="el-dropdown-link icon-menu-span">
                   <i class="el-icon-more"></i>
                 </span>
                 <el-dropdown-menu slot="dropdown">
-                  <router-link class="a-tag2" v-bind:to="{ name : 'QuestionEdit', params : { id: question.id }}"><el-dropdown-item>編集</el-dropdown-item></router-link>
+                  <router-link v-if="question.userid === user.id" class="a-tag2" v-bind:to="{ name : 'QuestionEdit', params : { id: question.id }}"><el-dropdown-item>編集</el-dropdown-item></router-link>
                   <el-popconfirm
+                  v-if="question.userid === user.id"
                   title="本当に削除しますか?"
                   confirm-button-text="Yes"
                   cancel-button-text="No"
@@ -28,6 +29,9 @@
                   >
                     <el-dropdown-item slot="reference">削除</el-dropdown-item>
                   </el-popconfirm>
+                    <router-link class="a-tag2" v-bind:to="{ name : 'QuestionMarkdown', params : { id: question.id }}">
+                      <el-dropdown-item>Markdownで見る</el-dropdown-item>
+                    </router-link>
                 </el-dropdown-menu>
               </el-dropdown>
             </span>
