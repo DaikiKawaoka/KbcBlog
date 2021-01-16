@@ -126,7 +126,8 @@
       </el-form-item>
 
       <el-form-item>
-        <el-button @click="userForm('userForm')">登録</el-button>
+        <el-button v-if="edit" @click="$emit('submit')">変更</el-button>
+        <el-button v-else @click="userForm('userForm')">登録</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -199,7 +200,7 @@
       uploadedImage: '',
     }
     },
-    beforeUpdate() {
+    created() {
       // 文字列のlangsを配列に変換
       if(this.edit){
         this.langarray = this.user.languages.String.split(',');
