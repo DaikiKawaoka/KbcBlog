@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" v-if="user">
     <Header :isArticle="false" :isQuestion="true" :user="user" @reset="reset"></Header>
     <div class="index-main body-main">
       <Tag @scopetag="scopetag" :tag="tag" :friendsOnly="friendsOnly" @reset="reset" @update:friendsOnly ="friendsOnly=$event"></Tag>
@@ -70,7 +70,7 @@
 
       </div>
       <div>
-        <Ranking :Ranking="Ranking" :random="random"></Ranking>
+        <Ranking :Ranking="Ranking" :rankingType="rankingType"></Ranking>
       </div>
     </div>
     <Footer></Footer>
@@ -92,7 +92,7 @@ export default {
   data(){
     return {
       questions: [],
-      user: {},
+      user: null,
       Ranking: [],
       searchText:"",
       tag: String,
@@ -102,7 +102,7 @@ export default {
       page: 1,
       infiniteId: +new Date(),
       notificationCount: localStorage.notificationCount,
-      random: null,
+      rankingType: null,
       questionloading: false,
     }
   },
@@ -142,7 +142,6 @@ export default {
   created () {
     document.title = `KBC Blog`;
     this.openFullScreen()
-    this.random = Math.floor(Math.random() * Math.floor(2));
     const jst = this.$cookies.get("JWT");
     if(jst === null){
       this.$router.push({ path: "/login" });
@@ -156,7 +155,7 @@ export default {
         order: this.order,
         tag: this.tag,
         cursor: this.cursor,
-        random: this.random,
+        rankingType: this.rankingType,
       },
       headers: {
         Authorization: `Bearer ${jst}`
@@ -320,6 +319,8 @@ export default {
       }else{
         this.friendsOnly = false
       }
+
+      this.rankingType = Math.floor(Math.random() * Math.floor(2));
     },
     reset(){
       this.searchText = ''

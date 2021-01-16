@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" v-if="user">
     <Header :isArticle="true" :isQuestion="false" :user="user" @reset="reset"></Header>
     <div class="index-main body-main">
       <Tag @scopetag="scopetag" :tag="tag" :friendsOnly="friendsOnly" @reset="reset" @update:friendsOnly ="friendsOnly=$event"></Tag>
@@ -85,7 +85,7 @@ export default {
   name: 'app',
   data(){
     return {
-      user: {},
+      user: null,
       articles: [],
       Ranking: [],
       searchText:"",
