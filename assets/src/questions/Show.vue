@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" v-if="question">
     <Header :isArticle="false" :isQuestion="true" :user="user"></Header>
     <div class="question-show-main">
       <div v-if="this.question != null">
