@@ -49,6 +49,7 @@ services:
     cap_add:
       - SYS_NICE
     volumes:
+      - ./docker/mysql/conf.d:/etc/mysql/conf.d
       - ./docker/mysql:/docker-entrypoint-initdb.d
       - mysql_data:/var/lib/mysql
 
