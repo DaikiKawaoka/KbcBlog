@@ -93,6 +93,10 @@ func main() {
 	r.GET("/Notifications/scope",handler.NotificationOrder)
 	r.DELETE("/Notifications", handler.NotificationDelete)
 
+	//Ranking
+	r.GET("/Article/Ranking",handler.GetArticleRanking)
+	r.GET("/Question/Ranking",handler.GetQuestionRanking)
+
 	// Webサーバーをポート番号 8082 で起動する
 	e.Logger.Fatal(e.Start(":8082"))
 	// e.Startの中はdocker-composeのgoコンテナで設定したportsを指定してください。
