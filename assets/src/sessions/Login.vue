@@ -49,7 +49,7 @@
 
 <script>
 import axios from "axios";
-import Header from './../components/Header.vue'
+import Header from './../components/Header.vue';
 import Footer from './../components/Footer.vue';
 
 export default {
@@ -66,6 +66,9 @@ export default {
   components: {
     Header,
     Footer,
+  },
+  created(){
+    document.title = `KBC Blog`;
   },
   methods: {
     signup: function(){
@@ -120,41 +123,40 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
 .body-main-login{
   height: 450px;
   position:relative;
-}
-.box-card {
+  .box-card {
   width: 480px;
 }
-
-.login {
-  position: relative;
-  top: 100px;
-  right: 0px;
-  bottom: 0px;
-  left: 0px;
-  margin: auto;
-}
-.err-div-login{
-  position:absolute;
-  top: 2px;
-  left: 50px;
-  z-index: 2;
-}
-.err-i{
-  font-size: 18px;
-  color:#F56C6C;
-}
-li{
-  list-style: none;
-}
-.error-span{
-  display: flex;
-  text-align: center;
-}
-.err-text{
-  font-size: 0.9em;
+  .login {
+    position: relative;
+    top: 100px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+    margin: auto;
+  }
+  .err-div-login{
+    position:absolute;
+    top: 2px;
+    left: 50px;
+    z-index: 2;
+  }
+  .err-i{
+    font-size: 18px;
+    color:#F56C6C;
+  }
+  li{
+    list-style: none;
+  }
+  .error-span{
+    display: flex;
+    text-align: center;
+  }
+  .err-text{
+    font-size: 0.9em;
+  }
 }
 </style>
