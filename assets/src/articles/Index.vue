@@ -65,7 +65,7 @@
 
       </div>
       <div>
-        <Ranking :Ranking="Ranking" :random="random" :isArticle="true" :user="user"></Ranking>
+        <Ranking :Ranking="Ranking" :rankingType="rankingType" :isArticle="true" :user="user"></Ranking>
       </div>
     </div>
     <Footer></Footer>
@@ -96,7 +96,7 @@ export default {
       page: 1,
       infiniteId: +new Date(),
       notificationCount: localStorage.notificationCount,
-      random: null,
+      rankingType: Number,
       loading: null,
     }
   },
@@ -117,6 +117,7 @@ export default {
     }
   },
   watch: {
+    immediate: true,
     searchText(newSearchText) {
       localStorage.searchText = newSearchText;
     },
@@ -137,7 +138,6 @@ export default {
   created () {
     document.title = `KBC Blog`;
     this.openFullScreen()
-    this.random = Math.floor(Math.random() * Math.floor(2));
     const jst = this.$cookies.get("JWT");
     this.setUp()
     this.$axios.get('http://localhost/api/restricted/Articles',{
@@ -148,7 +148,7 @@ export default {
         order: this.order,
         tag: this.tag,
         cursor: this.cursor,
-        random: this.random,
+        rankingType: this.rankingType,
       },
       headers: {
         Authorization: `Bearer ${jst}`
@@ -311,6 +311,7 @@ export default {
       }else{
         this.friendsOnly = false
       }
+      this.rankingType = Math.floor(Math.random() * Math.floor(2));
     },
     reset(){
       this.searchText = ''
@@ -336,6 +337,9 @@ body {
   background-color: #F6F6F4;
   /* background-color: #15202b; */
 }
+li{
+    list-style: none;
+}
 .body-main{
   width: 1000px;
   margin: 0 auto 0 auto;
@@ -358,10 +362,10 @@ body {
   display: flex;
 }
 .article-show-div:hover {
-  transition: 0.15s ;
+  transition: 0.10s ;
   border: solid 1.3px #409eff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
-  transform: translateY(-0.1875em);
+  /* box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04); */
+  /* transform: translateY(-0.1875em); */
 }
 .article-user-icon-div{
   margin-top: 25px;
@@ -399,6 +403,11 @@ body {
   background-color: #F6F6F4;
   /* background-color: #15202b; */
   padding-bottom: 8px;
+  /* margin-left: 20px; */
+  padding-top: 10px;
+  position: sticky;
+  top: 0;
+  /* z-index: 1000px; */
 }
 .order-div{
   padding-top: 20px;

@@ -348,10 +348,10 @@ export default {
   display: flex;
 }
 .question-show-div:hover {
-  transition: 0.15s ;
+  transition: 0.10s ;
   border: solid 1.3px #409eff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
-  transform: translateY(-0.1875em);
+  /* box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
+  transform: translateY(-0.1875em); */
 }
 .question-user-icon{
   margin-top: 25px;
@@ -396,7 +396,12 @@ export default {
 }
 .question-search-div{
   background-color: #F6F6F4;
+  /* background-color: #15202b; */
   padding-bottom: 8px;
+  /* margin-left: 20px; */
+  padding-top: 10px;
+  position: sticky;
+  top: 0;
 }
 
 .question-star-i{
