@@ -62,7 +62,7 @@ func QuestionIndex(c echo.Context) error {
 	scope.Tag = c.QueryParam("tag")//絞り込みタグ
 	scope.Text = c.QueryParam("searchText")//絞り込みテキスト
 	scope.FriendsOnly,_ = strconv.ParseBool(c.QueryParam("friendsOnly")) // フレンドのみ? true or false
-	random,_ := strconv.Atoi(c.QueryParam("random")) // ランダムな数字 0 or 1
+	rankingType,_ := strconv.Atoi(c.QueryParam("rankingType")) // ランダムな数字 0 or 1
 
 	questions, err := repository.QuestionListByCursor(0,&scope,userID)
 
@@ -73,20 +73,11 @@ func QuestionIndex(c echo.Context) error {
 
 	var Ranking []*model.RankingUser
 
-	if random == 0 {
-		// 質問数ランキング
-		Ranking,err = repository.KBCQuestionRankingTop10("post")
-		if err != nil {
-			c.Logger().Error(err.Error())
-			return c.JSON(http.StatusInternalServerError,"意欲的Rankingを取得中にエラー発生")
-		}
-	}else{
-		// 回答数ランキング
-		Ranking,err = repository.KBCQuestionRankingTop10("like")
-		if err != nil {
-			c.Logger().Error(err.Error())
-			return c.JSON(http.StatusInternalServerError,"回答数Rankingを取得中にエラー発生")
-		}
+	// 質問数ランキング
+	Ranking,err = repository.KBCQuestionRankingTop10(rankingType,"period")
+	if err != nil {
+		c.Logger().Error(err.Error())
+		return c.JSON(http.StatusInternalServerError,"Rankingを取得中にエラー発生")
 	}
 
 	// 取得できた最後の記事の ID をカーソルとして設定します。
