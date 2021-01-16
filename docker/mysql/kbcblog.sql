@@ -56,7 +56,7 @@ CREATE TABLE IF NOT EXISTS `article_likes` (
   `created` datetime,
   FOREIGN KEY (`userid`) REFERENCES `users`(`id`) ON DELETE CASCADE,
   FOREIGN KEY (`articleid`) REFERENCES `articles`(`id`) ON DELETE CASCADE,
-  PRIMARY KEY(`id`),
+  PRIMARY KEY(`id`)
 );
 update `article_likes` set `created` = CURRENT_TIMESTAMP where `created` is null;
 
@@ -67,7 +67,7 @@ CREATE TABLE IF NOT EXISTS `question_likes` (
   `created` datetime,
   FOREIGN KEY (`userid`) REFERENCES `users`(`id`) ON DELETE CASCADE,
   FOREIGN KEY (`questionid`) REFERENCES `questions`(`id`) ON DELETE CASCADE,
-  PRIMARY KEY(`id`),
+  PRIMARY KEY(`id`)
 );
 update `question_likes` set `created` = CURRENT_TIMESTAMP where `created` is null;
 
@@ -150,7 +150,7 @@ CREATE TABLE IF NOT EXISTS `notifications` (
   FOREIGN KEY (`visiterid`) REFERENCES `users`(`id`) ON DELETE CASCADE,
   FOREIGN KEY (`visitedid`) REFERENCES `users`(`id`) ON DELETE CASCADE,
   FOREIGN KEY (`a_commentid`) REFERENCES `article_comments`(`id`) ON DELETE CASCADE,
-  FOREIGN KEY (`q_commentid`) REFERENCES `question_comments`(`id`) ON DELETE CASCADE,
+  FOREIGN KEY (`q_commentid`) REFERENCES `question_comments`(`id`) ON DELETE CASCADE
 );
 update `notifications` set `created` = CURRENT_TIMESTAMP where `created` is null;
 update `notifications` set `updated` = CURRENT_TIMESTAMP where `updated` is null;
