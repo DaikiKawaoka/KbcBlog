@@ -425,6 +425,7 @@ li{
 }
 .order-span-color{
   color: #2ee002;
+  font-weight: bold;
 }
 .article-star-i{
   color: orange;
