@@ -23,6 +23,8 @@ import PassEdit from './users/PassEdit'
 import NotFound from './components/NotFound'
 import ArticleMarkdown from './articles/markdown'
 import QuestionMarkdown from './questions/markdown'
+import About from './static/About'
+// import Help from './static/Help'
 
 const router = new VueRouter({
   mode: 'history',
@@ -105,6 +107,16 @@ const router = new VueRouter({
       name: 'QuestionMarkdown',
       component: QuestionMarkdown
     },
+    {
+      path: '/About',
+      name: 'About',
+      component: About
+    },
+    // {
+    //   path: '/Help',
+    //   name: 'Help',
+    //   component: Help
+    // },
     {
       path: '*', component: NotFound
     },
