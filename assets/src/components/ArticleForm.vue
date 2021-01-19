@@ -48,15 +48,7 @@
       </el-select>
     </div>
   </el-form-item>
-
   </div>
-
-
-
-    <!-- <ArticleFormTag :article="article" :tagArray="tagArray"></ArticleFormTag> -->
-
-
-
 
     <el-row>
       <el-col :span="2"><div class="grid-content"></div></el-col>
@@ -104,7 +96,6 @@
 </template>
 
 <script>
-// import ArticleFormTag from './ArticleFormTag'
 import marked from 'marked';
 import hljs from 'highlight.js';
 import 'highlight.js/styles/github.css';
@@ -320,9 +311,6 @@ export default {
           }]
     }
   },
-  // components: {
-  //   ArticleFormTag,
-  // },
   created: function () {
     marked.setOptions({
       // code要素にdefaultで付くlangage-を削除
@@ -332,8 +320,6 @@ export default {
         return hljs.highlightAuto(code, [lang]).value
       }
     });
-  },
-  beforeUpdate(){
     this.tagArray = this.article.tag.split(',');
     if(this.tagArray[0].length == 0){
       this.tagArray = [];
@@ -350,8 +336,6 @@ export default {
     },
     arrayChangeString(){
       this.article.tag = this.tagArray.join(',');
-      // console.log(this.article.tag)
-      // console.log(this.tagArray2)
     },
   }
 }

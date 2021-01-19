@@ -23,7 +23,7 @@
     </el-form-item>
 
   <div>
-    <el-form-item label="種類">
+    <el-form-item label="カテゴリー">
       <div>
         <el-radio v-model="question.category" label="Q&A" border>Q&A</el-radio>
         <el-radio v-model="question.category" label="意見交換" border>意見交換</el-radio>
@@ -108,8 +108,8 @@ import hljs from 'highlight.js';
 import 'highlight.js/styles/github.css';
 import './markdown.css';
 
- export default {
-   props: {
+export default {
+  props: {
     question: Object,
     errors: Array,
     create: Boolean,
@@ -326,8 +326,6 @@ import './markdown.css';
         return hljs.highlightAuto(code, [lang]).value
       }
     });
-  },
-  beforeUpdate(){
     this.tagArray = this.question.tag.split(',');
     if(this.tagArray[0].length == 0){
       this.tagArray = [];
@@ -348,7 +346,7 @@ import './markdown.css';
       // console.log(this.tagArray2)
     },
   }
- }
+}
 </script>
 
 <style scoped>
