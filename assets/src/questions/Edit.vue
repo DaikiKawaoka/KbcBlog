@@ -71,8 +71,21 @@ export default {
             this.errorNotify();
           }
           this.errors = error.response.data.ValidationErrors;
+          window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+          });
+          this.openError()
         });
     },
+
+    openError() {
+        this.$message({
+          showClose: true,
+          message: '入力項目に不備があります。',
+          type: 'error'
+        });
+      },
 
     editQuestionAlert() {
       this.$notify({

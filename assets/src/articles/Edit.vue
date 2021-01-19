@@ -46,13 +46,12 @@ export default {
         // 文字列のlangsを配列に変換
       const w = this.article.tag;
       this.tagArray = w.split(',');
-      if(this.tagArray[0].length == 0){
+      if(this.tagArray.length === 0){
         this.tagArray = [];
       }
-
-        if(this.user.id != this.article.userid){
-          this.$router.push({ path: "/" });
-        }
+      if(this.user.id != this.article.userid){
+        this.$router.push({ path: "/" });
+      }
       })
       .catch(error => {
         if(error.response.status == 401){
@@ -80,8 +79,21 @@ export default {
             this.errorNotify();
           }
           this.errors = error.response.data.ValidationErrors;
+          window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+          });
+          this.openError()
         });
     },
+
+    openError() {
+        this.$message({
+          showClose: true,
+          message: '入力項目に不備があります。',
+          type: 'error'
+        });
+      },
 
     editArticleAlert() {
       this.$notify({
