@@ -3,7 +3,7 @@
 
     <!-- ログインしていない -->
 
-    <div class="body-main header-body-main-div" v-if="loginpage">
+    <div class="body-main header-body-main-div" v-if="loginpage || user === null">
       <div class="header-left">
         <router-link to="/login" class="a-tag"><h1 class="title">KBC Blog</h1></router-link>
       </div>
@@ -30,7 +30,7 @@
 
     <!-- ログイン済み -->
 
-    <div class="body-main header-body-main-div" v-else-if="!loginpage && user.id !== undefined ">
+    <div class="body-main header-body-main-div" v-else-if="user.id !== undefined && user.id !== null ">
       <div class="header-left">
         <router-link to="/" class="a-tag"><h1 class="title" @click="$emit('reset')">KBC Blog</h1></router-link>
         <router-link to="/" class="a-tag2"><h3 class="header-article" v-bind:class="{ active: isArticle }">記事</h3></router-link>
