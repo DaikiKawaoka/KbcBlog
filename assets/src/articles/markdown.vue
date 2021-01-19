@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" v-if="user">
     <Header :isArticle="true" :isQuestion="false" :user="user"></Header>
     <div class="markdown-all-div">
       <div>
@@ -22,7 +22,7 @@ export default {
   name: 'app',
   data(){
     return {
-      user: {},
+      user: null,
       article : {
         body: "",
       },
