@@ -4,4 +4,5 @@ ENV GO111MODULE=on
 
 RUN apk update && \
     apk add emacs curl git && \
+    # go get github.com/aws/aws-sdk-go && \
     go get github.com/pilu/fresh
