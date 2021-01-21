@@ -7,7 +7,7 @@ import (
 
 // GetMyUser ...
 func GetMyUser(id int) (*model.User , error) {
-	query := `SELECT id,mail,name,comment,imgdata64,sex
+	query := `SELECT id,mail,name,comment,sex,imgpath
 	FROM users
 	WHERE id = ?;`
 
@@ -27,8 +27,14 @@ func UserCreate(user *model.CreateUser) (sql.Result, error) {
     return nil, err
 	}
 
-  query := `INSERT INTO users (mail,passhash,name,sex)
-	VALUES (:mail, :passhash, :name, :sex);`
+	if user.Sex == 1 {
+		user.ImgPath = "http://www.kbcblog-s3.com.s3-website-ap-northeast-1.amazonaws.com/userIcon/man.png"
+	}else{
+		user.ImgPath = "http://www.kbcblog-s3.com.s3-website-ap-northeast-1.amazonaws.com/userIcon/woman.png"
+	}
+
+  query := `INSERT INTO users (mail,passhash,name,sex,imgpath)
+	VALUES (:mail, :passhash, :name, :sex, :imgpath);`
 
   tx := db.MustBegin()
   res, err := tx.NamedExec(query, user)
@@ -42,7 +48,7 @@ func UserCreate(user *model.CreateUser) (sql.Result, error) {
 
 // UserGetByID ...
 func UserGetByID(id int) (*model.User, error) {
-	query := `SELECT id,mail,name,comment,github,website,languages,sex,imgdata64
+	query := `SELECT id,mail,name,comment,github,website,languages,sex,imgpath
 	FROM users
 	WHERE id = ?`
 
@@ -79,7 +85,7 @@ func UserUpdate(user *model.User) error {
 func UserImgUpdate(user *model.UserImgUpdateClass) error {
 
 	query := `UPDATE users
-	SET imgdata64 = :imgdata64
+	SET imgpath = :imgpath
 	WHERE id = :id;`
 
 	tx := db.MustBegin()
@@ -94,10 +100,16 @@ func UserImgUpdate(user *model.UserImgUpdateClass) error {
 }
 
 // UserImgDelete ...
-func UserImgDelete(user *model.UserImgUpdateClass) error {
+func UserImgDelete(user *model.User) error {
 
-	query := `UPDATE users
-	SET imgdata64 = null
+	var query string
+	if user.Sex == 1 {
+		user.ImgPath = "http://www.kbcblog-s3.com.s3-website-ap-northeast-1.amazonaws.com/userIcon/man.png"
+	}else{
+		user.ImgPath = "http://www.kbcblog-s3.com.s3-website-ap-northeast-1.amazonaws.com/userIcon/woman.png"
+	}
+	query = `UPDATE users
+	SET imgpath = :imgpath
 	WHERE id = :id;`
 
 	tx := db.MustBegin()
