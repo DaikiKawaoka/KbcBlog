@@ -28,7 +28,7 @@ type User struct {
 	Github      sql.NullString    `db:"github" json:"github"`
 	Website     sql.NullString    `db:"website" json:"website"`
 	Languages   sql.NullString    `db:"languages" json:"languages"`
-	ImgData64     sql.NullString    `db:"imgdata64" json:"imgdata64"`
+	ImgPath     string    `db:"imgpath" json:"imgpath"`
 	Sex        int     `db:"sex" json:"sex"`
 }
 
@@ -45,14 +45,14 @@ type RankingUser struct {
 	Name        string    `db:"name" json:"name"`
 	Comment     sql.NullString   `db:"comment" json:"comment"`
 	Count int     `db:"count" json:"count"`
-	ImgData64     sql.NullString    `db:"imgdata64" json:"imgdata64"`
+	ImgPath      string    `db:"imgpath" json:"imgpath"`
 	Sex        int     `db:"sex" json:"sex"`
 }
 
 // UserImgUpdateClass ...
 type UserImgUpdateClass struct {
 	ID          int       `db:"id" json:"id"`
-	ImgData64   string    `db:"imgdata64" json:"imgdata64"`
+	ImgPath      string    `db:"imgpath" json:"imgpath"`
 }
 
 // SetupUser CreateUserからUserを作成

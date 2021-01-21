@@ -1,7 +1,6 @@
 package model
 
 import (
-	"database/sql"
 	"gopkg.in/go-playground/validator.v9"
 )
 
@@ -10,7 +9,7 @@ type Question struct {
 	ID        int       `db:"id" json:"id"`
 	Userid    int       `db:"userid" json:"userid"`
 	UserName  string   `db:"name" json:"name"`
-	ImgData64     sql.NullString    `db:"imgdata64" json:"imgdata64"`
+	ImgPath      string    `db:"imgpath" json:"imgpath"`
 	Sex         int       `db:"sex" json:"sex"`
 	Title     string    `db:"title" json:"title" validate:"required,max=50"`
 	Body      string    `db:"body" json:"body" validate:"required"`

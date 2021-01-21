@@ -27,7 +27,7 @@ type FUser struct {
 	ID          int              `db:"id" json:"id"`
 	Name        string           `db:"name" json:"name"`
 	Comment     sql.NullString   `db:"comment" json:"comment"`
-	ImgData64     sql.NullString    `db:"imgdata64" json:"imgdata64"`
+	ImgPath     string    `db:"imgpath" json:"imgpath"`
 	Sex         int       `db:"sex" json:"sex"`
 	IsFollowing bool             `db:"isfollowing" json:"isfollowing"`
 }
