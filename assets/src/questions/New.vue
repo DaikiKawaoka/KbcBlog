@@ -39,9 +39,7 @@ export default {
       },
     })
       .then(response => {
-        this.user.id = response.data.user.id
-        this.user.KBC_mail = response.data.user.KBC_mail
-        this.user.name = response.data.user.name
+        this.user = response.data.user
         if(this.user.id === 920437694){
           this.$router.push("/");
         }

@@ -34,6 +34,10 @@ func main() {
 	}
 	r.Use(middleware.JWTWithConfig(config))
 
+	//Static
+	r.GET("/About",handler.About)
+	// r.GET("/Help",handler.Help)
+
 	// Article
 	r.GET("/Articles", handler.ArticleIndex)
 	r.GET("/Articles/scope", handler.ArticleIndexOrder)

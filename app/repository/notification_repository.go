@@ -1,7 +1,6 @@
 package repository
 
 import (
-	// "database/sql"
 	"time"
 	"app/model"
 	)

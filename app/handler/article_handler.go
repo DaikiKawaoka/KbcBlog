@@ -5,7 +5,6 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
-
 	"app/repository"
 	"app/model"
 	"github.com/labstack/echo/v4"
@@ -96,8 +95,6 @@ func ArticleIndex(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError,"Rankingを取得中にエラー発生")
 	}
 
-
-	// 取得できた最後の記事の ID をカーソルとして設定します。
 	var cursor int
 	if len(articles) != 0 {
 		cursor = articles[len(articles)-1].ID
@@ -106,7 +103,6 @@ func ArticleIndex(c echo.Context) error {
 	notificationCount, err := repository.GetNotificationCount(userID)
 	if err != nil {
 		c.Logger().Error(err.Error())
-		// クライアントにステータスコード 500 でレスポンスを返します。
 		return c.JSON(http.StatusInternalServerError,"通知数取得中にエアー発生")
 	}
 

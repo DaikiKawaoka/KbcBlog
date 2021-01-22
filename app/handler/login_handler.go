@@ -1,13 +1,9 @@
 package handler
 
 import (
-	// "log"
 	"net/http"
-	// "strconv"
 	"time"
-
 	"app/repository"
-	// "app/model"
 	"github.com/labstack/echo/v4"
 	"golang.org/x/crypto/bcrypt"
 	"github.com/dgrijalva/jwt-go"
@@ -119,7 +115,6 @@ func GuestLogin(c echo.Context) error {
 	var loginRes LoginResponse
 	t, err := CreateToken(guestUser.ID)
 	if err != nil {
-		print("aaaaaaa")
 		return err
 	}
 	loginRes.Token = t

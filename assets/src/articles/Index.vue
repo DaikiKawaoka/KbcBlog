@@ -15,12 +15,12 @@
 
         <div v-if="articles.length !== 0">
           <div v-for="article in articles" :key="article.id" class="article-show-div">
-            <!-- <div class="article-user-icon-div">
-              <router-link v-bind:to="{ name : 'UserShow', params : { id: article.userid }}" class="a-tag"> -->
+            <div class="article-user-icon-div">
+              <router-link v-bind:to="{ name : 'UserShow', params : { id: article.userid }}" class="a-tag">
                 <!-- image -->
-                <!-- <img class="article-user-icon" :src="image_path(article)"> -->
-              <!-- </router-link> -->
-            <!-- </div> -->
+                <img class="article-user-icon" :src="article.imgpath">
+              </router-link>
+            </div>
             <div class="article-index-body">
               <div class="article-index-tag-div">
                 <i class="el-icon-collection-tag tag-icon"></i>
@@ -349,7 +349,8 @@ li{
   margin-top: 30px;
 }
 .article-all-div{
-  width: 480px;
+  width: 460px;
+  /* width: 500px; */
   background-color: #F6F6F4;
   /* background-color: #15202b; */
 }
@@ -373,6 +374,7 @@ li{
 .article-user-icon{
   width: 30px;
   height: 30px;
+  object-fit: cover; /* 画像トリミング */
   border-radius: 50%;
 }
 .article-index-body{
@@ -383,7 +385,7 @@ li{
 }
 .article-title-index{
   font-size: 1.1em;
-  width: 440px;
+  width: 400px;
   text-align: left;
   margin: 0;
 }
@@ -417,7 +419,7 @@ li{
   cursor: pointer;
 }
 .order-span-left{
-  margin-left: 100px;
+  margin-left: 80px;
   color: #777;
 }
 .order-span:hover{
@@ -452,7 +454,7 @@ li{
 .article-tag{
   font-size: 0.6em;
   color: #999;
-  width: 440px;
+  width: 400px;
 }
 .not-tag{
   width: 100%;

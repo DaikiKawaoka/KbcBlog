@@ -3,6 +3,7 @@ module app
 go 1.13
 
 require (
+	github.com/aws/aws-sdk-go v1.36.28
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/flosch/pongo2 v0.0.0-20200913210552-0d938eb266f3
 	github.com/go-playground/universal-translator v0.17.0 // indirect

@@ -1,22 +1,8 @@
 package handler
 
 import (
-	// "fmt"
-	// "log"
 	"net/http"
 	"strconv"
-	// "time"
-	// "github.com/nfnt/resize"
-	// "image"
-	_"image/gif"
-	// "image/jpeg"
-	// _"image/png"
-	// "os"
-	"encoding/base64"
-	// "encoding/json"
-	// "fmt"
-	"io/ioutil"
-
 	"app/model"
 	"app/repository"
 	"github.com/labstack/echo/v4"
@@ -133,7 +119,6 @@ func UserShow(c echo.Context) error {
 	notificationCount, err := repository.GetNotificationCount(userID)
 	if err != nil {
 		c.Logger().Error(err.Error())
-		// クライアントにステータスコード 500 でレスポンスを返します。
 		return c.JSON(http.StatusInternalServerError, "通知数取得中にエアー発生")
 	}
 
@@ -147,7 +132,6 @@ func UserShow(c echo.Context) error {
 		"Follow":            follow,
 		"Tags":              tags,
 		"NotificationCount": notificationCount,
-		// "likes" : likes,
 	}
 
 	return c.JSON(http.StatusOK, data)
@@ -225,72 +209,4 @@ func UserUpdate(c echo.Context) error {
 	}
 	out.User = &user
 	return c.JSON(http.StatusOK, out)
-}
-
-
-
-
-// UserImgUpdate ...
-func UserImgUpdate(c echo.Context) error {
-	var imgUser model.UserImgUpdateClass
-	imgUser.ID = userIDFromToken(c)
-
-	id, _ := strconv.Atoi(c.Param("id"))
-	if imgUser.ID != id {
-		return c.JSON(http.StatusBadRequest, "他人の情報は編集できません。") //400
-	}
-
-	file, err := c.FormFile("file")
-	if err != nil {
-		return err
-	}
-	src, err := file.Open()
-	if err != nil {
-		return err
-	}
-	defer src.Close()
-	/*ファイルをBase64エンコード*/
-	binary, _ := ioutil.ReadAll(src)
-	imgUser.ImgData64 = base64.StdEncoding.EncodeToString(binary)
-
-	if err := repository.UserImgUpdate(&imgUser); err != nil {
-		c.Logger().Error(err.Error())
-		return c.JSON(http.StatusInternalServerError, "変更失敗")
-	}
-
-	var user model.User
-	user.ImgData64.Valid = true
-	user.ImgData64.String = imgUser.ImgData64
-
-	data := map[string]interface{}{
-		"ImgData64": user.ImgData64,
-	}
-
-	return c.JSON(http.StatusOK, data)
-}
-
-// UserImgDelete ...
-func UserImgDelete(c echo.Context) error {
-	var imgUser model.UserImgUpdateClass
-	imgUser.ID = userIDFromToken(c)
-
-	id, _ := strconv.Atoi(c.Param("id"))
-	if imgUser.ID != id {
-		return c.JSON(http.StatusBadRequest, "他人の情報は編集できません。") //400
-	}
-
-	if err := repository.UserImgDelete(&imgUser); err != nil {
-		c.Logger().Error(err.Error())
-		return c.JSON(http.StatusInternalServerError, "削除失敗")
-	}
-
-	var user model.User
-	user.ImgData64.Valid = false
-	user.ImgData64.String = ""
-
-	data := map[string]interface{}{
-		"ImgData64": user.ImgData64,
-	}
-
-	return c.JSON(http.StatusOK, data)
 }

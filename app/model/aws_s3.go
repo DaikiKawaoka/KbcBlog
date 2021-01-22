@@ -48,14 +48,13 @@ func NewAwsS3() *AwsS3 {
         Keys: AwsS3URLs{
             Test: "userIcon/",
         },
-        // Create an uploader with the session and default options
         Uploader: s3manager.NewUploader(sess),
     }
 }
 
 
-// UploadTest ...
-func (a *AwsS3) UploadTest(file multipart.File,fileName string, extension string) (url string, err error) {
+// Upload ...
+func (a *AwsS3) Upload(file multipart.File,fileName string, extension string) (url string, err error) {
 
     var contentType string
 

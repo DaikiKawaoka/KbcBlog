@@ -15,14 +15,13 @@ func QuestionListByCursor(cursor int, scope *model.Scope, userid int) ([]*model.
 	var query1 string
 	var query2 string
 	var query3 string
-	// query4 := "AND u.id = f.followerid AND f.followerid = ? "
 
 	if scope.FriendsOnly {
 		// フォローしているユーザの投稿のみ
-		query1 = "SELECT q.id id,q.userid userid,u.name name, u.sex sex,q.title title,q.tag tag,q.created created,q.updated updated ,COUNT(ql.id) likecount FROM questions q inner join users u on q.userid = u.id inner join follows f on q.userid = f.followedid left join question_likes ql on q.id = ql.questionid "
+		query1 = "SELECT q.id id,q.userid userid,u.name name, u.imgpath imgpath, u.sex sex,q.title title,q.tag tag,q.created created,q.updated updated ,COUNT(ql.id) likecount FROM questions q inner join users u on q.userid = u.id inner join follows f on q.userid = f.followedid left join question_likes ql on q.id = ql.questionid "
 	}else{
 		// 全てのユーザの投稿
-		query1 = "SELECT q.id id,q.userid userid,u.name name, u.sex sex,q.title title,q.tag tag,q.category category,q.created created,q.updated updated ,COUNT(ql.id) likecount FROM questions q inner join users u on q.userid = u.id left join question_likes ql on q.id = ql.questionid "
+		query1 = "SELECT q.id id,q.userid userid,u.name name, u.imgpath imgpath, u.sex sex,q.title title,q.tag tag,q.category category,q.created created,q.updated updated ,COUNT(ql.id) likecount FROM questions q inner join users u on q.userid = u.id left join question_likes ql on q.id = ql.questionid "
 	}
 
 	if scope.Order == "new"{
@@ -40,18 +39,14 @@ func QuestionListByCursor(cursor int, scope *model.Scope, userid int) ([]*model.
 		if scope.Text == ""{
 			if scope.FriendsOnly{
 				if scope.Order == "new" {
-					// query2 = "WHERE q.id < ? AND (f.followerid = ? OR f.followedid = ?) "
 					query2 = "WHERE q.id < ? AND f.followerid = ? "
 					query = query1 + query2 + query3
-						// クエリ結果を格納する変数、クエリ文字列、パラメータを指定してクエリを実行します。
 					if err := db.Select(&questions, query, cursor,userid); err != nil {
 						return nil, err
 					}
 				}else{
-					// query2 = "WHERE q.id < ? AND (f.followerid = ? OR f.followedid = ?) "
 					query2 = "WHERE f.followerid = ? "
 					query = query1 + query2 + query3
-						// クエリ結果を格納する変数、クエリ文字列、パラメータを指定してクエリを実行します。
 					if err := db.Select(&questions, query, userid, cursor); err != nil {
 						return nil, err
 					}
@@ -60,13 +55,11 @@ func QuestionListByCursor(cursor int, scope *model.Scope, userid int) ([]*model.
 				if scope.Order == "new" {
 					query2 = "WHERE q.id < ? "
 					query = query1 + query2 + query3
-						// クエリ結果を格納する変数、クエリ文字列、パラメータを指定してクエリを実行します。
 					if err := db.Select(&questions, query, cursor); err != nil {
 						return nil, err
 					}
 				}else{
 					query = query1 + query3
-						// クエリ結果を格納する変数、クエリ文字列、パラメータを指定してクエリを実行します。
 					if err := db.Select(&questions, query, cursor); err != nil {
 						return nil, err
 					}
@@ -77,14 +70,12 @@ func QuestionListByCursor(cursor int, scope *model.Scope, userid int) ([]*model.
 				if scope.Order == "new" {
 					query2 = `WHERE q.id < ? AND q.title LIKE CONCAT("%",?,"%") AND f.followerid = ?  `
 					query = query1 + query2 + query3
-					// クエリ結果を格納する変数、クエリ文字列、パラメータを指定してクエリを実行します。
 					if err := db.Select(&questions, query, cursor, scope.Text,userid); err != nil {
 						return nil, err
 					}
 				}else{
 					query2 = `WHERE q.title LIKE CONCAT("%",?,"%") AND f.followerid = ?  `
 					query = query1 + query2 + query3
-					// クエリ結果を格納する変数、クエリ文字列、パラメータを指定してクエリを実行します。
 					if err := db.Select(&questions, query, scope.Text, userid, cursor); err != nil {
 						return nil, err
 					}
@@ -93,14 +84,12 @@ func QuestionListByCursor(cursor int, scope *model.Scope, userid int) ([]*model.
 				if scope.Order == "new" {
 					query2 = `WHERE q.id < ? AND q.title LIKE CONCAT("%",?,"%")`
 					query = query1 + query2 + query3
-					// クエリ結果を格納する変数、クエリ文字列、パラメータを指定してクエリを実行します。
 					if err := db.Select(&questions, query, cursor, scope.Text); err != nil {
 						return nil, err
 					}
 				}else{
 					query2 = `WHERE q.title LIKE CONCAT("%",?,"%")`
 					query = query1 + query2 + query3
-					// クエリ結果を格納する変数、クエリ文字列、パラメータを指定してクエリを実行します。
 					if err := db.Select(&questions, query, scope.Text, cursor); err != nil {
 						return nil, err
 					}
@@ -114,14 +103,12 @@ func QuestionListByCursor(cursor int, scope *model.Scope, userid int) ([]*model.
 				if scope.Order == "new" {
 					query2 = `WHERE q.id < ? AND q.tag LIKE CONCAT("%",?,"%") AND f.followerid = ? `
 					query = query1 + query2 + query3
-					// クエリ結果を格納する変数、クエリ文字列、パラメータを指定してクエリを実行します。
 					if err := db.Select(&questions, query, cursor, scope.Tag, userid); err != nil {
 						return nil, err
 					}
 				}else{
 					query2 = `WHERE q.tag LIKE CONCAT("%",?,"%") AND f.followerid = ? `
 					query = query1 + query2 + query3
-					// クエリ結果を格納する変数、クエリ文字列、パラメータを指定してクエリを実行します。
 					if err := db.Select(&questions, query, scope.Tag, userid, cursor); err != nil {
 						return nil, err
 					}
@@ -130,20 +117,17 @@ func QuestionListByCursor(cursor int, scope *model.Scope, userid int) ([]*model.
 				if scope.Order == "new" {
 					query2 = `WHERE q.id < ? AND q.tag LIKE CONCAT("%",?,"%")`
 					query = query1 + query2 + query3
-					// クエリ結果を格納する変数、クエリ文字列、パラメータを指定してクエリを実行します。
 					if err := db.Select(&questions, query, cursor, scope.Tag); err != nil {
 						return nil, err
 					}
 				}else{
 					query2 = `WHERE q.tag LIKE CONCAT("%",?,"%")`
 					query = query1 + query2 + query3
-					// クエリ結果を格納する変数、クエリ文字列、パラメータを指定してクエリを実行します。
 					if err := db.Select(&questions, query, scope.Tag, cursor); err != nil {
 						return nil, err
 					}
 				}
 			}
-			// query2 = `WHERE q.id < ? AND q.tag LIKE CONCAT("%",?,"%")`
 		}else{
 			if scope.FriendsOnly{
 				if scope.Order == "new" {
@@ -181,7 +165,7 @@ func QuestionListByCursor(cursor int, scope *model.Scope, userid int) ([]*model.
 
 // QuestionGetByID ...
 func QuestionGetByID(id int) (*model.Question, error) {
-	query := `SELECT q.id id,q.userid userid,u.name name,u.imgdata64 imgdata64, u.sex sex,q.title title,q.body body,q.tag tag,q.category category,q.created created,q.updated updated
+	query := `SELECT q.id id,q.userid userid,u.name name,u.imgpath imgpath, u.sex sex,q.title title,q.body body,q.tag tag,q.category category,q.created created,q.updated updated
 	FROM questions q,users u
 	WHERE q.id = ? and q.userid = u.id;`
 
@@ -257,11 +241,10 @@ func QuestionDelete(ID int) error {
 
 // GetUserQuestion ...
 func GetUserQuestion(cursor int,userID int) ([]*model.Question, error) {
-	// 引数で渡されたカーソルの値が 0 以下の場合は、代わりに int 型の最大値で置き換えます。
 	if cursor <= 0 {
 		cursor = math.MaxInt32
 	}
-	// ID の降順に記事データを 10 件取得するクエリ文字列を生成します。
+	// ID の降順に記事データを 10 件取得
 	query := `SELECT q.id id,q.userid userid,u.name name,q.title title,q.body body,q.tag tag, q.category category ,q.created created,q.updated updated, COUNT(l.id) likecount
 	FROM questions q inner join users u on q.userid = u.id
 	left join question_likes l on q.id = l.questionid

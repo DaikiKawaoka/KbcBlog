@@ -15,6 +15,7 @@ type CreateUser struct {
 	Password    string    `json:"password" validate:"required,min=8,max=50"`
 	PassCfm    string    `json:"password_confirmation"`
 	PassHash    string    `db:"passhash"`
+	ImgPath     string    `db:"imgpath" json:"imgpath"`
 	Sex         int       `db:"sex" json:"sex" validate:"required"`
 }
 

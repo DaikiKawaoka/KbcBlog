@@ -7,7 +7,7 @@
           <router-link v-bind:to="{ name : 'UserShow', params : { id: article.userid }}" class="a-tag">
             <div class="comment-header-div">
               <!-- <div class="comment-user-icon"></div> -->
-              <img class="comment-user-icon" :src="image_path(article)">
+              <img class="comment-user-icon" :src="article.imgpath">
               <p class="comment-user-name">{{ article.name }}</p>
             </div>
           </router-link>
@@ -75,7 +75,7 @@
           <div class="comment-header">
             <router-link v-bind:to="{ name : 'UserShow', params : { id: c.userid }}" class="a-tag">
               <div class="comment-header-div">
-                  <img class="comment-user-icon" :src="image_path(c)">
+                  <img class="comment-user-icon" :src="c.imgpath">
                   <p class="comment-user-name">{{c.name}}</p>
               </div>
             </router-link>
@@ -233,8 +233,7 @@ export default {
             this.comments = [];
           }
           this.comments.unshift(response.data.Comment);
-          this.comments[0].imgdata64.Valid = this.user.imgdata64.Valid
-          this.comments[0].imgdata64.String = this.user.imgdata64.String
+          this.comments[0].imgpath= this.user.imgpath
           this.comment.text = "";
           this.createCommentAlert();
         })
@@ -390,18 +389,6 @@ export default {
         });
     },
 
-    image_path(u){
-      if(u.imgdata64.Valid === true){
-        return 'data:image/jpeg;base64,' + u.imgdata64.String
-      }else{
-        if(u.sex === 1){
-          return require("@/assets/userIcon/man.png");
-        }else if(u.sex === 2){
-          return require("@/assets/userIcon/woman.png");
-        }
-      }
-    },
-
     openFullScreen() {
       this.loading = this.$loading({
           lock: true,
@@ -491,6 +478,7 @@ export default {
 .comment-user-icon{
   width: 40px;
   height: 40px;
+  object-fit: cover; /* 画像トリミング */
   border-radius: 50%;
 }
 .comment-user-name{

@@ -29,7 +29,7 @@
               <div>
                 <!-- アイコン -->
                 <!-- <div class="user-icon"></div> -->
-                <img class="user-icon" :src="image_path(u)">
+                <img class="user-icon" :src="u.imgpath">
               </div>
               <div class="u-div-nameandcomment-width">
                 <div class="string-out">
@@ -82,7 +82,7 @@
               <div>
                 <!-- アイコン -->
                 <!-- <div class="user-icon"></div> -->
-                <img class="user-icon" :src="image_path(u)">
+                <img class="user-icon" :src="u.imgpath">
               </div>
               <div class="u-div-nameandcomment-width">
                 <div class="string-out">
@@ -131,18 +131,6 @@
       }
     },
     methods:{
-      image_path(u){
-        if(u.imgdata64.Valid === true){
-          return 'data:image/jpeg;base64,' + u.imgdata64.String
-          // return require("@/assets/userIcon/" + this.user.imgdata64.String);
-        }else{
-          if(u.sex === 1){
-            return require("@/assets/userIcon/man.png");
-          }else if(u.sex === 2){
-            return require("@/assets/userIcon/woman.png");
-          }
-        }
-      },
       getRanking(type,period) {
         this.rankingLoading = true;
         this.$axios.get(`http://localhost/api/restricted/${type}/Ranking`, {
@@ -248,6 +236,7 @@
   background-color: #ccc;
   width: 30px;
   height: 30px;
+  object-fit: cover; /* 画像トリミング */
   border-radius: 50%;
 }
 .user-name{

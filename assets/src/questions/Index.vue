@@ -16,11 +16,11 @@
         <div v-if="questions.length !== 0" v-loading="questionloading"
         element-loading-text="Loading..." element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 1)">
           <div v-for="question in questions" :key="question.id" class="question-show-div">
-            <!-- <div class="question-user-icon">
-              <router-link v-bind:to="{ name : 'UserShow', params : { id: question.userid }}" class="a-tag"> -->
-                <!-- image -->
-              <!-- </router-link>
-            </div> -->
+            <div class="question-user-icon-div">
+              <router-link v-bind:to="{ name : 'UserShow', params : { id: question.userid }}" class="a-tag">
+                <img class="question-user-icon" :src="question.imgpath">
+              </router-link>
+            </div>
             <div class="question-index-body">
               <div class="question-tag-div">
                 <i class="el-icon-collection-tag tag-icon"></i>
@@ -354,9 +354,11 @@ export default {
   /* box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
   transform: translateY(-0.1875em); */
 }
-.question-user-icon{
+.question-user-icon-div{
   margin-top: 25px;
-  background-color: #ccc;
+}
+.question-user-icon{
+  object-fit: cover; /* 画像トリミング */
   width: 30px;
   height: 30px;
   border-radius: 50%;

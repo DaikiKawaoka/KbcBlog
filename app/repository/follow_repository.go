@@ -8,7 +8,6 @@ import (
 	// フォローする人は「follower」
 	// フォローされる人は「followed」
 
-
 	// CheckFollow フォローしているかチェック
 	func CheckFollow(followerID int, followedID int) (int, error) {
 		query := `SELECT COUNT(*) FROM follows WHERE followerid = ? AND followedid = ?;`
@@ -21,7 +20,7 @@ import (
 
 	// GetFollowerInfoList 自分のフォローユーザの情報を取得
 	func GetFollowerInfoList(userID int) ([]*model.FUser, error) {
-		query := `SELECT u.id,u.name,u.comment, u.imgdata64, u.sex FROM users u,follows f WHERE u.id = f.followedid AND f.followerid = ?;`
+		query := `SELECT u.id,u.name,u.comment, u.imgpath, u.sex FROM users u,follows f WHERE u.id = f.followedid AND f.followerid = ?;`
 		var users []*model.FUser
 		if err := db.Select(&users, query, userID); err != nil {
 			return nil, err
@@ -31,7 +30,7 @@ import (
 
 	// GetFollowedInfoList 自分のフォロワーの情報を取得
 	func GetFollowedInfoList(userID int) ([]*model.FUser, error) {
-		query := `SELECT u.id,u.name,u.comment, u.imgdata64, u.sex FROM users u,follows f WHERE u.id = f.followerid AND f.followedid = ?;`
+		query := `SELECT u.id,u.name,u.comment, u.imgpath, u.sex FROM users u,follows f WHERE u.id = f.followerid AND f.followedid = ?;`
 		var users []*model.FUser
 		if err := db.Select(&users, query, userID); err != nil {
 			return nil, err

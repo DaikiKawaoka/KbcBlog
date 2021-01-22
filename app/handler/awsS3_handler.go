@@ -38,7 +38,7 @@ func UserImgUpdate(c echo.Context) error {
 	awsS3 = model.NewAwsS3()
 
 	// multipart.File と os.File は同じように扱える
-	imgUser.ImgPath, err = awsS3.UploadTest(src,ids,filetype)
+	imgUser.ImgPath, err = awsS3.Upload(src,ids,filetype)
 	if err != nil {
 		c.Logger().Error(err.Error())
 		return c.JSON(http.StatusBadRequest, imgUser.ImgPath) //400

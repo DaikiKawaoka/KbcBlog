@@ -4,19 +4,14 @@
     <div class="user-show-all">
       <div class="user-show-header">
         <div class="user-show-icon">
-            <img v-if="user.id === myUser.id" class="user-show-icon-img" :src="image_path1()" @click="imgClick()">
-            <img v-else class="user-show-icon-img" :src="image_path()" @click="imgClick()">
+            <img class="user-show-icon-img" :src="user.imgpath" @click="imgClick()">
 
           <el-dialog v-if="user.id === myUser.id" :visible.sync="dialogVisible" width="400px" title="画像編集" center >
-              <img width="350px" height="350px" style="border-radius:3px;" :src="image_path1()" alt="">
-              <!-- アイコンが初期の時 -->
-              <span v-if="myUser.imgdata64.String === ''" slot="footer" class="dialog-footer">
+              <img width="350px" height="350px" style="border-radius:3px;object-fit: cover;" :src="user.imgpath" alt="">
+              <span slot="footer" class="dialog-footer">
                 <el-button type="primary" @click="$refs.input.click()">変更</el-button>
-              </span>
-              <!-- アイコンが初期でないとき -->
-              <span v-else slot="footer" class="dialog-footer">
-                <el-button type="primary" @click="$refs.input.click()">変更</el-button>
-                <el-button type="danger" @click="userImgDelete()">削除</el-button>
+                <el-button v-if="user.imgpath === 'http://www.kbcblog-s3.com.s3-website-ap-northeast-1.amazonaws.com/userIcon/man.png' || user.imgpath === 'http://www.kbcblog-s3.com.s3-website-ap-northeast-1.amazonaws.com/userIcon/woman.png'" type="danger" disabled @click="userImgDelete()">削除</el-button>
+                <el-button v-else type="danger" @click="userImgDelete()">削除</el-button>
               </span>
 
             <form>
@@ -31,7 +26,7 @@
           </el-dialog>
 
           <el-dialog v-else :visible.sync="dialogVisible" width="370px">
-              <img width="330px" height="330px" style="border-radius:3px;" :src="image_path()" alt="">
+              <img width="330px" height="330px" style="border-radius:3px;" :src="user.imgpath" alt="">
           </el-dialog>
 
           <!-- <div class="demo-image__preview">
@@ -101,7 +96,7 @@
                         <div class="dialog-main">
                           <div>
                             <!-- アイコン -->
-                            <img class="f-user-icon" :src="image_path2(f)" alt="">
+                            <img class="f-user-icon" :src="f.imgpath" alt="">
                           </div>
                           <div class="f-info-div">
                             <div>
@@ -141,7 +136,7 @@
                         <div class="dialog-main">
                           <div>
                             <!-- アイコン -->
-                            <img class="f-user-icon" :src="image_path2(f)" alt="">
+                            <img class="f-user-icon" :src="f.imgpath" alt="">
                           </div>
                           <div class="f-info-div">
                             <div>
@@ -366,6 +361,7 @@ export default {
       parcentArray: [],
       dialogVisible: false,
       uploadFile:null,
+      fileData: null,
       user: {
         KBCmail: "",
         id : 0,
@@ -387,10 +383,7 @@ export default {
           String: "",
           Valid: Boolean
         },
-        imgdata64:{
-          String: "",
-          Valid: Boolean
-        },
+        imgpath: String,
       },
       errors: {},
       tabPosition: 'left',
@@ -401,6 +394,7 @@ export default {
       loading: null,
       followersloading: false,
       followingloading:false,
+      imgloading:false,
     }
   },
   components: {
@@ -589,8 +583,6 @@ export default {
         .then(response => {
           this.follow.isfollow = true;
           this.follow.followedCount++;
-          // const user = {id: this.myUser.id,comment:this.myUser.comment, isfollowing: true, name: this.myUser.name, sex: this.MyUser.sex , imgdata64: this.MyUser.imgdata64}
-          // this.followers.push(user);
           console.log(response);
         })
         .catch(error => {
@@ -773,28 +765,58 @@ export default {
 
     userImgUpdate(){
       this.openFullScreen()
-      const data = new FormData();    // multipart/form-data形式のため、new
-      data.append('file', this.uploadFile);
+      this.fileData = new FormData();    // multipart/form-data形式のため、new
+      this.fileData.append('file', this.uploadFile);
       this.$axios
-        .post(`http://localhost/api/restricted/Users/${this.myUser.id}/img`,data,{
+        .post(`http://localhost/api/restricted/Users/${this.myUser.id}/img`,this.fileData,{
           headers: {
             'content-type': 'multipart/form-data',
             Authorization: `Bearer ${this.$cookies.get("JWT")}`,
           },
         })
         .then((response) => {
-          this.myUser.imgdata64 = response.data.ImgData64
+          this.user.imgpath = ""
+          this.user.imgpath = response.data.ImgPath
+          console.log(response)
+          this.$router.go({ name : 'UserShow', params : { id: this.user.id }})
           this.closeFullScreen()
         })
         .catch(error => {
+          if(error.response.status == 401){
+            this.$router.push({ path: "/login" });
+            this.errorNotify();
+          }
+          // 画像容量大きすぎ
+          if(error.response.status == 413){
+            this.openError()
+          }
+          if(error.response.status == 400){
+            this.openError2()
+          }
           this.errors = error.response.data.ValidationErrors;
           this.closeFullScreen()
         });
     },
 
+    openError() {
+        this.$message({
+          showClose: true,
+          message: '画像の容量が大き過ぎます。',
+          type: 'error'
+        });
+      },
+    openError2() {
+        this.$message({
+          showClose: true,
+          message: 'アップロードエラー',
+          type: 'error'
+        });
+      },
+
     onFileChange(e) {
       e.preventDefault();
       this.uploadFile = e.target.files[0]
+      console.log(this.uploadFile.name)
       this.userImgUpdate()
     },
 
@@ -806,47 +828,20 @@ export default {
           },
         })
         .then((response) => {
-          this.myUser.imgdata64 = response.data.ImgData64
+          this.user.imgpath= response.data.ImgPath
+          console.log(response)
+          this.$router.go({ name : 'UserShow', params : { id: this.user.id }})
         })
         .catch(error => {
+          if(error.response.status == 401){
+            this.$router.push({ path: "/login" });
+            this.errorNotify();
+          }
+          if(error.response.status == 400){
+            this.openError2()
+          }
           this.errors = error.response.data.ValidationErrors;
         });
-    },
-
-    image_path(){
-      if(this.user.imgdata64.Valid === true){
-        return 'data:image/jpeg;base64,' + this.user.imgdata64.String
-      }else{
-        if(this.user.sex === 1){
-          return require("@/assets/userIcon/man.png");
-        }else if(this.user.sex === 2){
-          return require("@/assets/userIcon/woman.png");
-        }
-      }
-    },
-
-    image_path1(){
-      if(this.myUser.imgdata64.Valid === true){
-        return 'data:image/jpeg;base64,' + this.myUser.imgdata64.String
-      }else{
-        if(this.myUser.sex === 1){
-          return require("@/assets/userIcon/man.png");
-        }else if(this.myUser.sex === 2){
-          return require("@/assets/userIcon/woman.png");
-        }
-      }
-    },
-
-    image_path2(u){
-      if(u.imgdata64.Valid === true){
-        return 'data:image/jpeg;base64,' + u.imgdata64.String
-      }else{
-        if(u.sex === 1){
-          return require("@/assets/userIcon/man.png");
-        }else if(u.sex === 2){
-          return require("@/assets/userIcon/woman.png");
-        }
-      }
     },
 
     openFullScreen() {
@@ -907,10 +902,12 @@ export default {
   margin-top: 50px;
   border-radius: 50%;
 }
-.user-show-icon-img {
+.user-show-icon-img{
   width: 180px;
   height: 180px;
+  object-fit: cover; /* 画像トリミング */
   cursor: pointer;
+  background: #000;
   border-radius: 50%;
 }
 .user-show-info{

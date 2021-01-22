@@ -9,7 +9,7 @@ import (
 // ArticleCommentListByCursor ...
 func ArticleCommentListByCursor(articleid int) ([]*model.ArticleComment, error) {
 
-	query := `SELECT c.id id,c.userid userid,c.articleid articleid,u.name name, u.imgdata64 imgdata64, u.sex sex,c.text text,c.created created,c.updated updated
+	query := `SELECT c.id id,c.userid userid,c.articleid articleid,u.name name, u.imgpath imgpath, u.sex sex,c.text text,c.created created,c.updated updated
 	FROM article_comments c,users u
 	WHERE c.userid = u.id and c.articleid = ?
 	ORDER BY c.id desc`
@@ -77,7 +77,7 @@ func ArticleCommentDelete(id int) error {
 //QuestionCommentListByCursor ...
 func QuestionCommentListByCursor(questionID int) ([]*model.QuestionComment, error) {
 
-	query := `SELECT c.id id,c.userid userid,c.questionid questionid,u.name name, u.imgdata64 imgdata64, u.sex sex,c.text text,c.created created,c.updated updated
+	query := `SELECT c.id id,c.userid userid,c.questionid questionid,u.name name, u.imgpath imgpath, u.sex sex,c.text text,c.created created,c.updated updated
 	FROM question_comments c,users u
 	WHERE c.userid = u.id and c.questionid = ?
 	ORDER BY c.id desc`

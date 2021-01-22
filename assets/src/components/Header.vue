@@ -157,8 +157,8 @@
             </el-badge>
 
           </li>
-          <li v-if="user.imgdata64">
-            <img v-if="user.sex !== 3" class="header-user-icon" :src="image_path()" @click="myUserPage">
+          <li>
+            <img class="header-user-icon" :src="user.imgpath" @click="myUserPage">
           </li>
         </ul>
       </nav>
@@ -200,19 +200,6 @@ export default {
     },
   },
   methods: {
-
-    image_path(){
-      if(this.user.imgdata64.Valid === true){
-        return 'data:image/jpeg;base64,' + this.user.imgdata64.String
-        // return require("@/assets/userIcon/" + this.user.imgdata64.String);
-      }else{
-        if(this.user.sex === 1){
-          return require("@/assets/userIcon/man.png");
-        }else if(this.user.sex === 2){
-          return require("@/assets/userIcon/woman.png");
-        }
-      }
-    },
 
     myUserPage: function() {
       if(this.$router.currentRoute.path !== `/Users/${this.user.id}`){
@@ -414,6 +401,7 @@ export default {
 .header-user-icon{
   width: 40px;
   height: 40px;
+  object-fit: cover; /* 画像トリミング */
   border-radius: 50%;
   cursor: pointer;
   margin-left: 15px;

@@ -3,10 +3,8 @@ package handler
 import (
 	"net/http"
 	"strconv"
-
 	"app/model"
 	"app/repository"
-
 	"github.com/labstack/echo/v4"
 )
 
