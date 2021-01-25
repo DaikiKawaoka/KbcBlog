@@ -1,25 +1,20 @@
-name: Go
+name: Go #ワークフロー名を「Go」に設定
 
-on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+on: [push] #リポジトリへのpush時にこのワークフローを実行するよう指定
 
-jobs:
+jobs: #ここで実行するジョブを指定する
 
-  build:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-
+  build: #「build」という名前のジョブを定義
+    runs-on: ubuntu-latest #Ubuntuの最新版環境内で処理を実行することを指定
+    steps: #ここで実行する処理やコマンドを指定する
     - name: Set up Go
-      uses: actions/setup-go@v2
+      uses: actions/setup-go@v1
+
       with:
-        go-version: 1.13.1
+        go-version: 1.13
 
     - name: Build
-      run: go build -v ./...
+      run: go build -v ./...  #「go build」コマンドを実行してビルドを行う
 
     - name: Test
-      run: go test -v ./...
+      run: go test -v ./...  #「cargo test」コマンドを実行してテストを行う
