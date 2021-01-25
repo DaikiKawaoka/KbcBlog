@@ -17,4 +17,4 @@ jobs: #ここで実行するジョブを指定する
       run: go build -v ./...  #「go build」コマンドを実行してビルドを行う
 
     - name: Test
-      run: go test -v ./...  #「cargo test」コマンドを実行してテストを行う
+      run: go test -v .  #「cargo test」コマンドを実行してテストを行う
