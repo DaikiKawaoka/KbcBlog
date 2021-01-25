@@ -4,7 +4,8 @@
       <h1 class="footer-title">KBCBlog</h1>
       <div class="footer-right-div">
         <div class="menu">
-          <router-link to="/About" class="a-tag"><p class="about-css">About</p></router-link>
+          <router-link v-if="user !== null && user !== undefined " to="/About" class="a-tag"><p class="about-css">About</p></router-link>
+          <p class="about-css" v-else @click="guestLogin">About</p>
           <!-- <router-link to="/Help" class="a-tag"><p class="about-css">Help</p></router-link> -->
         </div>
         <div class="btn">
@@ -16,15 +17,32 @@
 </template>
 
 <script>
-
+import axios from "axios";
 export default {
+  props: {
+    user: null,
+  },
   methods: {
+    guestLogin: function() {
+      axios
+        .get('http://localhost/api/guestLogin')
+        .then(response => {
+          let token = response.data.token;
+          this.$cookies.set('JWT',token,"10000h");
+          this.$router.push({ path: "/About" });
+        })
+        .catch(error => {
+          // if (error.response.data && error.response.data.errors) {
+            this.errors = error.response.data;
+          // }
+        });
+    },
     scrollTop: function(){
       window.scrollTo({
         top: 0,
         behavior: "smooth"
       });
-    }
+    },
   }
 }
 </script>

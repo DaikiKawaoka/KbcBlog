@@ -43,7 +43,7 @@
 
       </el-card>
     </div>
-    <Footer></Footer>
+    <Footer :user="user"></Footer>
   </div>
 </template>
 

@@ -2,7 +2,7 @@
   <div id="app" v-if="user.id !== 920437694 && user.id !== 0">
     <Header :isArticle="true" :isQuestion="false" :user="user"></Header>
     <Article-form :article="article" :errors="errors" :create="create" @submit="createArticle" @cancell="goHome"></Article-form>
-    <Footer></Footer>
+    <Footer :user="user"></Footer>
   </div>
 </template>
 

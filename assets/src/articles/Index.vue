@@ -68,7 +68,7 @@
         <Ranking :Ranking="Ranking" :rankingType="rankingType" :isArticle="true" :user="user"></Ranking>
       </div>
     </div>
-    <Footer></Footer>
+    <Footer :user="user"></Footer>
   </div>
 </template>
 

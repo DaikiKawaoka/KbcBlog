@@ -32,7 +32,7 @@
         </el-form>
       </div>
     </div>
-    <Footer></Footer>
+    <Footer :user="myUser"></Footer>
   </div>
 </template>
 <script>

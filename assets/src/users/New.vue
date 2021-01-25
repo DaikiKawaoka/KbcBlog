@@ -2,7 +2,7 @@
   <div id="app">
     <Header :loginpage="true"></Header>
     <user-form :errors="errors" :user="user" @submit="createUser"></user-form>
-    <Footer></Footer>
+    <Footer :user="user"></Footer>
   </div>
 </template>
 <script>

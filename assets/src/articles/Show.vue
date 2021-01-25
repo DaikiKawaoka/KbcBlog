@@ -123,7 +123,7 @@
 
       <CommentForm :comment="comment" :errors="errors" :user="user" @submit="createArticleComment"></CommentForm>
     </div>
-    <Footer></Footer>
+    <Footer :user="user"></Footer>
   </div>
 </template>
 

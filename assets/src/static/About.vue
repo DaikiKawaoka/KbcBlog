@@ -21,7 +21,7 @@
         </ul>
       </div>
     </div>
-    <Footer></Footer>
+    <Footer :user="user"></Footer>
   </div>
 </template>
 
@@ -53,7 +53,7 @@ export default {
       })
       .catch(error => {
         if(error.response.status == 401){
-          this.user = null
+          this.user = {}
         }
         // this.closeFullScreen()
       })

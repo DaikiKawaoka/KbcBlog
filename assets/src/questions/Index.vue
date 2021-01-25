@@ -73,7 +73,7 @@
         <Ranking :Ranking="Ranking" :rankingType="rankingType"></Ranking>
       </div>
     </div>
-    <Footer></Footer>
+    <Footer :user="user"></Footer>
   </div>
 </template>
 
