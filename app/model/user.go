@@ -124,7 +124,7 @@ func (u *CreateUser) ValidationErrors(err error) []string {
 		}
 	}
 	//password-check
-	if u.PasswordCheck() != true{
+	if !u.PasswordCheck(){
 		message := "パスワードとパスワード確認が異なります。"
 		errMessages = append(errMessages, message)
 	}
@@ -170,8 +170,5 @@ func MailCheckRegexp(fl validator.FieldLevel) bool {  //引数の型、返り値
 
 // PasswordCheck ...
 func (u *CreateUser) PasswordCheck() bool{
-	if(u.Password == u.PassCfm){
-		return true
-	}
-	return false
+	return u.Password == u.PassCfm
 }

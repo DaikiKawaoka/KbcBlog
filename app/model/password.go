@@ -35,18 +35,12 @@ func (p *Password) CurrentPasswordHash() error {
 
 // CurrentPasswordCheck 現在のパスワードがあっているかチェック
 func (p *Password) CurrentPasswordCheck(dbcurrentP string) bool{
-	if(p.CurrentPassword == dbcurrentP){
-		return true
-	}
-	return false
+	return p.CurrentPassword == dbcurrentP //true or false
 }
 
 // NewPasswordCheck ...
 func (p *Password) NewPasswordCheck() bool{
-	if(p.NewPassword == p.PasswordConfirmation){
-		return true
-	}
-	return false
+	return p.NewPassword == p.PasswordConfirmation
 }
 
 // ValidationErrors ...
@@ -80,7 +74,7 @@ func (p *Password) ValidationErrors(err error) []string {
 		}
 	}
 	//password-check
-	if p.NewPasswordCheck() != true{
+	if !p.NewPasswordCheck(){
 		message := "パスワードとパスワード確認が異なります。"
 		errMessages = append(errMessages, message)
 	}

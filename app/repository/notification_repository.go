@@ -57,8 +57,7 @@ func GetNotificationCount(userID int) (int,error){
 
 // GetNotification ...
 func GetNotification(userID int,cursor int) ([]*model.Notification , error){
-	var notifications []*model.Notification
-	notifications = make([]*model.Notification, 0, 4)
+	notifications := make([]*model.Notification, 0, 4)
 	query := `SELECT n.id id, a.id articleid,q.id questionid, n.visiterid userid, u2.name name,ac.text a_text,qc.text q_text, n.action action, n.checked checked, n.created created, n.updated updated FROM notifications n left join users u on n.visitedid = u.id left join users u2 on n.visiterid = u2.id left join articles a on n.articleid = a.id left join questions q on n.questionid = q.id left join article_comments ac on n.a_commentid = ac.id left join question_comments qc on n.q_commentid = qc.id WHERE u.id = ? ORDER BY n.id desc LIMIT ?,4;`
 	if err := db.Select(&notifications, query, userID, cursor); err != nil {
 		return nil, err
