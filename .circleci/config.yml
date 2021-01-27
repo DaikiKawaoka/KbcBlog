@@ -1,8 +1,7 @@
- version: 2
- jobs:
-   build:
-     docker:
-       - image: circleci/ruby:2.4.1
-     steps:
-       - checkout
-       - run: echo "A first hello"
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/golang:1.11.2
+    steps:
+      - run: echo "hello world"
