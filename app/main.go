@@ -2,6 +2,8 @@ package main
 
 import (
 	"log"
+	"os"
+	"fmt"
 	// "time"
 	"app/handler"
 	"app/repository"
@@ -11,6 +13,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"gopkg.in/go-playground/validator.v9"
+	"github.com/joho/godotenv" //環境変数
 )
 
 var db *sqlx.DB
@@ -26,7 +29,16 @@ func main() {
 }
 
 func connectDB() *sqlx.DB {
-	dsn := "root:kbc_password@tcp(myapp-mysql:3306)/kbcblog-mysql?parseTime=true&autocommit=0&sql_mode=%27TRADITIONAL,NO_AUTO_VALUE_ON_ZERO,ONLY_FULL_GROUP_BY%27"
+	err := godotenv.Load(fmt.Sprintf("../%s.env", os.Getenv("GO_ENV")))
+    if err != nil {
+			e.Logger.Fatal(err)
+		}
+	var (
+		DBPASSWORDROOT = os.Getenv("DB_PASSWORD_ROOT")
+		DBUSERNAME = os.Getenv("DB_USERNAME")
+		DBDATABASE = os.Getenv("DB_DATABASE")
+	)
+	dsn := DBUSERNAME+":"+DBPASSWORDROOT+"@tcp(myapp-mysql:3306)/"+DBDATABASE+"?parseTime=true&autocommit=0&sql_mode=%27TRADITIONAL,NO_AUTO_VALUE_ON_ZERO,ONLY_FULL_GROUP_BY%27"
 	db, err := sqlx.Open("mysql", dsn)
 	if err != nil {
 		e.Logger.Fatal(err)

@@ -1,22 +1,22 @@
-version: 2.1
-executors:
-  executor:
-    machine:
-      image: ubuntu-1604:201903-01
-jobs:
-  build:
-    executor: executor
-    steps:
-      - checkout
-      - run:
-          name: docker-compose build
-          command: docker-compose build
-      - run:
-          name: docker-compose up
-          command: docker-compose up -d
-      - run:
-          name: echo
-          command: echo "docker-compose Success"
+# version: 2.1
+# executors:
+#   executor:
+#     machine:
+#       image: ubuntu-1604:201903-01
+# jobs:
+#   build:
+#     executor: executor
+#     steps:
+#       - checkout
+#       - run:
+#           name: docker-compose build
+#           command: docker-compose build
+#       - run:
+#           name: docker-compose up
+#           command: docker-compose up -d
+#       - run:
+#           name: echo
+#           command: echo "docker-compose Success"
       # - run:
       #     name: docker-compose down
       #     command: docker-compose down
