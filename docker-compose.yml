@@ -42,10 +42,10 @@ services:
     ports:
       - "3306:3306"
     environment:
-      MYSQL_USER: root
-      MYSQL_ROOT_PASSWORD: "kbc_password"
-      MYSQL_DATABASE: kbcblog-mysql
-      TZ: 'Asia/Tokyo'
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD_ROOT}
+      MYSQL_DATABASE: ${DB_DATABASE}
+      TZ: ${TZ}
     cap_add:
       - SYS_NICE
     volumes:
