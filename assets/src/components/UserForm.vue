@@ -85,10 +85,10 @@
         </el-input>
       </el-form-item>
 
-      <el-form-item v-if="!edit"
+      <el-form-item
       label="メールアドレス" prop="KBC_mail"
       :rules="[
-          { required: true , pattern: /[\w\-\._]+@(stu.)?kawahara.ac.jp/, message: '河原学園のメールアドレスを入力してください。', trigger: 'blur'},
+          { required: true , pattern: /[\w\-\._]+@(stu.)?kawahara.ac.jp$/, message: '河原学園のメールアドレスを入力してください。', trigger: 'blur'},
       ]">
           <el-input v-model="user.KBC_mail"></el-input>
       </el-form-item>
@@ -126,7 +126,7 @@
       </el-form-item>
 
       <el-form-item>
-        <el-button v-if="edit" @click="$emit('submit')">変更</el-button>
+        <el-button v-if="edit" @click="userForm('userForm')">変更</el-button>
         <el-button v-else @click="userForm('userForm')">登録</el-button>
       </el-form-item>
     </el-form>
@@ -217,7 +217,6 @@
       userForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            this.openSuccess()
             this.$emit('submit')
           } else {
             console.log('error submit!!');
@@ -226,17 +225,10 @@
           }
         });
       },
-      openSuccess() {
-        this.$message({
-          showClose: true,
-          message: 'アカウントが作成できました。',
-          type: 'success'
-        });
-      },
       openError() {
         this.$message({
           showClose: true,
-          message: '未入力の項目があります。',
+          message: '入力項目に不備があります。',
           type: 'error'
         });
       },
