@@ -67,10 +67,14 @@ import (
 		tx := db.MustBegin()
 		_, err := tx.NamedExec(query, follow)
 		if err != nil {
-			tx.Rollback()
+			if re := tx.Rollback(); re != nil {
+				return re
+			}
 			return err
 		}
-		tx.Commit()
+		if re := tx.Commit(); re != nil {
+			return re
+		}
 		return nil
 	}
 
@@ -79,8 +83,13 @@ import (
 		query := "DELETE FROM follows WHERE followerid = ? AND followedid = ?"
 		tx := db.MustBegin()
 		if _, err := tx.Exec(query,followerid,followedid); err != nil {
-			tx.Rollback()
+			if re := tx.Rollback(); re != nil {
+				return re
+			}
 			return err
 		}
-		return tx.Commit()
+		if re := tx.Commit(); re != nil {
+			return re
+		}
+		return nil
 	}

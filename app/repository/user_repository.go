@@ -39,10 +39,14 @@ func UserCreate(user *model.CreateUser) (sql.Result, error) {
   tx := db.MustBegin()
   res, err := tx.NamedExec(query, user)
   if err != nil {
-    tx.Rollback()
+    if re := tx.Rollback(); re != nil {
+			return nil, re
+		}
     return nil, err
   }
-  tx.Commit()
+  if re := tx.Commit(); re != nil {
+		return nil, re
+	}
   return res, nil
 }
 
@@ -64,6 +68,7 @@ func UserUpdate(user *model.User) error {
 
 	query := `UPDATE users
 	SET name = :name,
+			mail = :mail,
 			comment = :comment,
 			github = :github,
 			website = :website,
@@ -73,11 +78,14 @@ func UserUpdate(user *model.User) error {
 	tx := db.MustBegin()
 	_, err := tx.NamedExec(query, user)
 	if err != nil {
-		tx.Rollback()
+		if re := tx.Rollback(); re != nil {
+			return re
+		}
 		return err
 	}
-	tx.Commit()
-
+	if re := tx.Commit(); re != nil {
+		return re
+	}
 	return nil
 }
 
@@ -91,10 +99,14 @@ func UserImgUpdate(user *model.UserImgUpdateClass) error {
 	tx := db.MustBegin()
 	_, err := tx.NamedExec(query, user)
 	if err != nil {
-		tx.Rollback()
+		if re := tx.Rollback(); re != nil {
+			return re
+		}
 		return err
 	}
-	tx.Commit()
+	if re := tx.Commit(); re != nil {
+		return re
+	}
 
 	return nil
 }
@@ -115,10 +127,13 @@ func UserImgDelete(user *model.User) error {
 	tx := db.MustBegin()
 	_, err := tx.NamedExec(query, user)
 	if err != nil {
-		tx.Rollback()
+		if re := tx.Rollback(); re != nil {
+			return re
+		}
 		return err
 	}
-	tx.Commit()
-
+	if re := tx.Commit(); re != nil {
+		return re
+	}
 	return nil
 }

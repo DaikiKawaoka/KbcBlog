@@ -34,10 +34,14 @@ func ArticleCommentCreate(comment *model.ArticleComment) (sql.Result, error) {
 
   res, err := tx.NamedExec(query, comment)
   if err != nil {
-    tx.Rollback()
+    if re := tx.Rollback(); re != nil {
+			return nil,re
+		}
     return nil, err
-  }
-  tx.Commit()
+	}
+	if re := tx.Commit(); re != nil {
+		return nil,re
+	}
   return res, nil
 }
 
@@ -54,10 +58,15 @@ func ArticleCommentUpdate(comment *model.ArticleComment) (sql.Result, error) {
 	res, err := tx.NamedExec(query, comment)
 
 	if err != nil {
-		tx.Rollback()
+		if re := tx.Rollback(); re != nil {
+			return nil,re
+		}
 		return nil, err
 	}
-	tx.Commit()
+	if re := tx.Commit(); re != nil {
+		return nil,re
+	}
+
 	return res, nil
 }
 
@@ -66,10 +75,15 @@ func ArticleCommentDelete(id int) error {
 	query := "DELETE FROM article_comments WHERE id = ?"
 	tx := db.MustBegin()
 	if _, err := tx.Exec(query, id); err != nil {
-		tx.Rollback()
+		if re := tx.Rollback(); re != nil {
+			return re
+		}
 		return err
 	}
-	return tx.Commit()
+	if re := tx.Commit(); re != nil {
+		return re
+	}
+	return nil
 }
 
 
@@ -103,10 +117,15 @@ func QuestionCommentCreate(comment *model.QuestionComment) (sql.Result, error) {
 
   res, err := tx.NamedExec(query, comment)
   if err != nil {
-    tx.Rollback()
+    if re := tx.Rollback(); re != nil {
+			return nil,re
+		}
     return nil, err
-  }
-  tx.Commit()
+	}
+	if re := tx.Commit(); re != nil {
+		return nil, re
+	}
+
   return res, nil
 }
 
@@ -123,10 +142,14 @@ func QuestionCommentUpdate(comment *model.QuestionComment) (sql.Result, error) {
 	res, err := tx.NamedExec(query, comment)
 
 	if err != nil {
-		tx.Rollback()
+		if re := tx.Rollback(); re != nil {
+			return nil,re
+		}
 		return nil, err
 	}
-	tx.Commit()
+	if re := tx.Commit(); re != nil {
+		return nil,re
+	}
 	return res, nil
 }
 
@@ -136,8 +159,13 @@ func QuestionCommentDelete(id int) error {
 	tx := db.MustBegin()
 
 	if _, err := tx.Exec(query, id); err != nil {
-		tx.Rollback()
+		if re := tx.Rollback(); re != nil {
+			return re
+		}
 		return err
 	}
-	return tx.Commit()
+	if re := tx.Commit(); re != nil {
+		return re
+	}
+	return nil
 }

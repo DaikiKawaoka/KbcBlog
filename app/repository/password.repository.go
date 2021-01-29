@@ -27,9 +27,13 @@ func PasswordUpdate(pass *model.Password) error {
 	tx := db.MustBegin()
 	_, err := tx.NamedExec(query, pass)
 	if err != nil {
-		tx.Rollback()
+		if re := tx.Rollback(); re != nil {
+			return re
+		}
 		return err
 	}
-	tx.Commit()
+	if re := tx.Commit(); re != nil {
+		return re
+	}
 	return nil
 }

@@ -38,10 +38,14 @@ func NotificationCreate(notification *model.CreateNotification) error {
   tx := db.MustBegin()
   _,err := tx.NamedExec(query, notification)
   if err != nil {
-    tx.Rollback()
+    if re := tx.Rollback(); re != nil {
+			return re
+		}
     return err
-  }
-  tx.Commit()
+	}
+	if re := tx.Commit(); re != nil {
+		return re
+	}
   return nil
 }
 
@@ -80,10 +84,14 @@ func NotificationChecked(userID int) error{
 	_ , err := tx.NamedExec(query, notification)
 
 	if err != nil {
-		tx.Rollback()
+		if re := tx.Rollback(); re != nil {
+			return re
+		}
 		return err
 	}
-	tx.Commit()
+	if re := tx.Commit(); re != nil {
+		return re
+	}
 	return nil
 }
 
@@ -92,8 +100,13 @@ func NotificationDelete(userID int) error {
 	query := "DELETE FROM notifications WHERE visitedid = ?"
 	tx := db.MustBegin()
 	if _, err := tx.Exec(query, userID); err != nil {
-		tx.Rollback()
+		if re := tx.Rollback(); re != nil {
+			return re
+		}
 		return err
 	}
-	return tx.Commit()
+	if re := tx.Commit(); re != nil {
+		return re
+	}
+	return nil
 }

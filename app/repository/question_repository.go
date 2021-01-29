@@ -197,10 +197,14 @@ func QuestionCreate(question *model.Question) (sql.Result, error) {
   tx := db.MustBegin()
   res, err := tx.NamedExec(query, question)
   if err != nil {
-    tx.Rollback()
+    if re := tx.Rollback(); re != nil {
+			return nil, re
+		}
     return nil, err
-  }
-  tx.Commit()
+	}
+	if re := tx.Commit(); re != nil {
+		return nil, re
+	}
   return res, nil
 }
 
@@ -221,10 +225,14 @@ func QuestionUpdate(question *model.Question) (sql.Result, error) {
 	res, err := tx.NamedExec(query, question)
 
 	if err != nil {
-		tx.Rollback()
+		if re := tx.Rollback(); re != nil {
+			return nil, re
+		}
 		return nil, err
 	}
-	tx.Commit()
+	if re := tx.Commit(); re != nil {
+		return nil, re
+	}
 	return res, nil
 }
 
@@ -233,10 +241,15 @@ func QuestionDelete(ID int) error {
 	query := "DELETE FROM questions WHERE id = ?"
 	tx := db.MustBegin()
 	if _, err := tx.Exec(query, ID); err != nil {
-		tx.Rollback()
+		if re := tx.Rollback(); re != nil {
+			return re
+		}
 		return err
 	}
-	return tx.Commit()
+	if re := tx.Commit(); re != nil {
+		return re
+	}
+	return nil
 }
 
 // GetUserQuestion ...

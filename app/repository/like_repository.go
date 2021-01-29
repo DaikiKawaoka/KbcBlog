@@ -49,10 +49,14 @@ func CreateArticleLike(like *model.ArticleLike) error {
   tx := db.MustBegin()
   _, err := tx.NamedExec(query, like)
   if err != nil {
-    tx.Rollback()
+    if re := tx.Rollback(); re != nil {
+			return re
+		}
     return err
-  }
-  tx.Commit()
+	}
+	if re := tx.Commit(); re != nil {
+		return re
+	}
   return nil
 }
 
@@ -62,13 +66,16 @@ func DeleteArticleLike(userid int, articleid int) error {
 	tx := db.MustBegin()
 
 	if _, err := tx.Exec(query, userid, articleid); err != nil {
-		tx.Rollback()
+		if re := tx.Rollback(); re != nil {
+			return re
+		}
 		return err
 	}
-	return tx.Commit()
+	if re := tx.Commit(); re != nil {
+		return re
+	}
+	return nil
 }
-
-
 
 
 
@@ -103,10 +110,14 @@ func CreateQuestionLike(like *model.QuestionLike) error {
   tx := db.MustBegin()
   _, err := tx.NamedExec(query, like)
   if err != nil {
-    tx.Rollback()
+    if re := tx.Rollback(); re != nil {
+			return re
+		}
     return err
-  }
-  tx.Commit()
+	}
+	if re := tx.Commit(); re != nil {
+		return re
+	}
   return nil
 }
 
@@ -116,13 +127,16 @@ func DeleteQuestionLike(userID int, questionID int) error {
 	tx := db.MustBegin()
 
 	if _, err := tx.Exec(query, userID, questionID); err != nil {
-		tx.Rollback()
+		if re := tx.Rollback(); re != nil {
+			return re
+		}
 		return err
 	}
-	return tx.Commit()
+	if re := tx.Commit(); re != nil {
+		return re
+	}
+	return nil
 }
-
-
 
 
 // GetArticleCommentLike ...
@@ -157,10 +171,14 @@ func CreateArticleCommentLike(like *model.ArticleCommentLike) error {
   tx := db.MustBegin()
   _, err := tx.NamedExec(query, like)
   if err != nil {
-    tx.Rollback()
+    if re := tx.Rollback(); re != nil {
+			return re
+		}
     return err
-  }
-  tx.Commit()
+	}
+	if re := tx.Commit(); re != nil {
+		return re
+	}
   return nil
 }
 
@@ -170,10 +188,15 @@ func DeleteArticleCommentLike(userID int, articleCommentID int) error {
 	tx := db.MustBegin()
 
 	if _, err := tx.Exec(query, userID, articleCommentID); err != nil {
-		tx.Rollback()
+		if re := tx.Rollback(); re != nil {
+			return re
+		}
 		return err
 	}
-	return tx.Commit()
+	if re := tx.Commit(); re != nil {
+		return re
+	}
+	return nil
 }
 
 
@@ -210,10 +233,14 @@ func CreateQuestionCommentLike(like *model.QuestionCommentLike) error {
   tx := db.MustBegin()
   _, err := tx.NamedExec(query, like)
   if err != nil {
-    tx.Rollback()
+    if re := tx.Rollback(); re != nil {
+			return re
+		}
     return err
-  }
-  tx.Commit()
+	}
+	if re := tx.Commit(); re != nil {
+		return re
+	}
   return nil
 }
 
@@ -223,8 +250,13 @@ func DeleteQuestionCommentLike(userid int, questionCommentID int) error {
 	tx := db.MustBegin()
 
 	if _, err := tx.Exec(query, userid, questionCommentID); err != nil {
-		tx.Rollback()
+		if re := tx.Rollback(); re != nil {
+			return re
+		}
 		return err
 	}
-	return tx.Commit()
+	if re := tx.Commit(); re != nil {
+		return re
+	}
+	return nil
 }

@@ -200,10 +200,14 @@ func ArticleCreate(article *model.Article) (sql.Result, error) {
 
   res, err := tx.NamedExec(query, article)
   if err != nil {
-    tx.Rollback()
+    if re := tx.Rollback(); re != nil {
+			return nil , re
+		}
     return nil, err
-  }
-  tx.Commit()
+	}
+	if re := tx.Commit(); re != nil {
+		return nil , re
+	}
   return res, nil
 }
 
@@ -220,12 +224,15 @@ func ArticleUpdate(article *model.Article) (sql.Result, error) {
 	WHERE id = :id;`
 	tx := db.MustBegin()
 	res, err := tx.NamedExec(query, article)
-
 	if err != nil {
-		tx.Rollback()
+		if re := tx.Rollback(); re != nil {
+			return nil , re
+		}
 		return nil, err
 	}
-	tx.Commit()
+	if re := tx.Commit(); re != nil {
+		return nil , re
+	}
 	return res, nil
 }
 
@@ -234,10 +241,15 @@ func ArticleDelete(id int) error {
 	query := "DELETE FROM articles WHERE id = ?"
 	tx := db.MustBegin()
 	if _, err := tx.Exec(query, id); err != nil {
-		tx.Rollback()
+		if re := tx.Rollback(); re != nil {
+			return re
+		}
 		return err
 	}
-	return tx.Commit()
+	if re := tx.Commit(); re != nil {
+		return re
+	}
+	return nil
 }
 
 // GetUserArticle ...
