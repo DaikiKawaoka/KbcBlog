@@ -53,7 +53,6 @@ func connectDB() *sqlx.DB {
 func createMux() *echo.Echo {
 	// アプリケーションインスタンスを生成
 	e := echo.New()
-
 	// アプリケーションに各種ミドルウェアを設定
 	//アプリケーションのどこかで予期せずにpanicを起こしてしまっても、サーバは落とさずにエラーレスポンスを返せるようにリカバリーする
 	e.Use(middleware.Recover())
@@ -146,6 +145,6 @@ type CustomValidator struct {
 
 // Validate ...
 func (cv *CustomValidator) Validate(i interface{}) error {
-	cv.validator.RegisterValidation("MailCheckRegexp",model.MailCheckRegexp)
+  _ = cv.validator.RegisterValidation("MailCheckRegexp",model.MailCheckRegexp)
 	return cv.validator.Struct(i)
 }
