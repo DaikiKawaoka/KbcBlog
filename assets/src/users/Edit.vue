@@ -120,6 +120,13 @@ export default {
         })
         .catch(error => {
           this.errors = error.response.data.ValidationErrors;
+          if(error.response.status == 500){
+            if(this.errors === null || this.errors.length === 0){
+              this.errors = ["このメールアドレスは既に使われています。"]
+            }else{
+              this.errors.push("このメールアドレスは既に使われています。")
+            }
+          }
           window.scrollTo({
             top: 0,
             behavior: "smooth"
