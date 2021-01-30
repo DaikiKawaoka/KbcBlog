@@ -40,7 +40,7 @@ func UserCreate(c echo.Context) error {
 	id, _ := res.LastInsertId()
 	user.SetupUser(createuser, int(id))
 	out.User = &user
-	return c.JSON(http.StatusOK, out)
+	return c.JSON(http.StatusCreated, out)
 }
 
 // UserShow ...
