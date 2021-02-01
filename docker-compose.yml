@@ -53,6 +53,22 @@ services:
       - ./docker/mysql:/docker-entrypoint-initdb.d
       - mysql_data:/var/lib/mysql
 
+  testDB:
+    container_name: testDB
+    image: mysql:latest
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_USER: ${DB_USERNAME_TEST}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD_ROOT_TEST}
+      MYSQL_DATABASE: ${DB_DATABASE_TEST}
+      TZ: ${TZ}
+    cap_add:
+      - SYS_NICE
+    volumes:
+      - ./docker/test_mysql/conf.d:/etc/mysql/conf.d
+      - ./docker/test_mysql:/docker-entrypoint-initdb.d
+
 # データ永続化領域
 volumes:
   mysql_data:
