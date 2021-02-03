@@ -1,6 +1,6 @@
 <template>
   <div id="app" v-if="user.id !== 920437694 && user.id !== undefined ">
-    <Header :user="myUser"></Header>
+    <Header :user="myUser" :url="url"></Header>
     <div class="passedit-all-div">
       <h1>パスワード変更</h1>
       <div class="passedit-main-div">
@@ -32,7 +32,7 @@
         </el-form>
       </div>
     </div>
-    <Footer :user="myUser"></Footer>
+    <Footer :user="myUser" :url="url"></Footer>
   </div>
 </template>
 <script>
@@ -60,6 +60,7 @@ export default {
       },
       errors: {},
       notificationCount: localStorage.notificationCount,
+      url: null,
     };
   },
   components: {
@@ -67,7 +68,8 @@ export default {
     Footer,
   },
   created () {
-    this.$axios.get(`http://localhost/api/restricted/Users/${this.$route.params.id}/edit`,{
+    this.url = process.env.VUE_APP_URL
+    this.$axios.get(this.url+`api/restricted/Users/${this.$route.params.id}/edit`,{
       headers: {
         Authorization: `Bearer ${this.$cookies.get("JWT")}`
       },
@@ -97,7 +99,7 @@ export default {
   methods: {
     passwordEdit: function() {
       this.$axios
-        .patch(`http://localhost/api/restricted/Users/${this.myUser.id}/password/edit`,this.passwords,{
+        .patch(this.url+`api/restricted/Users/${this.myUser.id}/password/edit`,this.passwords,{
           headers: {
             Authorization: `Bearer ${this.$cookies.get("JWT")}`
           },

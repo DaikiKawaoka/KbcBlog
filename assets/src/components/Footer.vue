@@ -21,11 +21,12 @@ import axios from "axios";
 export default {
   props: {
     user: null,
+    url: null,
   },
   methods: {
     guestLogin: function() {
       axios
-        .get('http://localhost/api/guestLogin')
+        .get(this.url+'api/guestLogin')
         .then(response => {
           let token = response.data.token;
           this.$cookies.set('JWT',token,"10000h");

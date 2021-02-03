@@ -1,6 +1,6 @@
 <template>
   <div id="app" v-if="article">
-    <Header :isArticle="true" :isQuestion="false" :user="user"></Header>
+    <Header :isArticle="true" :isQuestion="false" :user="user" :url="url"></Header>
     <div class="article-show-main">
       <div v-if="this.article != null">
         <div class="comment-header">
@@ -123,7 +123,7 @@
 
       <CommentForm :comment="comment" :errors="errors" :user="user" @submit="createArticleComment"></CommentForm>
     </div>
-    <Footer :user="user"></Footer>
+    <Footer :user="user" :url="url"></Footer>
   </div>
 </template>
 
@@ -156,7 +156,8 @@ export default {
       comments: [],
       errors: {},
       notificationCount: localStorage.notificationCount,
-      tags:[]
+      tags:[],
+      url: null,
     }
   },
   components: {
@@ -167,7 +168,8 @@ export default {
   // createdの中でaxiosを使います。get()の中のURLは、nginx.confで設定してるので、 /api/ になっています。
   created () {
     this.openFullScreen()
-    this.$axios.get(`http://localhost/api/restricted/Articles/${this.$route.params.id}`,{
+    this.url = process.env.VUE_APP_URL
+    this.$axios.get(this.url+`api/restricted/Articles/${this.$route.params.id}`,{
       headers: {
         Authorization: `Bearer ${this.$cookies.get("JWT")}`
       },})
@@ -223,7 +225,7 @@ export default {
     createArticleComment: function() {
       this.comment.name = this.user.name;
       this.$axios
-        .post(`http://localhost/api/restricted/Articles/${this.article.id}/Comments`, this.comment,{
+        .post(this.url+`api/restricted/Articles/${this.article.id}/Comments`, this.comment,{
           headers: {
             Authorization: `Bearer ${this.$cookies.get("JWT")}`
           },
@@ -255,7 +257,7 @@ export default {
 
     deleteArticle: function() {
       this.$axios
-        .delete(`http://localhost/api/restricted/Articles/${this.article.id}`,{
+        .delete(this.url+`api/restricted/Articles/${this.article.id}`,{
           headers: {
             Authorization: `Bearer ${this.$cookies.get("JWT")}`
           },
@@ -283,7 +285,7 @@ export default {
 
     deleteArticleComment: function(commentId,index) {
       this.$axios
-        .delete(`http://localhost/api/restricted/Articles/${this.article.id}/Comments/${commentId}`,{
+        .delete(this.url+`api/restricted/Articles/${this.article.id}/Comments/${commentId}`,{
           headers: {
             Authorization: `Bearer ${this.$cookies.get("JWT")}`
           },
@@ -311,7 +313,7 @@ export default {
 
     CreateArticleLike(){
       this.$axios
-        .post(`http://localhost/api/restricted/Articles/${this.article.id}/Likes`,this.article.userid,{
+        .post(this.url+`api/restricted/Articles/${this.article.id}/Likes`,this.article.userid,{
           headers: {
             Authorization: `Bearer ${this.$cookies.get("JWT")}`
           },
@@ -331,7 +333,7 @@ export default {
 
     DeleteArticleLike(){
       this.$axios
-        .delete(`http://localhost/api/restricted/Articles/${this.article.id}/Likes`,{
+        .delete(this.url+`api/restricted/Articles/${this.article.id}/Likes`,{
           headers: {
             Authorization: `Bearer ${this.$cookies.get("JWT")}`
           },
@@ -351,7 +353,7 @@ export default {
 
     CreateArticleCommentLike(index){
       this.$axios
-        .post(`http://localhost/api/restricted/Articles/Comments/${this.comments[index].id}/Likes`,{articleid:this.article.id,visitedid:this.comments[index].userid},{
+        .post(this.url+`api/restricted/Articles/Comments/${this.comments[index].id}/Likes`,{articleid:this.article.id,visitedid:this.comments[index].userid},{
           headers: {
             Authorization: `Bearer ${this.$cookies.get("JWT")}`
           },
@@ -371,7 +373,7 @@ export default {
 
     DeleteArticleCommentLike(index){
       this.$axios
-        .delete(`http://localhost/api/restricted/Articles/Comments/${this.comments[index].id}/Likes`,{
+        .delete(this.url+`api/restricted/Articles/Comments/${this.comments[index].id}/Likes`,{
           headers: {
             Authorization: `Bearer ${this.$cookies.get("JWT")}`
           },

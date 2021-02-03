@@ -1,8 +1,8 @@
 <template>
   <div id="app">
-    <Header :loginpage="true"></Header>
+    <Header :loginpage="true" :url="url"></Header>
     <user-form :errors="errors" :user="user" @submit="createUser"></user-form>
-    <Footer :user="user"></Footer>
+    <Footer :user="user" :url="url"></Footer>
   </div>
 </template>
 <script>
@@ -29,13 +29,15 @@ export default {
         password_confirmation: '',
         sex: '',
       },
-      errors: []
+      errors: [],
+      url: null,
     };
   },
   methods: {
     createUser: function() {
+      this.url = process.env.VUE_APP_URL
       axios
-        .post('http://localhost/api/Users',this.user)
+        .post(this.url+'api/Users',this.user)
         .then(() => {
           this.$router.push({ name: 'LoginPage' });
         })

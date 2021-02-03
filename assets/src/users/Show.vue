@@ -1,6 +1,6 @@
 <template>
   <div id="app" v-if="user.id !== 920437694 && user.id !== 0 ">
-    <Header :isArticle="false" :isQuestion="false" :user="myUser"></Header>
+    <Header :isArticle="false" :isQuestion="false" :user="myUser" :url="url"></Header>
     <div class="user-show-all">
       <div class="user-show-header">
         <div class="user-show-icon">
@@ -335,7 +335,7 @@
 
       </div>
     </div>
-    <Footer :user="myUser"></Footer>
+    <Footer :user="myUser" :url="url"></Footer>
   </div>
 </template>
 
@@ -395,6 +395,7 @@ export default {
       followersloading: false,
       followingloading:false,
       imgloading:false,
+      url: null,
     }
   },
   components: {
@@ -403,9 +404,10 @@ export default {
   },
   // createdの中でaxiosを使います。get()の中のURLは、nginx.confで設定してるので、 /api/ になっています。
   created () {
+    this.url = process.env.VUE_APP_URL
     this.openFullScreen()
     // this.id = this.$route.params.id
-    this.$axios.get(`http://localhost/api/restricted/Users/${this.$route.params.id}`,{
+    this.$axios.get(this.url+`api/restricted/Users/${this.$route.params.id}`,{
       headers: {
         Authorization: `Bearer ${this.$cookies.get("JWT")}`
       },})
@@ -454,7 +456,7 @@ export default {
   methods: {
 
     userUpdate: function(){
-    this.$axios.get(`http://localhost/api/restricted/Users/${this.$route.params.id}`,{
+    this.$axios.get(this.url+`api/restricted/Users/${this.$route.params.id}`,{
       headers: {
         Authorization: `Bearer ${this.$cookies.get("JWT")}`
       },})
@@ -519,7 +521,7 @@ export default {
     GetFollowing() {
       this.followdialog = true
       this.followingloading = true
-      this.$axios.get(`http://localhost/api/restricted/Users/${this.$route.params.id}/Following`, {
+      this.$axios.get(this.url+`api/restricted/Users/${this.$route.params.id}/Following`, {
         headers: {
           Authorization: `Bearer ${this.$cookies.get("JWT")}`
         },
@@ -546,7 +548,7 @@ export default {
     GetFollowers() {
       this.followerdialog = true
       this.followersloading = true
-      this.$axios.get(`http://localhost/api/restricted/Users/${this.$route.params.id}/Followers`, {
+      this.$axios.get(this.url+`api/restricted/Users/${this.$route.params.id}/Followers`, {
         headers: {
           Authorization: `Bearer ${this.$cookies.get("JWT")}`
         },
@@ -571,7 +573,7 @@ export default {
     // 大きいフォローボタンを押した時
     Follow(){
       this.$axios
-        .post(`http://localhost/api/restricted/Users/${this.user.id}/Follow`,{
+        .post(this.url+`api/restricted/Users/${this.user.id}/Follow`,{
             visiterid: this.myUser.id,
             visitedid: this.user.id,
             action: "follow"
@@ -597,7 +599,7 @@ export default {
     // 大きいフォローボタンを押した時
     UnFollow(){
       this.$axios
-        .delete(`http://localhost/api/restricted/Users/${this.user.id}/Follow`,{
+        .delete(this.url+`api/restricted/Users/${this.user.id}/Follow`,{
           headers: {
             Authorization: `Bearer ${this.$cookies.get("JWT")}`
           },
@@ -683,7 +685,7 @@ export default {
     // ChangeFollow(f,index,'follows')
     ListFollow(f,index,c){
       this.$axios
-        .post(`http://localhost/api/restricted/Users/${f.id}/Follow`,{
+        .post(this.url+`api/restricted/Users/${f.id}/Follow`,{
             visiterid: this.myUser.id,
             visitedid: f.id,
             action: "follow"
@@ -721,7 +723,7 @@ export default {
     // ChangeFollow(f,index,'follows')
     ListUnFollow(f,index,c){
       this.$axios
-        .delete(`http://localhost/api/restricted/Users/${f.id}/Follow`,{
+        .delete(this.url+`api/restricted/Users/${f.id}/Follow`,{
           headers: {
             Authorization: `Bearer ${this.$cookies.get("JWT")}`
           },
@@ -768,7 +770,7 @@ export default {
       this.fileData = new FormData();    // multipart/form-data形式のため、new
       this.fileData.append('file', this.uploadFile);
       this.$axios
-        .post(`http://localhost/api/restricted/Users/${this.myUser.id}/img`,this.fileData,{
+        .post(this.url+`api/restricted/Users/${this.myUser.id}/img`,this.fileData,{
           headers: {
             'content-type': 'multipart/form-data',
             Authorization: `Bearer ${this.$cookies.get("JWT")}`,
@@ -822,7 +824,7 @@ export default {
 
     userImgDelete(){
       this.$axios
-        .delete(`http://localhost/api/restricted/Users/${this.myUser.id}/img`,{
+        .delete(this.url+`api/restricted/Users/${this.myUser.id}/img`,{
           headers: {
             Authorization: `Bearer ${this.$cookies.get("JWT")}`
           },

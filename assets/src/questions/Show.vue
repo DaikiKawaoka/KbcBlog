@@ -1,6 +1,6 @@
 <template>
   <div id="app" v-if="question">
-    <Header :isArticle="false" :isQuestion="true" :user="user"></Header>
+    <Header :isArticle="false" :isQuestion="true" :user="user" :url="url"></Header>
     <div class="question-show-main">
       <div v-if="this.question != null">
         <div class="comment-header">
@@ -121,7 +121,7 @@
       </div>
       <CommentForm :comment="comment" :errors="errors" :user="user" @submit="createQuestionComment"></CommentForm>
     </div>
-    <Footer :user="user"></Footer>
+    <Footer :user="user" :url="url"></Footer>
   </div>
 </template>
 
@@ -155,6 +155,7 @@ export default {
       errors: {},
       tags:[],
       notificationCount: localStorage.notificationCount,
+      url: null,
     }
   },
   components: {
@@ -164,8 +165,9 @@ export default {
   },
   // createdの中でaxiosを使います。get()の中のURLは、nginx.confで設定してるので、 /api/ になっています。
   created () {
+    this.url = process.env.VUE_APP_URL
     this.openFullScreen()
-    this.$axios.get(`http://localhost/api/restricted/Questions/${this.$route.params.id}`,{
+    this.$axios.get(this.url+`api/restricted/Questions/${this.$route.params.id}`,{
       headers: {
         Authorization: `Bearer ${this.$cookies.get("JWT")}`
       },})
@@ -221,7 +223,7 @@ export default {
     createQuestionComment: function() {
       this.comment.name = this.user.name;
       this.$axios
-        .post(`http://localhost/api/restricted/Questions/${this.question.id}/Comments`, this.comment,{
+        .post(this.url+`api/restricted/Questions/${this.question.id}/Comments`, this.comment,{
           headers: {
             Authorization: `Bearer ${this.$cookies.get("JWT")}`
           },
@@ -254,7 +256,7 @@ export default {
 
     deleteQuestionComment: function(commentId,index) {
       this.$axios
-        .delete(`http://localhost/api/restricted/Questions/${this.question.id}/Comments/${commentId}`,{
+        .delete(this.url+`api/restricted/Questions/${this.question.id}/Comments/${commentId}`,{
           headers: {
             Authorization: `Bearer ${this.$cookies.get("JWT")}`
           },
@@ -282,7 +284,7 @@ export default {
 
     deleteQuestion: function() {
       this.$axios
-        .delete(`http://localhost/api/restricted/Questions/${this.$route.params.id}`,{
+        .delete(this.url+`api/restricted/Questions/${this.$route.params.id}`,{
           headers: {
             Authorization: `Bearer ${this.$cookies.get("JWT")}`
           },
@@ -310,7 +312,7 @@ export default {
 
     CreateQuestionLike(){
       this.$axios
-        .post(`http://localhost/api/restricted/Questions/${this.question.id}/Likes`,this.question.userid,{
+        .post(this.url+`api/restricted/Questions/${this.question.id}/Likes`,this.question.userid,{
           headers: {
             Authorization: `Bearer ${this.$cookies.get("JWT")}`
           },
@@ -330,7 +332,7 @@ export default {
 
     DeleteQuestionLike(){
       this.$axios
-        .delete(`http://localhost/api/restricted/Questions/${this.question.id}/Likes`,{
+        .delete(this.url+`api/restricted/Questions/${this.question.id}/Likes`,{
           headers: {
             Authorization: `Bearer ${this.$cookies.get("JWT")}`
           },
@@ -350,7 +352,7 @@ export default {
 
     CreateQuestionCommentLike(index){
       this.$axios
-        .post(`http://localhost/api/restricted/Questions/Comments/${this.comments[index].id}/Likes`,{questionid:this.question.id,visitedid:this.comments[index].userid},{
+        .post(this.url+`api/restricted/Questions/Comments/${this.comments[index].id}/Likes`,{questionid:this.question.id,visitedid:this.comments[index].userid},{
           headers: {
             Authorization: `Bearer ${this.$cookies.get("JWT")}`
           },
@@ -370,7 +372,7 @@ export default {
 
     DeleteQuestionCommentLike(index){
       this.$axios
-        .delete(`http://localhost/api/restricted/Questions/Comments/${this.comments[index].id}/Likes`,{
+        .delete(this.url+`api/restricted/Questions/Comments/${this.comments[index].id}/Likes`,{
           headers: {
             Authorization: `Bearer ${this.$cookies.get("JWT")}`
           },

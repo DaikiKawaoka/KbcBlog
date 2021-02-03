@@ -1,8 +1,8 @@
 <template>
   <div id="app" v-if="user.id !== 920437694 && user.id !== 0 ">
-    <Header :user="myUser"></Header>
+    <Header :user="myUser" :url="url"></Header>
     <user-form :errors="errors" :user="user" :edit="true" @submit="updateUser"></user-form>
-    <Footer :user="myUser"></Footer>
+    <Footer :user="myUser" :url="url"></Footer>
   </div>
 </template>
 <script>
@@ -46,6 +46,7 @@ export default {
       },
       errors: [],
       notificationCount: localStorage.notificationCount,
+      url: null,
     };
   },
   components: {
@@ -54,7 +55,8 @@ export default {
     Footer,
   },
   created () {
-    this.$axios.get(`http://localhost/api/restricted/Users/${this.$route.params.id}/edit`,{
+    this.url = process.env.VUE_APP_URL
+    this.$axios.get(this.url+`api/restricted/Users/${this.$route.params.id}/edit`,{
       headers: {
         Authorization: `Bearer ${this.$cookies.get("JWT")}`
       },
@@ -109,7 +111,7 @@ export default {
       }
 
       this.$axios
-        .patch(`http://localhost/api/restricted/Users/${this.myUser.id}`,this.user,{
+        .patch(this.url+`api/restricted/Users/${this.myUser.id}`,this.user,{
           headers: {
             Authorization: `Bearer ${this.$cookies.get("JWT")}`
           },

@@ -1,8 +1,8 @@
 <template>
   <div id="app" v-if="user">
-    <Header :isArticle="true" :isQuestion="false" :user="user" @reset="reset"></Header>
+    <Header :isArticle="true" :isQuestion="false" :user="user" @reset="reset" :url="url"></Header>
     <div class="index-main body-main">
-      <Tag @scopetag="scopetag" :tag="tag" :friendsOnly="friendsOnly" @reset="reset" @update:friendsOnly ="friendsOnly=$event"></Tag>
+      <Tag @scopetag="scopetag" :tag="tag" :friendsOnly="friendsOnly" @reset="reset" @update:friendsOnly ="friendsOnly=$event" :url="url"></Tag>
       <div class="article-all-div">
         <div class="article-search-div">
           <el-input placeholder="キーワード検索" v-model="searchText" suffix-icon="el-icon-search" style="width:200px; margin-left: 30px;" @input="scopetag"></el-input>
@@ -65,10 +65,10 @@
 
       </div>
       <div>
-        <Ranking :Ranking="Ranking" :rankingType="rankingType" :isArticle="true" :user="user"></Ranking>
+        <Ranking :Ranking="Ranking" :rankingType="rankingType" :isArticle="true" :user="user" :url="url"></Ranking>
       </div>
     </div>
-    <Footer :user="user"></Footer>
+    <Footer :user="user" :url="url"></Footer>
   </div>
 </template>
 
@@ -98,6 +98,7 @@ export default {
       notificationCount: localStorage.notificationCount,
       rankingType: Number,
       loading: null,
+      url: null,
     }
   },
   components: {
@@ -137,10 +138,11 @@ export default {
 
   created () {
     document.title = `KBC Blog`;
+    this.url = process.env.VUE_APP_URL
     this.openFullScreen()
     const jst = this.$cookies.get("JWT");
     this.setUp()
-    this.$axios.get('http://localhost/api/restricted/Articles',{
+    this.$axios.get(this.url+'api/restricted/Articles',{
       params: {
         // ここにクエリパラメータを指定する
         friendsOnly: this.friendsOnly,
@@ -194,7 +196,7 @@ export default {
 
     articleOrder(c) {
       this.changeType()
-      this.$axios.get('http://localhost/api/restricted/Articles/scope', {
+      this.$axios.get(this.url+'api/restricted/Articles/scope', {
       params: {
         friendsOnly: this.friendsOnly,
         searchText: this.searchText,
@@ -227,7 +229,7 @@ export default {
 
     scopetag() {
       this.changeType()
-      this.$axios.get('http://localhost/api/restricted/Articles/scope', {
+      this.$axios.get(this.url+'api/restricted/Articles/scope', {
       params: {
         friendsOnly: this.friendsOnly,
         searchText: this.searchText,
@@ -252,7 +254,7 @@ export default {
     },
 
     scrollArticles($state) {
-      this.$axios.get('http://localhost/api/restricted/Articles/scope', {
+      this.$axios.get(this.url+'api/restricted/Articles/scope', {
       params: {
         friendsOnly: this.friendsOnly,
         searchText: this.searchText,

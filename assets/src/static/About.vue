@@ -1,6 +1,6 @@
 <template>
   <div id="app" v-if="user">
-    <Header :isArticle="false" :isQuestion="false" :user="user"></Header>
+    <Header :isArticle="false" :isQuestion="false" :user="user" :url="url"></Header>
     <div class="about-all">
       <div class="div-1">
         <h1 class="title">KBC Blog とは</h1>
@@ -21,7 +21,7 @@
         </ul>
       </div>
     </div>
-    <Footer :user="user"></Footer>
+    <Footer :user="user" :url="url"></Footer>
   </div>
 </template>
 
@@ -34,6 +34,7 @@ export default {
   data(){
     return {
       user: {},
+      url: null,
     }
   },
   components: {
@@ -43,7 +44,8 @@ export default {
   // createdの中でaxiosを使います。get()の中のURLは、nginx.confで設定してるので、 /api/ になっています。
   created () {
     // this.openFullScreen()
-    this.$axios.get(`http://localhost/api/restricted/About`,{
+    this.url = process.env.VUE_APP_URL
+    this.$axios.get(this.url+`api/restricted/About`,{
       headers: {
         Authorization: `Bearer ${this.$cookies.get("JWT")}`
       },})

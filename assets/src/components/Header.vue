@@ -175,6 +175,7 @@ export default {
     isArticle: Boolean,
     isQuestion: Boolean,
     user: {},
+    url: null,
   },
   components: {
     InfiniteLoading,
@@ -212,7 +213,7 @@ export default {
     click_notification_btn: function(){
       this.changeType()
       const jst = this.$cookies.get("JWT");
-      this.$axios.get('http://localhost/api/restricted/Notifications',{
+      this.$axios.get(this.url+'api/restricted/Notifications',{
         headers: {
           Authorization: `Bearer ${jst}`
         },
@@ -236,7 +237,7 @@ export default {
     },
 
     scrollNotifications($state) {
-      this.$axios.get('http://localhost/api/restricted/Notifications/scope', {
+      this.$axios.get(this.url+'api/restricted/Notifications/scope', {
         params: {
           notificationCursor: this.notificationCursor,
         },
@@ -274,7 +275,7 @@ export default {
 
     deleteNotification() {
       this.$axios
-        .delete(`http://localhost/api/restricted/Notifications`,{
+        .delete(this.url+`api/restricted/Notifications`,{
           headers: {
             Authorization: `Bearer ${this.$cookies.get("JWT")}`
           },

@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Header :loginpage="loginpage"></Header>
+    <Header :loginpage="loginpage" :url="url"></Header>
     <div class="body-main-login">
 
       <el-card class="box-card login">
@@ -43,7 +43,7 @@
 
       </el-card>
     </div>
-    <Footer :user="null"></Footer>
+    <Footer :user="null" :url="url"></Footer>
   </div>
 </template>
 
@@ -60,7 +60,8 @@ export default {
         password: '',
       },
       errors: '',
-      loginpage: true
+      loginpage: true,
+      url: null,
     };
   },
   components: {
@@ -69,6 +70,7 @@ export default {
   },
   created(){
     document.title = `KBC Blog`;
+    this.url = process.env.VUE_APP_URL
   },
   methods: {
     signup: function(){
@@ -76,7 +78,7 @@ export default {
     },
     login: function() {
       axios
-        .post('http://localhost/api/Login',{password: this.loginUser.password, KBC_mail: this.loginUser.KBC_mail})
+        .post(this.url+'api/Login',{password: this.loginUser.password, KBC_mail: this.loginUser.KBC_mail})
         .then(response => {
           let token = response.data.token;
           this.$cookies.set('JWT',token,"10000h");
@@ -90,7 +92,7 @@ export default {
     },
     guestLogin: function() {
       axios
-        .get('http://localhost/api/guestLogin')
+        .get(this.url+'api/guestLogin')
         .then(response => {
           let token = response.data.token;
           this.$cookies.set('JWT',token,"10000h");

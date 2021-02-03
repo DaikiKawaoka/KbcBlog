@@ -114,6 +114,7 @@
       rankingType: Number,
       isArticle: Boolean,
       user: {},
+      url: null,
     },
     data() {
       return {
@@ -133,7 +134,7 @@
     methods:{
       getRanking(type,period) {
         this.rankingLoading = true;
-        this.$axios.get(`http://localhost/api/restricted/${type}/Ranking`, {
+        this.$axios.get(this.url+`api/restricted/${type}/Ranking`, {
         params: {
           rankingType: this.rankingType,
           period: period,

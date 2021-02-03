@@ -1,8 +1,8 @@
 <template>
   <div id="app" v-if="user.id !== 920437694 && user.id !== undefined">
-    <Header :isArticle="false" :isQuestion="true" :user="user"></Header>
+    <Header :isArticle="false" :isQuestion="true" :user="user" :url="url"></Header>
     <Question-form :question="question" :user="user" :errors="errors" :create="create" @submit="updateQuestion" @cancell="goHome"></Question-form>
-    <Footer :user="user"></Footer>
+    <Footer :user="user" :url="url"></Footer>
   </div>
 </template>
 
@@ -20,6 +20,7 @@ export default {
       errors: [],
       create: false,
       notificationCount: localStorage.notificationCount,
+      url: null,
     }
   },
   components: {
@@ -29,7 +30,8 @@ export default {
   },
   // createdの中でaxiosを使います。get()の中のURLは、nginx.confで設定してるので、 /api/ になっています。
   created () {
-    this.$axios.get(`http://localhost/api/restricted/Questions/${this.$route.params.id}/edit`,{
+    this.url = process.env.VUE_APP_URL
+    this.$axios.get(this.url+`api/restricted/Questions/${this.$route.params.id}/edit`,{
       headers: {
         Authorization: `Bearer ${this.$cookies.get("JWT")}`
       },
@@ -56,7 +58,7 @@ export default {
   methods: {
     updateQuestion: function() {
       this.$axios
-        .patch(`http://localhost/api/restricted/Questions/${this.$route.params.id}`, this.question,{
+        .patch(this.url+`api/restricted/Questions/${this.$route.params.id}`, this.question,{
           headers: {
             Authorization: `Bearer ${this.$cookies.get("JWT")}`
           },

@@ -1,6 +1,6 @@
 <template>
   <div id="app" v-if="user">
-    <Header :isArticle="false" :isQuestion="true" :user="user"></Header>
+    <Header :isArticle="false" :isQuestion="true" :user="user" :url="url"></Header>
     <div class="markdown-all-div">
       <div>
         <h4>タイトル</h4>
@@ -26,6 +26,7 @@ export default {
       question : {
         body:"",
       },
+      url: null,
     }
   },
   components: {
@@ -38,8 +39,9 @@ export default {
   },
   // createdの中でaxiosを使います。get()の中のURLは、nginx.confで設定してるので、 /api/ になっています。
   created () {
+    this.url = process.env.VUE_APP_URL
     this.openFullScreen()
-    this.$axios.get(`http://localhost/api/restricted/Questions/${this.$route.params.id}`,{
+    this.$axios.get(this.url+`api/restricted/Questions/${this.$route.params.id}`,{
       headers: {
         Authorization: `Bearer ${this.$cookies.get("JWT")}`
       },})

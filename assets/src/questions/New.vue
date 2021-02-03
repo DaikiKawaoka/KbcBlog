@@ -1,8 +1,8 @@
 <template>
   <div id="app" v-if="user.id !== 920437694 && user.id !== 0 ">
-    <Header :isArticle="false" :isQuestion="true" :user="user"></Header>
+    <Header :isArticle="false" :isQuestion="true" :user="user" :url="url"></Header>
     <Question-form :question="question" :errors="errors" :create="create" @submit="createQuestion" @cancell="goHome"></Question-form>
-    <Footer :user="user"></Footer>
+    <Footer :user="user" :url="url"></Footer>
   </div>
 </template>
 
@@ -30,10 +30,12 @@ export default {
       errors: [],
       create: true,
       notificationCount: localStorage.notificationCount,
+      url: null,
     }
   },
   created () {
-    this.$axios.get('http://localhost/api/restricted/Questions/new',{
+    this.url = process.env.VUE_APP_URL
+    this.$axios.get(this.url+'api/restricted/Questions/new',{
       headers: {
         Authorization: `Bearer ${this.$cookies.get("JWT")}`
       },
@@ -62,7 +64,7 @@ export default {
       document.title = `KBC Blog`;
       this.question.userid = this.user.id
       this.$axios
-        .post('http://localhost/api/restricted/Questions', this.question,{
+        .post(this.url+'api/restricted/Questions', this.question,{
           headers: {
             Authorization: `Bearer ${this.$cookies.get("JWT")}`
           },

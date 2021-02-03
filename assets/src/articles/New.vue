@@ -1,8 +1,8 @@
 <template>
   <div id="app" v-if="user.id !== 920437694 && user.id !== 0">
-    <Header :isArticle="true" :isQuestion="false" :user="user"></Header>
+    <Header :isArticle="true" :isQuestion="false" :user="user" :url="url"></Header>
     <Article-form :article="article" :errors="errors" :create="create" @submit="createArticle" @cancell="goHome"></Article-form>
-    <Footer :user="user"></Footer>
+    <Footer :user="user" :url="url"></Footer>
   </div>
 </template>
 
@@ -29,11 +29,13 @@ export default {
       errors: [],
       create: true,
       notificationCount: localStorage.notificationCount,
+      url: null,
     }
   },
   // createdの中でaxiosを使います。get()の中のURLは、nginx.confで設定してるので、 /api/ になっています。
   created () {
-    this.$axios.get('http://localhost/api/restricted/Articles/new',{
+    this.url = process.env.VUE_APP_URL
+    this.$axios.get(this.url+'api/restricted/Articles/new',{
       headers: {
         Authorization: `Bearer ${this.$cookies.get("JWT")}`
       },
@@ -61,7 +63,7 @@ export default {
   methods: {
     createArticle: function() {
       this.$axios
-        .post('http://localhost/api/restricted/Articles', this.article,{
+        .post(this.url+'api/restricted/Articles', this.article,{
           headers: {
             Authorization: `Bearer ${this.$cookies.get("JWT")}`
           },

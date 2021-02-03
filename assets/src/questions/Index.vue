@@ -1,6 +1,6 @@
 <template>
   <div id="app" v-if="user">
-    <Header :isArticle="false" :isQuestion="true" :user="user" @reset="reset"></Header>
+    <Header :isArticle="false" :isQuestion="true" :user="user" @reset="reset" :url="url"></Header>
     <div class="index-main body-main">
       <Tag @scopetag="scopetag" :tag="tag" :friendsOnly="friendsOnly" @reset="reset" @update:friendsOnly ="friendsOnly=$event"></Tag>
       <div class="question-all-div">
@@ -70,10 +70,10 @@
 
       </div>
       <div>
-        <Ranking :Ranking="Ranking" :rankingType="rankingType"></Ranking>
+        <Ranking :Ranking="Ranking" :rankingType="rankingType" :url="url"></Ranking>
       </div>
     </div>
-    <Footer :user="user"></Footer>
+    <Footer :user="user" :url="url"></Footer>
   </div>
 </template>
 
@@ -104,6 +104,7 @@ export default {
       notificationCount: localStorage.notificationCount,
       rankingType: null,
       questionloading: false,
+      url: null,
     }
   },
   components: {
@@ -140,6 +141,7 @@ export default {
     },
   },
   created () {
+    this.url = process.env.VUE_APP_URL
     document.title = `KBC Blog`;
     this.openFullScreen()
     const jst = this.$cookies.get("JWT");
@@ -147,7 +149,7 @@ export default {
       this.$router.push({ path: "/login" });
     }
     this.setUp()
-    this.$axios.get('http://localhost/api/restricted/Questions',{
+    this.$axios.get(this.url+'api/restricted/Questions',{
       params: {
         // ここにクエリパラメータを指定する
         friendsOnly: this.friendsOnly,
@@ -202,7 +204,7 @@ export default {
     questionOrder(c) {
       this.questionloading = true
       this.changeType()
-      this.$axios.get('http://localhost/api/restricted/Questions/scope', {
+      this.$axios.get(this.url+'api/restricted/Questions/scope', {
       params: {
         friendsOnly: this.friendsOnly,
         searchText: this.searchText,
@@ -235,7 +237,7 @@ export default {
 
     scopetag() {
       this.changeType()
-      this.$axios.get('http://localhost/api/restricted/Questions/scope', {
+      this.$axios.get(this.url+'api/restricted/Questions/scope', {
       params: {
         friendsOnly: this.friendsOnly,
         searchText: this.searchText,
@@ -260,7 +262,7 @@ export default {
     },
 
     scrollQuestions($state) {
-      this.$axios.get('http://localhost/api/restricted/Questions/scope', {
+      this.$axios.get(this.url+'api/restricted/Questions/scope', {
       params: {
         friendsOnly: this.friendsOnly,
         searchText: this.searchText,

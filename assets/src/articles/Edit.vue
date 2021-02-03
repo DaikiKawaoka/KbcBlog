@@ -1,8 +1,8 @@
 <template>
   <div id="app" v-if="user.id !== 920437694 && user.id !== undefined">
-    <Header :isArticle="true" :isQuestion="false" :user="user"></Header>
+    <Header :isArticle="true" :isQuestion="false" :user="user" :url="url"></Header>
     <Article-form :article="article" :user="user" :errors="errors" :create="create" @submit="updateArticle" @cancell="goHome" :tagArray="tagArray"></Article-form>
-    <Footer :user="user"></Footer>
+    <Footer :user="user" :url="url"></Footer>
   </div>
 </template>
 
@@ -21,6 +21,7 @@ export default {
       create: false,
       tagArray: [],
       notificationCount: localStorage.notificationCount,
+      url: null,
     }
   },
   components: {
@@ -30,7 +31,8 @@ export default {
   },
   // createdの中でaxiosを使います。get()の中のURLは、nginx.confで設定してるので、 /api/ になっています。
   created () {
-    this.$axios.get(`http://localhost/api/restricted/Articles/${this.$route.params.id}/edit`,{
+    this.url = process.env.VUE_APP_URL
+    this.$axios.get(this.url+`api/restricted/Articles/${this.$route.params.id}/edit`,{
       headers: {
         Authorization: `Bearer ${this.$cookies.get("JWT")}`
       },
@@ -64,7 +66,7 @@ export default {
   methods: {
     updateArticle: function() {
       this.$axios
-        .patch(`http://localhost/api/restricted/Articles/${this.$route.params.id}`, this.article,{
+        .patch(this.url+`api/restricted/Articles/${this.$route.params.id}`, this.article,{
           headers: {
             Authorization: `Bearer ${this.$cookies.get("JWT")}`
           },
