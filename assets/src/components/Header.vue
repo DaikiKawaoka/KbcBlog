@@ -336,17 +336,18 @@ export default {
 }
 .title{
   line-height: 60px;
-  margin: 0;
+  margin: 0 40px 0 0;
   color: #fff;
   text-decoration: none;
   cursor: pointer;
 }
 .header-article,.header-question{
-  margin-left: 30px;
-  margin-bottom: 10px;
-  padding: 0 12px 7px 12px;
+  margin: 22px 0 0 13px;
+  /* margin-bottom: 10px; */
+  padding: 0 8px 2px 8px;
   color: #fff;
   cursor: pointer;
+  font-size: 0.9em;
 }
 .header-login-span{
   float: right;
