@@ -35,10 +35,11 @@ func connectDB() *sqlx.DB {
 		}
 	var (
 		DBPASSWORDROOT = os.Getenv("DB_PASSWORD_ROOT")
-		DBUSERNAME = os.Getenv("DB_USERNAME")
-		DBDATABASE = os.Getenv("DB_DATABASE")
+		DBUSERNAME = os.Getenv("DB_USERNAME")  // DBに作成したユーザ名
+		DBDATABASE = os.Getenv("DB_DATABASE")  // テーブルを作ったDB名
+		DBENDPOINT = os.Getenv("DB_ENDPOINT")   // エンドポイント:ポート番号
 	)
-	dsn := DBUSERNAME+":"+DBPASSWORDROOT+"@tcp(myapp-mysql:3306)/"+DBDATABASE+"?parseTime=true&autocommit=0&sql_mode=%27TRADITIONAL,NO_AUTO_VALUE_ON_ZERO,ONLY_FULL_GROUP_BY%27"
+	dsn := DBUSERNAME+":"+DBPASSWORDROOT+"@tcp("+DBENDPOINT+")/"+DBDATABASE+"?parseTime=true&autocommit=0&sql_mode=%27TRADITIONAL,NO_AUTO_VALUE_ON_ZERO,ONLY_FULL_GROUP_BY%27"
 	db, err := sqlx.Open("mysql", dsn)
 	if err != nil {
 		e.Logger.Fatal(err)
