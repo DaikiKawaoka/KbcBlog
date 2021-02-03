@@ -140,8 +140,8 @@ export default {
   }
   .err-div-login{
     position:absolute;
-    top: 2px;
-    left: 50px;
+    top: 200px;
+    left: -20px;
     z-index: 2;
   }
   .err-i{

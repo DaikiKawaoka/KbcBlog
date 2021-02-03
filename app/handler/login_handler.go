@@ -46,7 +46,7 @@ func Login(c echo.Context) error {
 
 	if  err != nil{
     c.Logger().Error(err.Error())
-		message := "ユーザが存在しません。"
+		message := "メールアドレスまたはパスワードが違います。"
 		errmessages[0] = message;
     return c.JSON(http.StatusInternalServerError, errmessages) //500
 	}
@@ -54,7 +54,7 @@ func Login(c echo.Context) error {
 	//パスワードとパスワードハッシュが一致しているか検証
 	if err := passwordVerify(loginUser.PassHash, loginReq.Password); err != nil{
     c.Logger().Error(err.Error())
-		message := "パスワードが違います。"
+		message := "メールアドレスまたはパスワードが違います。"
 		errmessages[0] = message;
     return c.JSON(http.StatusInternalServerError, errmessages)
 	}
