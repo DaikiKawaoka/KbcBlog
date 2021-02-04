@@ -28,9 +28,9 @@ func UserCreate(user *model.CreateUser) (sql.Result, error) {
 	}
 
 	if user.Sex == 1 {
-		user.ImgPath = "http://www.kbcblog-s3.com.s3-website-ap-northeast-1.amazonaws.com/userIcon/man.png"
+		user.ImgPath = "https://s3.ap-northeast-1.amazonaws.com/www.kbcblog-s3.com/userIcon/man.png"
 	}else{
-		user.ImgPath = "http://www.kbcblog-s3.com.s3-website-ap-northeast-1.amazonaws.com/userIcon/woman.png"
+		user.ImgPath = "https://s3.ap-northeast-1.amazonaws.com/www.kbcblog-s3.com/userIcon/woman.png"
 	}
 
   query := `INSERT INTO users (mail,passhash,name,sex,imgpath)
@@ -116,9 +116,9 @@ func UserImgDelete(user *model.User) error {
 
 	var query string
 	if user.Sex == 1 {
-		user.ImgPath = "http://www.kbcblog-s3.com.s3-website-ap-northeast-1.amazonaws.com/userIcon/man.png"
+		user.ImgPath = "https://s3.ap-northeast-1.amazonaws.com/www.kbcblog-s3.com/userIcon/man.png"
 	}else{
-		user.ImgPath = "http://www.kbcblog-s3.com.s3-website-ap-northeast-1.amazonaws.com/userIcon/woman.png"
+		user.ImgPath = "https://s3.ap-northeast-1.amazonaws.com/www.kbcblog-s3.com/userIcon/woman.png"
 	}
 	query = `UPDATE users
 	SET imgpath = :imgpath
