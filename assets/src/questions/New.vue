@@ -61,7 +61,7 @@ export default {
   },
   methods: {
     createQuestion: function() {
-      document.title = `KBC Blog`;
+      this.openFullScreen();
       this.question.userid = this.user.id
       this.$axios
         .post(this.url+'api/restricted/Questions', this.question,{
@@ -70,10 +70,12 @@ export default {
           },
         })
         .then(() => {
+          this.closeFullScreen();
           this.$router.push({ path: "/Questions" });
           this.createQuestionAlert();
         })
         .catch(error => {
+          this.closeFullScreen();
           if(error.response.status == 401){
             this.$router.push({ path: "/login" });
             this.errorNotify();
@@ -102,6 +104,18 @@ export default {
           type: 'error'
         });
       },
+
+      openFullScreen() {
+      this.loading = this.$loading({
+          lock: true,
+          text: 'Loading',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.95)'
+        });
+    },
+    closeFullScreen() {
+      this.loading.close();
+    },
 
     goHome: function(){
       this.$router.push({ path: "/" });

@@ -62,6 +62,7 @@ export default {
   },
   methods: {
     createArticle: function() {
+      this.openFullScreen()
       this.$axios
         .post(this.url+'api/restricted/Articles', this.article,{
           headers: {
@@ -69,10 +70,12 @@ export default {
           },
         })
         .then(() => {
+          this.closeFullScreen();
           this.$router.push({ path: "/" });
           this.createArticleAlert();
         })
         .catch(error => {
+          this.closeFullScreen();
           if(error.response.status == 401){
             this.$router.push({ path: "/login" });
             this.errorNotify();
@@ -100,6 +103,17 @@ export default {
         message: '記事を投稿しました。',
         type: 'success'
       });
+    },
+    openFullScreen() {
+      this.loading = this.$loading({
+          lock: true,
+          text: 'Loading',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.95)'
+        });
+    },
+    closeFullScreen() {
+      this.loading.close();
     },
 
     goHome: function(){
