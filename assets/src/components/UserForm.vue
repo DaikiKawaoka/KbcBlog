@@ -81,7 +81,7 @@
         <el-input
           v-model="user.website.String"
           show-word-limit
-          placeholder="例  http://ec2-13-230-88-76.ap-northeast-1.compute.amazonaws.com/portfolio/">
+          placeholder="例  https://kbc-blog.com">
         </el-input>
       </el-form-item>
 

@@ -10,7 +10,7 @@
               <img width="350px" height="350px" style="border-radius:3px;object-fit: cover;" :src="user.imgpath" alt="">
               <span slot="footer" class="dialog-footer">
                 <el-button type="primary" @click="$refs.input.click()">変更</el-button>
-                <el-button v-if="user.imgpath === 'http://www.kbcblog-s3.com.s3-website-ap-northeast-1.amazonaws.com/userIcon/man.png' || user.imgpath === 'http://www.kbcblog-s3.com.s3-website-ap-northeast-1.amazonaws.com/userIcon/woman.png'" type="danger" disabled @click="userImgDelete()">削除</el-button>
+                <el-button v-if="user.imgpath === 'https://www.kbcblog-s3.com.s3-website-ap-northeast-1.amazonaws.com/userIcon/man.png' || user.imgpath === 'https://www.kbcblog-s3.com.s3-website-ap-northeast-1.amazonaws.com/userIcon/woman.png'" type="danger" disabled @click="userImgDelete()">削除</el-button>
                 <el-button v-else type="danger" @click="userImgDelete()">削除</el-button>
               </span>
 
