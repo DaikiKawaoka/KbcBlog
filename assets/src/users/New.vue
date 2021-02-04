@@ -39,6 +39,7 @@ export default {
       axios
         .post(this.url+'api/Users',this.user)
         .then(() => {
+          this.open()
           this.$router.push({ name: 'LoginPage' });
         })
         .catch(error => {
@@ -56,6 +57,13 @@ export default {
           });
         });
     },
+    open() {
+        this.$notify.success({
+          title: 'アカウントを作成できました！',
+          message: 'メールアドレスとパスワードを入力してログインしてください。',
+          offset: 100
+        });
+      },
   }
 };
 </script>
