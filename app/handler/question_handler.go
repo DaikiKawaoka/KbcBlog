@@ -344,3 +344,18 @@ func QuestionIndexOrder(c echo.Context) error {
 	}
 	return c.JSON(http.StatusOK, data)
 }
+
+// QuestionMarkdown 記事詳細ページ
+func QuestionMarkdown(c echo.Context) error {
+	id, _ := strconv.Atoi(c.Param("id"))
+	question, err := repository.QuestionGetByID(id)
+	if err != nil {
+		c.Logger().Error(err.Error())
+		return c.JSON(http.StatusInternalServerError,"記事データを取得中にエラー発生")
+	}
+	// テンプレートに渡すデータを map に格納します。
+	data := map[string]interface{}{
+		"Question": question,
+	}
+	return c.JSON(http.StatusOK, data)
+}

@@ -106,12 +106,18 @@ func ArticleIndex(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError,"通知数取得中にエアー発生")
 	}
 
+	// notifications,err := repository.GetNotification(userID,0)
+	// if err != nil {
+	// 	return c.JSON(http.StatusInternalServerError,"通知取得中にエラー") //500
+	// }
+
 	data := map[string]interface{}{
 		"user": myUser,
 		"Articles": articles,
 		"Cursor":   cursor,
 		"Ranking": Ranking,
 		"NotificationCount": notificationCount,
+		// "Notifications": notifications,
 	}
 	return c.JSON(http.StatusOK, data)
 }
@@ -315,6 +321,22 @@ func ArticleIndexOrder(c echo.Context) error {
 	data := map[string]interface{}{
 		"Articles": articles,
 		"Cursor":   cursor,
+	}
+	return c.JSON(http.StatusOK, data)
+}
+
+
+// ArticleMarkdown 記事詳細ページ
+func ArticleMarkdown(c echo.Context) error {
+	id, _ := strconv.Atoi(c.Param("id"))
+	article, err := repository.ArticleGetByID(id)
+	if err != nil {
+		c.Logger().Error(err.Error())
+		return c.JSON(http.StatusInternalServerError,"記事データを取得中にエラー発生")
+	}
+	// テンプレートに渡すデータを map に格納します。
+	data := map[string]interface{}{
+		"Article": article,
 	}
 	return c.JSON(http.StatusOK, data)
 }
