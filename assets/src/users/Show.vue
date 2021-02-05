@@ -189,7 +189,7 @@
               <p class="edit-margin-p">フォロー</p>
             </div>
           </div>
-          <div class="user-show-info-footer" v-if="user.comment.Valid === true">
+          <div class="user-show-info-footer" v-if="user.comment.Valid">
             <p class="user-show-comment-p">{{user.comment.String}}</p>
           </div>
         </div>
@@ -448,7 +448,7 @@ export default {
     moment: function (date) {
       // locale関数を使って言語を設定すると、日本語で出力される
       moment.locale( 'ja' );
-      return moment(date).format('YYYY/MM/DD HH:mm');
+      return moment(date).utc().format('YYYY/MM/DD HH:mm');
     }
   },
   computed: {

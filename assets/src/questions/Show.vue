@@ -29,8 +29,8 @@
                   >
                     <el-dropdown-item slot="reference">削除</el-dropdown-item>
                   </el-popconfirm>
-                    <router-link class="a-tag2" v-bind:to="{ name : 'QuestionMarkdown', params : { id: question.id }}">
-                      <el-dropdown-item>Markdownで見る</el-dropdown-item>
+                    <router-link class="a-tag2" target="_blank" v-bind:to="{ name : 'QuestionMarkdown', params : { id: question.id }}">
+                      <el-dropdown-item>ソースを見る</el-dropdown-item>
                     </router-link>
                 </el-dropdown-menu>
               </el-dropdown>
@@ -206,7 +206,7 @@ export default {
     moment: function (date) {
       // locale関数を使って言語を設定すると、日本語で出力される
       moment.locale( 'ja' );
-      return moment(date).format('YYYY/MM/DD HH:mm');
+      return moment(date).utc().format('YYYY/MM/DD HH:mm');
     }
   },
   computed: {
@@ -233,6 +233,8 @@ export default {
             this.comments = [];
           }
           this.comments.unshift(response.data.Comment);
+          // 日本時間に変換
+          this.comments[0].Created = moment.utc(this.comments[0].Created).local().format();
           this.comments[0].imgpath = this.user.imgpath
           this.comment.text = "";
           this.createCommentAlert();

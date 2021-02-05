@@ -33,8 +33,7 @@
                 <router-link v-bind:to="{ name : 'UserShow', params : { id: article.userid }}" class="a-tag">
                   <h3 class="article-index-username">by {{ article.name }}</h3>
                 </router-link>
-                <h3 class="article-index-update" v-if="order === 'new' "> {{ article.Created | moment }}</h3>
-                <h3 class="article-index-update" v-else> {{ article.Created | moment2 }}</h3>
+                <h3 class="article-index-update"> {{ article.Created | moment }}</h3>
                 <i class="el-icon-star-on article-star-i"></i>
                 <span class="article-likecount-span">{{article.likecount}}</span>
               </div>
@@ -49,7 +48,7 @@
         </div>
 
         <div v-else>
-          <div class="article-show-div not-tag-div" v-if="friendsOnly === false ">
+          <div class="article-show-div not-tag-div" v-if="!friendsOnly">
             <p class="not-tag" v-if="searchText === '' && tag !== '全て' ">タグ『{{ tag }}』の記事はまだありません。</p>
             <p class="not-tag" v-else-if="tag === '全て' && searchText !== '' ">キーワード『{{ searchText }}』の記事はありません。</p>
             <p class="not-tag"  v-else-if="tag !== '全て' && searchText !== '' ">タグ『{{ tag }}』,キーワード『{{ searchText }}』の記事はありません。</p>
@@ -110,11 +109,9 @@ export default {
   },
   filters: {
     moment: function (date) {
-      return moment(date).fromNow();
-    },
-    moment2: function (date) {
-      // locale関数を使って言語を設定すると、日本語で出力される
-      return moment(date).utc().format('YYYY/MM/DD');
+      return moment(date).utc().format('YYYY/MM/DD HH:mm');
+      // moment.locale('ja')
+      // return moment().utc(date).fromNow();
     }
   },
   watch: {

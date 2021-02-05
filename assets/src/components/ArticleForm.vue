@@ -67,7 +67,7 @@
       </el-col>
     </el-row>
 
-    <el-form-item label="本文" v-if="isActive == false">
+    <el-form-item label="本文" v-if="!isActive">
       <el-input
         type="textarea"
         :rows="20"

@@ -1,21 +1,24 @@
 <template>
-  <div id="app" v-if="user">
-    <Header :isArticle="false" :isQuestion="true" :user="user" :url="url"></Header>
+  <div id="app">
     <div class="markdown-all-div">
+      <h2>タイトル</h2>
       <div>
-        <h4>タイトル</h4>
         <span>{{question.title}}</span>
       </div>
+      <h2>本文</h2>
       <div>
-        <h4>本文</h4>
-        <span>{{compiledMarkdown}}</span>
+        <h3>src</h3>
+        <span v-text="compiledMarkdown"></span>
+      </div>
+      <div>
+        <h3>markdown</h3>
+        <span>{{question.body}}</span>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import Header from './../components/Header.vue'
 import marked from 'marked';
 
 export default {
@@ -30,7 +33,6 @@ export default {
     }
   },
   components: {
-    Header,
   },
   computed: {
     compiledMarkdown: function () {
@@ -41,7 +43,7 @@ export default {
   created () {
     this.url = process.env.VUE_APP_URL
     this.openFullScreen()
-    this.$axios.get(this.url+`api/restricted/Questions/${this.$route.params.id}`,{
+    this.$axios.get(this.url+`api/restricted/Questions/${this.$route.params.id}/markdown`,{
       headers: {
         Authorization: `Bearer ${this.$cookies.get("JWT")}`
       },})

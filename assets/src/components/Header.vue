@@ -69,7 +69,7 @@
                   <span style="margin:0;"><i v-on:click="deleteNotificationConfirmationOpen()" class="el-icon-delete" style="font-size: 1.4em; cursor:pointer;"></i></span>
                   <div class="overflow">
                     <div v-for="notification in notifications" :key="notification.id" class="notification-body-div">
-                      <span v-if="notification.checked === true"></span>
+                      <span v-if="notification.checked"></span>
                       <span v-else class="notification-badge">●</span>
                       <!-- <div class="user-icon">
                         <div class="notification-user-icon"> -->
@@ -192,7 +192,12 @@ export default {
   filters: {
     moment: function (date) {
       moment.locale('ja')
-      return moment(date).fromNow();
+      // console.log(date)
+      // return moment().utc(date).fromNow();
+      // const date1 = new Date();
+      // date1.setTime(date1.getTime() + 1000*60*60*9);// JSTに変換
+      // return moment(date).from(date1);
+      return moment(date).utc().format('MM/DD HH:mm');
     },
   },
   watch: {

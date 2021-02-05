@@ -24,7 +24,7 @@
     </div>
     <div class="commnet-form-main">
       <el-form>
-        <el-form-item label="投稿" v-if="isActive == false">
+        <el-form-item label="投稿" v-if="!isActive">
             <el-input
               type="textarea"
               :rows="4"

@@ -37,8 +37,7 @@
                 <router-link v-bind:to="{ name : 'UserShow', params : { id: question.userid }}" class="a-tag">
                   <h3 class="question-index-username">by {{ question.name }}</h3>
                 </router-link>
-                <h3 class="question-index-update" v-if="order === 'new' "> {{ question.Created | moment }}</h3>
-                <h3 class="question-index-update" v-else> {{ question.Created | moment2 }}</h3>
+                <h3 class="question-index-update"> {{ question.Created | moment }}</h3>
                 <i class="el-icon-star-on question-star-i"></i>
                 <span class="question-likecount-span">{{question.likecount}}</span>
               </div>
@@ -54,7 +53,7 @@
 
         <div v-else v-loading="questionloading"
         element-loading-text="Loading..." element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 1)">
-          <div class="question-show-div not-tag-div" v-if="friendsOnly === false ">
+          <div class="question-show-div not-tag-div" v-if="!friendsOnly">
             <p class="not-tag" v-if="searchText === '' && tag !== '全て' ">タグ『{{ tag }}』の質問はまだありません。</p>
             <p class="not-tag" v-else-if="tag === '全て' && searchText !== '' ">キーワード『{{ searchText }}』の質問はありません。</p>
             <p class="not-tag"  v-else-if="tag !== '全て' && searchText !== '' ">タグ『{{ tag }}』,キーワード『{{ searchText }}』の質問はありません。</p>
@@ -116,12 +115,8 @@ export default {
   },
   filters: {
     moment: function (date) {
-      return moment(date).fromNow();
+      return moment(date).utc().format('YYYY/MM/DD HH:mm');
     },
-    moment2: function (date) {
-      // locale関数を使って言語を設定すると、日本語で出力される
-      return moment(date).utc().format('YYYY/MM/DD');
-    }
   },
   watch: {
     searchText(newSearchText) {
