@@ -77,31 +77,33 @@ export default {
       this.$router.push("/Users/new");
     },
     login: function() {
+      this.openFullScreen();
       axios
         .post(this.url+'api/Login',{password: this.loginUser.password, KBC_mail: this.loginUser.KBC_mail})
         .then(response => {
+          this.closeFullScreen();
           let token = response.data.token;
           this.$cookies.set('JWT',token,"10000h");
           this.$router.push({ path: "/" });
         })
         .catch(error => {
-          // if (error.response.data && error.response.data.errors) {
-            this.errors = error.response.data;
-          // }
+          this.closeFullScreen();
+          this.errors = error.response.data;
         });
     },
     guestLogin: function() {
+      this.openFullScreen();
       axios
         .get(this.url+'api/guestLogin')
         .then(response => {
+          this.closeFullScreen();
           let token = response.data.token;
           this.$cookies.set('JWT',token,"10000h");
           this.$router.push({ path: "/" });
         })
         .catch(error => {
-          // if (error.response.data && error.response.data.errors) {
-            this.errors = error.response.data;
-          // }
+          this.closeFullScreen();
+          this.errors = error.response.data;
         });
     },
     loginForm(formName) {
@@ -113,6 +115,17 @@ export default {
             return false;
           }
         });
+      },
+      openFullScreen() {
+        this.loading = this.$loading({
+            lock: true,
+            text: 'Loading',
+            spinner: 'el-icon-loading',
+            background: 'rgba(0, 0, 0, 0.95)'
+          });
+      },
+      closeFullScreen() {
+        this.loading.close();
       },
       openError() {
         this.$message({

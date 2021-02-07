@@ -57,6 +57,7 @@ export default {
   },
   methods: {
     updateQuestion: function() {
+      this.openFullScreen();
       this.$axios
         .patch(this.url+`api/restricted/Questions/${this.$route.params.id}`, this.question,{
           headers: {
@@ -64,10 +65,12 @@ export default {
           },
         })
         .then(() => {
+          this.closeFullScreen();
           this.$router.push({ path: `/Questions/${this.question.id}` });
           this.editQuestionAlert();
         })
         .catch(error => {
+          this.closeFullScreen();
           if(error.response.status == 401){
             this.$router.push({ path: "/login" });
             this.errorNotify();
@@ -79,6 +82,18 @@ export default {
           });
           this.openError()
         });
+    },
+
+    openFullScreen() {
+      this.loading = this.$loading({
+          lock: true,
+          text: 'Loading',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.95)'
+        });
+    },
+    closeFullScreen() {
+      this.loading.close();
     },
 
     openError() {

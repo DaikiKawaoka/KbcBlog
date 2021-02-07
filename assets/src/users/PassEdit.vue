@@ -98,6 +98,7 @@ export default {
   },
   methods: {
     passwordEdit: function() {
+      this.openFullScreen();
       this.$axios
         .patch(this.url+`api/restricted/Users/${this.myUser.id}/password/edit`,this.passwords,{
           headers: {
@@ -105,10 +106,12 @@ export default {
           },
         })
         .then(() => {
+          this.closeFullScreen();
           this.$router.push({ name: 'UserShow' , params : { id: this.user.id }});
           this.editUserAlert();
         })
         .catch(error => {
+          this.closeFullScreen();
           this.errors = error.response.data.ValidationErrors;
         });
     },
@@ -119,6 +122,18 @@ export default {
         message: 'パスワードを変更しました。',
         type: 'success'
       });
+    },
+
+    openFullScreen() {
+      this.loading = this.$loading({
+          lock: true,
+          text: 'Loading',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.95)'
+        });
+    },
+    closeFullScreen() {
+      this.loading.close();
     },
 
     errorNotify() {

@@ -65,6 +65,7 @@ export default {
   },
   methods: {
     updateArticle: function() {
+      this.openFullScreen();
       this.$axios
         .patch(this.url+`api/restricted/Articles/${this.$route.params.id}`, this.article,{
           headers: {
@@ -72,10 +73,12 @@ export default {
           },
         })
         .then(() => {
+          this.closeFullScreen();
           this.$router.push({ path: `/Articles/${this.article.id}` });
           this.editArticleAlert();
         })
         .catch(error => {
+          this.closeFullScreen();
           if(error.response.status == 401){
             this.$router.push({ path: "/login" });
             this.errorNotify();
@@ -87,6 +90,18 @@ export default {
           });
           this.openError()
         });
+    },
+
+    openFullScreen() {
+      this.loading = this.$loading({
+          lock: true,
+          text: 'Loading',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.95)'
+        });
+    },
+    closeFullScreen() {
+      this.loading.close();
     },
 
     openError() {

@@ -35,14 +35,17 @@ export default {
   },
   methods: {
     createUser: function() {
+      this.openFullScreen()
       this.url = process.env.VUE_APP_URL
       axios
         .post(this.url+'api/Users',this.user)
         .then(() => {
-          this.open()
+          this.closeFullScreen();
+          this.open();
           this.$router.push({ name: 'LoginPage' });
         })
         .catch(error => {
+          this.closeFullScreen();
           this.errors = error.response.data.ValidationErrors;
           if(error.response.status == 500){
             if(this.errors === null || this.errors.length === 0){
@@ -56,6 +59,17 @@ export default {
             behavior: "smooth"
           });
         });
+    },
+    openFullScreen() {
+      this.loading = this.$loading({
+          lock: true,
+          text: 'Loading',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.95)'
+        });
+    },
+    closeFullScreen() {
+      this.loading.close();
     },
     open() {
         this.$notify.success({

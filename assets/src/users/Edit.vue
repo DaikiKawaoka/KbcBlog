@@ -85,6 +85,7 @@ export default {
   },
   methods: {
     updateUser: function() {
+      this.openFullScreen();
       // commentが空かチェック
       if (this.user.comment.length !== 0){
         this.user.comment.Valid = true;
@@ -117,10 +118,12 @@ export default {
           },
         })
         .then(() => {
+          this.closeFullScreen();
           this.$router.push({ name: 'UserShow' , params : { id: this.user.id }});
           this.editUserAlert();
         })
         .catch(error => {
+          this.closeFullScreen();
           this.errors = error.response.data.ValidationErrors;
           if(error.response.status == 500){
             if(this.errors === null || this.errors.length === 0){
@@ -134,6 +137,17 @@ export default {
             behavior: "smooth"
           });
         });
+    },
+    openFullScreen() {
+      this.loading = this.$loading({
+          lock: true,
+          text: 'Loading',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.95)'
+        });
+    },
+    closeFullScreen() {
+      this.loading.close();
     },
 
     editUserAlert() {
