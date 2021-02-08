@@ -73,7 +73,7 @@ export default {
 .about-all{
   width: 650px;
   margin: 0 auto;
-  height: 500px;
+  height: 550px;
   p{
     text-align: center;
     font-size: 1.1em;

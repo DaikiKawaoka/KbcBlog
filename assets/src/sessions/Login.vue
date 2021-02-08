@@ -140,7 +140,7 @@ export default {
 
 <style lang="scss" scoped>
 .body-main-login{
-  height: 450px;
+  height: 580px;
   position:relative;
   .box-card {
   width: 480px;
