@@ -31,6 +31,7 @@ export default {
       create: true,
       notificationCount: localStorage.notificationCount,
       url: null,
+      isEvent: true,
     }
   },
   created () {
@@ -61,16 +62,20 @@ export default {
     Footer,
   },
   beforeRouteLeave (to, from, next) {
-    this.$confirm('編集中のものは保存されませんが、よろしいですか？', 'Warning', {
-          confirmButtonText: 'OK',
-          cancelButtonText: 'Cancel',
-          type: 'warning',
-          center: true
-        }).then(() => {
-          next()
-        }).catch(() => {
-          next(false)
-        });
+    if(this.isEvent){
+      this.$confirm('編集中のものは保存されませんが、よろしいですか？', 'Warning', {
+            confirmButtonText: 'OK',
+            cancelButtonText: 'Cancel',
+            type: 'warning',
+            center: true
+          }).then(() => {
+            next()
+          }).catch(() => {
+            next(false)
+          });
+    }else{
+      next();
+    }
   },
   destroyed () {
     window.removeEventListener("beforeunload", this.confirmSave);
@@ -87,6 +92,7 @@ export default {
         })
         .then(() => {
           this.closeFullScreen();
+          this.isEvent = false;
           this.$router.push({ path: "/Questions" });
           this.createQuestionAlert();
         })
