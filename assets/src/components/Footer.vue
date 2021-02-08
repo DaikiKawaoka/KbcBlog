@@ -1,15 +1,17 @@
 <template>
   <footer id="footer">
     <div class="footer-all">
-      <h1 class="footer-title">KBCBlog</h1>
-      <div class="footer-right-div">
-        <div class="menu">
-          <router-link v-if="user !== null && user !== undefined " to="/About" class="a-tag"><p class="about-css">About</p></router-link>
-          <p class="about-css" v-else @click="guestLogin">About</p>
-          <!-- <router-link to="/Help" class="a-tag"><p class="about-css">Help</p></router-link> -->
-        </div>
-        <div class="btn">
-          <el-button class="scrollbtn" type="success" icon="el-icon-arrow-up" circle @click="scrollTop"></el-button>
+      <div class="footer-body">
+        <h1 class="footer-title">KBCBlog</h1>
+        <div class="footer-right-div">
+          <div class="menu">
+            <router-link v-if="user !== null && user !== undefined " to="/About" class="a-tag"><p class="about-css">About</p></router-link>
+            <p class="about-css" v-else @click="guestLogin">About</p>
+            <!-- <router-link to="/Help" class="a-tag"><p class="about-css">Help</p></router-link> -->
+          </div>
+          <div class="btn">
+            <el-button class="scrollbtn" type="success" icon="el-icon-arrow-up" circle @click="scrollTop"></el-button>
+          </div>
         </div>
       </div>
     </div>
@@ -51,12 +53,16 @@ export default {
 <style lang="scss" scoped>
 #footer{
   width: 100%;
-  height: 200px;
+  height: 150px;
   background-color: #555;
   .footer-all{
-  margin: 80px auto 0 auto;
-  width: 1000px;
-  display: flex;
+    width: 1000px;
+    height: 150px;
+    background: #555;
+    margin: 0 auto 0 auto;
+    .footer-body{
+      display: flex;
+    }
   }
 }
 
@@ -73,7 +79,7 @@ export default {
   width: 50%;
   margin-top: 30px;
   .menu{
-    margin-left: 200px;
+    margin-left: 300px;
     .about-css{
       margin: 0 0 10px 0;
       font-size: 1.2em;

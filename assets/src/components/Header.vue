@@ -1,167 +1,168 @@
 <template>
   <header id="header">
+    <div class="header-all">
+      <!-- ログインしていない -->
 
-    <!-- ログインしていない -->
-
-    <div class="body-main header-body-main-div" v-if="loginpage || user === null">
-      <div class="header-left">
-        <router-link to="/login" class="a-tag"><h1 class="title">KBC Blog</h1></router-link>
-      </div>
-      <div class="header-right">
-        <router-link to="/login" class="a-tag2"><span class="header-login-span">ログイン</span></router-link>
-      </div>
-    </div>
-
-    <!-- ゲストユーザー -->
-
-    <div class="body-main header-body-main-div" v-else-if="user.id === 920437694">
-      <div class="header-left">
-        <router-link to="/" class="a-tag"><h1 class="title" @click="$emit('reset')">KBC Blog</h1></router-link>
-        <router-link to="/" class="a-tag2"><h3 class="header-article" v-bind:class="{ active: isArticle }">記事</h3></router-link>
-        <router-link to="/Questions" class="a-tag2"><h3 class="header-question" v-bind:class="{ active: isQuestion }">質問</h3></router-link>
-      </div>
-      <div class="header-right">
-        <div class="header-login-btn-div">
+      <div class="header-body-main-div" v-if="loginpage || user === null">
+        <div class="header-left">
+          <router-link to="/login" class="a-tag"><h1 class="title">KBC Blog</h1></router-link>
+        </div>
+        <div class="header-right">
           <router-link to="/login" class="a-tag2"><span class="header-login-span">ログイン</span></router-link>
         </div>
       </div>
-    </div>
 
+      <!-- ゲストユーザー -->
 
-    <!-- ログイン済み -->
-
-    <div class="body-main header-body-main-div" v-else-if="user.id !== undefined && user.id !== null ">
-      <div class="header-left">
-        <router-link to="/" class="a-tag"><h1 class="title" @click="$emit('reset')">KBC Blog</h1></router-link>
-        <router-link to="/" class="a-tag2"><h3 class="header-article" v-bind:class="{ active: isArticle }">記事</h3></router-link>
-        <router-link to="/Questions" class="a-tag2"><h3 class="header-question" v-bind:class="{ active: isQuestion }">質問</h3></router-link>
+      <div class="header-body-main-div" v-else-if="user.id === 920437694">
+        <div class="header-left">
+          <router-link to="/" class="a-tag"><h1 class="title" @click="$emit('reset')">KBC Blog</h1></router-link>
+          <router-link to="/" class="a-tag2"><h3 class="header-article" v-bind:class="{ active: isArticle }">記事</h3></router-link>
+          <router-link to="/Questions" class="a-tag2"><h3 class="header-question" v-bind:class="{ active: isQuestion }">質問</h3></router-link>
+        </div>
+        <div class="header-right">
+          <div class="header-login-btn-div">
+            <router-link to="/login" class="a-tag2"><span class="header-login-span">ログイン</span></router-link>
+          </div>
+        </div>
       </div>
-      <nav id="header-nav">
-        <ul class="header-right-ul">
-          <!-- <li><router-link tag="li" id="gift-nav" to="/Articles/new" class="a-tag">作成</router-link></li> -->
-          <li>
-            <el-dropdown>
-              <span class="el-dropdown-link">
-                <i class="el-icon-edit toukou-icon"></i>
-                投稿<i class="el-icon-caret-bottom el-icon--right"> </i>
-              </span>
-              <el-dropdown-menu slot="dropdown">
-                <router-link to="/Articles/new" class="a-tag2"><el-dropdown-item>記事</el-dropdown-item></router-link>
-                <router-link to="/Questions/new" class="a-tag2"><el-dropdown-item>質問</el-dropdown-item></router-link>
-              </el-dropdown-menu>
-            </el-dropdown>
-          </li>
-          <li>
 
-            <el-badge :value="notificationCount" :max="99" class="badge-all">
-              <el-popover
-                placement="bottom"
-                width="320"
-                trigger="click"
-                v-on:hide="hideNotifications">
-                <!-- <el-table :data="user">
-                  <el-table-column width="150" property="date" label="date"></el-table-column>
-                  <el-table-column width="100" property="name" label="name"></el-table-column>
-                  <el-table-column width="300" property="address" label="address"></el-table-column>
-                </el-table> -->
-                <div  v-if="notifications.length > 0">
-                  <span style="margin-right: 230px;"><i class="el-icon-message-solid"></i>お知らせ</span>
-                  <span style="margin:0;"><i v-on:click="deleteNotificationConfirmationOpen()" class="el-icon-delete" style="font-size: 1.4em; cursor:pointer;"></i></span>
-                  <div class="overflow">
-                    <div v-for="notification in notifications" :key="notification.id" class="notification-body-div">
-                      <span v-if="notification.checked"></span>
-                      <span v-else class="notification-badge">●</span>
-                      <!-- <div class="user-icon">
-                        <div class="notification-user-icon"> -->
-                          <!-- <router-link v-bind:to="{ name : 'UserShow', params : { id: notification.userid }}" class="a-tag">
-                          </router-link> -->
-                        <!-- </div>
-                      </div> -->
-                      <div v-if="notification.action === 'alike'">
-                        <router-link class="a-tag-article" v-bind:to="{ name : 'ArticleShow', params : { id: notification.articleid.Int32 }}" >
-                        <div><p class="notification-text">
-                          <router-link v-bind:to="{ name : 'UserShow', params : { id: notification.userid }}" class="a-tag-n">
-                            <span class="visiter-name">{{notification.name}}</span></router-link> があなたの記事に「いいね！」しました。 <span class="notification-created">{{ notification.Created | moment }}</span></p>
-                        </div></router-link>
-                      </div>
-                      <div v-else-if="notification.action === 'qlike'">
-                        <router-link class="a-tag-article" v-bind:to="{ name : 'QuestionShow', params : { id: notification.questionid.Int32 }}" >
-                        <div><p class="notification-text">
-                          <router-link v-bind:to="{ name : 'UserShow', params : { id: notification.userid }}" class="a-tag-n">
-                            <span class="visiter-name">{{notification.name}}</span></router-link> があなたの質問に「いいね！」しました。<span class="notification-created">{{ notification.Created | moment }}</span></p>
+
+      <!-- ログイン済み -->
+
+      <div class="header-body-main-div" v-else-if="user.id !== undefined && user.id !== null ">
+        <div class="header-left">
+          <router-link to="/" class="a-tag"><h1 class="title" @click="$emit('reset')">KBC Blog</h1></router-link>
+          <router-link to="/" class="a-tag2"><h3 class="header-article" v-bind:class="{ active: isArticle }">記事</h3></router-link>
+          <router-link to="/Questions" class="a-tag2"><h3 class="header-question" v-bind:class="{ active: isQuestion }">質問</h3></router-link>
+        </div>
+        <nav id="header-nav">
+          <ul class="header-right-ul">
+            <!-- <li><router-link tag="li" id="gift-nav" to="/Articles/new" class="a-tag">作成</router-link></li> -->
+            <li>
+              <el-dropdown>
+                <span class="el-dropdown-link">
+                  <i class="el-icon-edit toukou-icon"></i>
+                  投稿<i class="el-icon-caret-bottom el-icon--right"> </i>
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <router-link to="/Articles/new" class="a-tag2"><el-dropdown-item>記事</el-dropdown-item></router-link>
+                  <router-link to="/Questions/new" class="a-tag2"><el-dropdown-item>質問</el-dropdown-item></router-link>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </li>
+            <li>
+
+              <el-badge :value="notificationCount" :max="99" class="badge-all">
+                <el-popover
+                  placement="bottom"
+                  width="320"
+                  trigger="click"
+                  v-on:hide="hideNotifications">
+                  <!-- <el-table :data="user">
+                    <el-table-column width="150" property="date" label="date"></el-table-column>
+                    <el-table-column width="100" property="name" label="name"></el-table-column>
+                    <el-table-column width="300" property="address" label="address"></el-table-column>
+                  </el-table> -->
+                  <div  v-if="notifications.length > 0">
+                    <span style="margin-right: 230px;"><i class="el-icon-message-solid"></i>お知らせ</span>
+                    <span style="margin:0;"><i v-on:click="deleteNotificationConfirmationOpen()" class="el-icon-delete" style="font-size: 1.4em; cursor:pointer;"></i></span>
+                    <div class="overflow">
+                      <div v-for="notification in notifications" :key="notification.id" class="notification-body-div">
+                        <span v-if="notification.checked"></span>
+                        <span v-else class="notification-badge">●</span>
+                        <!-- <div class="user-icon">
+                          <div class="notification-user-icon"> -->
+                            <!-- <router-link v-bind:to="{ name : 'UserShow', params : { id: notification.userid }}" class="a-tag">
+                            </router-link> -->
+                          <!-- </div>
+                        </div> -->
+                        <div v-if="notification.action === 'alike'">
+                          <router-link class="a-tag-article" v-bind:to="{ name : 'ArticleShow', params : { id: notification.articleid.Int32 }}" >
+                          <div><p class="notification-text">
+                            <router-link v-bind:to="{ name : 'UserShow', params : { id: notification.userid }}" class="a-tag-n">
+                              <span class="visiter-name">{{notification.name}}</span></router-link> があなたの記事に「いいね！」しました。 <span class="notification-created">{{ notification.Created | moment }}</span></p>
                           </div></router-link>
-                      </div>
-                      <div v-else-if="notification.action === 'follow'">
-                        <div><p class="notification-text">
-                          <router-link v-bind:to="{ name : 'UserShow', params : { id: notification.userid }}" class="a-tag-n">
-                            <span class="visiter-name">{{notification.name}}</span></router-link> があなたをフォローしました。 <span class="notification-created">{{ notification.Created | moment }}</span></p></div>
-                      </div>
-                      <div v-else-if="notification.action === 'aclike'">
-                        <router-link class="a-tag-article" v-bind:to="{ name : 'ArticleShow', params : { id: notification.articleid.Int32 }}" >
+                        </div>
+                        <div v-else-if="notification.action === 'qlike'">
+                          <router-link class="a-tag-article" v-bind:to="{ name : 'QuestionShow', params : { id: notification.questionid.Int32 }}" >
                           <div><p class="notification-text">
                             <router-link v-bind:to="{ name : 'UserShow', params : { id: notification.userid }}" class="a-tag-n">
-                              <span class="visiter-name">{{notification.name}}</span></router-link> があなたのコメントに「いいね！」しました。 <span class="notification-created">{{ notification.Created | moment }}</span></p>
-                              <div class="notification-comment-div">
-                                <span class="notification-comment-p">{{notification.a_text.String}}</span>
-                              </div>
-                          </div>
-                        </router-link>
-                      </div>
-                      <div v-else-if="notification.action === 'qclike'">
-                        <router-link class="a-tag-article" v-bind:to="{ name : 'QuestionShow', params : { id: notification.questionid.Int32 }}" >
+                              <span class="visiter-name">{{notification.name}}</span></router-link> があなたの質問に「いいね！」しました。<span class="notification-created">{{ notification.Created | moment }}</span></p>
+                            </div></router-link>
+                        </div>
+                        <div v-else-if="notification.action === 'follow'">
                           <div><p class="notification-text">
                             <router-link v-bind:to="{ name : 'UserShow', params : { id: notification.userid }}" class="a-tag-n">
-                              <span class="visiter-name">{{notification.name}}</span></router-link> があなたのコメントに「いいね！」しました。 <span class="notification-created">{{ notification.Created | moment }}</span></p>
-                              <div class="notification-comment-div">
-                                <span class="notification-comment-p">{{notification.q_text.String}}</span>
-                              </div>
-                          </div>
-                        </router-link>
+                              <span class="visiter-name">{{notification.name}}</span></router-link> があなたをフォローしました。 <span class="notification-created">{{ notification.Created | moment }}</span></p></div>
+                        </div>
+                        <div v-else-if="notification.action === 'aclike'">
+                          <router-link class="a-tag-article" v-bind:to="{ name : 'ArticleShow', params : { id: notification.articleid.Int32 }}" >
+                            <div><p class="notification-text">
+                              <router-link v-bind:to="{ name : 'UserShow', params : { id: notification.userid }}" class="a-tag-n">
+                                <span class="visiter-name">{{notification.name}}</span></router-link> があなたのコメントに「いいね！」しました。 <span class="notification-created">{{ notification.Created | moment }}</span></p>
+                                <div class="notification-comment-div">
+                                  <span class="notification-comment-p">{{notification.a_text.String}}</span>
+                                </div>
+                            </div>
+                          </router-link>
+                        </div>
+                        <div v-else-if="notification.action === 'qclike'">
+                          <router-link class="a-tag-article" v-bind:to="{ name : 'QuestionShow', params : { id: notification.questionid.Int32 }}" >
+                            <div><p class="notification-text">
+                              <router-link v-bind:to="{ name : 'UserShow', params : { id: notification.userid }}" class="a-tag-n">
+                                <span class="visiter-name">{{notification.name}}</span></router-link> があなたのコメントに「いいね！」しました。 <span class="notification-created">{{ notification.Created | moment }}</span></p>
+                                <div class="notification-comment-div">
+                                  <span class="notification-comment-p">{{notification.q_text.String}}</span>
+                                </div>
+                            </div>
+                          </router-link>
+                        </div>
+                        <div v-else-if="notification.action === 'acomment'">
+                          <router-link class="a-tag-article" v-bind:to="{ name : 'ArticleShow', params : { id: notification.articleid.Int32 }}" >
+                            <div><p class="notification-text">
+                              <router-link v-bind:to="{ name : 'UserShow', params : { id: notification.userid }}" class="a-tag-n">
+                                <span class="visiter-name">{{notification.name}}</span></router-link> があなたの記事に「コメント」しました。 <span class="notification-created">{{ notification.Created | moment }}</span></p>
+                                <div class="notification-comment-div">
+                                  <span class="notification-comment-p">{{notification.a_text.String}}</span>
+                                </div>
+                            </div>
+                          </router-link>
+                        </div>
+                        <div v-else-if="notification.action === 'qcomment'">
+                          <router-link class="a-tag-article" v-bind:to="{ name : 'QuestionShow', params : { id: notification.questionid.Int32 }}" >
+                            <div><p class="notification-text">
+                              <router-link v-bind:to="{ name : 'UserShow', params : { id: notification.userid }}" class="a-tag-n">
+                                <span class="visiter-name">{{notification.name}}</span></router-link> があなたの質問に「回答」しました。 <span class="notification-created">{{ notification.Created | moment }}</span></p>
+                                <div class="notification-comment-div">
+                                  <span class="notification-comment-p">{{notification.q_text.String}}</span>
+                                </div>
+                            </div>
+                          </router-link>
+                        </div>
                       </div>
-                      <div v-else-if="notification.action === 'acomment'">
-                        <router-link class="a-tag-article" v-bind:to="{ name : 'ArticleShow', params : { id: notification.articleid.Int32 }}" >
-                          <div><p class="notification-text">
-                            <router-link v-bind:to="{ name : 'UserShow', params : { id: notification.userid }}" class="a-tag-n">
-                              <span class="visiter-name">{{notification.name}}</span></router-link> があなたの記事に「コメント」しました。 <span class="notification-created">{{ notification.Created | moment }}</span></p>
-                              <div class="notification-comment-div">
-                                <span class="notification-comment-p">{{notification.a_text.String}}</span>
-                              </div>
-                          </div>
-                        </router-link>
-                      </div>
-                      <div v-else-if="notification.action === 'qcomment'">
-                        <router-link class="a-tag-article" v-bind:to="{ name : 'QuestionShow', params : { id: notification.questionid.Int32 }}" >
-                          <div><p class="notification-text">
-                            <router-link v-bind:to="{ name : 'UserShow', params : { id: notification.userid }}" class="a-tag-n">
-                              <span class="visiter-name">{{notification.name}}</span></router-link> があなたの質問に「回答」しました。 <span class="notification-created">{{ notification.Created | moment }}</span></p>
-                              <div class="notification-comment-div">
-                                <span class="notification-comment-p">{{notification.q_text.String}}</span>
-                              </div>
-                          </div>
-                        </router-link>
-                      </div>
+                      <infinite-loading @infinite="scrollNotifications" :identifier="infiniteId" spinner="spiral">
+                        <span slot="no-more"></span>
+                        <span slot="no-results"></span>
+                      </infinite-loading>
                     </div>
-                    <infinite-loading @infinite="scrollNotifications" :identifier="infiniteId" spinner="spiral">
-                      <span slot="no-more"></span>
-                      <span slot="no-results"></span>
-                    </infinite-loading>
+                    <!-- <router-link to="/Notifications" class="a-tag2"><p class="text-center">通知一覧を見る</p></router-link> -->
                   </div>
-                  <!-- <router-link to="/Notifications" class="a-tag2"><p class="text-center">通知一覧を見る</p></router-link> -->
-                </div>
-                <div v-else>
-                  <p style="margin:0;"><i class="el-icon-message-solid"></i>お知らせ</p>
-                  <p class="text-center">現在通知はございません。</p>
-                </div>
-                <el-button size="mini" slot="reference" @click="click_notification_btn"><i class="el-icon-message-solid message-solid-i"></i></el-button>
-              </el-popover>
-            </el-badge>
+                  <div v-else>
+                    <p style="margin:0;"><i class="el-icon-message-solid"></i>お知らせ</p>
+                    <p class="text-center">現在通知はございません。</p>
+                  </div>
+                  <el-button size="mini" slot="reference" @click="click_notification_btn"><i class="el-icon-message-solid message-solid-i"></i></el-button>
+                </el-popover>
+              </el-badge>
 
-          </li>
-          <li>
-            <img class="header-user-icon" :src="user.imgpath" @click="myUserPage">
-          </li>
-        </ul>
-      </nav>
+            </li>
+            <li>
+              <img class="header-user-icon" :src="user.imgpath" @click="myUserPage">
+            </li>
+          </ul>
+        </nav>
+      </div>
     </div>
   </header>
 </template>
@@ -325,9 +326,14 @@ export default {
 <style scoped>
 #header{
   height: 60px;
-  /* background: #2ee002; */
   background: #24292e;
   border-bottom: #bbb solid 1px;
+}
+.header-all{
+  width: 1000px;
+  background: #24292e;
+  border-bottom: #bbb solid 1px;
+  margin:0 auto;
 }
 .header-body-main-div{
   display: flex;
