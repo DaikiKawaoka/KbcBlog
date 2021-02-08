@@ -886,6 +886,7 @@ export default {
 
 .user-show-all{
   width: 1000px;
+  background-color: #F6F6F4;
   margin: 0 auto 0 auto;
 }
 .user-show-header,.user-show-body,.user-show-footer{

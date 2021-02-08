@@ -32,9 +32,22 @@ export default {
       url: null,
     }
   },
+  beforeRouteLeave (to, from, next) {
+    this.$confirm('編集中のものは保存されませんが、よろしいですか？', 'Warning', {
+          confirmButtonText: 'OK',
+          cancelButtonText: 'Cancel',
+          type: 'warning',
+          center: true
+        }).then(() => {
+          next()
+        }).catch(() => {
+          next(false)
+        });
+  },
   // createdの中でaxiosを使います。get()の中のURLは、nginx.confで設定してるので、 /api/ になっています。
   created () {
     this.url = process.env.VUE_APP_URL
+    window.addEventListener("beforeunload", this.confirmSave);
     this.$axios.get(this.url+'api/restricted/Articles/new',{
       headers: {
         Authorization: `Bearer ${this.$cookies.get("JWT")}`
@@ -55,12 +68,18 @@ export default {
         }
       })
   },
+  destroyed () {
+    window.removeEventListener("beforeunload", this.confirmSave);
+  },
   components: {
     Header,
     Footer,
     ArticleForm
   },
   methods: {
+    confirmSave (event) {
+      event.returnValue = "編集中のものは保存されませんが、よろしいですか？";
+    },
     createArticle: function() {
       this.openFullScreen()
       this.$axios

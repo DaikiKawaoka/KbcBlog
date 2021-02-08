@@ -30,6 +30,7 @@ export default {
   },
   // createdの中でaxiosを使います。get()の中のURLは、nginx.confで設定してるので、 /api/ になっています。
   created () {
+    window.addEventListener("beforeunload", this.confirmSave);
     this.url = process.env.VUE_APP_URL
     this.$axios.get(this.url+`api/restricted/Questions/${this.$route.params.id}/edit`,{
       headers: {
@@ -54,6 +55,21 @@ export default {
           }
         this.errors = error.response.data.ValidationErrors;
       })
+  },
+  beforeRouteLeave (to, from, next) {
+    this.$confirm('編集中のものは保存されませんが、よろしいですか？', 'Warning', {
+          confirmButtonText: 'OK',
+          cancelButtonText: 'Cancel',
+          type: 'warning',
+          center: true
+        }).then(() => {
+          next()
+        }).catch(() => {
+          next(false)
+        });
+  },
+  destroyed () {
+    window.removeEventListener("beforeunload", this.confirmSave);
   },
   methods: {
     updateQuestion: function() {
@@ -121,6 +137,10 @@ export default {
         title: 'Error',
         message: 'あなたのセッションはタイムアウトしました。再度ログインしてください。'
       });
+    },
+
+    confirmSave (event) {
+      event.returnValue = "編集中のものは保存されませんが、よろしいですか？";
     },
   },
   watch: {

@@ -220,6 +220,22 @@ export default {
       }
     }
   },
+  beforeRouteLeave (to, from, next) {
+    if (this.comment.text !== ""){
+      this.$confirm('編集中のものは保存されませんが、よろしいですか？', 'Warning', {
+          confirmButtonText: 'OK',
+          cancelButtonText: 'Cancel',
+          type: 'warning',
+          center: true
+        }).then(() => {
+          next()
+        }).catch(() => {
+          next(false)
+        });
+    }else{
+      next();
+    }
+  },
   methods: {
     createArticleComment: function() {
       this.comment.name = this.user.name;

@@ -34,6 +34,7 @@ export default {
     }
   },
   created () {
+    window.addEventListener("beforeunload", this.confirmSave);
     this.url = process.env.VUE_APP_URL
     this.$axios.get(this.url+'api/restricted/Questions/new',{
       headers: {
@@ -58,6 +59,21 @@ export default {
     Header,
     QuestionForm,
     Footer,
+  },
+  beforeRouteLeave (to, from, next) {
+    this.$confirm('編集中のものは保存されませんが、よろしいですか？', 'Warning', {
+          confirmButtonText: 'OK',
+          cancelButtonText: 'Cancel',
+          type: 'warning',
+          center: true
+        }).then(() => {
+          next()
+        }).catch(() => {
+          next(false)
+        });
+  },
+  destroyed () {
+    window.removeEventListener("beforeunload", this.confirmSave);
   },
   methods: {
     createQuestion: function() {
@@ -126,6 +142,10 @@ export default {
         title: 'Error',
         message: 'あなたのセッションはタイムアウトしました。再度ログインしてください。'
       });
+    },
+
+    confirmSave (event) {
+      event.returnValue = "編集中のものは保存されませんが、よろしいですか？";
     },
   },
   watch: {
