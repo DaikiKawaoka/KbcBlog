@@ -45,9 +45,9 @@
           </div>
 
 
-          <infinite-loading @infinite="scrollQuestions" :identifier="infiniteId" spinner="spiral">
-            <span slot="no-more">----- 検索結果は以上です-----</span>
-            <span slot="no-results">----- 検索結果は以上です -----</span>
+          <infinite-loading @infinite="scrollQuestions" :identifier="infiniteId" spinner="spiral" class="infinite-loading">
+            <span slot="no-more" class="thats-all"><i class="el-icon-caret-top"></i> That’s all  <i class="el-icon-caret-top"></i></span>
+            <span slot="no-results" class="thats-all"><i class="el-icon-caret-top"></i> That’s all  <i class="el-icon-caret-top"></i></span>
           </infinite-loading>
         </div>
 
@@ -424,5 +424,12 @@ export default {
   font-size: 0.6em;
   color: #999;
   width: 440px;
+}
+.infinite-loading{
+  height: 60px;
+  line-height: 60px;
+}
+.thats-all{
+  color: #777;
 }
 </style>
