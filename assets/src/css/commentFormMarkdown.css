@@ -1,0 +1,97 @@
+#article-form-body > blockquote {
+  background: #f3f3f3;
+  padding: 10px 12px;
+  font-style: italic;
+  color: #777;
+  border-left: solid 40px #c4c4c4;
+  box-sizing: border-box;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.19);
+  position: relative;
+}
+
+#article-form-body > p code {
+  display: inline-block;
+  background: #eee;
+}
+
+#article-form-body pre {
+  /* background: #272724; */
+  background: #364549;
+  color: #fff;
+  padding: 14px;
+  margin: 16px 0;
+  border-radius: 0.3em;
+  font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+  text-align: left;
+  word-spacing: normal;
+  word-break: normal;
+  white-space: pre;
+  word-wrap: normal;
+  line-height: 1.5;
+  tab-size: 4;
+  overflow-x: scroll;
+}
+
+
+#article-form-body > h1 {
+  font-size: 20px;
+}
+
+#article-form-body > h2 {
+  font-size: 15px;
+}
+
+#article-form-body > h3 {
+  font-size: 12px;
+}
+
+#article-form-body > h4 {
+  font-size: 10px;
+}
+
+#article-form-body > h5 {
+  font-size: 8px;
+}
+
+#article-form-body > p,
+#article-form-body > ul,
+#article-form-body > ol {
+  margin-top: 12px;
+  margin-bottom: 8px;
+}
+
+#article-form-body > ul > li,
+#article-form-body > ol > li {
+  margin-left: 20px;
+}
+
+#article-form-body li > ul,
+#article-form-body li > ol {
+  margin-left: 20px;
+}
+
+#article-form-body > table {
+  border-collapse: collapse;
+}
+
+#article-form-body > table th,
+#article-form-body > table td {
+  border: 1px solid #ccc;
+  padding: 8px 10px;
+}
+
+#article-form-body > table > tbody tr:nth-of-type(odd) {
+  background: #eee;
+}
+
+#article-form-body a {
+  color: #0000ee;
+}
+
+#article-form-body > *:first-child {
+  margin-top: 0;
+}
+
+#article-form-body > *:last-child {
+  margin-bottom: 48px;
+}
