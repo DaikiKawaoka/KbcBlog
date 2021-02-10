@@ -4,10 +4,12 @@
     <div class="question-show-main">
       <div v-if="this.question != null">
         <div class="comment-header">
-          <div class="comment-header-div">
-            <img class="comment-user-icon" :src="question.imgpath">
-            <p class="comment-user-name">{{ question.name }}</p>
-          </div>
+          <router-link v-bind:to="{ name : 'UserShow', params : { id: question.userid }}" class="a-tag">
+            <div class="comment-header-div">
+              <img class="comment-user-icon" :src="question.imgpath">
+              <p class="comment-user-name">{{ question.name }} <i v-if="teacherMatch(question.KBC_mail)" class="el-icon-success teacher" title="先生マーク"></i></p>
+            </div>
+          </router-link>
           <div class="comment-header-div">
             <div class="article-create-update-date-div">
               <p class="comment-create-date article-create-date"> 作成日 {{ question.Created | moment }}</p>
@@ -75,7 +77,7 @@
           <div class="comment-header">
             <div class="comment-header-div">
               <img class="comment-user-icon" :src="c.imgpath">
-              <p class="comment-user-name">{{c.name}}</p>
+              <p class="comment-user-name">{{c.name}} <i v-if="teacherMatch(c.KBC_mail)" class="el-icon-success teacher" title="先生マーク"></i></p>
             </div>
             <div class="comment-header-div">
               <div>
@@ -105,13 +107,11 @@
           </div>
 
           <el-row v-if="user.id === 920437694">
-            <!-- <i class="el-icon-star-on"></i> -->
             <i class="el-icon-star-off not-comment-ster-i" @click="loginDialog"></i>
             <span class="comment-like-count-span">{{c.Like.likeCount}}</span>
           </el-row>
 
           <el-row v-else>
-            <!-- <i class="el-icon-star-on"></i> -->
             <i v-if="c.Like.isLike" class="el-icon-star-on comment-ster-i" @click="DeleteQuestionCommentLike(index)"></i>
             <i v-else class="el-icon-star-off not-comment-ster-i" @click="CreateQuestionCommentLike(index)"></i>
             <span class="comment-like-count-span">{{c.Like.likeCount}}</span>
@@ -133,7 +133,8 @@ import Footer from './../components/Footer.vue';
 import marked from 'marked';
 import hljs from 'highlight.js';
 import 'highlight.js/styles/github.css';
-import '../components/markdown.css';
+import '../css/markdown.css';
+import '../css/monokai-sublime.css'
 
 export default {
   name: 'app',
@@ -165,8 +166,16 @@ export default {
   },
   // createdの中でaxiosを使います。get()の中のURLは、nginx.confで設定してるので、 /api/ になっています。
   created () {
-    this.url = process.env.VUE_APP_URL
     this.openFullScreen()
+    marked.setOptions({
+      // code要素にdefaultで付くlangage-を削除
+      langPrefix: '',
+      // highlightjsを使用したハイライト処理を追加
+      highlight: function(code, lang) {
+        return hljs.highlightAuto(code, [lang]).value
+      }
+    });
+    this.url = process.env.VUE_APP_URL
     this.$axios.get(this.url+`api/restricted/Questions/${this.$route.params.id}`,{
       headers: {
         Authorization: `Bearer ${this.$cookies.get("JWT")}`
@@ -190,17 +199,7 @@ export default {
           this.errorNotify();
         }
         this.closeFullScreen()
-      }),
-    function () {
-      marked.setOptions({
-        // code要素にdefaultで付くlangage-を削除
-        langPrefix: '',
-        // highlightjsを使用したハイライト処理を追加
-        highlight: function(code, lang) {
-          return hljs.highlightAuto(code, [lang]).value
-        }
-      });
-    }
+      })
   },
   filters: {
     moment: function (date) {
@@ -252,6 +251,7 @@ export default {
           // 日本時間に変換
           this.comments[0].Created = moment.utc(this.comments[0].Created).local().format();
           this.comments[0].imgpath = this.user.imgpath
+          this.comments[0].KBC_mail = this.user.KBC_mail
           this.comment.text = "";
           this.createCommentAlert();
         })
@@ -428,16 +428,24 @@ export default {
     },
 
     loginDialog() {
-        this.$confirm('この機能を利用するにはログインする必要があります', 'ユーザー登録してみませんか？', {
-          confirmButtonText: 'ログイン',
-          cancelButtonText: 'キャンセル',
-          type: 'success',
-          center: true
-        }).then(() => {
-          this.$router.push("/Login");
-        }).catch(() => {
-        });
-      },
+      this.$confirm('この機能を利用するにはログインする必要があります', 'ユーザー登録してみませんか？', {
+        confirmButtonText: 'ログイン',
+        cancelButtonText: 'キャンセル',
+        type: 'success',
+        center: true
+      }).then(() => {
+        this.$router.push("/Login");
+      }).catch(() => {
+      });
+    },
+
+    teacherMatch(kbcmail) {
+      const mail = String(kbcmail)
+      if (mail.match(/[\w\-._]+@kawahara.ac.jp/) !== null ){
+        return true
+      }
+      return false
+    },
 
   },
   watch: {
@@ -454,6 +462,12 @@ export default {
   margin: 30px auto 0 auto;
   background-color: #fff;
   padding: 20px;
+}
+.question-show-main{
+  padding: 20px;
+}
+.question-comment-all{
+  padding: 0 20px 20px 20px;
 }
 .question-title{
   padding: 20px;
@@ -510,13 +524,6 @@ export default {
   text-decoration: none;
   color: #606266;
 }
-
-
-
-
-
-
-
 
 .article-show-main,.article-comment-all{
   width: 800px;

@@ -6,9 +6,8 @@
         <div class="comment-header">
           <router-link v-bind:to="{ name : 'UserShow', params : { id: article.userid }}" class="a-tag">
             <div class="comment-header-div">
-              <!-- <div class="comment-user-icon"></div> -->
               <img class="comment-user-icon" :src="article.imgpath">
-              <p class="comment-user-name">{{ article.name }}</p>
+              <p class="comment-user-name">{{ article.name }} <i v-if="teacherMatch(article.KBC_mail)" class="el-icon-success teacher" title="先生マーク"></i></p>
             </div>
           </router-link>
           <div class="comment-header-div">
@@ -76,7 +75,7 @@
             <router-link v-bind:to="{ name : 'UserShow', params : { id: c.userid }}" class="a-tag">
               <div class="comment-header-div">
                   <img class="comment-user-icon" :src="c.imgpath">
-                  <p class="comment-user-name">{{c.name}}</p>
+                  <p class="comment-user-name">{{c.name}} <i v-if="teacherMatch(c.KBC_mail)" class="el-icon-success teacher" title="先生マーク"></i></p>
               </div>
             </router-link>
             <div class="comment-header-div">
@@ -135,7 +134,8 @@ import CommentForm from './../components/CommentForm.vue'
 import marked from 'marked';
 import hljs from 'highlight.js';
 import 'highlight.js/styles/github.css';
-import '../components/markdown.css';
+import '../css/monokai-sublime.css';
+import '../css/markdown.css';
 
 export default {
   name: 'app',
@@ -168,6 +168,14 @@ export default {
   // createdの中でaxiosを使います。get()の中のURLは、nginx.confで設定してるので、 /api/ になっています。
   created () {
     this.openFullScreen()
+    marked.setOptions({
+      // code要素にdefaultで付くlangage-を削除
+      langPrefix: '',
+      // highlightjsを使用したハイライト処理を追加
+      highlight: function(code, lang) {
+        return hljs.highlightAuto(code, [lang]).value
+      }
+    });
     this.url = process.env.VUE_APP_URL
     this.$axios.get(this.url+`api/restricted/Articles/${this.$route.params.id}`,{
       headers: {
@@ -192,17 +200,7 @@ export default {
           this.errorNotify();
         }
         this.closeFullScreen()
-      }),
-    function () {
-      marked.setOptions({
-        // code要素にdefaultで付くlangage-を削除
-        langPrefix: '',
-        // highlightjsを使用したハイライト処理を追加
-        highlight: function(code, lang) {
-          return hljs.highlightAuto(code, [lang]).value
-        }
-      });
-    }
+      })
   },
   filters: {
     moment: function (date) {
@@ -252,7 +250,8 @@ export default {
           this.comments.unshift(response.data.Comment);
           // 日本時間に変換
           this.comments[0].Created = moment.utc(this.comments[0].Created).local().format();
-          this.comments[0].imgpath= this.user.imgpath
+          this.comments[0].imgpath = this.user.imgpath
+          this.comments[0].KBC_mail = this.user.KBC_mail
           this.comment.text = "";
           this.createCommentAlert();
         })
@@ -428,16 +427,23 @@ export default {
     },
 
     loginDialog() {
-        this.$confirm('この機能を利用するにはログインする必要があります', 'ユーザー登録してみませんか？', {
-          confirmButtonText: 'ログイン',
-          cancelButtonText: 'キャンセル',
-          type: 'success',
-          center: true
-        }).then(() => {
-          this.$router.push("/Login");
-        }).catch(() => {
-        });
+      this.$confirm('この機能を利用するにはログインする必要があります', 'ユーザー登録してみませんか？', {
+        confirmButtonText: 'ログイン',
+        cancelButtonText: 'キャンセル',
+        type: 'success',
+        center: true
+      }).then(() => {
+        this.$router.push("/Login");
+      }).catch(() => {
+      });
+    },
+    teacherMatch(kbcmail) {
+      const mail = String(kbcmail)
+      if (mail.match(/[\w\-._]+@kawahara.ac.jp/) !== null ){
+        return true
       }
+      return false
+    },
   },
 
   watch: {
@@ -453,7 +459,12 @@ export default {
   width: 800px;
   margin: 30px auto 0 auto;
   background-color: #fff;
+}
+.article-show-main{
   padding: 20px;
+}
+.article-comment-all{
+  padding: 0 20px 20px 20px;
 }
 .article-title{
   padding: 0px 20px 0px 10px;
@@ -603,5 +614,10 @@ export default {
 }
 .article-like-btn-div{
   padding-top: 50px;
+}
+.teacher{
+  font-size: 1em;
+  color: #409eff;
+  cursor: pointer;
 }
 </style>
