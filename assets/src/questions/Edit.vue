@@ -29,7 +29,6 @@ export default {
     Footer,
     QuestionForm
   },
-  // createdの中でaxiosを使います。get()の中のURLは、nginx.confで設定してるので、 /api/ になっています。
   created () {
     window.addEventListener("beforeunload", this.confirmSave);
     this.url = process.env.VUE_APP_URL

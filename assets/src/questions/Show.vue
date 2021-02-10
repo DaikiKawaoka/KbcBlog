@@ -164,7 +164,6 @@ export default {
     CommentForm,
     Footer,
   },
-  // createdの中でaxiosを使います。get()の中のURLは、nginx.confで設定してるので、 /api/ になっています。
   created () {
     this.openFullScreen()
     marked.setOptions({

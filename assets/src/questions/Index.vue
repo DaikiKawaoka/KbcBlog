@@ -77,8 +77,6 @@
 </template>
 
 <script>
-// import axios from "axios";
-// import InfiniteLoading from 'vue-infinite-loading';
 import InfiniteLoading from 'vue-infinite-loading'
 import Header from './../components/Header.vue'
 import Footer from './../components/Footer.vue'

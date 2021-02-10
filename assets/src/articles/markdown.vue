@@ -19,7 +19,6 @@
 </template>
 
 <script>
-// import Header from './../components/Header.vue'
 import marked from 'marked';
 
 export default {
