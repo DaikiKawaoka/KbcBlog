@@ -33,7 +33,7 @@
               </div>
               <div class="u-div-nameandcomment-width">
                 <div class="string-out">
-                  <span class="user-name">{{ u.name }}</span>
+                  <span class="user-name">{{ u.name }} <i v-if="teacherMatch(u.KBC_mail)" class="el-icon-success teacher" title="先生マーク"></i></span>
                 </div>
                 <div class="string-out">
                   <span class="tag-user-comment">{{u.comment.String}}</span>
@@ -86,7 +86,7 @@
               </div>
               <div class="u-div-nameandcomment-width">
                 <div class="string-out">
-                  <span class="user-name">{{ u.name }}</span>
+                  <span class="user-name">{{ u.name }} <i v-if="teacherMatch(u.KBC_mail)" class="el-icon-success teacher" title="先生マーク"></i></span>
                 </div>
                 <div class="string-out">
                   <span class="tag-user-comment">{{u.comment.String}}</span>
@@ -155,6 +155,13 @@
             this.rankingLoading = false;
           }
         })
+      },
+      teacherMatch(kbcmail) {
+        const mail = String(kbcmail)
+        if (mail.match(/[\w\-._]+@kawahara.ac.jp/) !== null ){
+          return true
+        }
+        return false
       },
     }
   };
@@ -278,5 +285,10 @@
 }
 .tag-user-comment{
   font-size: 0.7em;
+}
+.teacher{
+  font-size: 1em;
+  color: #409eff;
+  cursor: pointer;
 }
 </style>

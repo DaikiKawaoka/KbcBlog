@@ -14,7 +14,7 @@
             <div class="comment-user-icon">
               <img class="comment-user-icon" :src="user.imgpath">
             </div>
-            <p class="comment-user-name">{{ user.name }}</p>
+            <p class="comment-user-name">{{ user.name }} <i v-if="teacherMatch(user.KBC_mail)" class="el-icon-success teacher" title="先生マーク"></i></p>
         </div>
           <!-- </router-link> -->
         <div class="form-preview-icon">
@@ -57,7 +57,8 @@
 import marked from 'marked';
 import hljs from 'highlight.js';
 import 'highlight.js/styles/github.css';
-import '../components/commentFormMarkdown.css';
+import '../css/commentFormMarkdown.css';
+import '../css/monokai-sublime.css';
 
 export default {
   props: {
@@ -94,6 +95,13 @@ export default {
     },
     login: function(){
       this.$router.push("/Login");
+    },
+    teacherMatch(kbcmail) {
+      const mail = String(kbcmail)
+      if (mail.match(/[\w\-._]+@kawahara.ac.jp/) !== null ){
+        return true
+      }
+      return false
     },
   }
 }
@@ -174,6 +182,11 @@ li{
 .guestUser-login-div{
   width: 300px;
   margin: 15px auto 0 auto;
+}
+.teacher{
+  font-size: 1em;
+  color: #409eff;
+  cursor: pointer;
 }
 
 

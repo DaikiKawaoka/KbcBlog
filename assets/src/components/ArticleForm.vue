@@ -99,7 +99,8 @@
 import marked from 'marked';
 import hljs from 'highlight.js';
 import 'highlight.js/styles/github.css';
-import './markdown.css';
+import '../css/markdown.css';
+import '../css/monokai-sublime.css'
 
 export default {
   props: {
