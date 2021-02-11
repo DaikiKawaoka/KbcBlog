@@ -16,24 +16,14 @@
           { required: true, message: '入力必須です', trigger: 'blur' },
           { min: 4, max: 10, message: '4~10文字で入力してください', trigger: 'blur' },
       ]">
+      <br>
         <el-input
           v-model="user.name"
+          style="width:210px;"
           placeholder="name"
           maxlength="10"
           show-word-limit
           name="user[name]"></el-input>
-      </el-form-item>
-
-      <el-form-item label="コメント" v-if="edit"
-      :rules="[
-          { max: 150, message: '最大150文字です', trigger: 'blur' },
-      ]">
-        <el-input
-          v-model="user.comment.String"
-          maxlength="150"
-          show-word-limit
-          placeholder="comment">
-        </el-input>
       </el-form-item>
 
   <el-form-item label="好きな言語 TOP 3" v-if="edit">
@@ -61,6 +51,19 @@
     </div>
   </el-form-item>
 
+  <el-form-item label="コメント" v-if="edit"
+    :rules="[
+        { max: 150, message: '最大150文字です', trigger: 'blur' },
+    ]">
+    <br>
+      <el-input
+        v-model="user.comment.String"
+        maxlength="150"
+        show-word-limit
+        placeholder="comment">
+      </el-input>
+    </el-form-item>
+
 
 
       <el-form-item label="GithubアカウントのURL" prop="github.String" v-if="edit"
@@ -86,7 +89,7 @@
       </el-form-item>
 
       <el-form-item
-      label="メールアドレス" prop="KBC_mail"
+      label="メールアドレス" prop="KBC_mail" v-if="!edit"
       :rules="[
           { required: true , pattern: /[\w\-\._]+@(stu.)?kawahara.ac.jp$/, message: '河原学園のメールアドレスを入力してください。', trigger: 'blur'},
       ]">

@@ -1,98 +1,100 @@
 <template>
-  <el-form :model="article" class="article-form-all">
+  <div class="body-main">
+    <el-form :model="article">
 
-    <h2 v-if="create">技術記事作成</h2>
-    <h2 v-else>技術記事編集</h2>
+      <h2 v-if="create">技術記事作成</h2>
+      <h2 v-else>技術記事編集</h2>
 
-    <div v-if="errors.length != 0">
-      <ul class="error-ul" v-for="e in errors" :key="e">
-          <li class="error-icon-li"><i class="el-icon-warning-outline"></i></li>
-          <li><font color="red">{{ e }}</font></li>
-      </ul>
-    </div>
+      <div v-if="errors.length != 0">
+        <ul class="error-ul" v-for="e in errors" :key="e">
+            <li class="error-icon-li"><i class="el-icon-warning-outline"></i></li>
+            <li><font color="red">{{ e }}</font></li>
+        </ul>
+      </div>
 
-    <el-form-item label="タイトル">
-      <el-input
-        type="text"
-        placeholder="Please input"
-        v-model="article.title"
-        maxlength="50"
-        show-word-limit
-      >
-      </el-input>
+      <el-form-item label="タイトル">
+        <el-input
+          type="text"
+          placeholder="Please input"
+          v-model="article.title"
+          maxlength="50"
+          show-word-limit
+        >
+        </el-input>
+      </el-form-item>
+
+
+  <div class="tag-all">
+      <el-form-item label="タグ">
+      <div class="select-div">
+        <el-select
+          style="width: 400px;"
+          v-model="tagArray"
+          v-on:change="arrayChangeString"
+          multiple
+          size="large"
+          :multiple-limit=5
+          :collapse-tags="false"
+          no-match-text="一致するタグがありません"
+          filterable
+          :allow-create="false"
+          :default-first-option="true"
+          placeholder="関連するタグを最大5つまで選択してください。">
+          <el-option
+            v-for="item in options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </div>
     </el-form-item>
-
-
-<div class="tag-all">
-    <el-form-item label="タグ">
-    <div class="select-div">
-      <el-select
-        style="width: 400px;"
-        v-model="tagArray"
-        v-on:change="arrayChangeString"
-        multiple
-        size="large"
-        :multiple-limit=5
-        :collapse-tags="false"
-        no-match-text="一致するタグがありません"
-        filterable
-        :allow-create="false"
-        :default-first-option="true"
-        placeholder="関連するタグを最大5つまで選択してください。">
-        <el-option
-          v-for="item in options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value">
-        </el-option>
-      </el-select>
     </div>
-  </el-form-item>
+
+      <el-row>
+        <el-col :span="2"><div class="grid-content"></div></el-col>
+        <el-col :span="4"><div class="grid-content"></div></el-col>
+        <el-col :span="4"><div class="grid-content"></div></el-col>
+        <el-col :span="4"><div class="grid-content"></div></el-col>
+        <el-col :span="6"><div class="grid-content"></div></el-col>
+        <el-col :span="4">
+          <!-- <el-button v-if="isActive" type="primary" icon="el-icon-open" circle v-on:click="active"></el-button>
+          <el-button v-else icon="el-icon-turn-off" circle v-on:click="active"></el-button> -->
+          <el-switch
+            v-model="isActive"
+            active-text="プレビュー"
+            inactive-text="編集">
+          </el-switch>
+        </el-col>
+      </el-row>
+
+      <el-form-item label="本文" v-if="!isActive">
+        <el-input
+          type="textarea"
+          :rows="20"
+          placeholder="Please input"
+          v-model="article.body"
+          font>
+        </el-input>
+      </el-form-item>
+
+      <div class="article-form__preview" v-else>
+        <div class="article-form__label--preview">
+          <p class="article-form__label--preview-p">プレビュー</p>
+        </div>
+        <div class="article-form__preview-body">
+          <div class="article-form__preview-body-contents article-body" v-html="compiledMarkdown"></div>
+        </div>
+      </div>
+
+      <el-row>
+        <el-col :span="6"><div class="grid-content"></div></el-col>
+        <el-col :span="8"><el-button type="danger" @click="$emit('cancell')">キャンセル</el-button></el-col>
+        <el-col :span="8"><el-button type="success" @click="$emit('submit')">セーブ</el-button></el-col>
+        <el-col :span="4"><div class="grid-content"></div></el-col>
+      </el-row>
+    </el-form>
   </div>
-
-    <el-row>
-      <el-col :span="2"><div class="grid-content"></div></el-col>
-      <el-col :span="4"><div class="grid-content"></div></el-col>
-      <el-col :span="4"><div class="grid-content"></div></el-col>
-      <el-col :span="4"><div class="grid-content"></div></el-col>
-      <el-col :span="6"><div class="grid-content"></div></el-col>
-      <el-col :span="4">
-        <!-- <el-button v-if="isActive" type="primary" icon="el-icon-open" circle v-on:click="active"></el-button>
-        <el-button v-else icon="el-icon-turn-off" circle v-on:click="active"></el-button> -->
-        <el-switch
-          v-model="isActive"
-          active-text="プレビュー"
-          inactive-text="編集">
-        </el-switch>
-      </el-col>
-    </el-row>
-
-    <el-form-item label="本文" v-if="!isActive">
-      <el-input
-        type="textarea"
-        :rows="20"
-        placeholder="Please input"
-        v-model="article.body"
-        font>
-      </el-input>
-    </el-form-item>
-
-    <div class="article-form__preview" v-else>
-      <div class="article-form__label--preview">
-        <p class="article-form__label--preview-p">プレビュー</p>
-      </div>
-      <div class="article-form__preview-body">
-        <div class="article-form__preview-body-contents article-body" v-html="compiledMarkdown"></div>
-      </div>
-    </div>
-
-    <el-row>
-      <el-col :span="6"><div class="grid-content"></div></el-col>
-      <el-col :span="8"><el-button type="danger" @click="$emit('cancell')">キャンセル</el-button></el-col>
-      <el-col :span="8"><el-button type="success" @click="$emit('submit')">セーブ</el-button></el-col>
-      <el-col :span="4"><div class="grid-content"></div></el-col>
-    </el-row>
-  </el-form>
 </template>
 
 <script>
@@ -343,11 +345,6 @@ export default {
 </script>
 
 <style scoped>
-.article-form-all{
-  width: 1000px;
-  margin-left: auto;
-  margin-right: auto;
-}
 .el-textarea >>> .el-textarea__inner {
   font-family: inherit;
   font-size: 130%;

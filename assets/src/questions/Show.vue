@@ -1,125 +1,127 @@
 <template>
   <div id="app" v-if="question">
     <Header :isArticle="false" :isQuestion="true" :user="user" :url="url"></Header>
-    <div class="question-show-main">
-      <div v-if="this.question != null">
-        <div class="comment-header">
-          <router-link v-bind:to="{ name : 'UserShow', params : { id: question.userid }}" class="a-tag">
-            <div class="comment-header-div">
-              <img class="comment-user-icon" :src="question.imgpath">
-              <p class="comment-user-name">{{ question.name }} <i v-if="teacherMatch(question.KBC_mail)" class="el-icon-success teacher" title="先生マーク"></i></p>
-            </div>
-          </router-link>
-          <div class="comment-header-div">
-            <div class="article-create-update-date-div">
-              <p class="comment-create-date article-create-date"> 作成日 {{ question.Created | moment }}</p>
-              <p class="comment-create-date article-update-date"> 更新日 {{ question.Updated | moment }}</p>
-            </div>
-            <span class="dropdown-span">
-              <el-dropdown>
-                <span class="el-dropdown-link icon-menu-span">
-                  <i class="el-icon-more"></i>
-                </span>
-                <el-dropdown-menu slot="dropdown">
-                  <router-link v-if="question.userid === user.id" class="a-tag2" v-bind:to="{ name : 'QuestionEdit', params : { id: question.id }}"><el-dropdown-item>編集</el-dropdown-item></router-link>
-                  <el-popconfirm
-                  v-if="question.userid === user.id"
-                  title="本当に削除しますか?"
-                  confirm-button-text="Yes"
-                  cancel-button-text="No"
-                  @confirm="deleteQuestion"
-                  >
-                    <el-dropdown-item slot="reference">削除</el-dropdown-item>
-                  </el-popconfirm>
-                    <router-link class="a-tag2" target="_blank" v-bind:to="{ name : 'QuestionMarkdown', params : { id: question.id }}">
-                      <el-dropdown-item>ソースを見る</el-dropdown-item>
-                    </router-link>
-                </el-dropdown-menu>
-              </el-dropdown>
-            </span>
-          </div>
-        </div>
-        <h1 class="article-title">{{question.title}}</h1>
-        <div class="article-tags-div">
-          <div v-if="question.category === 'Q&A'" class="article-tag-div question-show-category-div quesiton-show-category-Q">
-            <span>{{ question.category }}</span>
-          </div>
-          <div v-else class="article-tag-div question-show-category-div quesiton-show-category-I">
-            <span>{{ question.category }}</span>
-          </div>
-          <div v-for="(tag,index) in tags" :key="index" class="article-tag-div">
-            <span>{{tag}}</span>
-          </div>
-        </div>
-        <div class="article-form__preview-body">
-          <div class="article-form__preview-body-contents" id="article-body" v-html="compiledMarkdown"></div>
-        </div>
-
-        <el-row v-if="user.id === 920437694">
-          <button @click="loginDialog" class="like-btn">いいね <i class="el-icon-star-off"></i></button>
-          <span class="like-count-span">{{like.likeCount}}</span>
-        </el-row>
-        <el-row v-else>
-          <el-button v-if="like.isLike" type="warning" @click="DeleteQuestionLike">解除 <i class="el-icon-star-on"></i></el-button>
-          <button v-else @click="CreateQuestionLike" class="like-btn">いいね <i class="el-icon-star-off"></i></button>
-          <span class="like-count-span">{{like.likeCount}}</span>
-        </el-row>
-
-      </div>
-    </div>
-    <div class="article-comment-all">
-      <div class="article-comment-header">
-        <i class="el-icon-chat-dot-round comment-icon"></i>
-        <p class="comment">回答</p>
-      </div>
-      <div v-for="(c,index) in comments" :key="c.id" class="article-comment-main">
-        <div class="comment-div">
+    <div class="body-main">
+      <div class="question-show-main">
+        <div v-if="this.question != null">
           <div class="comment-header">
-            <div class="comment-header-div">
-              <img class="comment-user-icon" :src="c.imgpath">
-              <p class="comment-user-name">{{c.name}} <i v-if="teacherMatch(c.KBC_mail)" class="el-icon-success teacher" title="先生マーク"></i></p>
-            </div>
-            <div class="comment-header-div">
-              <div>
-                <p class="comment-create-date">投稿日 {{c.Created | moment}}</p>
+            <router-link v-bind:to="{ name : 'UserShow', params : { id: question.userid }}" class="a-tag">
+              <div class="comment-header-div">
+                <img class="comment-user-icon" :src="question.imgpath">
+                <p class="comment-user-name">{{ question.name }} <i v-if="teacherMatch(question.KBC_mail)" class="el-icon-success teacher" title="先生マーク"></i></p>
               </div>
-              <span v-if="c.userid === user.id" class="dropdown-span">
+            </router-link>
+            <div class="comment-header-div">
+              <div class="article-create-update-date-div">
+                <p class="comment-create-date article-create-date"> 作成日 {{ question.Created | moment }}</p>
+                <p class="comment-create-date article-update-date"> 更新日 {{ question.Updated | moment }}</p>
+              </div>
+              <span class="dropdown-span">
                 <el-dropdown>
                   <span class="el-dropdown-link icon-menu-span">
-                    <i class="el-icon-more comment-edit-icon"></i>
+                    <i class="el-icon-more"></i>
                   </span>
                   <el-dropdown-menu slot="dropdown">
+                    <router-link v-if="question.userid === user.id" class="a-tag2" v-bind:to="{ name : 'QuestionEdit', params : { id: question.id }}"><el-dropdown-item>編集</el-dropdown-item></router-link>
                     <el-popconfirm
+                    v-if="question.userid === user.id"
                     title="本当に削除しますか?"
                     confirm-button-text="Yes"
                     cancel-button-text="No"
-                    @confirm="deleteQuestionComment(c.id,index)"
+                    @confirm="deleteQuestion"
                     >
                       <el-dropdown-item slot="reference">削除</el-dropdown-item>
                     </el-popconfirm>
+                      <router-link class="a-tag2" target="_blank" v-bind:to="{ name : 'QuestionMarkdown', params : { id: question.id }}">
+                        <el-dropdown-item>ソースを見る</el-dropdown-item>
+                      </router-link>
                   </el-dropdown-menu>
                 </el-dropdown>
               </span>
             </div>
           </div>
-          <div class="comment-main">
-            <div class="article-body comment-text" v-html="compiledMarkdownComment(c.text)"></div>
+          <h1 class="article-title">{{question.title}}</h1>
+          <div class="article-tags-div">
+            <div v-if="question.category === 'Q&A'" class="article-tag-div question-show-category-div quesiton-show-category-Q">
+              <span>{{ question.category }}</span>
+            </div>
+            <div v-else class="article-tag-div question-show-category-div quesiton-show-category-I">
+              <span>{{ question.category }}</span>
+            </div>
+            <div v-for="(tag,index) in tags" :key="index" class="article-tag-div">
+              <span>{{tag}}</span>
+            </div>
+          </div>
+          <div class="article-form__preview-body">
+            <div class="article-form__preview-body-contents" id="article-body" v-html="compiledMarkdown"></div>
           </div>
 
           <el-row v-if="user.id === 920437694">
-            <i class="el-icon-star-off not-comment-ster-i" @click="loginDialog"></i>
-            <span class="comment-like-count-span">{{c.Like.likeCount}}</span>
+            <button @click="loginDialog" class="like-btn">いいね <i class="el-icon-star-off"></i></button>
+            <span class="like-count-span">{{like.likeCount}}</span>
           </el-row>
-
           <el-row v-else>
-            <i v-if="c.Like.isLike" class="el-icon-star-on comment-ster-i" @click="DeleteQuestionCommentLike(index)"></i>
-            <i v-else class="el-icon-star-off not-comment-ster-i" @click="CreateQuestionCommentLike(index)"></i>
-            <span class="comment-like-count-span">{{c.Like.likeCount}}</span>
+            <el-button v-if="like.isLike" type="warning" @click="DeleteQuestionLike">解除 <i class="el-icon-star-on"></i></el-button>
+            <button v-else @click="CreateQuestionLike" class="like-btn">いいね <i class="el-icon-star-off"></i></button>
+            <span class="like-count-span">{{like.likeCount}}</span>
           </el-row>
 
         </div>
       </div>
-      <CommentForm :comment="comment" :errors="errors" :user="user" @submit="createQuestionComment"></CommentForm>
+      <div class="question-comment-all">
+        <div class="question-comment-header">
+          <i class="el-icon-chat-dot-round comment-icon"></i>
+          <p class="comment">回答</p>
+        </div>
+        <div v-for="(c,index) in comments" :key="c.id" class="question-comment-main">
+          <div class="comment-div">
+            <div class="comment-header">
+              <div class="comment-header-div">
+                <img class="comment-user-icon" :src="c.imgpath">
+                <p class="comment-user-name">{{c.name}} <i v-if="teacherMatch(c.KBC_mail)" class="el-icon-success teacher" title="先生マーク"></i></p>
+              </div>
+              <div class="comment-header-div">
+                <div>
+                  <p class="comment-create-date">投稿日 {{c.Created | moment}}</p>
+                </div>
+                <span v-if="c.userid === user.id" class="dropdown-span">
+                  <el-dropdown>
+                    <span class="el-dropdown-link icon-menu-span">
+                      <i class="el-icon-more comment-edit-icon"></i>
+                    </span>
+                    <el-dropdown-menu slot="dropdown">
+                      <el-popconfirm
+                      title="本当に削除しますか?"
+                      confirm-button-text="Yes"
+                      cancel-button-text="No"
+                      @confirm="deleteQuestionComment(c.id,index)"
+                      >
+                        <el-dropdown-item slot="reference">削除</el-dropdown-item>
+                      </el-popconfirm>
+                    </el-dropdown-menu>
+                  </el-dropdown>
+                </span>
+              </div>
+            </div>
+            <div class="comment-main">
+              <div class="article-body comment-text" v-html="compiledMarkdownComment(c.text)"></div>
+            </div>
+
+            <el-row v-if="user.id === 920437694">
+              <i class="el-icon-star-off not-comment-ster-i" @click="loginDialog"></i>
+              <span class="comment-like-count-span">{{c.Like.likeCount}}</span>
+            </el-row>
+
+            <el-row v-else>
+              <i v-if="c.Like.isLike" class="el-icon-star-on comment-ster-i" @click="DeleteQuestionCommentLike(index)"></i>
+              <i v-else class="el-icon-star-off not-comment-ster-i" @click="CreateQuestionCommentLike(index)"></i>
+              <span class="comment-like-count-span">{{c.Like.likeCount}}</span>
+            </el-row>
+
+          </div>
+        </div>
+        <CommentForm :comment="comment" :errors="errors" :user="user" @submit="createQuestionComment"></CommentForm>
+      </div>
     </div>
     <Footer :user="user" :url="url"></Footer>
   </div>
@@ -456,17 +458,22 @@ export default {
 </script>
 
 <style>
+.body-main{
+  width: 1000px;
+  padding: 15px 0 40px 0;
+  background-color: #F6F6F4;
+}
 .question-show-main,.question-comment-all{
   width: 800px;
-  margin: 30px auto 0 auto;
+  margin: 0 auto;
   background-color: #fff;
-  padding: 20px;
 }
 .question-show-main{
   padding: 20px;
 }
 .question-comment-all{
-  padding: 0 20px 20px 20px;
+  margin-top: 15px;
+  padding: 0px 20px 20px 20px;
 }
 .question-title{
   padding: 20px;
@@ -526,7 +533,7 @@ export default {
 
 .article-show-main,.article-comment-all{
   width: 800px;
-  margin: 30px auto 0 auto;
+  /* margin: 30px auto 0 auto; */
   background-color: #fff;
   padding: 20px;
 }

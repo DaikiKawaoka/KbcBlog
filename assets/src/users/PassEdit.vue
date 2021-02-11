@@ -12,21 +12,37 @@
           </ul>
         </div>
 
-        <el-form>
-          <el-form-item label="現在のパスワード">
+        <el-form :model="passwords" ref="passForm">
+          <el-form-item label="現在のパスワード" prop="currentPassword"
+              :rules="[
+              { required: true, message: '入力必須です', trigger: 'blur' },
+              { min: 8, max: 50, message: '8~50文字で入力してください', trigger: 'blur' },
+              { pattern: /^(?=.*?[a-z])(?=.*?\d)[a-z\d]{8,100}$/i, message: '半角英字と半角数字それぞれ1文字以上含めてください。', trigger: 'blur' },
+          ]">
               <el-input type="password" v-model="passwords.currentPassword" autocomplete="off" show-password></el-input>
           </el-form-item>
 
-          <el-form-item label="新しいパスワード">
+          <el-form-item label="新しいパスワード" prop="newPassword"
+          :rules="[
+              { required: true, message: '入力必須です', trigger: 'blur' },
+              { min: 8, max: 50, message: '8~50文字で入力してください', trigger: 'blur' },
+              { pattern: /^(?=.*?[a-z])(?=.*?\d)[a-z\d]{8,100}$/i, message: '半角英字と半角数字それぞれ1文字以上含めてください。', trigger: 'blur' },
+          ]">
               <el-input type="password" v-model="passwords.newPassword" autocomplete="off" show-password></el-input>
           </el-form-item>
 
-          <el-form-item label="新しいパスワードを確認">
+          <el-form-item label="新しいパスワードを確認" prop="passwordConfirmation"
+          :rules="[
+              { required: true, message: '入力必須です', trigger: 'blur' },
+              { min: 8, max: 50, message: '8~50文字で入力してください', trigger: 'blur' },
+              { pattern: /^(?=.*?[a-z])(?=.*?\d)[a-z\d]{8,100}$/i, message: '半角英字と半角数字それぞれ1文字以上含めてください。', trigger: 'blur' },
+          ]">
               <el-input type="password" v-model="passwords.passwordConfirmation" autocomplete="off" show-password></el-input>
           </el-form-item>
 
+          <br>
           <el-form-item>
-            <el-button type="primary" @click="passwordEdit">パスワード変更</el-button>
+            <el-button type="primary" @click="passForm('passForm')">パスワード変更</el-button>
           </el-form-item>
 
         </el-form>
@@ -97,23 +113,46 @@ export default {
       })
   },
   methods: {
+    passForm(formName) {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            this.passwordEdit();
+          } else {
+            console.log("aaa")
+            this.openError()
+            return false;
+          }
+        });
+      },
+      openError() {
+        this.$message({
+          showClose: true,
+          message: '入力項目に不備があります。',
+          type: 'error'
+        });
+      },
     passwordEdit: function() {
       this.openFullScreen();
-      this.$axios
-        .patch(this.url+`api/restricted/Users/${this.myUser.id}/password/edit`,this.passwords,{
-          headers: {
-            Authorization: `Bearer ${this.$cookies.get("JWT")}`
-          },
-        })
-        .then(() => {
+      if(this.passwords.newPassword === this.passwords.passwordConfirmation){
+        this.$axios
+          .patch(this.url+`api/restricted/Users/${this.myUser.id}/password/edit`,this.passwords,{
+            headers: {
+              Authorization: `Bearer ${this.$cookies.get("JWT")}`
+            },
+          })
+          .then(() => {
+            this.closeFullScreen();
+            this.$router.push({ name: 'UserShow' , params : { id: this.user.id }});
+            this.editUserAlert();
+          })
+          .catch(error => {
+            this.closeFullScreen();
+            this.errors = error.response.data.ValidationErrors;
+          });
+        }else{
           this.closeFullScreen();
-          this.$router.push({ name: 'UserShow' , params : { id: this.user.id }});
-          this.editUserAlert();
-        })
-        .catch(error => {
-          this.closeFullScreen();
-          this.errors = error.response.data.ValidationErrors;
-        });
+          this.errors = ["パスワードと確認パスワードが異なります。"];
+        }
     },
 
     editUserAlert() {
@@ -157,10 +196,13 @@ h1{
 }
 .passedit-all-div{
   width: 1000px;
-  margin: 0 auto 100px auto;
+  padding: 15px 0 40px 0;
+  background-color: #F6F6F4;
+  margin: 0 auto;
 }
 .passedit-main-div{
   width: 500px;
+  height: 450px;
   margin: 0 auto 0 auto;
 }
 i{

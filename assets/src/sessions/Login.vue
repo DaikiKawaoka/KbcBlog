@@ -29,11 +29,11 @@
             <el-input type="email" placeholder="河原学園のメールアドレス" v-model="loginUser.KBC_mail"></el-input>
           </el-form-item>
           <el-form-item label="Password" prop="password"
-      :rules="[
-          { required: true, message: '入力必須です', trigger: 'blur' },
-          { min: 8, max: 50, message: '8~50文字で入力してください', trigger: 'blur' },
-      ]">
-      <!-- { pattern: /^(?=.*?[a-z])(?=.*?\d)[a-z\d]{8,100}$/i, message: '半角英字と半角数字それぞれ1文字以上含めてください。', trigger: 'blur' }, -->
+          :rules="[
+              { required: true, message: '入力必須です', trigger: 'blur' },
+              { min: 8, max: 50, message: '8~50文字で入力してください', trigger: 'blur' },
+              { pattern: /^(?=.*?[a-z])(?=.*?\d)[a-z\d]{8,100}$/i, message: '半角英字と半角数字それぞれ1文字以上含めてください。', trigger: 'blur' },
+          ]">
             <el-input type="password" placeholder="パスワード" v-model="loginUser.password"></el-input>
           </el-form-item>
           <el-form-item>
@@ -141,6 +141,8 @@ export default {
 <style lang="scss" scoped>
 .body-main-login{
   height: 580px;
+  width: 1000px;
+  background-color: #F6F6F4;
   position:relative;
   .box-card {
   width: 480px;

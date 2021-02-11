@@ -27,18 +27,10 @@
           <el-dialog v-else :visible.sync="dialogVisible" width="370px">
               <img width="330px" height="330px" style="border-radius:3px;" :src="user.imgpath" alt="">
           </el-dialog>
-
-          <!-- <div class="demo-image__preview">
-          <el-image
-            style="width: 150px; height: 150px; border-radius: 50%;"
-            :src="url"
-            :preview-src-list="srcList">
-          </el-image>
-          </div> -->
         </div>
         <div class="user-show-info">
           <div class="user-show-info-header">
-            <span class="user-show-name">{{user.name}}</span>
+            <span class="user-show-name">{{user.name}} <i v-if="teacherMatch(user.KBC_mail)" class="el-icon-success teacher" title="先生マーク"></i></span>
 
             <div class="user-show-info-div" v-if="myUser.id===user.id">
               <div class="user-show-btn-div"><el-button type="info" size="mini" @click="editUser">プロフィール編集</el-button></div>
@@ -99,7 +91,7 @@
                           </div>
                           <div class="f-info-div">
                             <div>
-                              <span class="f-user-name">{{f.name}}</span>
+                              <span class="f-user-name">{{f.name}} <i v-if="teacherMatch(f.KBC_mail)" class="el-icon-success teacher" title="先生マーク"></i></span>
                             </div>
                             <div class="string-out">
                               <span class="f-user-comment">{{f.comment.String}}</span>
@@ -139,7 +131,7 @@
                           </div>
                           <div class="f-info-div">
                             <div>
-                              <span class="f-user-name">{{f.name}}</span>
+                              <span class="f-user-name">{{f.name}} <i v-if="teacherMatch(f.KBC_mail)" class="el-icon-success teacher" title="先生マーク"></i></span>
                             </div>
                             <div class="string-out">
                               <span class="f-user-comment">{{f.comment.String}}</span>
@@ -868,6 +860,13 @@ export default {
         }).catch(() => {
         });
       },
+      teacherMatch(kbcmail) {
+        const mail = String(kbcmail)
+        if (mail.match(/[\w\-._]+@kawahara.ac.jp/) !== null ){
+          return true
+        }
+        return false
+      },
 
   },
   watch: {
@@ -888,6 +887,7 @@ export default {
   width: 1000px;
   background-color: #F6F6F4;
   margin: 0 auto 0 auto;
+  padding-bottom: 40px;
 }
 .user-show-header,.user-show-body,.user-show-footer{
   margin-left: 100px;
@@ -965,15 +965,6 @@ export default {
 .user-show-follower-count-div,.user-show-follow-count-div{
   cursor: pointer;
 }
-
-/* ダイアログ */
-/* .el-dialog--center{
-  padding: 0px;
-}
-.el-dialog__body{
-  padding: 0px;
-  height: 320px;
-} */
 .dialog-all{
   height: 320px;
   overflow-y: scroll;
@@ -1250,5 +1241,10 @@ svg{
 .no-post-array{
   text-align: center;
   color: #777;
+}
+.teacher{
+  font-size: 1em;
+  color: #409eff;
+  cursor: pointer;
 }
 </style>
