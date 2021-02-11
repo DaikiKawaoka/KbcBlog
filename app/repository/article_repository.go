@@ -165,7 +165,7 @@ func ArticleListByCursor(cursor int, scope *model.Scope, userid int) ([]*model.A
 
 // ArticleGetByID ...
 func ArticleGetByID(id int) (*model.Article, error) {
-	query := `SELECT a.id id,a.userid userid,u.name name, u.imgpath imgpath, u.sex sex, a.title title,a.body body,a.tag tag,a.created created,a.updated updated
+	query := `SELECT a.id id,a.userid userid,u.name name, u.mail mail, u.imgpath imgpath, u.sex sex, a.title title,a.body body,a.tag tag,a.created created,a.updated updated
 	FROM articles a,users u
 	WHERE a.id = ? and a.userid = u.id;`
 

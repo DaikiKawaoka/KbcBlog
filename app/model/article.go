@@ -9,6 +9,7 @@ type Article struct {
 	ID      int       `db:"id" json:"id"`
 	Userid  int       `db:"userid" json:"userid"`
 	UserName string   `db:"name" json:"name"`
+	KBCMail    string    `db:"mail" json:"KBC_mail"`
 	ImgPath      string    `db:"imgpath" json:"imgpath"`
 	Sex         int       `db:"sex" json:"sex"`
 	Title   string    `db:"title" json:"title" validate:"required,max=50"`

@@ -165,7 +165,7 @@ func QuestionListByCursor(cursor int, scope *model.Scope, userid int) ([]*model.
 
 // QuestionGetByID ...
 func QuestionGetByID(id int) (*model.Question, error) {
-	query := `SELECT q.id id,q.userid userid,u.name name,u.imgpath imgpath, u.sex sex,q.title title,q.body body,q.tag tag,q.category category,q.created created,q.updated updated
+	query := `SELECT q.id id,q.userid userid,u.name name, u.mail mail,u.imgpath imgpath, u.sex sex,q.title title,q.body body,q.tag tag,q.category category,q.created created,q.updated updated
 	FROM questions q,users u
 	WHERE q.id = ? and q.userid = u.id;`
 

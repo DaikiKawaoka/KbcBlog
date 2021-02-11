@@ -10,6 +10,7 @@ type ArticleComment struct {
 	Userid      int       `db:"userid" form:"userid" json:"userid"`
 	Articleid   int       `db:"articleid" json:"articleid"`
 	UserName    string    `db:"name" json:"name"`
+	KBCMail    string    `db:"mail" json:"KBC_mail"`
 	ImgPath      string    `db:"imgpath" json:"imgpath"`
 	Sex         int       `db:"sex" json:"sex"`
 	Text        string    `db:"text" form:"text" json:"text" validate:"required"`
@@ -40,6 +41,7 @@ type QuestionComment struct {
 	Userid      int       `db:"userid" form:"userid" json:"userid"`
 	Questionid   int      `db:"questionid" json:"questionid"`
 	UserName    string    `db:"name" json:"name"`
+	KBCMail    string    `db:"mail" json:"KBC_mail"`
 	ImgPath      string    `db:"imgpath" json:"imgpath"`
 	Sex         int       `db:"sex" json:"sex"`
 	Text        string    `db:"text" form:"text" json:"text" validate:"required"`

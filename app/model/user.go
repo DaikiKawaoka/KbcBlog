@@ -44,6 +44,7 @@ type LoginUser struct {
 type RankingUser struct {
 	ID          int       `db:"id" json:"id"`
 	Name        string    `db:"name" json:"name"`
+	KBCMail    string    `db:"mail" json:"KBC_mail"`
 	Comment     sql.NullString   `db:"comment" json:"comment"`
 	Count int     `db:"count" json:"count"`
 	ImgPath      string    `db:"imgpath" json:"imgpath"`
