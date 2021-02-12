@@ -118,11 +118,6 @@ const router = new VueRouter({
       name: 'About',
       component: About
     },
-    // {
-    //   path: '/Help',
-    //   name: 'Help',
-    //   component: Help
-    // },
     {
       path: '*', component: NotFound
     },
