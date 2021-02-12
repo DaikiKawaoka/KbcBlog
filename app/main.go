@@ -4,7 +4,6 @@ import (
 	"log"
 	"os"
 	"fmt"
-	// "time"
 	"app/handler"
 	"app/repository"
 	"app/model"
@@ -75,7 +74,6 @@ func createMux() *echo.Echo {
 	r.Use(middleware.JWTWithConfig(config))
 	//Static
 	r.GET("/About",handler.About)
-	// r.GET("/Help",handler.Help)
 	// Article
 	r.GET("/Articles", handler.ArticleIndex)
 	r.GET("/Articles/scope", handler.ArticleIndexOrder)
@@ -132,9 +130,13 @@ func createMux() *echo.Echo {
 	r.GET("/Notifications",handler.Notifications)
 	r.GET("/Notifications/scope",handler.NotificationOrder)
 	r.DELETE("/Notifications", handler.NotificationDelete)
-	//Ranking
+	// Ranking
 	r.GET("/Article/Ranking",handler.GetArticleRanking)
 	r.GET("/Question/Ranking",handler.GetQuestionRanking)
+	// Post
+	r.GET("/Posts/:id/Favorite",handler.GetFavoritePosts)
+	r.GET("/Article/Favorites/scroll",handler.GetFavoriteArticles)
+
 
 	e.Validator = &CustomValidator{validator: validator.New()}
 	// アプリケーションインスタンスを返却
