@@ -19,6 +19,7 @@ import LoginPage from './sessions/Login'
 import UserNew from './users/New'
 import UserShow from './users/Show'
 import UserEdit from './users/Edit'
+import Favorite from './users/Favorite'
 import PassEdit from './users/PassEdit'
 import NotFound from './components/NotFound'
 import ArticleMarkdown from './articles/markdown'
@@ -96,6 +97,11 @@ const router = new VueRouter({
       path: '/Users/:id(\\d+)/password/edit',
       name: 'PassEdit',
       component: PassEdit
+    },
+    {
+      path: '/Users/:id(\\d+)/favorites',
+      name: 'Favorite',
+      component: Favorite
     },
     {
       path: '/Articles/:id(\\d+)/markdown',
