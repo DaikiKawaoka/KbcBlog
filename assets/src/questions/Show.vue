@@ -61,7 +61,7 @@
             <span class="like-count-span">{{like.likeCount}}</span>
           </el-row>
           <el-row v-else>
-            <el-button v-if="like.isLike" type="warning" @click="DeleteQuestionLike">解除 <i class="el-icon-star-on"></i></el-button>
+            <el-button v-if="like.isLike" type="warning" @click="DeleteLikeConfirmationOpen">解除 <i class="el-icon-star-on"></i></el-button>
             <button v-else @click="CreateQuestionLike" class="like-btn">いいね <i class="el-icon-star-off"></i></button>
             <span class="like-count-span">{{like.likeCount}}</span>
           </el-row>
@@ -347,6 +347,16 @@ export default {
           }
           this.errors = error.response.data.ValidationErrors;
         });
+    },
+
+    DeleteLikeConfirmationOpen() {
+      this.$confirm(`いいねを解除しますか?`, '確認', {
+        confirmButtonText: '解除する',
+        cancelButtonText: 'キャンセル',
+        center: true
+      }).then(() => {
+        this.DeleteQuestionLike()
+      });
     },
 
     DeleteQuestionLike(){
