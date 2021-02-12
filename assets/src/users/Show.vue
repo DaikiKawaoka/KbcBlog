@@ -398,7 +398,7 @@ export default {
   },
   // createdの中でaxiosを使います。get()の中のURLは、nginx.confで設定してるので、 /api/ になっています。
   created () {
-    this.url = process.env.VUE_APP_URL
+    this.url = process.env.VUE_APP_URL;
     this.openFullScreen()
     // this.id = this.$route.params.id
     this.$axios.get(this.url+`api/restricted/Users/${this.$route.params.id}`,{
@@ -746,8 +746,11 @@ export default {
       // #はパス名で使えないから変換
       if(lang === "C#"){
         lang = "C-sharp"
+      }else if(lang === "C++"){
+        lang = "C%2B%2B"
       }
-      return require('@/assets/pgsvg/'+lang+".svg")
+      // return require('@/assets/pgsvg/'+lang+".svg")
+      return "https://s3-ap-northeast-1.amazonaws.com/www.kbcblog-s3.com/pgsvg/"+lang+".svg"
     },
 
     imgClick(){
