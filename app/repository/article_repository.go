@@ -263,8 +263,28 @@ func GetUserArticle(cursor int,userid int) ([]*model.Article, error) {
 	WHERE a.id < ? and a.userid = u.id and a.userid = ?
 	GROUP BY a.id,a.userid,u.name,a.title,a.created,a.updated
 	ORDER BY a.id desc
+	LIMIT 30`
+	articles := make([]*model.Article, 0, 30)
+	if err := db.Select(&articles, query, cursor,userid); err != nil {
+		return nil, err
+	}
+
+	return articles, nil
+}
+
+// GetFavoriteArticle ...
+func GetFavoriteArticle(cursor int,userid int) ([]*model.FavoriteArticle, error) {
+	if cursor <= 0 {
+		cursor = math.MaxInt32
+	}
+	query := `SELECT a.id id,a.userid userid,u.name name, u.imgpath imgpath, a.title title,a.tag tag,a.updated updated, COUNT(l.id) likecount,l.id likeid
+	FROM articles a inner join users u on a.userid = u.id
+	left join article_likes l on a.id = l.articleid
+	WHERE l.id < ? and l.userid = ?
+	GROUP BY a.id,a.userid,u.name,u.imgpath,a.title,a.updated,l.id
+	ORDER BY l.id desc
 	LIMIT 10`
-	articles := make([]*model.Article, 0, 10)
+	articles := make([]*model.FavoriteArticle, 0, 10)
 	if err := db.Select(&articles, query, cursor,userid); err != nil {
 		return nil, err
 	}

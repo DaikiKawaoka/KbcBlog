@@ -20,6 +20,19 @@ type Article struct {
 	Updated string `db:"updated"`
 }
 
+// FavoriteArticle ...
+type FavoriteArticle struct {
+	ID      int       `db:"id" json:"id"`
+	Userid  int       `db:"userid" json:"userid"`
+	UserName string   `db:"name" json:"name"`
+	ImgPath      string    `db:"imgpath" json:"imgpath"`
+	Title   string    `db:"title" json:"title" validate:"required,max=50"`
+	Tag    string     `db:"tag" json:"tag" validate:"required"`
+	LikeCount int     `db:"likecount" json:"likecount"`
+	LikeID   int      `db:"likeid" json:"likeid"`
+	Updated string `db:"updated"`
+}
+
 // ValidationErrors ...
 func (a *Article) ValidationErrors(err error) []string {
 	// メッセージを格納するスライスを宣言します。

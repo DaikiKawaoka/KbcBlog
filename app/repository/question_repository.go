@@ -264,9 +264,9 @@ func GetUserQuestion(cursor int,userID int) ([]*model.Question, error) {
 	WHERE q.id < ? and q.userid = u.id and q.userid = ?
 	GROUP BY q.id,q.userid,u.name,q.title,q.body,q.tag,q.category,q.created,q.updated
 	ORDER BY q.id desc
-	LIMIT 10`
+	LIMIT 20`
 
-	questions := make([]*model.Question, 0, 10)
+	questions := make([]*model.Question, 0, 20)
 	if err := db.Select(&questions, query, cursor,userID); err != nil {
 		return nil, err
 	}
@@ -285,6 +285,45 @@ func GetAnswerQuestionList(cursor int, userID int) ([]*model.AnswerQuestion, err
 	LIMIT 10`
 
 	answerQuestions := make([]*model.AnswerQuestion, 0, 10)
+	if err := db.Select(&answerQuestions, query, cursor ,userID); err != nil {
+		return nil, err
+	}
+	return answerQuestions, nil
+}
+
+// GetFavoriteQuestion ...
+func GetFavoriteQuestion(cursor int,userid int) ([]*model.FavoriteQuestion, error) {
+	if cursor <= 0 {
+		cursor = math.MaxInt32
+	}
+	query := `SELECT q.id id,q.userid userid,u.name name,u.imgpath imgpath ,q.title title,q.tag tag, q.category category ,q.updated updated, COUNT(l.id) likecount,l.id likeid
+	FROM questions q inner join users u on q.userid = u.id
+	left join question_likes l on q.id = l.questionid
+	WHERE l.id < ? and l.userid = ?
+	GROUP BY q.id,q.userid,u.name,u.imgpath,q.title,q.tag,q.category,q.updated,l.id
+	ORDER BY l.id desc
+	LIMIT 30`
+	questions := make([]*model.FavoriteQuestion, 0, 30)
+	if err := db.Select(&questions, query, cursor,userid); err != nil {
+		return nil, err
+	}
+	return questions, nil
+}
+
+// GetFavoriteAnswerQuestion 回答した質問を取得
+func GetFavoriteAnswerQuestion(cursor int, userID int) ([]*model.AnswerQuestion, error){
+	if cursor <= 0 {
+		cursor = math.MaxInt32
+	}
+	query := `SELECT q.id id,q.userid userid,u.name name,u.imgpath imgpath ,q.title title, c.text text,c.created created
+	FROM questions q inner join question_comments c on q.id = c.questionid
+	inner join users u on c.userid = u.id
+	inner join question_comment_likes l on c.id = l.question_commentid
+	WHERE c.id < ? AND l.userid = ?
+	ORDER BY l.id desc
+	LIMIT 20`
+
+	answerQuestions := make([]*model.AnswerQuestion, 0, 20)
 	if err := db.Select(&answerQuestions, query, cursor ,userID); err != nil {
 		return nil, err
 	}

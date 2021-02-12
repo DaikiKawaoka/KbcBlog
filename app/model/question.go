@@ -26,10 +26,26 @@ type AnswerQuestion struct {
 	ID      int       `db:"id" json:"id"`
 	Userid  int       `db:"userid" json:"userid"`
 	UserName string   `db:"name" json:"name"`
+	ImgPath      string    `db:"imgpath" json:"imgpath"`
 	Title   string    `db:"title" json:"question_title"`
 	Text    string    `db:"text" json:"comment_text"`
 	Created string    `db:"created" json:"comment_created"`
 }
+
+// FavoriteQuestion ...
+type FavoriteQuestion struct {
+	ID      int       `db:"id" json:"id"`
+	Userid  int       `db:"userid" json:"userid"`
+	UserName string   `db:"name" json:"name"`
+	ImgPath      string    `db:"imgpath" json:"imgpath"`
+	Title   string    `db:"title" json:"title" validate:"required,max=50"`
+	Tag    string     `db:"tag" json:"tag" validate:"required"`
+	Category  string     `db:"category" json:"category" validate:"required"`
+	LikeCount int     `db:"likecount" json:"likecount"`
+	LikeID   int      `db:"likeid" json:"likeid"`
+	Updated string `db:"updated"`
+}
+
 
 // ValidationErrors ...
 func (q *Question) ValidationErrors(err error) []string {
