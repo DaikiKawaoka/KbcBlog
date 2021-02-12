@@ -41,6 +41,7 @@
                   <i class="el-icon-setting"></i>
                 </span>
                 <el-dropdown-menu slot="dropdown">
+                  <router-link class="a-tag2" v-bind:to="{ name : 'Favorite', params : { id: user.id }}"><el-dropdown-item>お気に入り投稿</el-dropdown-item></router-link>
                   <router-link class="a-tag2" v-bind:to="{ name : 'PassEdit', params : { id: user.id }}"><el-dropdown-item>パスワード変更</el-dropdown-item></router-link>
                   <el-popconfirm
                   title="本当にログアウトしますか?"
@@ -52,7 +53,6 @@
                   </el-popconfirm>
                 </el-dropdown-menu>
               </el-dropdown>
-
             </div>
 
             <div class="user-show-info-div" v-else-if="user.id === 0">
@@ -74,6 +74,14 @@
                   <i class="el-icon-user"></i>フォロー解除
                 </el-button>
               </div>
+              <el-dropdown>
+                <span class="el-dropdown-link icon-menu-span">
+                  <i class="el-icon-setting"></i>
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <router-link class="a-tag2" v-bind:to="{ name : 'Favorite', params : { id: user.id }}"><el-dropdown-item>お気に入り投稿</el-dropdown-item></router-link>
+                </el-dropdown-menu>
+              </el-dropdown>
             </div>
 
 
@@ -238,10 +246,6 @@
             </div>
             <span v-else class="not-conf article-parcent-not-conf">No data</span>
           </div>
-          <!-- <div class="user-iine-div">
-            <span class="user-show-body-div-in-span">Good記事</span>
-            <span class="not-conf">No data</span>
-          </div> -->
         </div>
       </div>
 
@@ -251,7 +255,6 @@
             <el-tab-pane label="記事"><i class="el-icon-document"></i> 記事</el-tab-pane>
             <el-tab-pane label="質問"><i class="el-icon-chat-round"></i> 質問</el-tab-pane>
             <el-tab-pane label="回答"><i class="el-icon-s-promotion"></i> 回答</el-tab-pane>
-            <!-- <el-tab-pane label="いいね"><i class="el-icon-star-off"></i> いいね</el-tab-pane> -->
           </el-tabs>
         </div>
 
@@ -597,11 +600,6 @@ export default {
         })
         .then(response => {
           this.follow.isfollow = false;
-          // const w = this.followers.findIndex(item => item.id === this.myUser.id)
-          // if(w !== -1){
-          //   //ユーザのフォロワー配列から自分を削除
-          //   this.followers.splice(w, 1);
-          // }
           this.follow.followedCount--;
           console.log(response);
         })
@@ -866,6 +864,27 @@ export default {
           return true
         }
         return false
+      },
+      favoritePost(){
+        this.url = process.env.VUE_APP_URL
+        this.openFullScreen()
+        this.$axios.get(this.url+`api/restricted/Posts/Favorite`,{
+          headers: {
+            Authorization: `Bearer ${this.$cookies.get("JWT")}`
+          },})
+          .then(response => {
+            this.articles = response.data.Articles
+            // this.questions = response.data.Questions
+            // this.answerQuestions = response.data.AnswerQuestions
+            this.closeFullScreen()
+          })
+          .catch(error => {
+            if(error.response.status == 401){
+              this.$router.push({ path: "/login" });
+              this.errorNotify();
+            }
+            this.closeFullScreen()
+          })
       },
 
   },
