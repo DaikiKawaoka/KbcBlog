@@ -144,6 +144,7 @@ export default {
   width: 1000px;
   background-color: #F6F6F4;
   position:relative;
+  margin: 0 auto;
   .box-card {
   width: 480px;
 }
