@@ -34,3 +34,23 @@
 これらを踏まえて作成したのがこのKBC-Blogです。
 
 ## 使用画面のイメージ
+
+![Image](https://github.com/DaikiKawaoka/KbcBlog/blob/master/document/image.jpg)
+
+## 使用技術
+* フロントエンド
+  * vue/cli 4.5.6
+  * HTML / CSS / SCSS
+*バックエンド
+  * Golang 1.15.1
+  * echo 4.1.17
+* インフラ
+  * CircleCi
+  * Docker/ docker-compose
+  * nginx 1.17.10
+  * mysql 5.8
+  * AWS(EC2,ALB,ACM,S3,RDS,Route53,VPC,EIP,IAM)
+* その他のツール
+  * Visual Studio Code
+  * Draw.io
+ 
