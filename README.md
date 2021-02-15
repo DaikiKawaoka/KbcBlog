@@ -1,6 +1,7 @@
 # KBC Blog  
 #### 僕が通っている学校（河原電子ビジネス専門学校）専用の技術ブログサイトです。
 ### URL https://kbc-blog.com/  
+（kbcblog.comが取れなかったのでしょうがなくハイフンを入れました。）
 
 ## アプリ概要
 ### こちらのアプリのコンセプトは、以下の4点です。
@@ -15,6 +16,9 @@
 * 記事、質問にタグやカテゴリーを付け検索機能
 * 投稿数、いいね数、回答数、のランキング機能（1ヶ月ごとに集計）
 * 様々なアクションの後に通知機能
+
+このアプリを作成するにあたって参考にさせてもらった記事
+https://qiita.com/nasuB7373/items/0e507abad2017976c407
 
 
 ## 開発した背景
@@ -40,14 +44,15 @@
 ## 使用技術
 * フロントエンド
   * vue/cli 4.5.6
+  * Element UI 2.13.2
   * HTML / CSS / SCSS
-*バックエンド
+* バックエンド
   * Golang 1.15.1
   * echo 4.1.17
 * インフラ
   * CircleCi
   * Docker/ docker-compose
-  * nginx 1.17.10
+  * nginx 1.19.6
   * mysql 5.8
   * AWS(EC2,ALB,ACM,S3,RDS,Route53,VPC,EIP,IAM)
 * その他のツール
@@ -93,8 +98,35 @@
  * 画像アップロード機能
  * 記事や質問のmarkdown,src表示機能
    * コピぺしたら簡単に同じ記事を作成できる
+ 
+ ※レスポンシブWebデザインはしてないです  
+   時間がかかる上に学校のパソコンで見るのが大半だと判断したから
+
 
 ## DB設計
+ER図下手すぎました。すみません。
  
+  ![Image](https://github.com/DaikiKawaoka/KbcBlog/blob/master/document/kbcblogDB.jpg)
+  
+### 各テーブルについて
 
+| テーブル名 | 説明        |
+| ------ | ------------- |
+| users    | ユーザー情報 |
+| follows    | フォロー情報 |
+| articles    | 技術記事情報 |
+| article_comments    | 技術記事へのコメント情報 |
+| article_likes    | 技術記事のいいね情報 |
+| article_comment_likes    | 技術記事へのコメントのいいね情報 |
+| questions    | 質問情報 |
+| question_comments    | 質問への回答情報 |
+| question_likes    | 質問のいいね情報 |
+| question_comment_likes    | 質問への回答のいいね情報 |
+| notifications    | 通知情報 |
+
+## 最後に
+
+今は僕と同じクラスの生徒約10名、後輩約10名、先生2名が使ってくれています。
+徐々に範囲を広げていきたいですが、インフラの問題上、重くなってしまうのが問題点です。
+本番環境で保守をするのは初めてで全然慣れないですがこれからも使ってもらえるように頑張っていきたいです。
 
