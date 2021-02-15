@@ -54,3 +54,6 @@
   * Visual Studio Code
   * Draw.io
  
+ ## AWS構成図
+ 
+ ![PDF](https://github.com/DaikiKawaoka/KbcBlog/blob/master/document/kbcblogNetwork.pdf)
