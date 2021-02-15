@@ -44,6 +44,7 @@ https://qiita.com/nasuB7373/items/0e507abad2017976c407
 ## 使用技術
 * フロントエンド
   * vue/cli 4.5.6
+  * Element UI 2.13.2
   * HTML / CSS / SCSS
 * バックエンド
   * Golang 1.15.1
@@ -51,7 +52,7 @@ https://qiita.com/nasuB7373/items/0e507abad2017976c407
 * インフラ
   * CircleCi
   * Docker/ docker-compose
-  * nginx 1.17.10
+  * nginx 1.19.6
   * mysql 5.8
   * AWS(EC2,ALB,ACM,S3,RDS,Route53,VPC,EIP,IAM)
 * その他のツール
@@ -97,6 +98,10 @@ https://qiita.com/nasuB7373/items/0e507abad2017976c407
  * 画像アップロード機能
  * 記事や質問のmarkdown,src表示機能
    * コピぺしたら簡単に同じ記事を作成できる
+ 
+ ※レスポンシブWebデザインはしてないです  
+   時間がかかる上に学校のパソコンで見るのが大半だと判断したから
+
 
 ## DB設計
 ER図下手すぎました。すみません。
