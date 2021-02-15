@@ -95,6 +95,22 @@
    * コピぺしたら簡単に同じ記事を作成できる
 
 ## DB設計
+ER図下手すぎました。すみません。
  
+  ![Image](https://github.com/DaikiKawaoka/KbcBlog/blob/master/document/kbcblogDB.jpg)
+  
+### 各テーブルについて
 
-
+| テーブル名 | 説明        |
+| ------ | ------------- |
+| users    | ユーザー情報 |
+| follows    | フォロー情報 |
+| articles    | 技術記事情報 |
+| article_comments    | 技術記事へのコメント情報 |
+| article_likes    | 技術記事のいいね情報 |
+| article_comment_likes    | 技術記事へのコメントのいいね情報 |
+| questions    | 質問情報 |
+| question_comments    | 質問への回答情報 |
+| question_likes    | 質問のいいね情報 |
+| question_comment_likes    | 質問への回答のいいね情報 |
+| notifications    | 通知情報 |
