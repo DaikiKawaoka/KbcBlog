@@ -43,12 +43,13 @@ https://qiita.com/nasuB7373/items/0e507abad2017976c407
 
 ## 使用技術
 * フロントエンド
-  * vue/cli 4.5.6
+  * Vue.js 2.6.12
+  * Vue/cli 4.5.6
   * Element UI 2.13.2
   * HTML / CSS / SCSS
 * バックエンド
   * Golang 1.15.1
-  * echo 4.1.17
+  * Echo 4.1.17
 * インフラ
   * CircleCi
   * Docker/ docker-compose
