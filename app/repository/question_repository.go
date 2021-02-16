@@ -296,12 +296,13 @@ func GetFavoriteQuestion(cursor int,userid int) ([]*model.FavoriteQuestion, erro
 	if cursor <= 0 {
 		cursor = math.MaxInt32
 	}
-	query := `SELECT q.id id,q.userid userid,u.name name,u.imgpath imgpath ,q.title title,q.tag tag, q.category category ,q.updated updated, COUNT(l.id) likecount,l.id likeid
+	query := `SELECT q.id t_id,q.userid userid,u.name name, u.imgpath imgpath, q.title title,q.tag tag, q.category category ,q.updated updated,
+	(select COUNT(l.id) from questions q inner join users u on q.userid = u.id right join question_likes l on q.id = l.questionid where q.id = t_id Group by q.id) as likecount,l.id likeid
 	FROM questions q inner join users u on q.userid = u.id
-	left join question_likes l on q.id = l.questionid
+	right join question_likes l on q.id = l.questionid
 	WHERE l.id < ? and l.userid = ?
-	GROUP BY q.id,q.userid,u.name,u.imgpath,q.title,q.tag,q.category,q.updated,l.id
-	ORDER BY l.id desc
+	GROUP BY t_id,userid,name,imgpath,title,updated,likeid
+	ORDER BY likeid desc
 	LIMIT 30`
 	questions := make([]*model.FavoriteQuestion, 0, 30)
 	if err := db.Select(&questions, query, cursor,userid); err != nil {

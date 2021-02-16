@@ -34,7 +34,7 @@ type AnswerQuestion struct {
 
 // FavoriteQuestion ...
 type FavoriteQuestion struct {
-	ID      int       `db:"id" json:"id"`
+	ID      int       `db:"t_id" json:"id"`
 	Userid  int       `db:"userid" json:"userid"`
 	UserName string   `db:"name" json:"name"`
 	ImgPath      string    `db:"imgpath" json:"imgpath"`

@@ -277,12 +277,13 @@ func GetFavoriteArticle(cursor int,userid int) ([]*model.FavoriteArticle, error)
 	if cursor <= 0 {
 		cursor = math.MaxInt32
 	}
-	query := `SELECT a.id id,a.userid userid,u.name name, u.imgpath imgpath, a.title title,a.tag tag,a.updated updated, COUNT(l.id) likecount,l.id likeid
+	query := `SELECT a.id t_id,a.userid userid,u.name name, u.imgpath imgpath, a.title title,a.tag tag,a.updated updated,
+	(select COUNT(l.id) from articles a inner join users u on a.userid = u.id right join article_likes l on a.id = l.articleid where a.id = t_id Group by a.id) as likecount,l.id likeid
 	FROM articles a inner join users u on a.userid = u.id
-	left join article_likes l on a.id = l.articleid
+	right join article_likes l on a.id = l.articleid
 	WHERE l.id < ? and l.userid = ?
-	GROUP BY a.id,a.userid,u.name,u.imgpath,a.title,a.updated,l.id
-	ORDER BY l.id desc
+	GROUP BY t_id,userid,name,imgpath,title,updated,likeid
+	ORDER BY likeid desc
 	LIMIT 10`
 	articles := make([]*model.FavoriteArticle, 0, 10)
 	if err := db.Select(&articles, query, cursor,userid); err != nil {
