@@ -1,6 +1,8 @@
 package main
 
 import (
+	"net/http"
+	"regexp"
 	"log"
 	"os"
 	"fmt"
@@ -15,16 +17,17 @@ import (
 	"github.com/joho/godotenv" //環境変数
 )
 
-var db *sqlx.DB
-var e = createMux()
-
+var (
+	db *sqlx.DB
+	allowedOrigins = []string{os.Getenv("DOMAIN"),}
+	regexpOrigin = `^http:\/\/localhost\/[a-zA-Z0-9\/]*$`
+	e = createMux()
+)
 
 func main() {
 	db = connectDB()
 	repository.SetDB(db)
-	// Webサーバーをポート番号 8082 で起動する
 	e.Logger.Fatal(e.Start(":8082"))
-	// e.Startの中はdocker-composeのgoコンテナで設定したportsを指定してください。
 }
 
 func connectDB() *sqlx.DB {
@@ -51,17 +54,28 @@ func connectDB() *sqlx.DB {
 }
 
 func createMux() *echo.Echo {
-	// アプリケーションインスタンスを生成
 	e := echo.New()
-	// アプリケーションに各種ミドルウェアを設定
-	//アプリケーションのどこかで予期せずにpanicを起こしてしまっても、サーバは落とさずにエラーレスポンスを返せるようにリカバリーする
 	e.Use(middleware.Recover())
-	//アクセスログのようなリクエスト単位のログを出力してくれます。
 	e.Use(middleware.Logger())
-	//gzip圧縮スキームを使用してHTTP応答を圧縮します。
-	e.Use(middleware.Gzip())
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins: allowedOrigins,
+		AllowMethods:    []string{http.MethodGet, http.MethodPut, http.MethodPost, http.MethodDelete},
+	}))
 
-	// e.Use(middleware.CORS())
+	//、Originが不正な場合に403を返却
+	e.Use(func(next echo.HandlerFunc) echo.HandlerFunc {
+		return func(c echo.Context) error {
+				// リファラーを取得
+				origin := c.Request().Referer()
+				result, _ := regexp.MatchString(regexpOrigin, origin)
+				if result {
+						return next(c)
+				}
+				// 一致してない場合403(Forbidden)を返却
+				return c.String(http.StatusForbidden, "forbidden")
+		}
+	})
+
 	e.POST("/Users",handler.UserCreate)
 	e.POST("/Login",handler.Login)
 	e.GET("/guestLogin",handler.GuestLogin)
@@ -139,7 +153,6 @@ func createMux() *echo.Echo {
 
 
 	e.Validator = &CustomValidator{validator: validator.New()}
-	// アプリケーションインスタンスを返却
 	return e
 }
 
