@@ -13,8 +13,8 @@
             </router-link>
             <div class="comment-header-div">
               <div class="article-create-update-date-div">
-                <p class="article-create-date"> 作成日 {{ article.Created | moment }}</p>
-                <p class="article-create-date"> 更新日 {{ article.Updated | moment }}</p>
+                <p class="article-create-date"> 作成日 {{ article.Created | dayjs }}</p>
+                <p class="article-create-date"> 更新日 {{ article.Updated | dayjs }}</p>
               </div>
               <span class="dropdown-span">
                 <el-dropdown>
@@ -81,7 +81,7 @@
               </router-link>
               <div class="comment-header-div">
                 <div>
-                  <p class="comment-create-date">投稿日 {{c.Created | moment}}</p>
+                  <p class="comment-create-date">投稿日 {{c.Created | dayjs}}</p>
                 </div>
                 <span v-if="c.userid === user.id" class="dropdown-span">
                   <el-dropdown>
@@ -129,12 +129,15 @@
 </template>
 
 <script>
-import moment from 'moment'
+
 import Header from './../components/Header.vue'
 import Footer from './../components/Footer.vue';
 import CommentForm from './../components/CommentForm.vue'
 import marked from 'marked';
 import hljs from 'highlight.js';
+import dayjs from 'dayjs'
+import timezone from 'dayjs/plugin/timezone'
+import utc from 'dayjs/plugin/utc'
 import 'highlight.js/styles/github.css';
 import '../css/monokai-sublime.css';
 import '../css/markdown.css';
@@ -205,9 +208,10 @@ export default {
       })
   },
   filters: {
-    moment: function (date) {
-      moment.locale( 'ja' );
-      return moment(date).utc().format('YYYY/MM/DD HH:mm');
+    dayjs: function (date) {
+      dayjs.extend(utc)
+      dayjs.extend(timezone)
+      return dayjs(date).tz('UTC').format('YYYY/MM/DD')
     }
   },
   computed: {
@@ -251,7 +255,7 @@ export default {
           }
           this.comments.unshift(response.data.Comment);
           // 日本時間に変換
-          this.comments[0].Created = moment.utc(this.comments[0].Created).local().format();
+          this.comments[0].Created = dayjs(this.comments[0].Created).tz("JST").format();
           this.comments[0].imgpath = this.user.imgpath
           this.comments[0].KBC_mail = this.user.KBC_mail
           this.comment.text = "";

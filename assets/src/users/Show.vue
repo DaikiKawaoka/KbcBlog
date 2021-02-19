@@ -271,7 +271,7 @@
                   <div class="post-index-username-updated">
                     <i class="el-icon-star-on star-i"></i>
                     <span class="likecount-span">{{article.likecount}}</span>
-                    <p class="post-index-update">{{ article.Updated | moment }}</p>
+                    <p class="post-index-update">{{ article.Updated | dayjs }}</p>
                   </div>
                 </div>
               </router-link>
@@ -298,7 +298,7 @@
                     </div>
                     <i class="el-icon-star-on star-i"></i>
                     <span class="likecount-span">{{ question.likecount}}</span>
-                    <p class="post-index-update">{{ question.Updated  | moment }}</p>
+                    <p class="post-index-update">{{ question.Updated  | dayjs }}</p>
                   </div>
                 </div>
               </router-link>
@@ -316,7 +316,7 @@
                     <span class="answer-question-title">「{{answer.question_title}}」</span> <span class="answer-question-title-last">に回答しました。</span>
                     <p class="answer-comment-text"> {{answer.comment_text}} </p>
                   <div class="post-index-username-updated">
-                    <h3 class="post-index-update">{{ answer.comment_created | moment }}</h3>
+                    <h3 class="post-index-update">{{ answer.comment_created | dayjs }}</h3>
                   </div>
                 </div>
               </router-link>
@@ -334,8 +334,9 @@
 </template>
 
 <script>
-// import countArrayValues from 'count-array-values'
-import moment from 'moment'
+import dayjs from 'dayjs'
+import timezone from 'dayjs/plugin/timezone'
+import utc from 'dayjs/plugin/utc'
 import Header from './../components/Header.vue';
 import Footer from './../components/Footer.vue';
 
@@ -439,10 +440,10 @@ export default {
   },
 
   filters: {
-    moment: function (date) {
-      // locale関数を使って言語を設定すると、日本語で出力される
-      moment.locale( 'ja' );
-      return moment(date).utc().format('YYYY/MM/DD HH:mm');
+    dayjs: function (date) {
+      dayjs.extend(utc)
+      dayjs.extend(timezone)
+      return dayjs(date).tz('UTC').format('YYYY/MM/DD')
     }
   },
   computed: {

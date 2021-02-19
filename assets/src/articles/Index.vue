@@ -33,7 +33,7 @@
                 <router-link v-bind:to="{ name : 'UserShow', params : { id: article.userid }}" class="a-tag">
                   <h3 class="article-index-username">by {{ article.name }}</h3>
                 </router-link>
-                <h3 class="article-index-update"> {{ article.Created | moment }}</h3>
+                <h3 class="article-index-update"> {{ article.Created | dayjs }}</h3>
                 <i class="el-icon-star-on article-star-i"></i>
                 <span class="article-likecount-span">{{article.likecount}}</span>
               </div>
@@ -77,7 +77,9 @@ import Header from './../components/Header.vue'
 import Footer from './../components/Footer.vue'
 import Tag from './../components/Tag.vue'
 import Ranking from './../components/Ranking.vue'
-import moment from 'moment'
+import dayjs from 'dayjs'
+import timezone from 'dayjs/plugin/timezone'
+import utc from 'dayjs/plugin/utc'
 
 export default {
   name: 'app',
@@ -107,10 +109,10 @@ export default {
     InfiniteLoading,
   },
   filters: {
-    moment: function (date) {
-      return moment(date).utc().format('YYYY/MM/DD HH:mm');
-      // moment.locale('ja')
-      // return moment().utc(date).fromNow();
+    dayjs: function (date) {
+      dayjs.extend(utc)
+      dayjs.extend(timezone)
+      return dayjs(date).tz('UTC').format('YYYY/MM/DD')
     }
   },
   watch: {
@@ -149,7 +151,7 @@ export default {
         rankingType: this.rankingType,
       },
       headers: {
-        Authorization: `Bearer ${jst}`
+        Authorization: `Bearer ${jst}`,
       },
     })
       .then(response => {

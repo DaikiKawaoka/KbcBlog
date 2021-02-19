@@ -37,7 +37,7 @@
                 <router-link v-bind:to="{ name : 'UserShow', params : { id: question.userid }}" class="a-tag">
                   <h3 class="question-index-username">by {{ question.name }}</h3>
                 </router-link>
-                <h3 class="question-index-update"> {{ question.Created | moment }}</h3>
+                <h3 class="question-index-update"> {{ question.Created | dayjs }}</h3>
                 <i class="el-icon-star-on question-star-i"></i>
                 <span class="question-likecount-span">{{question.likecount}}</span>
               </div>
@@ -82,7 +82,9 @@ import Header from './../components/Header.vue'
 import Footer from './../components/Footer.vue'
 import Tag from './../components/Tag.vue'
 import Ranking from './../components/Ranking.vue'
-import moment from 'moment'
+import dayjs from 'dayjs'
+import timezone from 'dayjs/plugin/timezone'
+import utc from 'dayjs/plugin/utc'
 
 export default {
   name: 'app',
@@ -112,9 +114,11 @@ export default {
     InfiniteLoading,
   },
   filters: {
-    moment: function (date) {
-      return moment(date).utc().format('YYYY/MM/DD HH:mm');
-    },
+    dayjs: function (date) {
+      dayjs.extend(utc)
+      dayjs.extend(timezone)
+      return dayjs(date).tz('UTC').format('YYYY/MM/DD')
+    }
   },
   watch: {
     searchText(newSearchText) {

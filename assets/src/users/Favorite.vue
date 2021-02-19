@@ -67,7 +67,7 @@
                       <i class="el-icon-star-on star-i"></i>
                       <span class="likecount-span">{{article.likecount}}</span>
                     </div>
-                    <p class="post-index-update">{{ article.Updated | moment }}</p>
+                    <p class="post-index-update">{{ article.Updated | dayjs }}</p>
                   </div>
                 </div>
               </router-link>
@@ -109,7 +109,7 @@
                       <i class="el-icon-star-on star-i"></i>
                       <span class="likecount-span">{{ question.likecount}}</span>
                     </div>
-                    <p class="question-index-update">{{ question.Updated  | moment }}</p>
+                    <p class="question-index-update">{{ question.Updated  | dayjs }}</p>
                   </div>
                 </div>
               </router-link>
@@ -138,7 +138,7 @@
                         <h3 class="article-index-username">by {{ answer.name }}</h3>
                       </router-link>
                     </div>
-                    <h3 class="post-index-update">{{ answer.comment_created | moment }}</h3>
+                    <h3 class="post-index-update">{{ answer.comment_created | dayjs }}</h3>
                   </div>
                 </div>
               </router-link>
@@ -157,9 +157,11 @@
 
 <script>
 import InfiniteLoading from 'vue-infinite-loading'
-import moment from 'moment'
 import Header from './../components/Header.vue';
 import Footer from './../components/Footer.vue';
+import dayjs from 'dayjs'
+import timezone from 'dayjs/plugin/timezone'
+import utc from 'dayjs/plugin/utc'
 
 export default {
   name: 'app',
@@ -242,10 +244,10 @@ export default {
   },
 
   filters: {
-    moment: function (date) {
-      // locale関数を使って言語を設定すると、日本語で出力される
-      moment.locale( 'ja' );
-      return moment(date).utc().format('YYYY/MM/DD HH:mm');
+    dayjs: function (date) {
+      dayjs.extend(utc)
+      dayjs.extend(timezone)
+      return dayjs(date).tz('UTC').format('YYYY/MM/DD')
     }
   },
   computed: {

@@ -81,26 +81,26 @@
                           <router-link class="a-tag-article" v-bind:to="{ name : 'ArticleShow', params : { id: notification.articleid.Int32 }}" >
                           <div><p class="notification-text">
                             <router-link v-bind:to="{ name : 'UserShow', params : { id: notification.userid }}" class="a-tag-n">
-                              <span class="visiter-name">{{notification.name}}</span></router-link> があなたの記事に「いいね！」しました。 <span class="notification-created">{{ notification.Created | moment }}</span></p>
+                              <span class="visiter-name">{{notification.name}}</span></router-link> があなたの記事に「いいね！」しました。 <span class="notification-created">{{ notification.Created | dayjs }}</span></p>
                           </div></router-link>
                         </div>
                         <div v-else-if="notification.action === 'qlike'">
                           <router-link class="a-tag-article" v-bind:to="{ name : 'QuestionShow', params : { id: notification.questionid.Int32 }}" >
                           <div><p class="notification-text">
                             <router-link v-bind:to="{ name : 'UserShow', params : { id: notification.userid }}" class="a-tag-n">
-                              <span class="visiter-name">{{notification.name}}</span></router-link> があなたの質問に「いいね！」しました。<span class="notification-created">{{ notification.Created | moment }}</span></p>
+                              <span class="visiter-name">{{notification.name}}</span></router-link> があなたの質問に「いいね！」しました。<span class="notification-created">{{ notification.Created | dayjs }}</span></p>
                             </div></router-link>
                         </div>
                         <div v-else-if="notification.action === 'follow'">
                           <div><p class="notification-text">
                             <router-link v-bind:to="{ name : 'UserShow', params : { id: notification.userid }}" class="a-tag-n">
-                              <span class="visiter-name">{{notification.name}}</span></router-link> があなたをフォローしました。 <span class="notification-created">{{ notification.Created | moment }}</span></p></div>
+                              <span class="visiter-name">{{notification.name}}</span></router-link> があなたをフォローしました。 <span class="notification-created">{{ notification.Created | dayjs }}</span></p></div>
                         </div>
                         <div v-else-if="notification.action === 'aclike'">
                           <router-link class="a-tag-article" v-bind:to="{ name : 'ArticleShow', params : { id: notification.articleid.Int32 }}" >
                             <div><p class="notification-text">
                               <router-link v-bind:to="{ name : 'UserShow', params : { id: notification.userid }}" class="a-tag-n">
-                                <span class="visiter-name">{{notification.name}}</span></router-link> があなたのコメントに「いいね！」しました。 <span class="notification-created">{{ notification.Created | moment }}</span></p>
+                                <span class="visiter-name">{{notification.name}}</span></router-link> があなたのコメントに「いいね！」しました。 <span class="notification-created">{{ notification.Created | dayjs }}</span></p>
                                 <div class="notification-comment-div">
                                   <span class="notification-comment-p">{{notification.a_text.String}}</span>
                                 </div>
@@ -111,7 +111,7 @@
                           <router-link class="a-tag-article" v-bind:to="{ name : 'QuestionShow', params : { id: notification.questionid.Int32 }}" >
                             <div><p class="notification-text">
                               <router-link v-bind:to="{ name : 'UserShow', params : { id: notification.userid }}" class="a-tag-n">
-                                <span class="visiter-name">{{notification.name}}</span></router-link> があなたのコメントに「いいね！」しました。 <span class="notification-created">{{ notification.Created | moment }}</span></p>
+                                <span class="visiter-name">{{notification.name}}</span></router-link> があなたのコメントに「いいね！」しました。 <span class="notification-created">{{ notification.Created | dayjs }}</span></p>
                                 <div class="notification-comment-div">
                                   <span class="notification-comment-p">{{notification.q_text.String}}</span>
                                 </div>
@@ -122,7 +122,7 @@
                           <router-link class="a-tag-article" v-bind:to="{ name : 'ArticleShow', params : { id: notification.articleid.Int32 }}" >
                             <div><p class="notification-text">
                               <router-link v-bind:to="{ name : 'UserShow', params : { id: notification.userid }}" class="a-tag-n">
-                                <span class="visiter-name">{{notification.name}}</span></router-link> があなたの記事に「コメント」しました。 <span class="notification-created">{{ notification.Created | moment }}</span></p>
+                                <span class="visiter-name">{{notification.name}}</span></router-link> があなたの記事に「コメント」しました。 <span class="notification-created">{{ notification.Created | dayjs }}</span></p>
                                 <div class="notification-comment-div">
                                   <span class="notification-comment-p">{{notification.a_text.String}}</span>
                                 </div>
@@ -133,7 +133,7 @@
                           <router-link class="a-tag-article" v-bind:to="{ name : 'QuestionShow', params : { id: notification.questionid.Int32 }}" >
                             <div><p class="notification-text">
                               <router-link v-bind:to="{ name : 'UserShow', params : { id: notification.userid }}" class="a-tag-n">
-                                <span class="visiter-name">{{notification.name}}</span></router-link> があなたの質問に「回答」しました。 <span class="notification-created">{{ notification.Created | moment }}</span></p>
+                                <span class="visiter-name">{{notification.name}}</span></router-link> があなたの質問に「回答」しました。 <span class="notification-created">{{ notification.Created | dayjs }}</span></p>
                                 <div class="notification-comment-div">
                                   <span class="notification-comment-p">{{notification.q_text.String}}</span>
                                 </div>
@@ -169,7 +169,10 @@
 
 <script>
 import InfiniteLoading from 'vue-infinite-loading'
-import moment from 'moment'
+import dayjs from 'dayjs'
+import timezone from 'dayjs/plugin/timezone'
+import utc from 'dayjs/plugin/utc'
+
 export default {
   props: {
     loginpage: Boolean,
@@ -191,15 +194,11 @@ export default {
     }
   },
   filters: {
-    moment: function (date) {
-      moment.locale('ja')
-      // console.log(date)
-      // return moment().utc(date).fromNow();
-      // const date1 = new Date();
-      // date1.setTime(date1.getTime() + 1000*60*60*9);// JSTに変換
-      // return moment(date).from(date1);
-      return moment(date).utc().format('MM/DD HH:mm');
-    },
+    dayjs: function (date) {
+      dayjs.extend(utc)
+      dayjs.extend(timezone)
+      return dayjs(date).tz('UTC').format('MM/DD HH:mm')
+    }
   },
   watch: {
     notificationCount(newNotificationCount) {
